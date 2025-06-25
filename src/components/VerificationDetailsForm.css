@@ -1,0 +1,352 @@
+/* Flexbox container to divide the page into two sections */
+.verification-form-container {
+  display: flex;
+  background-color: #fff;
+  width: 40vw;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 50px;
+}
+
+.font-paragraph-black-light {
+  /* font-size: 20px; */
+  /* color: #666; */
+}
+
+.font-paragraph {
+  /* font-size: 18px; */
+  /* color: #333; */
+}
+
+.form-card {
+  width: 100%;
+}
+
+.detail-form-icon {
+  position: absolute;
+  padding-top: 15px;
+  padding-left: 12px;
+  padding-bottom: 14px;
+
+}
+
+.form-icon-gender {
+  position: absolute;
+  margin-right: 6vw;
+  margin-bottom: 0.5vh;
+}
+
+
+.form-title {
+  margin-bottom: 20px;
+}
+
+.form-card input {
+  width: 90%;
+  background-color: #F9F9F9;
+  border: 1px solid #BDBDBD;
+  padding: 15px 0px 15px 60px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 16.45px;
+  align-items: center;
+  color: #727272;
+  /* box-sizing: border-box; */
+}
+
+/* Gender Selection */
+.gender-selection {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 30.5vw;
+  gap: 20px;
+  margin-left: 1.5vw;
+}
+
+.gender-selection button {
+  flex: 1;
+  padding: 15px 10px 15px 10px;
+  background: #F9F9F9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.gender-selection img {
+  width: 3vw;
+  height: 3vh;
+  position: absolute;
+}
+
+.gender-selection button img {
+  filter: brightness(0);
+}
+
+.gender-selection button.selected {
+  background: black;
+  color: white;
+}
+
+.gender-selection button.selected img {
+  filter: brightness(0) invert(1);
+  /* This makes the icon white */
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 30vw;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  /* font-size: 16px; */
+}
+
+.submit-btn:hover {
+  background: #333;
+}
+
+/* Skip Text */
+.skip-text {
+  text-align: center;
+  margin-top: 3vh;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.skip-text:hover {
+  color: black;
+}
+
+.details-form-heading-black {
+  font-family: "Public Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 28.2px;
+  align-items: center;
+  color: #000000;
+  letter-spacing: -3%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* Hide default calendar icon in date input fields */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+@media (max-width:1024px) {
+  .verification-form-container {
+    width: 60vw;
+    height: 125vh;
+  }
+
+  .gender-selection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 45vw;
+    gap: 0.5vw;
+    margin-left: 2.5vw;
+  }
+
+  .nonBinary {
+    margin-right: 9vw;
+  }
+
+  .left-section {
+    display: flex;
+    width: 90vw;
+    align-content: center;
+    padding-left: 0vw;
+  }
+
+  .step3 {
+    font-size: 14px;
+    padding-left: 15vw;
+    margin-top: 10vh;
+  }
+
+  .verification-main-heading {
+    margin-top: -6vh;
+  }
+
+  .verification-subheading {
+    font-size: 14px;
+    margin-left: 30vw;
+  }
+
+  .submit-btn {
+    width: 45vw;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .verification-main-heading {
+    margin-left: 5vw;
+    align-items: center;
+  }
+
+  .verification-subheading {
+    align-items: center;
+  }
+
+  .verification-form-container {
+    width: 70vw;
+  }
+
+  .gender-selection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 52vw;
+    gap: 1vw;
+  }
+
+  .font-heading-black {
+    /* font-size: 40px; */
+  }
+
+  .nonBinary {
+    margin-right: 12vw;
+  }
+
+  .female {
+    margin-right: 12vw;
+  }
+
+  .male {
+    margin-right: 10vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .verification-form-container {
+    width: 70vw;
+    /* Set container width to occupy more of the screen */
+    padding: 20px;
+    /* Reduce padding for mobile view */
+    box-shadow: none;
+    /* Optional: Remove shadow for a simpler look */
+  }
+
+  .form-card input {
+    width: 60vw;
+    padding: 10px 15px 10px 50px;
+    /* Adjust padding for input fields */
+    font-size: 12px;
+    /* Smaller font for mobile view */
+  }
+
+  .form-icon-phone,
+  .detail-form-icon,
+  .form-icon-gender {
+    padding-left: 12px;
+    /* Align icons more closely to inputs */
+    padding-top: 5px;
+    /* Center-align icons with text */
+  }
+
+  .gender-selection {
+    flex-direction: row;
+    gap: 2vw;
+    /* Adjust gap for smaller screens */
+    width: 60vw;
+    /* Allow the gender selection to stretch to fit */
+    /* background-color: aqua; */
+    margin-left: 1vw;
+  }
+
+  .gender-selection button {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+
+  .gender-selection img {
+    width: 5vw;
+    height: 5vh;
+  }
+
+  .male {
+    margin-right: 12vw
+  }
+
+  .female {
+    margin-right: 14vw
+  }
+
+  .nonBinary {
+    margin-right: 17vw
+  }
+
+  .submit-btn {
+    padding: 10px;
+    /* Adjust padding for mobile */
+    /* font-size: 14px; */
+    /* Smaller font size for the button */
+  }
+
+  .skip-text {
+    font-size: 12px;
+    /* Adjust font size for mobile */
+    margin-top: 20px;
+    /* Reduce top margin */
+  }
+
+  .details-form-heading-black {
+    font-size: 20px;
+    margin-bottom: 10px;
+    /* Adjust margin for spacing */
+  }
+
+  .detail-form-icon {
+    padding-top: 1.5vh;
+  }
+
+  .step3 {
+    font-size: 14px;
+    margin-right: 10vw;
+  }
+
+  .verification-main-heading {
+    font-size: 25px;
+    margin-top: 0.5vh;
+  }
+
+  .verification-subheading {
+    font-size: 14px;
+    margin-right: 22vw;
+    width: 60vw;
+  }
+
+  .submit-btn {
+    width: 60vw;
+  }
+
+}

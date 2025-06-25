@@ -1,0 +1,27 @@
+.topics-dropdown {
+  border-radius: 8px 0 0 8px;
+}
+.topics-dropdown {
+  display: none;
+}
+/* Laptop view (show list, hide dropdown) */
+@media (min-width: 1024px) {
+  .topics-dropdown {
+    display: none;
+  }
+}
+
+/* Tablet view (show dropdown, hide list) */
+@media (min-width: 480px) and (max-width: 1023px) {
+  .topics-dropdown {
+    display: block;
+  }
+}
+
+/* Mobile view (show dropdown, hide list, hide navbar) */
+@media (max-width: 480px) {
+  .topics-dropdown {
+    display: block;
+    width: 120px;
+  }
+}

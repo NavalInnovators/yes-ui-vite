@@ -1,0 +1,12 @@
+.faq-page-container{
+    width:100%;
+    padding-top:250px;
+}
+
+
+
+.top-animation{
+    width:100%;
+    position:absolute;
+    z-index:-1;
+}

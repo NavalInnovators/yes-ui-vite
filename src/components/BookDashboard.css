@@ -1,0 +1,98 @@
+body {
+  font-family: Public Sans;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+.parent-book-dashboard {
+  margin-top: 7rem;
+  /* background-color: aqua; */
+  background-color: #fff;
+  border-radius: 5px;
+  max-width: 100%;
+}
+
+.book-dashboard-content-sec {
+  /* background-color: red; */
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* === DESKTOP default layout === */
+.desktop-layout {
+  width: 100%;
+  /* background-color: black; */
+  display: flex;
+  justify-content: space-between;
+  /* gap: 1rem; */
+}
+
+.left-right-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* Hide mobile layout by default */
+.mobile-layout {
+  display: none;
+}
+
+@media (max-width: 1440px) {
+  .parent-book-dashboard {
+    margin-top: 6.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .parent-book-dashboard {
+    margin-top: 6.5rem;
+  }
+}
+@media (max-width: 1023px) {
+  .book-dashboard-content-sec {
+    flex-direction: column;
+  }
+  .desktop-layout {
+    display: none;
+  }
+
+  .mobile-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-right-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .mid-wrapper {
+    margin-top: 0px;
+    /* background-color: yellow; */
+  }
+  
+}
+
+@media (max-width: 768px) {
+  .parent-book-dashboard {
+    margin-top: 6.5rem;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .parent-book-dashboard {
+    margin-top: 4rem;
+  }
+}
+@media (max-width: 425px) {
+  .parent-book-dashboard {
+    margin-top: 4rem;
+  }
+}

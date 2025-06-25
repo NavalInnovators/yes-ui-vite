@@ -1,0 +1,218 @@
+.parent-div-form-container-contact-page {
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.contact-page-form-container {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-page-first-row {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+.contact-page-first-row input:first-child {
+  border-radius: 5px 0 0 0;
+}
+.contact-page-first-row input:nth-child(2) {
+  border-radius: 0 5px 0 0;
+}
+
+.contact-page-form-container input,
+textarea {
+  width: 100%;
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  font-size: 0.7rem;
+  box-sizing: border-box;
+}
+.contact-page-form-container textarea {
+  border-radius: 0 0 5px 5px;
+  height: 5rem;
+  font-size: 0.7rem;
+  resize: none;
+  background-color: #f9f9f9;
+}
+.contact-page-form-container textarea::placeholder {
+  font-family: "Public Sans", "sans-serif";
+}
+
+#contact-page-input-email {
+  width: 100%;
+  padding: 1rem;
+  font-size: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#contact-page-input-email:focus {
+  /* border: 2px solid rgb(10, 178, 75); */
+  box-shadow: 0 black;
+}
+.button-cont {
+  background: radial-gradient(
+    134.61% 193.04% at 97.06% 13.13%,
+    #feac2f 0%,
+    #9b32ad 32.77%,
+    #381ab2 69.93%,
+    #17082c 100%
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 35px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+.contact-page-btn {
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  width: 6rem;
+  height: 2.25rem;
+  padding: 0.5rem 1rem;
+  margin: 0 auto;
+}
+.contact-page-btn:hover {
+  background-color: white;
+}
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+@media (max-width: 1080px) {
+  .contact-page-form-container {
+    width: 90%;
+  }
+
+  .contact-page-btn {
+    width: 5.5rem;
+    height: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .parent-div-form-container-contact-page {
+    padding: 1.5rem 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .contact-page-form-container {
+    width: 85%;
+    gap: 0.5rem;
+  }
+
+  .contact-page-form-container input,
+  textarea {
+    font-size: 9px;
+    padding: 10px 6px;
+  }
+  #contact-page-input-email {
+    font-size: 9px;
+    padding: 10px 6px;
+  }
+  .contact-page-form-container textarea {
+    font-size: 9px;
+    padding: 10px 6px;
+    background-color: #f9f9f9;
+
+  }
+
+  .contact-page-btn {
+    width: 5rem;
+    height: 1.75rem;
+    font-size: 9px;
+  }
+
+  .error {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .parent-div-form-container-contact-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .contact-page-form-container {
+    width: 95%;
+  }
+  .contact-page-form-container input,
+  textarea {
+    font-size: 8px;
+    padding: 8px 5px;
+  }
+  #contact-page-input-email {
+    font-size: 8px;
+    padding: 8px 5px;
+  }
+  .contact-page-form-container textarea {
+    font-size: 8px;
+    padding: 8px 5px;
+    background-color: #f9f9f9;
+
+  }
+
+  .error {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 375px) {
+  .parent-div-form-container-contact-page {
+    padding: 0.75rem 0.25rem;
+  }
+
+  .contact-page-form-container {
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+  .contact-page-form-container input,
+  select,
+  textarea {
+    /* background-color: green; */
+    font-size: 0.4rem;
+    padding: 6px 4px;
+  }
+
+  .contact-page-btn {
+    width: 4rem;
+    height: 1.25rem;
+    font-size: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #contact-page-input-email {
+    font-size: 0.4rem;
+    padding: 6px 4px;
+  }
+  .contact-page-form-container textarea {
+    font-size: 0.4rem;
+    padding: 6px 4px;
+    background-color: #f9f9f9;
+
+  }
+  /* .contact-us-textarea-form::placeholder{
+    font-family: 'Public Sans', sans-serif;
+  } */
+
+  .error {
+    font-size: 0.3rem;
+  }
+}

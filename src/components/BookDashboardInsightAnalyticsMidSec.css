@@ -1,0 +1,193 @@
+.book-dashboard-insight-analytics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 58vw;
+  box-sizing: border-box;
+}
+
+.book-dashboard-toggle-bar {
+  margin-top: 5vh;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+#left-toggle-bar,
+#right-toggle-bar {
+  background-color: white;
+  color: #000;
+  padding: 0.9vh 1.2vw;
+  text-decoration: none;
+  border: 1px solid #bdbdbd;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 0.8rem;
+}
+
+/* Left and right tab styles */
+#left-toggle-bar {
+  border-radius: 8px 0px 0px 8px;
+}
+#right-toggle-bar {
+  border-radius: 0px 8px 8px 0px;
+}
+
+/* Hover effect only for inactive tabs */
+.book-dashboard-toggle-bar #left-toggle-bar:not(.active):hover {
+  background-color: black;
+  color: white;
+}
+/* Hover effect only for inactive tabs */
+.book-dashboard-toggle-bar #right-toggle-bar:not(.active):hover {
+  background-color: black;
+  color: white;
+}
+
+/* Active tab style */
+.book-dashboard-toggle-bar #right-toggle-bar.active {
+  background-color: black;
+  color: white;
+}
+/* Active tab style */
+.book-dashboard-toggle-bar #left-toggle-bar.active {
+  background-color: black;
+  color: white;
+}
+
+/* ===== Content ===== */
+.book-dashboard-analytics {
+  margin-top: 7vh;
+}
+.book-dashboard-analytics-question {
+  box-sizing: border-box;
+  background: #f5f5f5;
+  padding: 1.2vw 3vh;
+  border-radius: 10px 10px 0px 0px;
+  width: 100%;
+
+  font-family: "Public Sans", sans-serif;
+  font-weight: 500;
+  font-size: 2.1vh;
+  color: #000000;
+}
+
+.book-dashboard-analytics-answer {
+  margin-top: 0.7vh;
+  background: #f5f5f5;
+  padding: 1.8vh 1.8vw;
+  border-radius: 0px 0px 10px 10px;
+
+  font-family: Public Sans;
+  font-size: 1.7vh;
+  font-weight: 400;
+  line-height: 3vh;
+  text-align: justify;
+  color: #2f2f2f;
+}
+.book-dashboard-analytics-mid-answer {
+  border-radius: 0px;
+}
+/* .book-dashboard-piecharts {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4vw;
+}
+.common-pie-chart {
+  background: #0000000d;
+  width: 50%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+} */
+
+.book-dashboard-piecharts {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4vw;
+}
+
+.common-pie-chart {
+  background: #0000000d;
+  width: 50%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* .BookDashboardRightPieChart {
+  width: 100%; 
+  height: 100%; 
+} */
+
+/* Tablet view (hide section) */
+/* For tablets and small screens (480px to 1023px) */
+@media (min-width: 480px) and (max-width: 1023px) {
+  .book-dashboard-insight-analytics {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  .book-dashboard-piecharts {
+    display: flex;
+    gap: 10px; /* Space between items */
+  }
+
+  .common-pie-chart {
+    width: 49%; /* Adjust width of individual pie charts */
+  }
+}
+
+/* Mobile view (max-width: 480px) */
+@media (max-width: 480px) {
+  hr {
+    display: block;
+  }
+
+  .book-dashboard-insight-analytics {
+    max-width: 100%;
+    margin: 10px;
+  }
+
+  .book-dashboard-toggle-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+  }
+
+  #left-toggle-bar {
+    min-width: 80px;
+    display: flex;
+    justify-content: center;
+  }
+
+  #right-toggle-bar {
+    min-width: 80px;
+    justify-content: center;
+  }
+
+  .book-dashboard-piecharts {
+    display: flex;
+    flex-direction: column; 
+    flex-wrap: wrap;
+    gap: 1vh; 
+    width: 89%; 
+    box-sizing: border-box;
+  }
+
+  .common-pie-chart {
+    width: 100%; 
+  }
+  
+  .book-dashboard-piecharts img {
+    width: 100%; 
+  }
+}

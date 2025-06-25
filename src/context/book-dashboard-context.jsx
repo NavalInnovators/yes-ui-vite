@@ -1,0 +1,119 @@
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { getQnA, getSyllabus, getUnitNotes } from "../api/api";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+
+// Create the context
+const DashboardContext = createContext();
+
+// Custom hook to use the context
+export const useBookDashboard = () => {
+  return useContext(DashboardContext);
+};
+
+// Provider component for the context
+export const BookDashboardProvider = ({ children }) => {
+  const [selectedUnit, setSelectedUnit] = useState("1");
+  const [navigation, setNavigation] = useState("");
+  const [topics, setTopics] = useState("");
+  const [subCode, setSubCode] = useState(sessionStorage.getItem('selectedCourseCode'));
+  const [qList, setQList] = useState([[], [], [], [], []]);
+  const [notesList, setNotesList] = useState({});
+  const [selectedQuestion, setSelectedQuestion] = useState("0");
+  // const [subSyllabus, setSubSyllabus] = useState([]);
+
+  // Fetch subcode from URL
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const code = searchParams.get("subcode");
+    if (code) {
+      setSubCode(code);
+    }
+  }, [searchParams]);
+
+  // Fetch syllabus data
+  const {
+    data: syllabus,
+    isLoading: syllabusLoading,
+    error: syllabusError,
+  } = useQuery({
+    queryKey: ["syllabus", subCode],
+    queryFn: () => getSyllabus(subCode),
+    enabled: !!subCode,
+  });
+
+  // Fetch QnA data
+  const {
+    data: qna,
+    isLoading: qnaLoading,
+    error: qnaError,
+  } = useQuery({
+    queryKey: ["qna", subCode],
+    queryFn: () => getQnA(subCode),
+    enabled: !!subCode,
+  });
+
+  //Fetch unitNotes
+  const {
+    data: unitNotes,
+    isLoading: unitNotesLoading,
+    error: unitNotesError,
+  } = useQuery({
+    queryKey: ["unitNotes", subCode],
+    queryFn: () => getUnitNotes(subCode),
+    enabled: !!subCode,
+  });
+
+
+  useEffect(() => {
+    if (qna) {
+      const newQList = [[], [], [], [], []];
+      qna.forEach((qItem) => {
+        const unitIndex = parseInt(qItem.unit[0], 10) - 1;
+        if (unitIndex >= 0 && unitIndex < 5) {
+          newQList[unitIndex].push(qItem);
+        }
+      });
+      setQList(newQList);
+    }
+    // if (syllabus) {
+    //   setSubSyllabus(syllabus);
+    // }
+    if (unitNotes) {
+      const tempNotesObj = {};
+      unitNotes.forEach((note) => {
+        tempNotesObj[note.unitnumber] = note.notes;
+      });
+      setNotesList(tempNotesObj);
+    }
+  }, [qna, unitNotes]);
+
+  return (
+    <DashboardContext.Provider
+      value={{
+        selectedUnit,
+        setSelectedUnit,
+        navigation,
+        setNavigation,
+        topics,
+        setTopics,
+        subCode,
+        setSubCode,
+        syllabus,
+        syllabusLoading,
+        syllabusError,
+        qna,
+        qList,
+        qnaLoading,
+        qnaError,
+        notesList,
+        unitNotesLoading,
+        unitNotesError,
+        selectedQuestion,
+        setSelectedQuestion,
+      }}
+    >
+      {children}
+    </DashboardContext.Provider>
+  );
+};

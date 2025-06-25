@@ -1,0 +1,39 @@
+.userdashboard-right-section {
+  width: 355px;
+  position: sticky;
+  top: 100px; 
+}
+.categories-container {
+  width: 100%;
+  padding: 16px;
+  height: 668px; 
+  border-left: 1px solid #E6E6E6;
+  overflow-y: auto; 
+}
+
+.categories-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+
+}
+
+.category-item {
+font-family: Public Sans;
+font-size: 14px;
+font-weight: 400;
+line-height: 16.45px;
+text-align: left;
+background-color: #e0e0e0;
+border-radius: 27px;
+padding: 10px 15px;
+font-size: 14px;
+color: #333;
+white-space: nowrap;
+}
+@media(max-width:768px){
+  .userdasbord-right-section{
+    display:none;
+  }
+}

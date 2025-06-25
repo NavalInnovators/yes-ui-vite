@@ -1,0 +1,142 @@
+/* .edit-profile-container {
+  margin-top: 6rem;
+} */
+.editProfileDobLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-edit-main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.profile-edit-main-content {
+  padding: 20px;
+  gap: 20px;
+  width: 50%;
+}
+
+.edit-profile-sec-input {
+  background-color: transparent;
+  border: 0;
+  width: 90%;
+}
+.edit-profile-sec-select {
+  background-color: transparent;
+  border: 0;
+  width: 100%;
+  padding: 0;
+}
+
+.profile-edit-submit {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.profile-edit-submit-button.password-button.colourful-border-btn {
+  margin-top: 1rem;
+  width: 8rem;
+  height: 2rem;
+}
+
+/* Responsive Media Queries for Edit Profile Section */
+@media (max-width: 1080px) {
+  .edit-profile-container {
+    margin-top: 6.5rem;
+  }
+
+  .profile-edit-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-edit-main-content {
+    width: 70%;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .edit-profile-sec-input,
+  .edit-profile-sec-select {
+    width: 100%;
+  }
+
+  .profile-edit-submit-button.password-button {
+    width: 7rem;
+    height: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-profile-container {
+    margin-top: 6rem;
+  }
+
+  .profile-edit-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-edit-main-content {
+    width: 80%;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .edit-profile-sec-input,
+  .edit-profile-sec-select {
+    width: 100%;
+  }
+
+  .profile-edit-submit-button.password-button {
+    width: 6.5rem;
+    height: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-profile-container {
+    margin-top: 4rem;
+  }
+
+  .profile-edit-main-content {
+    width: 90%;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .edit-profile-sec-input,
+  .edit-profile-sec-select {
+    width: 100%;
+  }
+
+  .profile-edit-submit-button.password-button {
+    width: 6rem;
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .edit-profile-container {
+    margin-top: 4rem;
+  }
+
+  .profile-edit-main-content {
+    width: 100%;
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .edit-profile-sec-input,
+  .edit-profile-sec-select {
+    width: 100%;
+  }
+
+  .profile-edit-submit-button.password-button {
+    width: 5.5rem;
+    height: 1.4rem;
+  }
+}

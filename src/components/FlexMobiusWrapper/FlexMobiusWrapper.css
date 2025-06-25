@@ -1,0 +1,22 @@
+/* General Wrapper Styles */
+.FlexMobiusWrapper {
+    display: inline-block;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: #F5F5F5;
+  }
+  
+  /* Animation for the Mobius Strip */
+  .mobiusStripImg {
+    animation: mobiusStripImg-spin infinite 20s linear;
+  }
+  
+  @keyframes mobiusStripImg-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

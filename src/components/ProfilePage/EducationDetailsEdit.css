@@ -1,0 +1,31 @@
+/* .education-details-edit-container {
+  margin-top: 6rem;
+} */
+
+.education-edit-main {
+  display: flex;
+  justify-content: center;
+}
+
+.education-edit-main-content {
+  /* background-color: red; */
+  width: 70%;
+  margin-top: 1.5rem;
+}
+
+.education-edit-submit {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.profile-sec-full-cell.edit-edu-sec-first-cell {
+  border-radius: 5px 5px 0 0;
+}
+.profile-sec-full-cell.edit-edu-sec-last-cell {
+  border-radius: 0 0 5px 5px;
+}
+
+.edit-profile-sec-select.edit-edu-sec-select {
+  width: 100%;
+}

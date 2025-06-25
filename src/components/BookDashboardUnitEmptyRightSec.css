@@ -1,0 +1,13 @@
+.book-dashboard-empty-right-sec {
+  width: 18%;
+  display: block; /* Default for larger screens */
+  /* background-color: rgb(255, 200, 0); */
+}
+
+/* Tablet view (hide section) */
+@media (max-width: 1023px) {
+  .book-dashboard-empty-right-sec {
+    display: none;
+  }
+}
+

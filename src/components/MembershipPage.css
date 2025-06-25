@@ -1,0 +1,11 @@
+body {
+  font-family: Public Sans;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  /* background-color: aqua; */
+}
+
+.membership-page-parent {
+  max-width: 100%;
+}

@@ -1,0 +1,219 @@
+.membership-section {
+    min-height: 90vh;
+    max-width: 95vw;
+    margin: 2vh 2vw;
+    padding: 4vh 4vw;
+    border-radius: 2vw;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    z-index: 1;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.bg-animation {
+    background: radial-gradient(circle at 50% 50%,
+            #feac2f,
+            #9b32ad,
+            #381ab2,
+            #17082c);
+    background-size: 200% 200%;
+    animation: gradientMove 20s infinite linear;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    25% {
+        background-position: 100% 0%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+
+    75% {
+        background-position: 0% 100%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.membership-heading {
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    text-align: center;
+}
+
+.membership-plans {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3vw;
+}
+
+.each-plan {
+    background-color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 25vw;
+    min-width: 300px;
+    border-radius: 1vw;
+}
+
+.membership-plan-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.membership-img {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 2.5vh;
+    padding-bottom: 2.5vh;
+}
+
+.membership-img img {
+    width: 6vw;
+    height: 6vw;
+    min-width: 60px;
+    min-height: 60px;
+}
+
+.membership-plan-name {
+    font-family: "Public Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(20px, 2vw, 25px);
+    line-height: 1.2;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+.membership-plan-price {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.membership-btn-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.membership-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20vw;
+    min-width: 260px;
+    height: 50px;
+    border-radius: 0.8vw;
+    background-color: white;
+    font-family: "Public Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(14px, 1.2vw, 16px);
+    line-height: 18.8px;
+    align-items: center;
+    color: #000000;
+}
+
+.membership-feature-section {
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
+
+.features {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 1vh;
+    gap: 1.5vw;
+}
+
+@media (max-width: 1024px) {
+    /* todo */
+}
+
+@media (max-width: 700px) {
+    .membership-plans {
+        flex-direction: column;
+        align-items: center;
+        gap: 3vh;
+    }
+
+    .each-plan {
+        width: 90vw;
+        min-width: unset;
+        margin: 0 auto;
+    }
+
+    .membership-btn {
+        width: 80%;
+        min-width: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .membership-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding:0px;
+        height: 100%;
+        margin:0 18px;
+
+    }
+
+    .membership-plans {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .membership-heading {
+        font-size: 25px;
+        font-weight: 400;
+        letter-spacing: -0.03em;
+        text-align: center;
+    }
+
+    .each-plan {
+        max-width: 311px;
+        margin-bottom: 20px;
+        margin-left:30px;
+        margin-right:30px;
+        height: auto;
+    }
+    .membership-btn{
+        max-width: 260px;
+    }
+    .membership-feature-section{
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-bottom: 50px;
+    }
+    .testimonials-title{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}

@@ -1,0 +1,153 @@
+.contact-page-left-container {
+  border-radius: 1.5rem;
+  background: #f2f2f2;
+  /* background-color: orange; */
+  width: 50%;
+  height: 80vh;
+  padding: 5rem 1.5rem 2.5rem 1.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.contact-page-heading-left {
+  font-size: 43px;
+}
+
+.parent-contact-page-email-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.parent-contact-page-email-section img {
+  width: 40%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contact-page-app-icons {
+  display: flex;
+  justify-content: space-between;
+  width: 35%;
+}
+
+.contact-page-app-icons img {
+  width: 2rem;
+}
+
+@media (max-width: 1080px) {
+  .contact-page-left-container {
+    width: 100%;
+    height: auto;
+    padding: 3rem 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .contact-page-heading-left {
+    font-size: 38px;
+  }
+
+  .parent-contact-page-email-section {
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .parent-contact-page-email-section img {
+    width: 40%;
+  }
+
+  .contact-page-app-icons {
+    width: 30%;
+  }
+
+  .contact-page-app-icons img {
+    width: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-page-left-container {
+    width: 100%;
+    height: auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .contact-page-heading-left {
+    font-size: 32px;
+  }
+
+  .parent-contact-page-email-section {
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .parent-contact-page-email-section img {
+    width: 40%;
+  }
+
+  .contact-page-app-icons {
+    width: 40%;
+  }
+
+  .contact-page-app-icons img {
+    width: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-page-left-container {
+    padding: 2rem 1rem;
+    border-radius: 10px;
+  }
+
+  .contact-page-heading-left {
+    font-size: 24px;
+  }
+
+  .parent-contact-page-email-section {
+    align-items: center;
+  }
+
+  .parent-contact-page-email-section img {
+    width: 60%;
+  }
+
+  .contact-page-app-icons {
+    width: 50%;
+  }
+
+  .contact-page-app-icons img {
+    width: 1.2rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .contact-page-left-container {
+    padding: 1.5rem 1rem;
+    align-items: center;
+    background-color: rgb(212, 212, 212);
+  }
+
+  .contact-page-heading-left {
+    font-size: 24px;
+  }
+
+  .parent-contact-page-email-section img {
+    width: 60%;
+  }
+
+  .contact-page-app-icons {
+    width: 50%;
+    justify-content: space-evenly;
+  }
+
+  .contact-page-app-icons img {
+    width: 1rem;
+  }
+}

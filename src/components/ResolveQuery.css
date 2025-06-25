@@ -1,0 +1,130 @@
+/* .resolve-query-container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0%;
+    align-items: center;
+    gap: 2vh;
+    margin: 0;
+    margin-top: 18vh;
+    height: 100vh;
+    font-family: "Public Sans", sans-serif;
+   
+}
+
+.gradient-bar {
+    width: 100vw;
+    height: 7.68vh;
+    background: linear-gradient(90deg, #17082C, #381AB2, #9B32AD, #FEAC2F);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10vw;
+    border-radius: 4px;
+
+}
+
+.gradient-text {
+    color: white;
+    font-size: 2.97vh;
+    font-weight: 500;
+}
+
+.query {
+    width: 49.3vw;
+    height: 59.56vh;
+    background-color: #F2F2F2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin-top: 5vh;
+}
+
+.sub-query {
+    width: 45.67vw;
+    height: 55.23vh;
+
+    display: flex;
+    flex-direction: column;
+
+
+
+}
+
+.subject {
+    font-size: 18px;
+    line-height: 2.21vh;
+    font-weight: 500;
+    width: 44.67vw;
+    height: 6.15vh;
+    background-color: #FFFFFF;
+    margin-bottom: 1vh;
+    border-radius: 8px;
+}
+
+
+.question {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 2vh;
+
+    font-weight: 400;
+    width: 44.67vw;
+    height: 14.18vh;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    color: #2F2F2F;
+}
+
+.answer {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 2vh; 
+    padding: 1rem;
+    font-weight: 400;
+    width: 44.67vw;
+    height: 26.71vh;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    color: #2F2F2F;
+}
+
+
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.date {
+
+    color: black;
+    background-color: white;
+    border-radius: 27px;
+    height: 5.13vh;
+    width: 6.71vw;
+    /* padding-top: 1vw; */
+   /* display: flex;
+   align-items: center;
+   justify-content: center;
+    
+
+}
+
+.date p {
+    font-size: 12px;
+    font-weight: 400;
+    
+    
+   
+}
+.icons{
+  cursor: pointer;
+  background-color: #FFFFFF;
+
+} */ 

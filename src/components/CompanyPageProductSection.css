@@ -1,0 +1,230 @@
+.product-by-sec {
+  margin: 1px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52vw;
+  position: relative;
+  /* background-color: red; */
+}
+
+.header-text-div {
+  position: absolute;
+  top: 15%;
+  text-align: center;
+}
+
+.heading-a {
+  font-family: Public Sans;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.heading-b {
+  font-family: Public Sans;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 4.5rem;
+}
+
+/* ===== CREATOR SECTION ===== */
+.creator-sec {
+  margin-top: 15vh;
+  width: 100%;
+  /* background-color: yellow; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.creator-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-color: red; */
+}
+.creator-info img {
+  height: 15vh;
+}
+.creator-name {
+  margin-top: 20px;
+  font-family: Public Sans;
+  font-size: 18px;
+  font-weight: 500;
+}
+.creator-designation {
+  font-family: Public Sans;
+  font-size: 14px;
+  font-weight: 400;
+  color: #727272;
+  /* background-color: red; */
+}
+
+/* ===== CONTENT SECTION ===== */
+.company-content-div {
+  margin-top: 100px;
+  width: 100%;
+  /* background-color: red; */
+}
+
+.company-content-heading {
+  font-size: 5.4vh;
+  font-weight: 400;
+  line-height: 7vh;
+  text-align: left;
+}
+
+.company-content {
+  /* background-color: yellow; */
+  width: 70%;
+  margin: 40px auto 0;
+  font-size: 1.5vh;
+  font-weight: 400;
+  text-align: justify;
+  line-height: 2.5vh;
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1025px) {
+  .product-by-sec {
+    width: 52vw;
+  }
+  .creator-sec {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .company-content {
+    width: 70%;
+    font-size: 1.5vh;
+  }
+  .company-content-heading {
+    font-size: 5.4vh;
+    line-height: 7vh;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .product-by-sec {
+    width: 90vw;
+  }
+  .header-text-div {
+    top: 10%;
+  }
+  .creator-sec {
+    width: 60vw;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two items per row */
+    gap: 30px 0px; /* Space between items */
+    justify-content: center;
+  }
+  .creator-info {
+    /* margin: 10px; */
+    width: auto;
+    text-align: center; /* Center-align content */
+  }
+  .creator-info img {
+    height: 12vh;
+  }
+  .company-content-heading {
+    font-size: 4vh;
+    line-height: 5vh;
+    text-align: left;
+  }
+  .company-content {
+    /* background-color: aqua; */
+    width: 100%;
+    font-size: 1.8vh;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 767px) {
+  .product-by-sec {
+    width: 95vw;
+  }
+  .header-text-div {
+    top: 8%;
+  }
+  .creator-sec {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two items per row */
+    gap: 10px; /* Space between items */
+    justify-content: center;
+  }
+  .creator-info {
+    text-align: center;
+  }
+  .creator-info img {
+    height: 10vh;
+  }
+  .creator-name {
+    font-size: 16px;
+  }
+  .creator-designation {
+    font-size: 12px;
+  }
+  .company-content {
+    width: 90%;
+    font-size: 1.4vh;
+    line-height: 2vh;
+  }
+  .company-content-heading {
+    font-size: 4vh;
+    line-height: 5.5vh;
+    text-align: center;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .product-by-sec {
+    width: 100vw;
+    display: flex;
+  }
+  .header-text-div {
+    top: 8%;
+  }
+  .heading-a {
+    font-size: 1rem;
+  }
+
+  .heading-b {
+    line-height: 5vh;
+    font-size: 1.5rem;
+  }
+  .creator-sec {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two items per row */
+    gap: 30px 10px;
+    justify-content: center;
+    /* background-color: pink; */
+    width: 95%;
+  }
+  .creator-info img {
+    height: 18vh;
+  }
+  .creator-name {
+    font-size: 20px;
+  }
+  .creator-designation {
+    font-size: 15px;
+  }
+  .company-content-heading {
+    font-size: 3.5vh;
+    line-height: 4.5vh;
+    text-align: left;
+    margin-left: 2.5%;
+    width: 95%;
+    /* background-color: green; */
+  }
+  .company-content {
+    /* background-color: red; */
+    width: 95%;
+    font-size: 2.5vh;
+    line-height: 3.2vh;
+  }
+}

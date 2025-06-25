@@ -1,0 +1,115 @@
+.book-dashboard-right-sec {
+  margin-top: 1rem;
+  width: 18%;
+  /* background-color: green; */
+}
+.selected-question {
+  color: black;
+  font-weight: bold;
+}
+
+.all-topics {
+  font-family: Public Sans;
+  font-size: 1.8vh;
+  font-weight: 500;
+  margin-bottom: 1.5vh;
+  text-align: center;
+}
+
+.book-dashboard-topics {
+  /* background-color: red; */
+  font-family: Public Sans;
+  font-size: 1.4vh;
+  font-weight: 350;
+  margin-bottom: 1.5vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  position: relative;
+  direction: rtl; /* Keep the scrollbar on the left */
+  background-color: #fff;
+}
+
+.book-dashboard-topics::-webkit-scrollbar {
+  width: 0.55vw;
+}
+
+.book-dashboard-topics::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 4px;
+}
+
+.book-dashboard-topics::-webkit-scrollbar-track {
+  background: #e6e6e6;
+}
+
+.book-dashboard-topics ol {
+  color: #727272;
+  padding-left: 15px;
+  margin: 0;
+  list-style-position: inside;
+  direction: ltr;
+}
+
+.book-dashboard-topics li {
+  padding: 3vh 0px;
+  border-bottom: 1px solid #ccc;
+}
+
+.book-dashboard-topics div {
+  text-decoration: none;
+  color: #808080;
+}
+
+.book-dashboard-topics div:hover {
+  color: black;
+  font-weight: 500;
+}
+
+
+
+/* Default behavior (mobile-first approach): both dropdown and list are hidden */
+
+.topics-not-dropdown {
+  display: none;
+}
+
+.mobile-question-dropdown {
+  display: none;
+}
+
+/* Laptop view (show list, hide dropdown) */
+@media (min-width: 1024px) {
+  .topics-not-dropdown {
+    display: block;
+  }
+}
+
+/* Tablet view (show dropdown, hide list) */
+@media (max-width: 1023px) {
+  .book-dashboard-right-sec {
+    margin-top: 0rem;
+    width: 60%;
+  }
+  .mobile-question-dropdown {
+    display: flex;
+  }
+  .mobile-question-dropdown select {
+    padding-left: 1rem;
+    width: 100%;
+    max-width: 100vw;
+    height: 2rem;
+    /* padding: 0.5rem; */
+    font-size: 0.8rem;
+    font-weight: 500;
+    appearance: none;
+    background-color: #e4e4e4;
+    border: none;
+    border-radius: 0.3rem 0rem 0rem 0.3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    outline: none;
+  }
+  
+}
+

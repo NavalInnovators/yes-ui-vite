@@ -1,0 +1,132 @@
+.testimonials {
+    /* background-color: blue; */
+    margin-top: 5%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonials-title {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.testimonials-card {
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    padding: 10px;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+
+}
+
+.testimonials-card::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, and Opera */
+}
+
+.each-testimonial {
+    background-color: #E6E6E6;
+    width: 342px;
+    height: 444px;
+    border-radius: 25px;
+}
+
+.testimonials-header {
+    /* background-color: green; */
+    margin: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+}
+
+.testimonial-name {
+    width: 194px;
+    height: 24px;
+    font-family: "Public Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 23.5px;
+    color: #000000;
+}
+
+.testimonial-desc {
+    width: 194px;
+    height: 20px;
+    font-family: "Public Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 16.45px;
+    color: #727272;
+}
+
+.header-img {
+    /* background-color: green; */
+    margin-left: 20px;
+}
+
+.testimonials-content {
+    /* background-color: blueviolet; */
+    margin: 30px;
+    font-family: "Public Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 26px;
+    color: #000000;
+}
+
+.arrows {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.left-arrow {
+    left: 0;
+}
+
+.right-arrow {
+    right: 0;
+}
+
+
+
+@media (max-width: 1024px) {
+    /* todo */
+}
+
+@media (max-width: 768px) {}
+
+@media (max-width: 480px) {
+    .testimonials-card{
+        padding:0 20px;
+    }
+
+    
+}

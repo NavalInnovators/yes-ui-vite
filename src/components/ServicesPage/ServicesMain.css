@@ -1,0 +1,8 @@
+.servicesMain {
+    width: 75%;
+    margin: 4rem auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+}

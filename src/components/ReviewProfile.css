@@ -1,0 +1,139 @@
+.review-profile-container {
+    background-color: rgb(255, 255, 255);
+    margin-top: 100px;
+}
+
+.review-form-container {
+    max-width: 800px;
+    height: 700px;
+    margin: 3.5% auto;
+    padding: 40px;
+    background-color: #F2F2F2;
+    border-radius: 8px;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.review-form-title {
+    margin-bottom: 10px;
+}
+
+.review-form-description {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.review-form-description-container {
+    width: 529px;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.star {
+    font-size: 30px;
+    cursor: pointer;
+    color: #ddd;
+}
+
+.star-1 {
+    color: #FFAD30;
+    ;
+}
+
+.star-2 {
+    color: #C2627D;
+}
+
+.star-3 {
+    color: #ff33bb;
+}
+
+.star-4 {
+    color: #7529AF;
+}
+
+.star-5 {
+    color: #5120B1;
+}
+
+.review-textarea {
+    width: 95%;
+    height: 240px;
+    padding: 10px;
+    border: none;
+    border-radius: 9px;
+    margin-bottom: 20px;
+    resize: none;
+    font-family: "Public Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 25px;
+    align-items: left;
+    color: #454545;
+}
+
+.video-upload {
+    height: 130px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    gap: 60px;
+}
+
+.video-upload-label {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #E1E1E1;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.video-upload-icon {
+    height: 22px;
+    width: 22px;
+}
+
+.video-upload-input {
+    display: none;
+}
+
+.video-upload-texts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.submit-button {
+    background-color: #000;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 135px;
+    height: 50px;
+    margin-top: 20px;
+}

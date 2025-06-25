@@ -1,0 +1,39 @@
+.units-section-unit-dropdown {
+  display: none;
+  margin-left: 0px;
+  box-sizing: border-box;
+}
+.units-section-unit-dropdown-select {
+  box-sizing: border-box;
+  background: linear-gradient(0deg, #f2f2f2, #f2f2f2),
+    linear-gradient(0deg, #e6e6e6, #e6e6e6);
+  border: none;
+  height: 5vh;
+  padding: 0.5vh 1vw;
+
+  color: black;
+  font-family: Public Sans;
+  font-size: 1.8vh;
+  font-weight: 600;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .units-section-unit-dropdown {
+    display: none;
+  }
+}
+
+/* Tablet view (show dropdown, hide list) */
+@media (min-width: 480px) and (max-width: 1023px) {
+  .units-section-unit-dropdown {
+    display: block;
+  }
+}
+
+/* Mobile view (show dropdown, hide list, hide navbar) */
+@media (max-width: 480px) {
+  .units-section-unit-dropdown {
+    display: block;
+    width: 96vw;
+  }
+}

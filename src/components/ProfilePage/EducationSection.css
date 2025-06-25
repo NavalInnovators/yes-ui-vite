@@ -1,0 +1,105 @@
+/* Education Section Styles */
+
+.education-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.education-sec-first-full-cell {
+  border-radius: 10px 10px 0 0;
+}
+
+/* Responsive Media Queries for Education Section */
+@media (max-width: 1080px) {
+  .education-details {
+    gap: 0.5rem;
+  }
+
+  .profile-section-heading {
+    font-size: 1.3rem;
+  }
+
+  .education-sec-first-full-cell {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .profile-sec-full-cell span {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-sections {
+    width: 80%;
+    padding: 1em;
+  }
+
+  .profile-section-heading {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .education-details {
+    gap: 0.4rem;
+  }
+
+  .profile-sec-full-cell span {
+    font-size: 0.7rem;
+  }
+
+  .education-sec-first-full-cell {
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-sections {
+    width: 100%;
+    padding: 0.8em;
+    border-radius: 8px;
+  }
+
+  .profile-section-heading {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .education-details {
+    gap: 0.3rem;
+  }
+
+  .profile-sec-full-cell span {
+    font-size: 0.65rem;
+  }
+
+  .education-sec-first-full-cell {
+    border-radius: 6px 6px 0 0;
+  }
+}
+
+@media (max-width: 375px) {
+  .profile-sections {
+    width: 100%;
+    padding: 0.6em;
+    border-radius: 6px;
+    background-color: #e8e8e8;
+  }
+
+  .profile-section-heading {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .education-details {
+    gap: 0.25rem;
+  }
+
+  .profile-sec-full-cell span {
+    font-size: 0.6rem;
+  }
+
+  .education-sec-first-full-cell {
+    border-radius: 5px 5px 0 0;
+  }
+}

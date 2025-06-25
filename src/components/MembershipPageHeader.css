@@ -1,0 +1,257 @@
+body {
+  font-family: Public Sans;
+
+  /* box-sizing: border-box; */
+}
+
+.membership-page-header-parent {
+  position: relative;
+  /* }
+.membership-page-header { */
+  background: radial-gradient(134.61% 193.04% at 97.06% 13.13%,
+      #feac2f 0%,
+      #9b32ad 32.77%,
+      #381ab2 69.93%,
+      #17082c 100%)
+    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */
+  ;
+  /* width: 100%; */
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  height: 42vh;
+
+  margin-top: 14vh;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.head-text {
+  font-size: 3rem;
+  font-weight: 300;
+  text-align: left;
+  color: white;
+}
+
+/* ====== CARD ====== */
+.membership-page-card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  position: absolute;
+  top: 25vh;
+  height: auto;
+  width: 100%;
+  /* background-color: red; */
+}
+
+.membership-page-card {
+  /* background-color: red; */
+  background-color: white;
+  width: 23%;
+  /* height: 700px; */
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid #bdbdbd;
+  /* overflow: hidden; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-top: 25px;
+}
+
+.membership-page-card img {
+  height: auto;
+}
+
+.membership-page-card-content {
+  /* background-color: orange; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 90%;
+}
+
+.membership-page-card-heading {
+  align-content: center;
+  font-size: 3vh;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.membership-page-card-subheading {
+  font-size: 2vh;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+/* .membership-page-card-content p {
+  font-size: 15px;
+  margin-bottom: 20px;
+} */
+
+/* Button Styles */
+.membership-page-card-button {
+  /* to centre get started */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  font-size: 1.7vh;
+  font-weight: 500;
+  color: black;
+  width: 100%;
+  text-decoration: none;
+  height: 5vh;
+  margin-top: 3vh;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  /* Smooth transition */
+
+  background: radial-gradient(white, white) padding-box,
+    radial-gradient(134.61% 193.04% at 97.06% 13.13%,
+      #feac2f 0%,
+      #9b32ad 32.77%,
+      #381ab2 69.93%,
+      #17082c 100%) border-box;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+}
+
+.membership-page-custom-hr {
+  margin-top: 1.5rem;
+  height: 1px;
+  border: none;
+  background-color: #e0e0e0;
+  width: 90%;
+}
+
+.membership-page-card-button:hover {
+  background: radial-gradient(134.61% 193.04% at 97.06% 13.13%,
+      #feac2f 0%,
+      #9b32ad 32.77%,
+      #381ab2 69.93%,
+      #17082c 100%);
+  /* Change text color to white when hovered */
+  color: white;
+  border: 0px solid transparent;
+}
+
+.membership-page-parent-ul-li {
+  margin-bottom: 25px;
+  /* background-color: green; */
+  width: 100%;
+}
+
+.membership-page-ul-li {
+  /* background-color: green; */
+  padding-top: 15px;
+}
+
+.membership-page-ul-li img {
+  margin-right: 10px;
+  height: 8px;
+}
+
+.membership-page-ul-li span {
+  text-align: end;
+  font-size: 12px;
+}
+
+/* Media Queries */
+
+/* For tablets and smaller laptops (width <= 1024px) */
+@media (max-width: 1024px) {
+  .membership-page-card {
+    width: 30%;
+  }
+
+  .membership-page-header {
+    min-height: 30vh;
+    padding: 3vh 2vw;
+  }
+
+  .head-text {
+    font-size: 2.5rem;
+  }
+
+  .membership-page-card-heading {
+    font-size: 1.7vh;
+  }
+
+  .membership-page-card-subheading {
+    font-size: 1.2vh;
+  }
+
+  .membership-page-card-button {
+    font-size: 1vh;
+    height: 3vh;
+  }
+}
+
+/* For large phones and smaller tablets (width <= 768px) */
+@media (max-width: 768px) {
+  .membership-page-card {
+    width: 45%;
+  }
+
+  .membership-page-header {
+    min-height: 25vh;
+    padding: 2.5vh 1.5vw;
+  }
+
+  .head-text {
+    font-size: 2rem;
+  }
+}
+
+/* For mobile phones (width <= 480px) */
+@media (max-width: 480px) {
+  .membership-page-header-parent {
+    margin-top: 17vh;
+    height: 35vh;
+  }
+
+  .membership-page-card-container {
+    top: 15vh;
+  }
+
+  .membership-page-header {
+    border-radius: 10px;
+  }
+
+  .membership-page-card {
+    width: 80%;
+  }
+
+  .membership-page-header {
+    min-height: 20vh;
+    padding: 2vh 1vw;
+  }
+
+  .head-text {
+    font-size: 1.5rem;
+  }
+
+  .membership-page-card-heading {
+    font-size: 2.5vh;
+  }
+
+  .membership-page-card-subheading {
+    font-size: 2vh;
+  }
+
+  .membership-page-card-button {
+    font-size: 1.5vh;
+    height: 4vh;
+  }
+
+  /* TODO */
+  /* .membership-page-card-img img{
+    width: 80px;
+  } */
+  .membership-page-ul-li span {
+    font-size: 10px;
+  }
+}

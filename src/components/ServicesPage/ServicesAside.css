@@ -1,0 +1,36 @@
+.servicesAside {
+    position: sticky;
+    top: 13rem;
+    left: 1.5rem;
+    height: min-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5rem;
+
+    width: 25%;
+    margin: 4rem 0 4rem 1.5rem;
+}
+
+.asideLink {
+    font-size: 0.75rem;
+    color: #727272;
+    cursor: pointer;
+    width: 80%;
+    background: transparent;
+    border: none;
+    text-align: start;
+    transition: all 0.2s ease;
+}
+
+.asideLink:hover {
+    color: black;
+    font-size: 1rem;
+}
+
+.asideLink:focus {
+    color: black;
+    font-size: 1rem;
+}

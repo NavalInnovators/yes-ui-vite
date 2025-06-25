@@ -1,0 +1,178 @@
+.faq-outer {
+  margin: 0 14rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  margin-bottom: 6rem;
+  padding: 3rem;
+  background-color: #ffffff;
+}
+
+.faq-search {
+  display: flex;
+  justify-content: center;
+}
+
+.faq-search input {
+  padding: 1rem;
+  font-size: 1rem;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.faq-item {
+  padding: 1rem 0;
+  margin: 0.8rem 0;
+  cursor: pointer;
+  border-bottom: 1px solid #c9c9c9;
+}
+
+.faq-item,
+.last-item {
+  border-bottom: none;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.toggle-icon {
+  font-size: 1.2rem;
+}
+
+.toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+.toggle-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.faq-search-icon {
+  color: white;
+}
+
+.bg-animation {
+  background: radial-gradient(circle at 50% 50%,
+      #feac2f,
+      #9b32ad,
+      #381ab2,
+      #17082c);
+  background-size: 200% 200%;
+  animation: gradientMove 30s infinite linear;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  25% {
+    background-position: 100% 0%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  75% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.faq-answer {
+  /* background-color: wheat; */
+  margin-top: 0.9rem;
+  display: none;
+  color: #727272;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.faq-answer.show {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1024px) {
+  .faq-outer {
+    margin: 0 8rem;
+    padding: 3rem;
+  }
+
+}
+
+
+@media (max-width: 768px) {
+  .faq-outer {
+    margin: 0 4rem;
+    padding: 1.5rem;
+  }
+
+  .faq-search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.8rem;
+  }
+  .toggle-icon {
+    font-size: 0.9rem;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+  .faq-outer {
+    margin: 0 1rem;
+    padding: 0.5rem;
+  }
+
+  .faq-search input {
+    padding: 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .faq-search button {
+    padding: 0.7rem;
+  }
+  .faq-search {
+    margin-bottom: 1rem;
+  }
+  .faq-item {
+    padding: 0.4rem 0;
+    margin: 0.4rem 0;
+  }
+
+  .faq-question {
+    font-weight: 400;
+    font-size: 0.8rem;
+    line-height: 01rem;
+  }
+  .faq-answer {
+    margin-top: 0.5rem;
+    font-size: 0.66rem;
+  }
+  
+  .toggle-icon {
+    font-size: 0.2rem;
+  }
+}

@@ -1,0 +1,13 @@
+body {
+  font-family: Public Sans;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+.parent-container {
+  margin-top: 12vh;
+  background-color: #fff;
+  border-radius: 5px;
+  max-width: 100%;
+}

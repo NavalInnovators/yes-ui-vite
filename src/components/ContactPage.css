@@ -1,0 +1,14 @@
+.contact-page-parent-container {
+  margin: 110px 30px 30px 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+/* Media query for tablets and mobile devices */
+@media (max-width: 1024px) {
+  .contact-page-parent-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

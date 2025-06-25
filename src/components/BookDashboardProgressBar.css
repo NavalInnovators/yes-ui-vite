@@ -1,0 +1,63 @@
+.header-progress-bar {
+  background: linear-gradient(
+      270deg,
+      #feac2f 0%,
+      #9b32ad 33.48%,
+      #381ab2 71.46%,
+      #17082c 140.19%
+    ),
+    linear-gradient(
+      269.83deg,
+      #feac2f 17.01%,
+      #9b32ad 51.81%,
+      #381ab2 91.27%,
+      #17082c 123.2%
+    );
+  box-sizing: border-box;
+  /* height: 93px; */
+  height: 10vh;
+  /* padding: 15px 20px 20px 30px; */
+  padding: 1.5vh 2vh 2vh 3vh;
+  color: aliceblue;
+  display: flex;
+  justify-content: space-between;
+}
+.book-name {
+  margin-bottom: 0.7vh;
+  font-family: Public Sans;
+  font-size: 1.8vh;
+  /* font-size: 18px; */
+  font-weight: 500;
+}
+.book-details {
+  display: flex;
+  gap: 0.5vh;
+}
+.book-details div {
+  background-color: transparent;
+  border-radius: 2.7vh;
+  border: 1px solid #6c3fee;
+  font-family: Public Sans;
+  font-size: 1.35vh;
+  font-weight: 400;
+  padding: 0.25rem 0.5rem;
+}
+.completion-percentage {
+  font-family: Public Sans;
+  /* font-size: 20px; */
+  font-size: 5vh;
+  font-weight: 400;
+}
+.progress-bar-line {
+  background: linear-gradient(
+      90deg,
+      #ff0000 0%,
+      #feac2f 19.93%,
+      #32ad6b 40.39%,
+      #e6e6e6 40.39%
+    ),
+    linear-gradient(0deg, #e6e6e6, #e6e6e6);
+  height: 0.5vh;
+  position: sticky;
+  z-index: 500;
+}

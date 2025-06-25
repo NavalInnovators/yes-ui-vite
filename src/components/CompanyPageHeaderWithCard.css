@@ -1,0 +1,206 @@
+.company-header-card {
+  margin: 12vh 3vw 3vh 3vw;
+  position: relative;
+  max-width: 100%;
+  border-radius: 20px;
+  padding: 3vh 3vw;
+  overflow: hidden;
+  z-index: 1;
+  height: 77vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.company-header-card::before {
+  content: "";
+  position: absolute;
+  top: -180%;
+  left: -10%;
+  width: 120%;
+  height: 425%;
+  background: radial-gradient(
+    134.61% 193.04% at 97.06% 13.13%,
+    #feac2f 10%,
+    #9b32ad 32.77%,
+    #381ab2 69.93%,
+    #17082c 100%
+  );
+  background-size: 100% 100%;
+  z-index: -1;
+  animation: rotate-background 15s linear infinite;
+}
+
+.header-text-card {
+  margin-bottom: 5vh;
+  font-family: Public Sans;
+  font-size: 6vh;
+  font-weight: 400;
+  line-height: 9vh;
+  letter-spacing: -0.03em;
+  text-align: left;
+  color: #ffffff;
+  width: 50%;
+}
+
+.company-card-container {
+  position: relative;
+  margin: 6vh auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+}
+
+.company-card {
+  background: #ffffff;
+  box-sizing: border-box;
+  width: 19vw;
+  height: 38vh;
+  padding: 2vh;
+  border-radius: 25px;
+  position: relative;
+}
+
+.company-card img {
+  width: 5vw;
+  position: absolute;
+  top: 3vh;
+  right: 1vw;
+}
+
+.company-card-inner-heading {
+  margin-top: 13vh;
+  font-size: 1em;
+  font-weight: 500;
+  text-align: left;
+}
+
+.company-card-inner-text {
+  margin-top: 15px;
+  font-size: 0.8em;
+  color: #727272;
+  font-weight: 400;
+  line-height: 1.5em;
+  text-align: justify;
+}
+
+/* Media Queries for Responsiveness */
+
+/* Large screens (Desktops) */
+@media (min-width: 1200px) {
+  .header-text-card {
+    font-size: 6vh;
+    width: 60%;
+    height: auto;
+  }
+
+  .company-card {
+    width: 18vw;
+    height: auto;
+  }
+
+  .company-card img {
+    width: 4vw;
+  }
+}
+
+/* Medium screens (Tablets) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .company-header-card {
+    height: auto;
+  }
+  .header-text-card {
+    font-size: 5vh;
+    line-height: 6vh;
+    width: 100%;
+  }
+  .company-header-card::before {
+    top: -200%; /* Adjust to position background better */
+    /* left: -20%;  */
+    width: 400%; /* Increase width to cover the smaller viewport */
+    height: 500%; /* Adjust height to maintain aspect ratio */
+    background-size: 100% 100%;
+    animation: rotate-background 20s linear infinite; /* Slower animation for a better effect on small screens */
+  }
+  .company-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .company-card {
+    width: calc(50% - 10px);
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 2vh;
+  }
+
+  /* If the last card is a standalone (odd number of cards) */
+  .company-card:last-child:nth-child(odd) {
+    width: 100%; 
+  }
+
+  .company-card img {
+    width: 9vw;
+  }
+  .company-card-inner-heading {
+    margin-top: 8vh;
+    font-size: 1.2em;
+  }
+}
+
+/* Small screens (Mobile) */
+@media (max-width: 767px) {
+  .company-header-card {
+    height: auto;
+    padding: 10px;
+  }
+  .company-header-card::before {
+    top: -200%; /* Adjust to position background better */
+    /* left: -20%;  */
+    width: 400%; /* Increase width to cover the smaller viewport */
+    height: 500%; /* Adjust height to maintain aspect ratio */
+    background-size: 100% 100%;
+    animation: rotate-background 20s linear infinite; 
+  }
+  .header-text-card {
+    font-size: 4vh;
+    line-height: 6vh;
+    width: 100%;
+    text-align: left;
+  }
+
+  .company-card-container {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 3vh;
+    margin-bottom: 1vh;
+  }
+
+  .company-card {
+    width: 100%;
+    height: auto;
+    padding: 2vh;
+    margin-bottom: 2vh;
+  }
+
+  .company-card img {
+    width: 15vw;
+    right: 5vw;
+  }
+
+  .company-card-inner-heading {
+    margin-top: 10vh;
+    font-size: 1.2em;
+  }
+
+  .company-card-inner-text {
+    font-size: 0.9em;
+    text-align: justify;
+  }
+}

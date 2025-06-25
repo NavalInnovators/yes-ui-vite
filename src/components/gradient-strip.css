@@ -1,0 +1,121 @@
+.gradient-strip {
+  margin-top: 6rem;
+  height: 3.5rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 1rem 7rem;
+  color: white;
+  background: linear-gradient(
+    90deg,
+    #17082c -10%,
+    #381ab2 25%,
+    #9b32ad 45%,
+    #feac2f 70%
+  );
+}
+
+.gradient-strip-heading-left {
+  font-weight: 300;
+  cursor: pointer;
+}
+.gradient-strip-heading-left,
+.gradient-strip-heading-right {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 1rem;
+  gap: 0.5rem;
+}
+
+.back-arrow {
+  display: flex;
+  align-items: center;
+}
+.back-arrow img {
+  height: 0.9rem;
+}
+
+.gradient-strip-normal-text {
+  font-size: 0.9rem;
+}
+
+/* Media Query for max-width: 1080px */
+@media (max-width: 1080px) {
+  .gradient-strip {
+    padding: 1rem 5rem;
+    font-size: 0.9rem;
+  }
+  .gradient-strip-heading-left,
+  .gradient-strip-heading-right {
+    gap: 0.4rem;
+  }
+  .back-arrow img {
+    height: 0.8rem;
+  }
+  .gradient-strip-normal-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Media Query for max-width: 768px */
+@media (max-width: 768px) {
+  .gradient-strip {
+    padding: 0.8rem 3rem;
+    height: auto;
+  }
+  .gradient-strip-heading-left,
+  .gradient-strip-heading-right {
+    font-size: 0.9rem;
+    gap: 0.3rem;
+    justify-content: center;
+  }
+  .back-arrow img {
+    height: 0.7rem;
+  }
+  .gradient-strip-normal-text {
+    font-size: 0.7rem;
+  }
+}
+
+/* Media Query for max-width: 480px */
+@media (max-width: 480px) {
+  .gradient-strip {
+    margin-top: 4rem;
+    padding: 0.5rem 1rem;
+    height: auto;
+  }
+  .gradient-strip-heading-left,
+  .gradient-strip-heading-right {
+    font-size: 0.8rem;
+    gap: 0.2rem;
+  }
+  .back-arrow img {
+    height: 0.6rem;
+  }
+  .gradient-strip-normal-text {
+    font-size: 0.6rem;
+  }
+}
+
+/* Media Query for max-width: 375px */
+@media (max-width: 375px) {
+  .gradient-strip {
+    padding: 0.5rem;
+    height: auto;
+    margin-top: 4rem;
+  }
+  .gradient-strip-heading-left,
+  .gradient-strip-heading-right {
+    font-size: 0.7rem;
+    gap: 0.1rem;
+  }
+  .back-arrow img {
+    height: 0.5rem;
+  }
+  .gradient-strip-normal-text {
+    font-size: 0.5rem;
+  }
+}

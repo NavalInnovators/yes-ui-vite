@@ -1,0 +1,72 @@
+// function handleUpload() {
+  //   if (!files) {
+  //     setMsg("No file Selected");
+  //     return;
+  //   }
+
+  //   const fd = new FormData();
+  //   for (let i = 0; i < files.length; i++) {
+  //     fd.append(`file${i + 1}`, files[i]);
+  //   }
+
+  //   setMsg("Uploading...");
+  //   setProgress((prevState) => {
+  //     return { ...prevState, started: true };
+  //   });
+  //   axios
+  //     .post("http://httpbin.org/post", fd, {
+  //       onUploadProgress: (progressEvent) => {
+  //         setProgress((prevState) => {
+  //           return { ...prevState, pc: progressEvent.progress * 100 };
+  //         });
+  //       },
+  //       headers: { "Custom-Header": "value" },
+  //     })
+  //     .then((res) => {
+  //       setMsg("Upload Successful");
+  //     })
+  //     .catch((err) => {
+  //       setMsg("Upload Successful");
+  //       console.error(err);
+  //     });
+  // }
+
+
+// Code for upload file
+
+{/* UPLOAD VIDEO */}
+        {/* <div className="review-sec-upload-file">
+          <input
+            type="file"
+            id="reviewUploadBtn"
+            multiple
+            onChange={(e) => {
+              setFiles(e.target.files);
+            }}
+          />
+          <div
+            className="review-sec-attachment-icon-cont"
+            onClick={() => document.getElementById("reviewUploadBtn").click()}
+          >
+            <img
+              src={AttachmentIcon}
+              alt="Attachment Icon"
+              className="review-sec-attachment-icon"
+            />
+          </div>
+
+          <div className="review-sec-upload-file-text">
+            <div className="review-sec-upload-file-text-a">Upload a Video</div>
+            <div className="review-sec-upload-file-text-b ">
+              File format should be as MP4 and under 10 MB
+            </div>
+          </div>
+        </div> */}
+
+
+
+        {/* PROGRESS BAR FOR UPLOADING */}
+        {/* {progress.started && (
+          <progress max="100" value={progress.pc}></progress>
+        )}
+        {msg && <span>{msg}</span>} */}

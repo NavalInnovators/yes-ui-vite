@@ -1,0 +1,83 @@
+.faq-header-container {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    border-radius: 15px;
+    height: 42vh;
+    display: flex;
+    position: relative;
+    margin-top: 14vh;
+}
+
+.blog-title {
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+}
+
+.blog-title-text {
+    font-family: "Public Sans", sans-serif;
+    font-size: 2.9rem;
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.bg-animation {
+    background: radial-gradient(circle at 50% 50%,
+            #feac2f,
+            #9b32ad,
+            #381ab2,
+            #17082c);
+    background-size: 200% 200%;
+    animation: gradientMove 30s infinite linear;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    25% {
+        background-position: 100% 0%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+
+    75% {
+        background-position: 0% 100%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+@media (max-width: 768px) {
+    .faq-header-container {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top: 14vh;
+    }
+    .blog-title-text {
+        font-weight: 350;
+        font-size: 2.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .faq-header-container {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        margin-top: 12vh;
+    }
+    .blog-title {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+    }
+    .blog-title-text {
+        font-weight: 300;
+        font-size: 2.1rem;
+    }
+}

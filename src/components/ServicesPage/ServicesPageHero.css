@@ -1,0 +1,37 @@
+.servicesHero {
+    /* bg animation */
+    background: radial-gradient(circle at 50% 50%,
+            #feac2f,
+            #9b32ad,
+            #381ab2,
+            #17082c);
+    background-size: 200% 200%;
+    animation: gradientMove 30s infinite linear;
+
+    height: 42vh;
+    padding: 2rem 1.5rem;
+    border-radius: 1rem;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    margin-top: 14vh;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+
+.servicesHeroTitle {
+    align-self: flex-start;
+    font-size: 3rem;
+    font-weight: 400;
+}
+
+.servicesHeroText {
+    width: 16rem;
+    align-self: flex-end;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 300;
+}

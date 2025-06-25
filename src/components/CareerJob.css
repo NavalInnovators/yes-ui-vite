@@ -1,0 +1,281 @@
+.header {
+  margin: 14vh auto 0;
+  position: relative;
+  height: 42vh;
+  border-radius: 15px;
+  overflow: hidden;
+  padding: 2rem;
+  width: 90%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(45deg,
+      #FEAC2F 10%,
+      /* Color 1 starts at 10% */
+      #9B32AD 25%,
+      /* Color 2 starts at 25% */
+      #381AB2 40%,
+      /* Color 3 starts at 40% */
+      #17082C 60%
+      /* Color 4 starts at 60% */
+    );
+  background-size: 200% 200%;
+  z-index: -1;
+  animation: rotate-background 15s infinite linear;
+}
+
+@keyframes rotate-background {
+  0% {
+    background-position: rotate(0deg);
+  }
+
+  100% {
+    background-position: rotate(360deg);
+  }
+}
+
+.main-heading {
+  text-align: left;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 600;
+  color: #ffffff;
+  word-wrap: break-word;
+}
+
+.career-jobcard {
+  width: 80%;
+  max-width: 1200px;
+  padding: 50px 52px;
+  border-radius: 10px 10px 0px 0px;
+  border: 1px solid #D9D9D9;
+  background-color: #FFFFFF;
+  align-items: flex-start;
+  margin: -25vh auto 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.careerJob-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 50px;
+}
+
+.inner-jobcard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative; /* Ensure position context for the button in mobile view */
+}
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  transition: all 0.3s ease; /* Smooth transition when changing position */
+}
+
+.apply-btn {
+  height: 50px;
+  width: 124px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  background-color: black;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  position: relative;
+  transition: color 0.3s, background-color 0.3s, border 0.3s;
+}
+
+.apply-btn:hover {
+  background-color: white;
+  color: black;
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(-15deg, #FEAC2F, #9B32AD, #381AB2, #17082C) border-box;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.section-carrer {
+  opacity: 1;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2F2F2F;
+  line-height: 28px;
+  margin-bottom: 20px;
+}
+
+.section-carrer li {
+  margin-bottom: 10px;
+  margin-left: 20px;
+  line-height: 1.6;
+}
+
+.section--heading {
+  margin-bottom: 20px;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 600;
+  color: #333;
+}
+
+@media(max-width:1200px) {
+  .header {
+    height: 45vh;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  .career-jobcard {
+    width: 85%;
+  }
+
+  .font-header {
+    font-size: 2.5rem;
+  }
+}
+
+@media(max-width:992px) {
+  .header {
+    height: 40vh;
+  }
+
+  .career-jobcard {
+    width: 70%;
+    padding: 40px 30px;
+  }
+
+  .font-header {
+    font-size: 2.2rem;
+  }
+}
+
+@media(max-width:768px) {
+  .header {
+    height: 35vh;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: 1.5rem;
+  }
+
+  .career-jobcard {
+    width: 70%;
+    margin: -20vh auto 0;
+    padding: 30px 25px;
+  }
+
+  .font-header {
+    font-size: 2rem;
+  }
+
+  .section--heading {
+    margin-bottom: 15px;
+  }
+
+  .btn {
+    margin-bottom: 20px;
+  }
+
+  .apply-btn {
+    height: 45px;
+    width: 110px;
+  }
+}
+
+@media(max-width:576px) {
+  .header {
+    height: 30vh;
+    margin-top: 10vh;
+  }
+
+  .career-jobcard {
+    width: 72%;
+    margin: -15vh auto 0;
+    padding: 25px 20px 70px; /* Added padding at bottom for button */
+    border-radius: 8px 8px 0 0;
+    position: relative; /* Ensure position context for absolute button */
+  }
+
+  .font-header {
+    font-size: 1.7rem;
+  }
+
+  .font-heading {
+    font-size: 1.3rem;
+    line-height: 1.4;
+  }
+
+  .section-carrer {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .section-carrer li {
+    margin-bottom: 8px;
+    margin-left: 15px;
+  }
+
+  .btn {
+    position: absolute;
+    bottom: -5%;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+
+  .apply-btn {
+    height: 40px;
+    width: 120px;
+    font-size: 14px;
+  }
+}
+
+@media(max-width:375px) {
+  .header {
+    height: 25vh;
+    margin-top: 8vh;
+    padding: 1rem;
+  }
+
+  .career-jobcard {
+    width: 74%;
+    margin: -12vh auto 0;
+    padding: 20px 15px 70px; /* Added padding at bottom for button */
+  }
+
+  .font-header {
+    font-size: 1.5rem;
+  }
+
+  .font-heading {
+    font-size: 1.2rem;
+  }
+
+  .section-carrer {
+    font-size: 13px;
+    line-height: 22px;
+  }
+  
+  .btn {
+    bottom: -5%;
+  }
+}

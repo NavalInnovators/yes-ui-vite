@@ -1,0 +1,157 @@
+.all-query-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  padding: 0 1rem;
+  margin-top: 18vh;
+  gap: 2vh;
+
+
+  height: 100vh;
+  font-family: "Public Sans", sans-serif;
+}
+
+.gradient-bar {
+  width: 100vw;
+  height: 7.68vh;
+  background: linear-gradient(45deg, #17082C, #381AB2, #9B32AD, #FEAC2F);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10vw;
+  border-radius: 4px;
+
+}
+
+.gradient-text {
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 25px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 1vw;
+}
+
+.Your-answers {
+  background-color: #E6E6E6;
+  border: 1px solid #E6E6E6;
+  border-radius: 1vh;
+  width: 12vw;
+  cursor: pointer;
+  background-color: black;
+  color: #E6E6E6;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.Subject-query {
+  color: white;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  background-color: #E6E6E6;
+  width: 12vw;
+  color: #17082C;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.sub-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.08vw;
+ 
+}
+
+.card {
+  width: 19.45vw;
+  height: 33.25vh;
+  background-color: #F2F2F2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: black;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 23px;
+
+}
+
+.card-content {
+  font-size: 11px;
+  color: #17082C;
+  margin: 0.5rem 0;
+  flex-grow: 1;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.date {
+  font-size: 0.85rem;
+  color: black;
+  background-color: white;
+  border-radius: 27px;
+  height: 3.34vh;
+  width: 6.71vw;
+  padding-left: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+
+.icons-like-comment{
+  background-color: white;
+  height: 3.34vh;
+  width: 6.71vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+  border-radius: 15px;
+}
+.icons-like-comment span {
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  /* border-color: white; */
+  background-color: white;
+  height: 4.34vh;
+  width: 6.71vw;
+}
+
+.icons-like-comment img {
+   background-color: white; 
+  /* border: 1px solid white; */
+  height: 3.11vh;
+  width: 1.06vw;
+}

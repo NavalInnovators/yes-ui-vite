@@ -1,0 +1,234 @@
+.doubt-sec {
+  /* background-color: aqua; */
+  max-width: 100%;
+  /* height: 440px; */
+  margin: 8vh 2vw;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+}
+.left-doubt-sec {
+  padding: 1vw;
+  padding-right: 0;
+  /* background-color: red; */
+}
+.doubt-sec-left-heading {
+  /* background-color: red; */
+  width: 55vw;
+  letter-spacing: -0.03em;
+  text-align: left;
+  font-size: 6vh;
+  line-height: 7vh;
+}
+.doubt-sec-left-content {
+  margin-top: 1vh;
+  width: 30vw;
+  font-size: 1.7vh;
+  line-height: 2.5vh;
+}
+
+.right-doubt-sec {
+  /* background-color: yellow; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: end;
+  position: relative;
+  /* this is the game */
+  /* left: 170px; */
+  /* right: 40px; */
+}
+.doubt-sec-right-content {
+  position: absolute;
+  /* width: 668px; */
+  /* background-color: brown; */
+  font-size: 1.5vh;
+  line-height: 2.5vh;
+  z-index: 2;
+}
+.right-doubt-sec img {
+  position: relative;
+  width: 36vw;
+  bottom: 10vh;
+}
+
+/* Laptop view (show list, hide dropdown) */
+@media (min-width: 1024px) {
+  .doubt-sec {
+    /* background-color: aqua; */
+    height: 440px;
+  }
+}
+
+/* iPad Pro - Landscape and Portrait */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .doubt-sec {
+    flex-wrap: wrap;
+    margin: 5vh 4vw;
+    height: 600px;
+  }
+  .left-doubt-sec {
+    width: 100%;
+  }
+  .doubt-sec-left-heading {
+    width: 100%;
+    font-size: 4.5vh;
+    line-height: 5.5vh;
+    text-align: left;
+  }
+  .doubt-sec-left-content {
+    margin-top: 1vh;
+    width: 75%;
+    font-size: 1.6vh;
+    line-height: 2.2vh;
+    text-align: justify;
+  }
+  .right-doubt-sec {
+    width: 100%;
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .doubt-sec-right-content {
+    position: static; /* Ensure content adjusts naturally */
+    font-size: 1.5vh;
+    line-height: 2vh;
+    text-align: justify;
+  }
+  .right-doubt-sec img {
+    width: 50%;
+    bottom: 380px;
+    margin-top: 3vh;
+  }
+}
+
+/* Tablet view (show dropdown, hide list) */
+@media (min-width: 480px) and (max-width: 1023px) {
+  .doubt-sec {
+    flex-wrap: wrap;
+    margin: 5vh 4vw;
+    height: 42vh;
+  }
+  .left-doubt-sec {
+    width: 100%;
+  }
+  .doubt-sec-left-heading {
+    width: 100%;
+    font-size: 4vh;
+    line-height: 5vh;
+    text-align: left;
+  }
+  .doubt-sec-left-content {
+    margin-top: 1vh;
+    width: 75%;
+    font-size: 1.7vh;
+    line-height: 2.2vh;
+    text-align: justify;
+  }
+  .right-doubt-sec {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 5vh;
+    /* background-color: aqua; */
+  }
+  .doubt-sec-right-content {
+    /* Use static positioning for better flow */
+    position: static;
+    font-size: 1.5vh;
+    line-height: 2vh;
+    text-align: justify;
+  }
+  .right-doubt-sec img {
+    width: 50%;
+    /* height: 60%; */
+    /* background-color: red; */
+    bottom: 240px;
+  }
+}
+
+/* Tablet view (show dropdown, hide list) */
+/* @media (min-width: 480px) and (max-width: 1023px) {
+  .doubt-sec {
+    flex-wrap: wrap;
+  }
+  .doubt-sec-left-heading {
+    width: 100%;
+    font-size: 4vh;
+    line-height: 5vh;
+  }
+  .doubt-sec-left-content {
+    margin-top: 0.5vh;
+    width: 80%;
+    font-size: 1.7vh;
+    line-height: 2vh;
+  }
+  .doubt-sec-right-content {
+    position: absolute;
+    font-size: 1.5vh;
+    line-height: 2.5vh;
+    z-index: 2;
+    text-align: justify;
+  }
+  .right-doubt-sec {
+    width: 100%;
+    line-height: 10px;
+    margin: 10px;
+  }
+  .doubt-sec-right-content {
+    position: absolute;
+    font-size: 1.5vh;
+    line-height: 2vh;
+    z-index: 2;
+  }
+  .right-doubt-sec img {
+    bottom: 3vh;
+    align-items: center;
+  }
+} */
+
+/* Mobile view (show dropdown, hide list, hide navbar) */
+@media (max-width: 480px) {
+  .doubt-sec {
+    flex-wrap: wrap;
+    /* background-color: aqua; */
+    height: 49vh;
+  }
+  .left-doubt-sec {
+    padding: 1vw;
+    /* background-color: pink; */
+    /* height: 120px; */
+  }
+  .doubt-sec-left-heading {
+    /* background-color: red; */
+    width: 90%;
+    font-size: 4vh;
+    line-height: 5vh;
+  }
+  .doubt-sec-left-content {
+    margin-top: 0.5vh;
+    width: 100%;
+    font-size: 1.7vh;
+    line-height: 2vh;
+  }
+
+  .right-doubt-sec {
+    /* background-color: beige; */
+    width: 100%;
+    line-height: 1vh;
+    margin: 1vw;
+  }
+  .doubt-sec-right-content {
+    text-align: justify;
+    position: absolute;
+    font-size: 1.5vh;
+    line-height: 2vh;
+    z-index: 2;
+  }
+  .right-doubt-sec img {
+    bottom: 130px;
+    width: 50%;
+  }
+}

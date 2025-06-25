@@ -1,0 +1,72 @@
+.progress-slider-card {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.progress-slider-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; 
+}
+.total-units{
+align-items: flex-start;
+}
+.completed-units{
+    align-items: flex-end;
+}
+.fraction-units{
+    display: flex;
+    padding-left: 3vw;
+}
+.progress-slider-input {
+    -webkit-appearance: none;
+    width: 20vw;
+    height: 3px;
+    outline: none;
+    margin-top: 10px;
+    position: relative;
+    right:1.3vw;
+}
+
+/* Customizing the slider thumb */
+.progress-slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: #ff6f00;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.progress-slider-input::-moz-range-thumb {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: #ff6f00;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+@media(max-width:1024px){
+    .progress-slider-input {
+        right:1.9vw;
+        width: 30vw;
+    }
+}
+@media(max-width:768px){
+    .progress-slider-input {
+        right:2.7vw;
+        width: 45vw;
+    }
+}
+@media(max-width:480px){
+    .progress-slider-input {
+        right:4vw;
+        width: 79vw;
+    }
+}

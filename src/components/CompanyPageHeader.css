@@ -1,0 +1,119 @@
+.company-header {
+  background: radial-gradient(circle at 50% 50%,
+            #feac2f,
+            #9b32ad,
+            #381ab2,
+            #17082c);
+    background-size: 200% 200%;
+    animation: gradientMove 30s infinite linear;
+
+  margin-top: 14vh;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 42vh;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  color: white;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* .company-header::before {
+  content: "";
+  position: absolute;
+  top: -180%;
+  left: -10%;
+  width: 120%;
+  height: 500%;
+  background: radial-gradient(134.61% 193.04% at 97.06% 13.13%,
+      #feac2f 10%,
+      #9b32ad 32.77%,
+      #381ab2 69.93%,
+      #17082c 100%);
+  background-size: 100% 100%;
+  z-index: -1;
+  animation: rotate-background 15s linear infinite;
+}
+
+@keyframes rotate-background {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+} */
+
+.header-text {
+  font-family: Public Sans;
+  font-size: 6vh;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.right-text {
+  font-family: Public Sans;
+  font-size: 2vh;
+  font-weight: 400;
+  line-height: 2.3vh;
+  text-align: right;
+  width: 26vw;
+  height: 72px;
+  color: #ffffff;
+  position: absolute;
+  right: 2.5vw;
+  bottom: 3vh;
+}
+
+/* Laptop view (show list, hide dropdown) */
+/* @media (min-width: 1024px) {
+  .right-text {
+    bottom: 5vh;
+  }
+} */
+
+/* Tablet view (show dropdown, hide list) */
+@media (min-width: 480px) and (max-width: 1023px) {
+  .company-header {
+    padding: 20px;
+  }
+
+  .company-header::before {
+    top: -192%;
+  }
+
+  .right-text {
+    font-size: 18px;
+    line-height: 20px;
+    width: 350px;
+    right: 25px;
+    bottom: 25px;
+  }
+}
+
+/* Mobile view (show dropdown, hide list, hide navbar) */
+@media (max-width: 480px) {
+  .company-header {
+    margin: 10px;
+    margin-top: 120px;
+  }
+
+  .company-header::before {
+    top: -200%;
+  }
+
+  .right-text {
+    font-size: 14px;
+    line-height: 20px;
+    width: 300px;
+    right: 25px;
+    bottom: 10px;
+  }
+}

@@ -1,0 +1,77 @@
+.reset-form {
+  background: rgb(255, 255, 255);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  text-align: center;
+  color: #000;
+  width: 40vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem ;
+}
+
+.reset-form input {
+  border-radius: 0.6rem;
+  border: none;
+  width: 100%;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+  color: #727272;
+  /* height: 7vh; */
+  padding-left: 0.5rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  text-align: left;
+}
+.input-container-email {
+  background-color: #f9f9f9;
+  border: 1px solid hsl(0, 0%, 74%);
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+.input-container-email img {
+  padding: 0.2rem;
+}
+
+
+.reset-form button {
+  width: 100%;
+  background-color: #000000;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+  align-items: center;
+  color: #ffffff;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.reset-form a {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.input-container-email {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .reset-form{
+    width: 55vw;
+  }
+}
+@media (max-width: 425px) {
+  .reset-form{
+    width: 75vw;
+  }
+}

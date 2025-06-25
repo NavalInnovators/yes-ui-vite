@@ -1,0 +1,29 @@
+/* ===== TABLE ===== */
+.book-dashboard-prediction-table {
+  box-sizing: border-box;
+  width: auto;
+  margin-top: 1vh;
+  background: #f5f5f5;
+  padding: 3vh;
+}
+
+.book-dashboard-prediction-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.book-dashboard-prediction-table th,
+.book-dashboard-prediction-table td {
+  border: 1px solid #ccc;
+  padding: 2vh 2vw;
+  text-align: left;
+}
+.book-dashboard-prediction-table th {
+  font-weight: 500;
+  font-size: 1.6vh;
+}
+.book-dashboard-prediction-table td {
+  font-weight: 350;
+  font-size: 1.6vh;
+}
+/* ===== TABLE END ===== */

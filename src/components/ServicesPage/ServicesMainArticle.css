@@ -1,0 +1,37 @@
+.servicesMainArticle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 65%;
+}
+
+.servicesMainArticleTitle {
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.servicesMainArticleContent {
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.servicesMainArticleImg {
+    object-fit: contain;
+    width: 100%;
+    height: 10rem;
+}
+
+.servicesMainArticleBtn {
+    background-color: #000000;
+    color: #FFFFFF;
+    width: 7rem;
+    height: 2.5rem;
+    font-size: 0.8rem;
+}
+
+.servicesMainArticleBtn:hover {
+    background-color: #FFFFFF;
+}
