@@ -5,9 +5,8 @@ const FeatureCards = () => {
     const navigate = useNavigate();
     return (
         <div className="feature-cards">
-
             {cardValues.map((card, index) => (
-                <div className="each-card" onClick={ ()=>navigate('/services')} >
+                <div key={index} className="each-card" onClick={ ()=>navigate('/services')} >
                     <div className="card-top">
                         <div className="card-image">
                             <img src={card.img} alt="card1" />

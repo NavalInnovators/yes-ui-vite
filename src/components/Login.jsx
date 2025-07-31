@@ -1,21 +1,33 @@
 import "./Login.css";
-import "./OtpVerification.css"
-import { LoginSidesection, OtpVerification, SignUp, VerificationDetailsForm,LoginSignupLeft,OtpVerficationLeft,VerifiactionDetailsLeft, ResetPasswordLeft, ResetPasswordForm, ResetPasswordRight} from ".";
+import "./OtpVerification.css";
+import {
+  LoginSidesection,
+  OtpVerification,
+  SignUp,
+  VerificationDetailsForm,
+  LoginSignupLeft,
+  OtpVerficationLeft,
+  VerifiactionDetailsLeft,
+  ResetPasswordLeft,
+  ResetPasswordForm,
+  ResetPasswordRight,
+} from ".";
 import React from "react";
 import { useLocation } from "react-router-dom";
-
 
 const Login = () => {
   const location = useLocation();
   return (
     <div className="login">
       <div className="left-container">
-      {location.pathname==='/login'&& <LoginSignupLeft />}
-      {location.pathname==='/signup' &&<LoginSignupLeft />}
-      {location.pathname==='/otp-verification' && <OtpVerficationLeft />}
-      {location.pathname === "/verification-detail" && <VerifiactionDetailsLeft />}
-      {location.pathname==="/reset-password" && <ResetPasswordLeft/>}
-      {location.pathname==="/new-password-page" && <ResetPasswordLeft/>}
+        {location.pathname === "/login" && <LoginSignupLeft />}
+        {location.pathname === "/signup" && <LoginSignupLeft />}
+        {location.pathname === "/otp-verification" && <OtpVerficationLeft />}
+        {location.pathname === "/verification-detail" && (
+          <VerifiactionDetailsLeft />
+        )}
+        {location.pathname === "/reset-password" && <ResetPasswordLeft />}
+        {location.pathname === "/new-password-page" && <ResetPasswordLeft />}
         {/* <div className="img-text-container">
           <img src={YesLogoNoTextLightBG} alt="yesLogo" />
           <div className="login-heading font-heading-black">
@@ -39,7 +51,7 @@ const Login = () => {
         {location.pathname === "/otp-verification" && <OtpVerification />}
         {location.pathname === "/verification-detail" && <VerificationDetailsForm />}
         {location.pathname === "/reset-password" && <ResetPasswordForm />}
-        {location.pathname==="/new-password-page" && <ResetPasswordRight/>}
+        {location.pathname === "/new-password-page" && <ResetPasswordRight />}
       </div>
     </div>
   );

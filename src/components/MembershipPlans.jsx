@@ -13,7 +13,7 @@ const MembershipPlans = () => {
             <div className="membership-heading font-heading-white">Membership Plans</div>
             <div className="membership-plans">
                 {membershipPlan.map((plan, index) => (
-                    <div className="each-plan">
+                    <div key={index} className="each-plan">
 
                         <div className="membership-plan-header">
                             <div>
@@ -41,7 +41,7 @@ const MembershipPlans = () => {
                         <div className="membership-feature-section">
                             <hr />
                             {plan.features.map((feature, index) => (
-                                <div className="features font-paragraph-white">
+                                <div key={index} className="features font-paragraph-white">
                                     <img src={Tick} alt="tick"/>
 
                                     {feature}

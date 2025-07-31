@@ -1,5 +1,5 @@
-import React from "react";
-import { Analytics } from '@vercel/analytics/react';
+import React, { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
@@ -52,7 +52,25 @@ import EditProfile from "./components/ProfilePage/EditProfile.jsx";
 import OtpVerificationPage from "./pages/OtpVerification/OtpVerificationPage.jsx";
 import LoginSignupGaurd from "./Auth/LoginSignupGaurd.jsx";
 import { BookDashboardProvider } from "./context/book-dashboard-context.jsx";
+import Reviewer from "./Reviewer/Reviewer.jsx";
+import "./main.css";
+
 function App() {
+  {
+    /* Reviewer Page (Change this before merging) */
+  }
+  const [isReviewer, setIsReviewer] = useState(true);
+  if (isReviewer)
+    return (
+      <div>
+        <Router>
+          <Routes>
+            <Route path="/*" element={<Reviewer />} />
+          </Routes>
+        </Router>
+      </div>
+    );
+
   return (
     <div>
       {/* ToastContainer is placed outside Router to avoid unnecessary re-renders */}

@@ -4,6 +4,85 @@
 
 @import "tailwindcss";
 
+
+/* ------------ For Reviewer Mode ------------ */
+@theme {
+  --color-white: hsl(0, 0%, 95%);
+
+  /* Dark Mode */
+  --color-dark-card: hsl(0, 0%, 5%);
+  --color-dark-highlight: hsl(0, 0%, 10%);
+  --color-dark-more-highlighted: hsl(0, 0%, 17%);
+  --color-dark-hover: hsl(0, 0%, 15%);
+  --color-dark-text-muted: hsl(0, 0%, 70%);
+  --color-dark-border: hsl(0, 0%, 20%);
+
+  /* Light Mode */
+  --color-light-card: hsl(0, 0%, 95%);
+  --color-light-text: hsl(0, 0%, 30%);
+  --color-light-border: hsl(0, 0%, 80%);
+  --color-light-hover: hsl(0, 0%, 90%);
+}
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Hover Tooltip */
+.info-tooltip {
+  z-index: 10;
+  background: white;
+}
+
+.info-tooltip::after {
+  content: "\25B2";
+  position: absolute;
+  top: -25.5px;
+  font-size: 25px;
+  right: 30px;
+  text-shadow: 0px -1px 1px rgb(190, 189, 189);
+  color: rgb(255, 255, 255);
+  z-index: 1;
+}
+
+/* Gradient Border */
+.gradient-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background: linear-gradient(90deg, #381AB2, #9B32AD, #FEAC2F);
+  z-index: -1;
+  border-radius: 8px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  background-color: hsl(0, 0%, 95%);
+  width: 17px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 70%);
+  border-radius: 10px;
+  border: 4px solid hsl(0, 0%, 95%);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 80%);
+}
+
+/* ---- CK Editor Styles ----*/
+.cke {
+  border: 2px solid hsl(0, 0%, 90%) !important;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* --------------------------------------------- */
+
+
 /*
 // <uniquifier>: Use a unique and descriptive class name
 // <weight>: Use a value from 100 to 900
@@ -38,35 +117,32 @@
       #17082C 85%
       /* Color 4 starts at 60% */
     );
-
 }
-
-
 
 html,
 body {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0; 
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-root{
+root {
   width: 100%;
 }
 
 * {
-  margin: 0px;
-  padding: 0px;
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
 
-body, root {
+body,
+root {
   font-family: "Public Sans", sans-serif;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
 
 .colourful-border-btn {
@@ -273,6 +349,7 @@ body, root {
   align-items: light;
   color: #2F2F2F;
 }
+
 .font-paragraph-grey {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -282,6 +359,7 @@ body, root {
   line-height: 22px;
   color: #727272;
 }
+
 .font-otp-grey {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -302,6 +380,7 @@ body, root {
   align-items: center;
   color: #ffffff;
 }
+
 .font-paragraph-black {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -312,6 +391,7 @@ body, root {
   align-items: center;
   color: #000000;
 }
+
 .font-profile-dropdown {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -446,14 +526,14 @@ body, root {
   border-radius: 0px 8px 8px 0px;
 }
 
-.otp-heading{
+.otp-heading {
   font-family: Public Sans;
   font-size: 24px;
   font-weight: 500;
   line-height: 28.2px;
   text-align: center;
   color: #000000;
-    }
+}
 
 
 @media (max-width: 1024px) {
@@ -489,6 +569,7 @@ body, root {
     text-align: left;
 
   }
+
   .font-subheading-black {
     font-family: "Public Sans", sans-serif;
     font-optical-sizing: auto;
@@ -511,43 +592,48 @@ body, root {
     color: #727272;
   }
 }
-.card-black-heading{
-font-family: Public Sans;
-font-size: 20px;
-font-weight: 500;
-line-height: 23.5px;
-text-align: left;
-color: #000;
+
+.card-black-heading {
+  font-family: Public Sans;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 23.5px;
+  text-align: left;
+  color: #000;
 }
-.card-grey-heading{
-font-family: Public Sans;
-font-size: 14px;
-font-weight: 400;
-line-height: 16.45px;
-text-align: left;
-color:#727272;
+
+.card-grey-heading {
+  font-family: Public Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.45px;
+  text-align: left;
+  color: #727272;
 }
-.font-header{
-    font-family: "Public Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 55px;
-    color:#FFFFFF;
-    text-align: left;
+
+.font-header {
+  font-family: "Public Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 55px;
+  color: #FFFFFF;
+  text-align: left;
 }
-.font-ul{
-font-family: "Public Sans";
-font-size: 16px;
-font-weight: 400;
-line-height: 28px;
-text-align: left;
-color: #2F2F2F;
+
+.font-ul {
+  font-family: "Public Sans";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+  text-align: left;
+  color: #2F2F2F;
 }
-.font-heading{
-font-family: Public Sans;
-font-size: 20px;
-font-weight: 500;
-line-height: 23.5px;
-color: #000000;
+
+.font-heading {
+  font-family: Public Sans;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 23.5px;
+  color: #000000;
 }
