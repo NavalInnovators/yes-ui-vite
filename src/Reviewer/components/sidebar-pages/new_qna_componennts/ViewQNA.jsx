@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import Line from "../../Line";
 import SearchBar from "./view_qna_components/SearchBar";
 import SelectTopic from "./view_qna_components/SelectTopic";
@@ -8,6 +9,7 @@ import data from "../../../dummy_data/data";
 import Pagination from "../../pagination/Pagination";
 import { options } from "../../../constants/constants";
 import { PAGE_SIZE } from "../../../constants/constants";
+import { fuzzySearch } from "../../../lib/fuzzySearch";
 
 export default function ViewQNA() {
   const [questions, setQuestions] = useState(data);
@@ -21,30 +23,20 @@ export default function ViewQNA() {
   const start = (currentPage - 1) * PAGE_SIZE;
   let end = Math.min(start + PAGE_SIZE, filteredQuestions.length);
 
-  function fuzzySearch(substr, str) {
-    const words = substr.toLowerCase().split(" ");
-    str = str.toLowerCase();
-
-    for (const word of words) {
-      if (!str.includes(word)) return false;
-    }
-
-    return true;
-  }
-
   useEffect(() => {
     if (searchQuery === "") {
       setFilteredQuestions(questions);
+      setCurrentPage(1);
       return;
     }
 
     setDraftOnly(false);
     setSelectedOption("All");
+    setCurrentPage(1);
+
     setFilteredQuestions(
       questions.filter((q) => fuzzySearch(searchQuery, q.content))
     );
-
-    setCurrentPage(1);
   }, [searchQuery]);
 
   function filterBySearch(e) {
@@ -89,6 +81,7 @@ export default function ViewQNA() {
 
       <div className="flex items-center gap-[7px] w-full">
         <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
+
         <SelectTopic
           options={options}
           filterByTopicName={filterByTopicName}

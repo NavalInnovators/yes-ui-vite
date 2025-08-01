@@ -5,12 +5,21 @@ import Pagination from "../../../components/pagination/Pagination";
 import { Link } from "react-router-dom";
 
 export default function TopNavigationPanel() {
-  const [selectedOption, setSelectedOption] = useState("Select a Topic");
+  const [selectedTopic, setSelectedTopic] = useState("Select a Topic");
+  const [selectedResponse, setSelectedResponse] = useState("View all Answers");
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalQuestions = 10;
 
-  const options = [
+  const topics = [
+    "Data Structures",
+    "Machine Learning",
+    "Data Science",
+    "Theory of Automata",
+    "Operating System",
+  ];
+
+  const responses = [
     "Response ID 234845",
     "Response ID 384777",
     "Response ID 214578",
@@ -22,17 +31,17 @@ export default function TopNavigationPanel() {
     <div className="py-[10px] px-[25px] flex justify-between items-center">
       <div className="flex items-center gap-[10px]">
         <SelectTopic
-          options={options}
+          options={topics}
           filterByTopicName={filterByTopicName}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
+          selectedOption={selectedTopic}
+          setSelectedOption={setSelectedTopic}
         />
 
         <SelectTopic
-          options={options}
+          options={responses}
           filterByTopicName={filterByTopicName}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
+          selectedOption={selectedResponse}
+          setSelectedOption={setSelectedResponse}
         />
       </div>
 

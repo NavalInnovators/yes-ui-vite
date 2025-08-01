@@ -1,4 +1,6 @@
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { motion } from "motion/react";
 
 import TopGradientBar from "./components/TopGradientBar";
 import TopNavigationPanel from "./components/TopNavigationPanel";
@@ -8,7 +10,6 @@ import questions from "../../dummy_data/data";
 // Context
 import QuestionContext from "./context/QuestionContext";
 import CommentTextContext from "./context/CommentTextContext";
-import { useMemo, useState } from "react";
 
 export default function DraftPage() {
   const { id } = useParams();
@@ -21,7 +22,11 @@ export default function DraftPage() {
   );
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: "100%" }}
+      animate={{ opacity: 1, y: "0%" }}
+      transition={{ ease: "circOut", duration: 0.2 }}
+    >
       <TopGradientBar />
 
       <CommentTextContext.Provider value={commentTextMemo}>
@@ -30,6 +35,6 @@ export default function DraftPage() {
           <Section />
         </QuestionContext.Provider>
       </CommentTextContext.Provider>
-    </div>
+    </motion.div>
   );
 }

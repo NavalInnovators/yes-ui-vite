@@ -27,6 +27,7 @@
     "html-react-parser": "^5.2.2",
     "lucide-react": "^0.533.0",
     "mermaid": "^11.4.1",
+    "motion": "^12.23.12",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^7.6.0",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Line from "../../Line";
 import { options as topic_options, status } from "../../../constants/constants";
@@ -8,6 +8,7 @@ import ReviewedQNAQuestions from "../reviewed_qna_components/ReviewedQNAQuestion
 import Pagination from "../../pagination/Pagination";
 import data from "../../../dummy_data/data";
 import { PAGE_SIZE } from "../../../constants/constants";
+import { fuzzySearch } from "../../../lib/fuzzySearch";
 
 export default function ReviewedQNALeft() {
   const [selectedTopic, setSelectedTopic] = useState("Select a Topic");
@@ -16,11 +17,30 @@ export default function ReviewedQNALeft() {
   const [questions, setQuestions] = useState(reviewed_questions);
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const totalQuestions = filteredQuestions.length;
 
   const start = (currentPage - 1) * PAGE_SIZE;
   let end = Math.min(start + PAGE_SIZE, filteredQuestions.length);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setFilteredQuestions(questions);
+      setCurrentPage(1);
+      return;
+    }
+
+    setFilteredQuestions(
+      questions.filter((q) => fuzzySearch(searchQuery, q.content))
+    );
+
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  function filterBySearch(e) {
+    setSearchQuery(e.target.value);
+  }
 
   function filterByTopicName(topic_name) {
     const filteredByTopicName = questions.filter(
@@ -47,7 +67,7 @@ export default function ReviewedQNALeft() {
       <Line />
 
       <div className="flex items-center gap-[7px] w-full">
-        <SearchBar />
+        <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
 
         <SelectTopic
           options={topic_options}
