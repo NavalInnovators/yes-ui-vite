@@ -23,9 +23,16 @@ export default function DraftPage() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: "100%" }}
-      animate={{ opacity: 1, y: "0%" }}
-      transition={{ ease: "circOut", duration: 0.2 }}
+      initial={{ translateY: "100%" }}
+      animate={{ translateY: "0%" }}
+      exit={{ translateY: "100%" }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 25,
+        mass: 1,
+      }}
+      className="absolute top-0 left-0 bg-[#fff] z-[10]"
     >
       <TopGradientBar />
 

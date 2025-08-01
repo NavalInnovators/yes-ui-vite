@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import ReviewerAnalytics from "./new_qna_componennts/ReviewerAnalytics";
 import ViewQNA from "./new_qna_componennts/ViewQNA";
 
@@ -6,6 +7,8 @@ export default function NewQNA() {
     <div className="flex gap-[20px] justify-between">
       <ViewQNA />
       <ReviewerAnalytics showReviewed={false} />
+
+      <Outlet />
     </div>
   );
 }

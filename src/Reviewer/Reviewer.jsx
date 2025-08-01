@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashBoard from "./components/sidebar-pages/DashBoard";
 import ReviewedQNA from "./components/sidebar-pages/ReviewedQNA";
@@ -6,22 +6,31 @@ import Notification from "./components/sidebar-pages/Notification";
 import NewQNA from "./components/sidebar-pages/NewQNA";
 import HomeLayout from "./HomeLayout";
 import DraftPage from "./pages/draft_page/DraftPage";
+import { AnimatePresence } from "motion/react";
 
 function Reviewer() {
-  return (
-    <Routes>
-      {/* Home */}
-      <Route path="/" element={<HomeLayout />}>
-        <Route index element={<Navigate to="dashboard" replace />} />
-        <Route path="dashboard" element={<DashBoard />} />
-        <Route path="notification" element={<Notification />} />
-        <Route path="new_qna" element={<NewQNA />} />
-        <Route path="reviewed_qna" element={<ReviewedQNA />} />
-      </Route>
+  const location = useLocation();
 
-      {/* Draft */}
-      <Route path="/qna/:id" element={<DraftPage />} />
-    </Routes>
+  return (
+    <AnimatePresence>
+      <Routes location={location} key={location.pathname}>
+        {/* Home */}
+        <Route path="/" element={<HomeLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+
+          <Route path="dashboard" element={<DashBoard />} />
+
+          <Route path="notification" element={<Notification />} />
+
+          <Route path="new_qna" element={<NewQNA />}>
+            {/* Draft Page */}
+            <Route path="qna/:id" element={<DraftPage />} />
+          </Route>
+
+          <Route path="reviewed_qna" element={<ReviewedQNA />} />
+        </Route>
+      </Routes>
+    </AnimatePresence>
   );
 }
 
