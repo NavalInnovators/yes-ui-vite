@@ -57,9 +57,9 @@ import EditProfile from "./components/ProfilePage/EditProfile.jsx";
 import OtpVerificationPage from "./pages/OtpVerification/OtpVerificationPage.jsx";
 import LoginSignupGaurd from "./Auth/LoginSignupGaurd.jsx";
 import { BookDashboardProvider } from "./context/book-dashboard-context.jsx";
-import Reviewer from "./Reviewer/Reviewer.jsx";
+import Reviewer from "./roles/Reviewer/Reviewer.jsx";
 import "./main.css";
-import Creator from "./Creator/Creator.jsx";
+import Creator from "./roles/Creator/Creator.jsx";
 
 function App() {
   return (
@@ -89,8 +89,8 @@ function AppContent() {
       <ScrollToTop /> {/* makes any page scroll to top when loaded */}
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/reviewer*" element={<Reviewer />} />
-        <Route path="/creator*" element={<Creator />} />
+        <Route path="/reviewer/*" element={<Reviewer />} />
+        <Route path="/creator/*" element={<Creator />} />
         <Route
           path="/login"
           element={
