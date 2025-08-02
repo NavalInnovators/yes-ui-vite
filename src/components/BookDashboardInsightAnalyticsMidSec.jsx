@@ -49,18 +49,18 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
       {/* MAIN CONTENT */}
       <div className="book-dashboard-analytics">
         {/* TOPIC BOX */}
-        <div className="md:w-[1000px] w-full mx-auto flex justify-center items-center  h-16  bg-gray-100">
+        <div className="md:w-[1000px] w-full mx-auto flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
           Topic: These analytics graphs are based on unit 1
         </div>
 
         {/* TWO COLUMN LAYOUT */}
-        <div className="flex flex-col md:flex-row gap-4 !mt-4">
+        <div className="flex flex-col md:flex-row gap-4 !mt-4 max-w-[1000px] mx-auto">
           {/* LEFT COLUMN */}
           <div className="flex flex-col w-full md:w-[60%] gap-4  p-2 ">
             {/* Upper Left */}
-           <div className="h-auto p-4 rounded-md flex justify-center items-center shadow-sm bg-gray-100">
-  <BookDashboardLeftPieChart />
-</div>
+            <div className="h-auto p-4 rounded-md flex justify-center items-center shadow-sm bg-gray-100">
+              <BookDashboardLeftPieChart />
+            </div>
 
 
             {/* Lower Left */}
@@ -74,15 +74,15 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
 
             <BookDashboardRightPieChart />
             <div className="text-center mt-4">
-  <p className="text-gray-700 mb-3">
-    Click and find the answer on topic page
-  </p>
-  <button
-    className="rounded-md border-2 bg-[#792AAF] text-white !px-7 !py-2 !mb-4 text-base cursor-pointer hover:bg-[#5e1f87] transition-all duration-200"
-  >
-    Go To Topic
-  </button>
-</div>
+              <p className="text-gray-700 mb-3">
+                Click and find the answer on topic page
+              </p>
+              <button
+                className="rounded-md border-2 bg-[#792AAF] text-white !px-7 !py-2 !mb-4 text-base cursor-pointer hover:bg-[#5e1f87] transition-all duration-200"
+              >
+                Go To Topic
+              </button>
+            </div>
 
 
 
