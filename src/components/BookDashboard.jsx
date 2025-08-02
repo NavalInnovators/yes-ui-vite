@@ -51,7 +51,7 @@ const BookDashboardSections = [
 ];
 
 function BookDashboard() {
-  const [currentSection, setCurrentSection] = useState("Syllabus");
+  const [currentSection, setCurrentSection] = useState("Insights");
 
   const handleSectionChange = (section) => {
     setCurrentSection(section);
