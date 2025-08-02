@@ -38,7 +38,7 @@ const AllSubjects = ({ searchQuery }) => {
       ? allCourses
       : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
   ).filter((course) => {
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery.trim().toLowerCase();
 
     const nameMatch = course.name?.toLowerCase().includes(query);
     const universityMatch = course.universityName
@@ -46,17 +46,13 @@ const AllSubjects = ({ searchQuery }) => {
       .includes(query);
     const yearMatch = String(course.year).toLowerCase().includes(query);
     const branchMatch = course.branchNames?.some((branch) => {
-      const normalize = (str) => str.toLowerCase().replace(/[^a-z0-9]/gi, "");
-
-      const normalizedBranch = normalize(branch);
-      const normalizedQuery = normalize(query);
-
+      const lowerBranch = branch.toLowerCase();
+      const branchParts = lowerBranch.split(/[^a-zA-Z0-9]/);
       return (
-        normalizedBranch.includes(normalizedQuery) ||
-        normalizedQuery.includes(normalizedBranch)
+        lowerBranch.includes(query) ||
+        branchParts.some((part) => part.includes(query))
       );
     });
-
     const codeMatch = course.courseCodes?.some((code) =>
       code.toLowerCase().includes(query)
     );
