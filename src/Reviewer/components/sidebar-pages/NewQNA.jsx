@@ -8,6 +8,7 @@ export default function NewQNA() {
       <ViewQNA />
       <ReviewerAnalytics showReviewed={false} />
 
+      {/* Draft Page */}
       <Outlet />
     </div>
   );

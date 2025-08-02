@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Line from "../../Line";
 import { options as topic_options, status } from "../../../constants/constants";
@@ -6,18 +6,23 @@ import SearchBar from "../new_qna_componennts/view_qna_components/SearchBar";
 import SelectTopic from "../new_qna_componennts/view_qna_components/SelectTopic";
 import ReviewedQNAQuestions from "../reviewed_qna_components/ReviewedQNAQuestions";
 import Pagination from "../../pagination/Pagination";
-import data from "../../../dummy_data/data";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
 
+import QuestionsContext from "../../../context/QuestionsContext";
+
 export default function ReviewedQNALeft() {
+  const { questions, setQuestions } = useContext(QuestionsContext);
+
   const [selectedTopic, setSelectedTopic] = useState("Select a Topic");
   const [selectedStatus, setSelectedStatus] = useState("Select a Status");
-  const reviewed_questions = data.filter((q) => q.reviewed);
-  const [questions, setQuestions] = useState(reviewed_questions);
-  const [filteredQuestions, setFilteredQuestions] = useState(questions);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setFilteredQuestions(questions.filter((q) => q.reviewed));
+  }, [questions]);
 
   const totalQuestions = filteredQuestions.length;
 
@@ -40,6 +45,10 @@ export default function ReviewedQNALeft() {
 
   function filterBySearch(e) {
     setSearchQuery(e.target.value);
+
+    // Reset Other Filters
+    setSelectedStatus("Select a Status");
+    setSelectedTopic("Select a Topic");
   }
 
   function filterByTopicName(topic_name) {
@@ -49,6 +58,10 @@ export default function ReviewedQNALeft() {
 
     setFilteredQuestions(filteredByTopicName);
     setSelectedTopic(topic_name);
+
+    // Reset Other Filters
+    setSelectedStatus("Select a Status");
+    setSearchQuery("");
     setCurrentPage(1);
   }
 
@@ -57,6 +70,10 @@ export default function ReviewedQNALeft() {
 
     setFilteredQuestions(filteredByStatus);
     setSelectedStatus(status);
+
+    // Reset Other Filters
+    setSelectedTopic("Select a Topic");
+    setSearchQuery("");
     setCurrentPage(1);
   }
 

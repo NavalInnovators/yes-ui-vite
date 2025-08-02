@@ -4,7 +4,8 @@ import InfoLabel from "../../../components/InfoLabel";
 import StarRating from "../../../components/StarRating";
 
 export default function UserAnswer() {
-  const question = useContext(QuestionContext);
+  const { question } = useContext(QuestionContext);
+  console.log("From UserAnswer: ", question);
 
   return (
     <div className="flex flex-col p-[30px] gap-[20px] bg-[#fff] rounded-[10px]">
@@ -12,7 +13,7 @@ export default function UserAnswer() {
       <div className="flex items-center justify-between">
         <h1 className="text-[18px]">User's Answer</h1>
 
-        <InfoLabel value={question.answers_submitted_by_user} />
+        <InfoLabel value={question?.answers_submitted_by_user} />
       </div>
 
       {/* User's Submitted Answer Section */}
@@ -20,11 +21,11 @@ export default function UserAnswer() {
         {/* Rated Stars */}
         <div className="flex items-center justify-between border-b-[1px] px-[30px] py-[20px] border-light-border pb-[15px]">
           <p className="bg-yellow-100 text-[15px] text-yellow-600 w-fit py-[2px] px-[15px] rounded-[7px]">
-            {question.stars} Star
+            {question?.stars} Star
           </p>
 
           <StarRating
-            defaultRating={Math.round(question.stars)}
+            defaultRating={Math.round(question?.stars)}
             size={25}
             fixed={true}
           />

@@ -25,7 +25,7 @@ export default function Question({ question }) {
         <div className="flex-1">{question.content}</div>
 
         {/* Topic Name */}
-        <div className="flex items-center dark:bg-dark-more-highlighted dark:text-dark-text-muted justify-center font-light bg-[rgba(230,230,230,1)] text-[12px] h-[24px] p-[5px] rounded-[5px]">
+        <div className="flex items-center dark:bg-dark-more-highlighted dark:text-dark-text-muted justify-center font-light bg-[rgba(230,230,230,1)] text-[12px] h-[24px] p-[5px] rounded-[5px] ml-[5px]">
           {question.topic_name}
         </div>
 

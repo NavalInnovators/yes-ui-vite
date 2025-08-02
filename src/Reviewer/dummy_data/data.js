@@ -1,4 +1,4 @@
-export default [
+[
   {
     id: 1,
     content:
@@ -8,7 +8,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 5,
@@ -52,7 +52,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 6,
@@ -74,7 +74,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 8,
@@ -85,7 +85,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 9,
@@ -96,7 +96,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 10,
@@ -107,7 +107,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 11,
@@ -118,7 +118,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 12,
@@ -140,7 +140,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 14,
@@ -162,7 +162,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 16,
@@ -184,7 +184,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 18,
@@ -195,7 +195,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 19,
@@ -206,7 +206,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 20,
@@ -217,7 +217,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 21,
@@ -250,7 +250,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 24,
@@ -261,7 +261,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 25,
@@ -272,7 +272,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 26,
@@ -283,7 +283,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 27,
@@ -294,7 +294,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 28,
@@ -305,7 +305,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 29,
@@ -316,7 +316,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 30,
@@ -327,7 +327,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 31,
@@ -338,7 +338,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 32,
@@ -360,7 +360,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 34,
@@ -371,7 +371,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 35,
@@ -382,7 +382,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 36,
@@ -426,7 +426,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 40,
@@ -437,7 +437,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 41,
@@ -448,7 +448,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 42,
@@ -459,7 +459,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 43,
@@ -470,7 +470,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 44,
@@ -492,7 +492,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 46,
@@ -536,7 +536,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 50,
@@ -547,7 +547,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 51,
@@ -558,7 +558,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 52,
@@ -569,7 +569,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 53,
@@ -580,7 +580,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 54,
@@ -591,7 +591,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 55,
@@ -602,7 +602,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 56,
@@ -635,7 +635,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 59,
@@ -657,7 +657,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 61,
@@ -668,7 +668,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 62,
@@ -679,7 +679,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 63,
@@ -690,7 +690,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 64,
@@ -701,7 +701,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 65,
@@ -712,7 +712,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 66,
@@ -734,7 +734,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 68,
@@ -756,7 +756,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 70,
@@ -767,7 +767,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 71,
@@ -778,7 +778,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 72,
@@ -789,7 +789,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 73,
@@ -811,7 +811,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 75,
@@ -833,7 +833,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 77,
@@ -855,7 +855,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 79,
@@ -866,7 +866,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 80,
@@ -877,7 +877,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 81,
@@ -888,7 +888,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 82,
@@ -910,7 +910,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 84,
@@ -921,7 +921,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 85,
@@ -932,7 +932,7 @@ export default [
     status: "Review & Comment",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 86,
@@ -943,7 +943,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 87,
@@ -954,7 +954,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 88,
@@ -965,7 +965,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 89,
@@ -976,7 +976,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 90,
@@ -987,7 +987,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 91,
@@ -998,7 +998,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 92,
@@ -1042,7 +1042,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 96,
@@ -1053,7 +1053,7 @@ export default [
     status: "Review & Comment",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 97,
@@ -1064,7 +1064,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 98,
@@ -1075,7 +1075,7 @@ export default [
     status: "Draft",
     approved: "Not Approved",
     reviewed: true,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 99,
@@ -1086,7 +1086,7 @@ export default [
     status: "Draft",
     approved: "In Progress",
     reviewed: false,
-    stars: 0.0,
+    stars: 0,
   },
   {
     id: 100,

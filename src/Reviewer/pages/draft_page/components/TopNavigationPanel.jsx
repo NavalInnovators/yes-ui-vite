@@ -2,9 +2,8 @@ import { useState } from "react";
 
 import SelectTopic from "../../../components/sidebar-pages/new_qna_componennts/view_qna_components/SelectTopic";
 import Pagination from "../../../components/pagination/Pagination";
-import { Link } from "react-router-dom";
 
-export default function TopNavigationPanel() {
+export default function TopNavigationPanel({ setConfirmSubmit }) {
   const [selectedTopic, setSelectedTopic] = useState("Select a Topic");
   const [selectedResponse, setSelectedResponse] = useState("View all Answers");
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +24,11 @@ export default function TopNavigationPanel() {
     "Response ID 214578",
   ];
 
+  function handleConfirmSubmit() {
+    setConfirmSubmit(true);
+  }
+
+  // Cannot proceed with this function without backend
   function filterByTopicName() {}
 
   return (
@@ -61,12 +65,12 @@ export default function TopNavigationPanel() {
           Approve
         </button>
 
-        <Link
-          to="/reviewed_qna"
+        <button
+          onClick={handleConfirmSubmit}
           className="transition-colors hover:text-white hover:bg-transparent ml-[15px] rounded-[8px] cursor-pointer bg-[#fff] py-[7px] px-[20px] relative gradient-button"
         >
           Submit Comment
-        </Link>
+        </button>
       </div>
     </div>
   );

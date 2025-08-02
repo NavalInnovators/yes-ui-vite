@@ -129,6 +129,22 @@ body {
   overflow-x: hidden;
 }
 
+html::-webkit-scrollbar {
+  background-color: hsl(0, 0%, 95%);
+  width: 17px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 70%);
+  border-radius: 10px;
+  border: 4px solid hsl(0, 0%, 95%);
+  box-sizing: border-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 80%);
+}
+
 root {
   width: 100%;
 }

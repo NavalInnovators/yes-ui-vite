@@ -1,25 +1,29 @@
+import { useContext } from "react";
+
+import QuestionsContext from "../../../context/QuestionsContext";
 import Line from "../../Line";
-import data from "../../../dummy_data/data"
 
 export default function ReviewerAnalytics({ showReviewed }) {
+  const { questions, setQuestions } = useContext(QuestionsContext);
+
   let totalQuestions;
-  let questions = [];
+  let reviewedQuestions = [];
 
   if (showReviewed) {
-    questions = data.filter((q) => q.reviewed);
-    totalQuestions = questions.length;
+    reviewedQuestions = questions.filter((q) => q.reviewed);
+    totalQuestions = reviewedQuestions.length;
   } else {
-    questions = data;
-    totalQuestions = questions.length;
+    reviewedQuestions = questions;
+    totalQuestions = reviewedQuestions.length;
   }
 
-  const totalAccepted = questions.filter(
+  const totalAccepted = reviewedQuestions.filter(
     (q) => q.approved === "Accepted"
   ).length;
-  const totalRejected = questions.filter(
+  const totalRejected = reviewedQuestions.filter(
     (q) => q.approved === "Not Approved"
   ).length;
-  const totalInPending = questions.filter(
+  const totalInPending = reviewedQuestions.filter(
     (q) => q.approved === "In Progress"
   ).length;
 

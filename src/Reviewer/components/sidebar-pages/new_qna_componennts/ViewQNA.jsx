@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Line from "../../Line";
 import SearchBar from "./view_qna_components/SearchBar";
 import SelectTopic from "./view_qna_components/SelectTopic";
 import DraftOnly from "./view_qna_components/DraftOnly";
 import Questions from "./view_qna_components/Questions";
-import data from "../../../dummy_data/data";
 import Pagination from "../../pagination/Pagination";
 import { options } from "../../../constants/constants";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
+import QuestionsContext from "../../../context/QuestionsContext";
 
 export default function ViewQNA() {
-  const [questions, setQuestions] = useState(data);
-  const [filteredQuestions, setFilteredQuestions] = useState(questions);
+  const { questions, setQuestions, isLoading } = useContext(QuestionsContext);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [draftOnly, setDraftOnly] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Select a Topic");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setFilteredQuestions(questions);
+  }, [questions]);
 
   const totalQuestions = filteredQuestions.length;
   const start = (currentPage - 1) * PAGE_SIZE;
@@ -41,6 +45,10 @@ export default function ViewQNA() {
 
   function filterBySearch(e) {
     setSearchQuery(e.target.value);
+
+    // Reset Other Filters
+    setSelectedOption("Select a Topic");
+    setDraftOnly(false);
   }
 
   function filterByTopicName(topic_name) {
@@ -48,9 +56,12 @@ export default function ViewQNA() {
       (q) => q.topic_name === topic_name || topic_name === "All"
     );
 
-    setDraftOnly(false);
     setFilteredQuestions(filteredByTopicName);
     setSelectedOption(topic_name);
+
+    // Reset Other Filter
+    setSearchQuery("");
+    setDraftOnly(false);
     setCurrentPage(1);
   }
 
@@ -69,8 +80,12 @@ export default function ViewQNA() {
       }
     }
 
-    setCurrentPage(1);
     setDraftOnly((prev) => !prev);
+
+    // Reset Other Filters
+    setSearchQuery("");
+    setSelectedOption("Select a Topic");
+    setCurrentPage(1);
   }
 
   return (
@@ -94,12 +109,18 @@ export default function ViewQNA() {
 
       <Line />
 
-      <Questions
-        filteredQuestions={filteredQuestions}
-        PAGE_SIZE={PAGE_SIZE}
-        start={start}
-        end={end}
-      />
+      {isLoading ? (
+        <div className="text-2xl text-center mt-[100px]">
+          Loading Questions...
+        </div>
+      ) : (
+        <Questions
+          filteredQuestions={filteredQuestions}
+          PAGE_SIZE={PAGE_SIZE}
+          start={start}
+          end={end}
+        />
+      )}
 
       <Pagination
         totalQuestions={totalQuestions}
