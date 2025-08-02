@@ -30,12 +30,155 @@
 .contact-page-app-icons {
   display: flex;
   justify-content: space-between;
-  width: 35%;
+  width: 17%;
 }
 
 .contact-page-app-icons img {
   width: 2rem;
 }
+
+
+/* .email-card {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.5rem;
+  max-width: 40%;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.email-card:hover {
+  transform: translateY(-2px);
+}
+
+.email-card img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.email-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.email-text .label {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.email-text .email {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+  cursor: pointer;
+  word-break: break-word;
+} */
+
+/* @media (max-width: 768px) {
+  .email-card {
+    padding: 1rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .email-card img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .email-text .email {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .email-card {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 1rem;
+  }
+
+  .email-card img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .email-text .label {
+    font-size: 13px;
+  }
+
+  .email-text .email {
+    font-size: 15px;
+  }
+} */
+
+
+
+@media (max-width: 480px) {
+  .contact-page-left-container {
+    padding: 2rem 1rem;
+    border-radius: 10px;
+  }
+
+  .contact-page-heading-left {
+    font-size: 24px;
+  }
+
+  .parent-contact-page-email-section {
+    align-items: center;
+  }
+
+  .parent-contact-page-email-section img {
+    width: 60%;
+  }
+
+  .contact-page-app-icons {
+    width: 25%;
+  }
+
+  .contact-page-app-icons img {
+    width: 1.2rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .contact-page-left-container {
+    padding: 1.5rem 1rem;
+    align-items: center;
+    background-color: rgb(212, 212, 212);
+  }
+
+  .contact-page-heading-left {
+    font-size: 24px;
+  }
+
+  .parent-contact-page-email-section img {
+    width: 60%;
+  }
+
+  .contact-page-app-icons {
+    width: 50%;
+    justify-content: space-evenly;
+  }
+
+  .contact-page-app-icons img {
+    width: 1rem;
+  }
+}
+
+
+
+
+
 
 @media (max-width: 1080px) {
   .contact-page-left-container {
@@ -62,7 +205,7 @@
   }
 
   .contact-page-app-icons {
-    width: 30%;
+    width: 20%;
   }
 
   .contact-page-app-icons img {
@@ -97,57 +240,5 @@
 
   .contact-page-app-icons img {
     width: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-page-left-container {
-    padding: 2rem 1rem;
-    border-radius: 10px;
-  }
-
-  .contact-page-heading-left {
-    font-size: 24px;
-  }
-
-  .parent-contact-page-email-section {
-    align-items: center;
-  }
-
-  .parent-contact-page-email-section img {
-    width: 60%;
-  }
-
-  .contact-page-app-icons {
-    width: 50%;
-  }
-
-  .contact-page-app-icons img {
-    width: 1.2rem;
-  }
-}
-
-@media (max-width: 375px) {
-  .contact-page-left-container {
-    padding: 1.5rem 1rem;
-    align-items: center;
-    background-color: rgb(212, 212, 212);
-  }
-
-  .contact-page-heading-left {
-    font-size: 24px;
-  }
-
-  .parent-contact-page-email-section img {
-    width: 60%;
-  }
-
-  .contact-page-app-icons {
-    width: 50%;
-    justify-content: space-evenly;
-  }
-
-  .contact-page-app-icons img {
-    width: 1rem;
   }
 }

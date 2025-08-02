@@ -6,7 +6,8 @@ import {
   insta,
   linkedin,
   twitter,
-  youtube
+  youtube,
+  mailLogo,
 } from "../assets";
 
 function ContactPageLeft() {
@@ -18,20 +19,28 @@ function ContactPageLeft() {
       <div className="parent-contact-page-email-section">
         {/* <div className="contact-page-email-section"> */}
         {/* <a href="mailto:info@yourexamsaathi.com"> */}
+        {/* <div class="email-card">
+          <img src={mailLogo} alt="Gmail Icon" />
+          <div class="email-text">
+            <p class="label">Email us here</p>
+            <a href="info@navalinnovators.com">info@navalinnovators.com</a>
+          </div>
+        </div> */}
+
         <img
           src={gmail}
           alt="Gmail Icon"
-          onClick={() => window.open("mailto:info@yourexamsaathi.com")}
+          onClick={() => window.open("info@navalinnovators.com")}
         />
         {/* </a> */}
         {/* </div> */}
         <div className="contact-page-app-icons">
-          <img
+          {/* <img
             src={facebook}
             alt="Facebook Icon"
             onClick={() => window.open("https://www.yourexamsaathi.com/")}
             aria-label="Open Facebook"
-          />
+          /> */}
           <img
             src={insta}
             alt="Instagram Icon"
@@ -43,14 +52,14 @@ function ContactPageLeft() {
             src={linkedin}
             alt="LinkedIn Icon"
             onClick={() =>
-              window.open("https://www.linkedin.com/company/navalinnovators")
+              window.open("https://www.linkedin.com/company/yourexamsaathi")
             }
           />
-          <img
+          {/* <img
             src={twitter}
             alt="Twitter Icon"
             onClick={() => window.open("https://www.yourexamsaathi.com/")}
-          />
+          /> */}
           <img
             src={youtube}
             alt="Youtube Icon"

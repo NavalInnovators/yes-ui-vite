@@ -1,5 +1,5 @@
 import "./Footer.css";
-import { logo, RightArrow, MobiusStrip, LogoNI } from "../assets";
+import { updateLogo, RightArrow, MobiusStrip, LogoNI } from "../assets";
 import React, { useState } from 'react';
 import { footerLinks } from "../constants";
 // import { useNavigate } from 'react-router-dom';
@@ -33,8 +33,8 @@ const Footer = () => {
         <div className="footer">
             <div className="upper-footer">
                 <div className="logo-section">
-                    <img src={logo} alt="yes-logo" />
-                    <div className="company-email-btn">info@yourexamsaathi.com</div>
+                    <img src={updateLogo} alt="yes-logo" />
+                    <div className="company-email-btn">info@navalinnovators.com</div>
                 </div>
 
 

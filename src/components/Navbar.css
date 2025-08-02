@@ -26,6 +26,7 @@
 .navbar-logo {
   display: flex;
   flex-direction: row;
+  width: 12%;
 }
 
 .navbar>.navbar-links:nth-child(2) {

@@ -77,8 +77,14 @@ import changePass from "./changePass.svg";
 import hat from "./hat.svg";
 import star from "./star.svg";
 import dashboardIcon from "./dashboardIcon.svg";
+import updateLogo from './updateLogo.png';
+import logoheader from './logoheader.png';
+import mailLogo from './mailLogo.png'
 
 export {
+  logoheader,
+  mailLogo,
+  updateLogo ,
   logo,
   SearchIcon,
   MobiusStrip,
