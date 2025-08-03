@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, LucideImageMinus } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Page from "./Page";
 
 export default function Pagination({

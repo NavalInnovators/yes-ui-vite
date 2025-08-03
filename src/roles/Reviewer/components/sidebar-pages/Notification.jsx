@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 
 import Line from "../../../components/Line";
 
@@ -31,8 +32,16 @@ export default function Notification() {
     fetchNotifications();
   }, []);
 
+  if (!notifications) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="h-[calc(100vh-74px-77.5px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 p-[30px] rounded-[10px]">
+    <motion.div
+      initial={{ x: "-1%", opacity: 0 }}
+      animate={{ x: "0%", opacity: 1 }}
+      className="h-[calc(100vh-74px-77.5px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 p-[30px] rounded-[10px]"
+    >
       <h1 className="text-[20px] dark:text-white mb-[20px]">Notifications</h1>
 
       <Line />
@@ -47,12 +56,12 @@ export default function Notification() {
         {/* Notification Title */}
         {notifications.map((notification, i) => (
           <div
+            key={notification.id}
             className={`flex items-center py-[20px] dark:text-white ${
               i === notifications.length - 1
                 ? ""
                 : "border-b border-light-border dark:border-dark-border"
             }`}
-            key={notification.id}
           >
             <div className="font-light flex-4 mt-[1px]">
               {notification.title}
@@ -68,6 +77,6 @@ export default function Notification() {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

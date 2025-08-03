@@ -10,6 +10,8 @@ export default function WelcomeBar() {
           Reviewer
         </p>
       </div>
+
+      <p>New Updates</p>
     </GradientDiv>
   );
 }

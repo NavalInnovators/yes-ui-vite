@@ -1,1003 +1,1004 @@
 {
   "questions": [
-  {
-    "id": 1,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? What are the trade-offs involved in this approach?",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 2,
-    "content": "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? Discuss any relevant libraries or tools.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.5
-  },
-  {
-    "id": 3,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Illustrate with code or diagrams if possible. Include differences in real-time applications.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 4,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Illustrate with code or diagrams if possible. What are the trade-offs involved in this approach?",
-    "topic_name": "React",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 5,
-    "content": "What are some best practices for responsive design in modern web development workflows? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 6,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Provide examples where applicable. Illustrate with code or diagrams if possible. What are some industry standards regarding this?",
-    "topic_name": "Databases",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.7
-  },
-  {
-    "id": 7,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
-    "topic_name": "React",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 8,
-    "content": "What are some best practices for responsive design in modern web development workflows? What are the trade-offs involved in this approach? What are some industry standards regarding this?",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 9,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Include differences in real-time applications. What are the trade-offs involved in this approach?",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 10,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Discuss any relevant libraries or tools. Illustrate with code or diagrams if possible.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 11,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Provide examples where applicable. How does this apply in enterprise-level systems?",
-    "topic_name": "React",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 12,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? What are the trade-offs involved in this approach? Compare with alternatives, if any.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.9
-  },
-  {
-    "id": 13,
-    "content": "What are some best practices for responsive design in modern web development workflows? What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 14,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? Compare with alternatives, if any. Include differences in real-time applications.",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 4.6
-  },
-  {
-    "id": 15,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Discuss any relevant libraries or tools. Compare with alternatives, if any. Discuss any relevant libraries or tools.",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 16,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Provide examples where applicable. Provide examples where applicable. Illustrate with code or diagrams if possible.",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.7
-  },
-  {
-    "id": 17,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are the trade-offs involved in this approach? What are some industry standards regarding this?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 18,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Include differences in real-time applications. Provide examples where applicable.",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 19,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Illustrate with code or diagrams if possible. What are the trade-offs involved in this approach?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 20,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Illustrate with code or diagrams if possible.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 21,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. Include differences in real-time applications.",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 4.3
-  },
-  {
-    "id": 22,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? What are the trade-offs involved in this approach?",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.4
-  },
-  {
-    "id": 23,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Provide examples where applicable. What are the trade-offs involved in this approach?",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 24,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Discuss any relevant libraries or tools. Provide examples where applicable. What are the trade-offs involved in this approach?",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 25,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Include differences in real-time applications. What are the trade-offs involved in this approach?",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 26,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are some industry standards regarding this? What are the trade-offs involved in this approach?",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 27,
-    "content": "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 28,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Include differences in real-time applications. How does this apply in enterprise-level systems?",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 29,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. How does this apply in enterprise-level systems? What are the trade-offs involved in this approach?",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 30,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Discuss any relevant libraries or tools. Illustrate with code or diagrams if possible.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 31,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Discuss any relevant libraries or tools.",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 32,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Provide examples where applicable. What are some industry standards regarding this?",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.4
-  },
-  {
-    "id": 33,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Compare with alternatives, if any. Provide examples where applicable.",
-    "topic_name": "Databases",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 34,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Discuss any relevant libraries or tools. Provide examples where applicable.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 35,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 36,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Discuss any relevant libraries or tools. What are the trade-offs involved in this approach?",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.5
-  },
-  {
-    "id": 37,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Include differences in real-time applications. How does this apply in enterprise-level systems?",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.2
-  },
-  {
-    "id": 38,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are the trade-offs involved in this approach? What are some industry standards regarding this?",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 1.5
-  },
-  {
-    "id": 39,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 40,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? Discuss any relevant libraries or tools. Include differences in real-time applications.",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 41,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? How does this apply in enterprise-level systems?",
-    "topic_name": "React",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 42,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Illustrate with code or diagrams if possible.",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 43,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Compare with alternatives, if any. What are some industry standards regarding this? Discuss any relevant libraries or tools.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 44,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? What are some industry standards regarding this? Include differences in real-time applications.",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.9
-  },
-  {
-    "id": 45,
-    "content": "What are some best practices for responsive design in modern web development workflows? Provide examples where applicable. What are some industry standards regarding this? Include differences in real-time applications.",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 46,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. What are some industry standards regarding this?",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 4.3
-  },
-  {
-    "id": 47,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Provide examples where applicable. What are some industry standards regarding this? Include differences in real-time applications.",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 1.6
-  },
-  {
-    "id": 48,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Include differences in real-time applications. Illustrate with code or diagrams if possible.",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 1.6
-  },
-  {
-    "id": 49,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are the trade-offs involved in this approach? Include differences in real-time applications.",
-    "topic_name": "Databases",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 50,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? How does this apply in enterprise-level systems? Compare with alternatives, if any.",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 51,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Provide examples where applicable. Include differences in real-time applications.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 52,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? How does this apply in enterprise-level systems? How does this apply in enterprise-level systems?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 53,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? What are some industry standards regarding this? Provide examples where applicable.",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 54,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? Illustrate with code or diagrams if possible. Discuss any relevant libraries or tools.",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 55,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 56,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Illustrate with code or diagrams if possible.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.3
-  },
-  {
-    "id": 57,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Discuss any relevant libraries or tools. Provide examples where applicable.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.5
-  },
-  {
-    "id": 58,
-    "content": "What are some best practices for responsive design in modern web development workflows? Compare with alternatives, if any. Compare with alternatives, if any. Illustrate with code or diagrams if possible.",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 59,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are the trade-offs involved in this approach? Provide examples where applicable.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.3
-  },
-  {
-    "id": 60,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Provide examples where applicable. What are some industry standards regarding this?",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 61,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 62,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Provide examples where applicable. Include differences in real-time applications.",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 63,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Provide examples where applicable. Illustrate with code or diagrams if possible. What are some industry standards regarding this?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 64,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Provide examples where applicable. What are the trade-offs involved in this approach?",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 65,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 66,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are the trade-offs involved in this approach? Provide examples where applicable. What are some industry standards regarding this?",
-    "topic_name": "Databases",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.6
-  },
-  {
-    "id": 67,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Provide examples where applicable. Compare with alternatives, if any.",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 68,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Discuss any relevant libraries or tools. What are some industry standards regarding this?",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.8
-  },
-  {
-    "id": 69,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Compare with alternatives, if any. How does this apply in enterprise-level systems?",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 70,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Provide examples where applicable. How does this apply in enterprise-level systems?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 71,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Provide examples where applicable. Discuss any relevant libraries or tools.",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 72,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
-    "topic_name": "React",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 73,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Provide examples where applicable. Illustrate with code or diagrams if possible.",
-    "topic_name": "Databases",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.9
-  },
-  {
-    "id": 74,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? What are the trade-offs involved in this approach? Illustrate with code or diagrams if possible.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 75,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? What are the trade-offs involved in this approach?",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 2,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 3.4
-  },
-  {
-    "id": 76,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Compare with alternatives, if any. What are the trade-offs involved in this approach?",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 77,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Compare with alternatives, if any. What are the trade-offs involved in this approach?",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 1.9
-  },
-  {
-    "id": 78,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Illustrate with code or diagrams if possible. Discuss any relevant libraries or tools.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 79,
-    "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Provide examples where applicable. Provide examples where applicable.",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 80,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Include differences in real-time applications. What are the trade-offs involved in this approach?",
-    "topic_name": "React",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 81,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are some industry standards regarding this? Discuss any relevant libraries or tools.",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 82,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Discuss any relevant libraries or tools. Provide examples where applicable.",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.3
-  },
-  {
-    "id": 83,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? What are the trade-offs involved in this approach?",
-    "topic_name": "JavaScript",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 84,
-    "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Include differences in real-time applications. Compare with alternatives, if any. Include differences in real-time applications.",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 85,
-    "content": "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? What are some industry standards regarding this?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 86,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are some industry standards regarding this? Discuss any relevant libraries or tools.",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 87,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Compare with alternatives, if any. What are the trade-offs involved in this approach?",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 88,
-    "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are some industry standards regarding this? Provide examples where applicable. What are the trade-offs involved in this approach?",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 89,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Provide examples where applicable. Discuss any relevant libraries or tools.",
-    "topic_name": "React",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 90,
-    "content": "How do props and state differ in React, and how would you decide which one to use in a component? Illustrate with code or diagrams if possible.",
-    "topic_name": "Algorithms",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 91,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 92,
-    "content": "What are some best practices for responsive design in modern web development workflows? Provide examples where applicable. Compare with alternatives, if any. Include differences in real-time applications.",
-    "topic_name": "Data Structures",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 2.2
-  },
-  {
-    "id": 93,
-    "content": "What are some best practices for responsive design in modern web development workflows? Include differences in real-time applications. How does this apply in enterprise-level systems? Provide examples where applicable.",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 1.7
-  },
-  {
-    "id": 94,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. Discuss any relevant libraries or tools.",
-    "topic_name": "Java",
-    "answers_submitted_by_user": 3,
-    "status": "Review & Comment",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 4.7
-  },
-  {
-    "id": 95,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 96,
-    "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Compare with alternatives, if any. What are some industry standards regarding this?",
-    "topic_name": "Databases",
-    "answers_submitted_by_user": 1,
-    "status": "Review & Comment",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 97,
-    "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? How does this apply in enterprise-level systems? What are some industry standards regarding this?",
-    "topic_name": "Web Development",
-    "answers_submitted_by_user": 2,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 98,
-    "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Provide examples where applicable. What are some industry standards regarding this?",
-    "topic_name": "Networking",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Not Approved",
-    "reviewed": true,
-    "stars": 0
-  },
-  {
-    "id": 99,
-    "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Illustrate with code or diagrams if possible. What are the trade-offs involved in this approach?",
-    "topic_name": "Cybersecurity",
-    "answers_submitted_by_user": 1,
-    "status": "Draft",
-    "approved": "In Progress",
-    "reviewed": false,
-    "stars": 0
-  },
-  {
-    "id": 100,
-    "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Compare with alternatives, if any. Compare with alternatives, if any.",
-    "topic_name": "Operating Systems",
-    "answers_submitted_by_user": 3,
-    "status": "Draft",
-    "approved": "Accepted",
-    "reviewed": true,
-    "stars": 1.1
-  }]
+    {
+      "id": 1,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? What are the trade-offs involved in this approach?",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 2,
+      "content": "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? Discuss any relevant libraries or tools.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.5
+    },
+    {
+      "id": 3,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Illustrate with code or diagrams if possible. Include differences in real-time applications.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 4,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Illustrate with code or diagrams if possible. What are the trade-offs involved in this approach?",
+      "topic_name": "React",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 5,
+      "content": "What are some best practices for responsive design in modern web development workflows? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 6,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Provide examples where applicable. Illustrate with code or diagrams if possible. What are some industry standards regarding this?",
+      "topic_name": "Databases",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.7
+    },
+    {
+      "id": 7,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
+      "topic_name": "React",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 8,
+      "content": "What are some best practices for responsive design in modern web development workflows? What are the trade-offs involved in this approach? What are some industry standards regarding this?",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 9,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Include differences in real-time applications. What are the trade-offs involved in this approach?",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 10,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Discuss any relevant libraries or tools. Illustrate with code or diagrams if possible.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 11,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Provide examples where applicable. How does this apply in enterprise-level systems?",
+      "topic_name": "React",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 12,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? What are the trade-offs involved in this approach? Compare with alternatives, if any.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.9
+    },
+    {
+      "id": 13,
+      "content": "What are some best practices for responsive design in modern web development workflows? What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 14,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? Compare with alternatives, if any. Include differences in real-time applications.",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 4.6
+    },
+    {
+      "id": 15,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Discuss any relevant libraries or tools. Compare with alternatives, if any. Discuss any relevant libraries or tools.",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 16,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Provide examples where applicable. Provide examples where applicable. Illustrate with code or diagrams if possible.",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.7
+    },
+    {
+      "id": 17,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are the trade-offs involved in this approach? What are some industry standards regarding this?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 18,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Include differences in real-time applications. Provide examples where applicable.",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 19,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Illustrate with code or diagrams if possible. What are the trade-offs involved in this approach?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 20,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Illustrate with code or diagrams if possible.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 21,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. Include differences in real-time applications.",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 4.3
+    },
+    {
+      "id": 22,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? What are the trade-offs involved in this approach?",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.4
+    },
+    {
+      "id": 23,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Provide examples where applicable. What are the trade-offs involved in this approach?",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 24,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Discuss any relevant libraries or tools. Provide examples where applicable. What are the trade-offs involved in this approach?",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 25,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Include differences in real-time applications. What are the trade-offs involved in this approach?",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 26,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are some industry standards regarding this? What are the trade-offs involved in this approach?",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 27,
+      "content": "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 28,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Include differences in real-time applications. How does this apply in enterprise-level systems?",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 29,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. How does this apply in enterprise-level systems? What are the trade-offs involved in this approach?",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 30,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Discuss any relevant libraries or tools. Illustrate with code or diagrams if possible.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 31,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Discuss any relevant libraries or tools.",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 32,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Provide examples where applicable. What are some industry standards regarding this?",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.4
+    },
+    {
+      "id": 33,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Compare with alternatives, if any. Provide examples where applicable.",
+      "topic_name": "Databases",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 34,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Discuss any relevant libraries or tools. Provide examples where applicable.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 35,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 36,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Discuss any relevant libraries or tools. What are the trade-offs involved in this approach?",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.5
+    },
+    {
+      "id": 37,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Include differences in real-time applications. How does this apply in enterprise-level systems?",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.2
+    },
+    {
+      "id": 38,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are the trade-offs involved in this approach? What are some industry standards regarding this?",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 1.5
+    },
+    {
+      "id": 39,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 40,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? Discuss any relevant libraries or tools. Include differences in real-time applications.",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 41,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? How does this apply in enterprise-level systems?",
+      "topic_name": "React",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 42,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Illustrate with code or diagrams if possible.",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 43,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Compare with alternatives, if any. What are some industry standards regarding this? Discuss any relevant libraries or tools.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 44,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? What are some industry standards regarding this? Include differences in real-time applications.",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.9
+    },
+    {
+      "id": 45,
+      "content": "What are some best practices for responsive design in modern web development workflows? Provide examples where applicable. What are some industry standards regarding this? Include differences in real-time applications.",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 46,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. What are some industry standards regarding this?",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 4.3
+    },
+    {
+      "id": 47,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Provide examples where applicable. What are some industry standards regarding this? Include differences in real-time applications.",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 1.6
+    },
+    {
+      "id": 48,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Include differences in real-time applications. Illustrate with code or diagrams if possible.",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 1.6
+    },
+    {
+      "id": 49,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are the trade-offs involved in this approach? Include differences in real-time applications.",
+      "topic_name": "Databases",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 50,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? How does this apply in enterprise-level systems? Compare with alternatives, if any.",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 51,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Provide examples where applicable. Include differences in real-time applications.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 52,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? How does this apply in enterprise-level systems? How does this apply in enterprise-level systems?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 53,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? What are some industry standards regarding this? Provide examples where applicable.",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 54,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? Illustrate with code or diagrams if possible. Discuss any relevant libraries or tools.",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 55,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 56,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Illustrate with code or diagrams if possible.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.3
+    },
+    {
+      "id": 57,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Discuss any relevant libraries or tools. Provide examples where applicable.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.5
+    },
+    {
+      "id": 58,
+      "content": "What are some best practices for responsive design in modern web development workflows? Compare with alternatives, if any. Compare with alternatives, if any. Illustrate with code or diagrams if possible.",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 59,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are the trade-offs involved in this approach? Provide examples where applicable.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.3
+    },
+    {
+      "id": 60,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Provide examples where applicable. What are some industry standards regarding this?",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 61,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 62,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Provide examples where applicable. Include differences in real-time applications.",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 63,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. Provide examples where applicable. Illustrate with code or diagrams if possible. What are some industry standards regarding this?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 64,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Provide examples where applicable. What are the trade-offs involved in this approach?",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 65,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 66,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are the trade-offs involved in this approach? Provide examples where applicable. What are some industry standards regarding this?",
+      "topic_name": "Databases",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.6
+    },
+    {
+      "id": 67,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Provide examples where applicable. Compare with alternatives, if any.",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 68,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Discuss any relevant libraries or tools. What are some industry standards regarding this?",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.8
+    },
+    {
+      "id": 69,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Compare with alternatives, if any. How does this apply in enterprise-level systems?",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 70,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Provide examples where applicable. How does this apply in enterprise-level systems?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 71,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Provide examples where applicable. Discuss any relevant libraries or tools.",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 72,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? What are the trade-offs involved in this approach? How does this apply in enterprise-level systems?",
+      "topic_name": "React",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 73,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Provide examples where applicable. Illustrate with code or diagrams if possible.",
+      "topic_name": "Databases",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.9
+    },
+    {
+      "id": 74,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? What are the trade-offs involved in this approach? Illustrate with code or diagrams if possible.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 75,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? What are the trade-offs involved in this approach?",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 2,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 3.4
+    },
+    {
+      "id": 76,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Compare with alternatives, if any. What are the trade-offs involved in this approach?",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 77,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Compare with alternatives, if any. What are the trade-offs involved in this approach?",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 1.9
+    },
+    {
+      "id": 78,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Illustrate with code or diagrams if possible. Discuss any relevant libraries or tools.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 79,
+      "content": "How does the OSI model relate to real-world networking, and where do protocols like HTTP and TCP fit in? Provide examples where applicable. Provide examples where applicable.",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 80,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Include differences in real-time applications. What are the trade-offs involved in this approach?",
+      "topic_name": "React",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 81,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? What are some industry standards regarding this? Discuss any relevant libraries or tools.",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 82,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Discuss any relevant libraries or tools. Provide examples where applicable.",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.3
+    },
+    {
+      "id": 83,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? What are the trade-offs involved in this approach?",
+      "topic_name": "JavaScript",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 84,
+      "content": "What are some common cybersecurity threats to web applications, and how can they be mitigated? Include differences in real-time applications. Compare with alternatives, if any. Include differences in real-time applications.",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 85,
+      "content": "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? What are some industry standards regarding this?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 86,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are some industry standards regarding this? Discuss any relevant libraries or tools.",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 87,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Compare with alternatives, if any. What are the trade-offs involved in this approach?",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 88,
+      "content": "Explain the time and space complexity trade-offs when choosing between different sorting algorithms. What are some industry standards regarding this? Provide examples where applicable. What are the trade-offs involved in this approach?",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 89,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Provide examples where applicable. Discuss any relevant libraries or tools.",
+      "topic_name": "React",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 90,
+      "content": "How do props and state differ in React, and how would you decide which one to use in a component? Illustrate with code or diagrams if possible.",
+      "topic_name": "Algorithms",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 91,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Discuss any relevant libraries or tools. How does this apply in enterprise-level systems?",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 92,
+      "content": "What are some best practices for responsive design in modern web development workflows? Provide examples where applicable. Compare with alternatives, if any. Include differences in real-time applications.",
+      "topic_name": "Data Structures",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 2.2
+    },
+    {
+      "id": 93,
+      "content": "What are some best practices for responsive design in modern web development workflows? Include differences in real-time applications. How does this apply in enterprise-level systems? Provide examples where applicable.",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 1.7
+    },
+    {
+      "id": 94,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Discuss any relevant libraries or tools. Discuss any relevant libraries or tools.",
+      "topic_name": "Java",
+      "answers_submitted_by_user": 3,
+      "status": "Review & Comment",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 4.7
+    },
+    {
+      "id": 95,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? What are some industry standards regarding this? Illustrate with code or diagrams if possible.",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 96,
+      "content": "Can you explain how garbage collection works in Java and what role the JVM plays in managing memory? Compare with alternatives, if any. What are some industry standards regarding this?",
+      "topic_name": "Databases",
+      "answers_submitted_by_user": 1,
+      "status": "Review & Comment",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 97,
+      "content": "Can you describe the difference between a process and a thread, and how the OS handles scheduling? How does this apply in enterprise-level systems? What are some industry standards regarding this?",
+      "topic_name": "Web Development",
+      "answers_submitted_by_user": 2,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 98,
+      "content": "How does a stack differ from a queue, and what are typical use cases for each data structure? Provide examples where applicable. What are some industry standards regarding this?",
+      "topic_name": "Networking",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Not Approved",
+      "reviewed": true,
+      "stars": 0
+    },
+    {
+      "id": 99,
+      "content": "How do SQL and NoSQL databases differ in terms of structure, performance, and scalability? Illustrate with code or diagrams if possible. What are the trade-offs involved in this approach?",
+      "topic_name": "Cybersecurity",
+      "answers_submitted_by_user": 1,
+      "status": "Draft",
+      "approved": "In Progress",
+      "reviewed": false,
+      "stars": 0
+    },
+    {
+      "id": 100,
+      "content": "What are the different ways to handle asynchronous operations in JavaScript, and when would you use each? Compare with alternatives, if any. Compare with alternatives, if any.",
+      "topic_name": "Operating Systems",
+      "answers_submitted_by_user": 3,
+      "status": "Draft",
+      "approved": "Accepted",
+      "reviewed": true,
+      "stars": 1.1
+    }
+  ]
 }

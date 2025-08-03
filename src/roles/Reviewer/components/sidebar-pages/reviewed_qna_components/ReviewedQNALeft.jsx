@@ -5,7 +5,7 @@ import { options as topic_options, status } from "../../../constants/constants";
 import SearchBar from "../../../../components/SearchBar";
 import SelectTopic from "../../../../components/SelectTopic";
 import ReviewedQNAQuestions from "../reviewed_qna_components/ReviewedQNAQuestions";
-import Pagination from "../../pagination/Pagination";
+import Pagination from "../../../../components/pagination/Pagination";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
 

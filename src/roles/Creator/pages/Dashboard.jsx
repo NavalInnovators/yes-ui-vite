@@ -3,10 +3,15 @@ import MyProfile from "../components/MyProfile";
 import NewQuestions from "../components/NewQuestions";
 import TopCreators from "../components/TopCreators";
 import TotalEarning from "../components/TotalEarning";
+import { motion } from "motion/react";
 
 export default function Dashboard() {
   return (
-    <div className="max-w-[1200px] w-[100%] p-[30px] flex flex-col gap-[20px]">
+    <motion.div
+      initial={{ x: "-1%", opacity: 0 }}
+      animate={{ x: "0%", opacity: 1 }}
+      className="max-w-[1200px] w-[100%] flex flex-col gap-[20px]"
+    >
       <div className="flex gap-[20px]">
         <CreatorAnalytics />
         <TotalEarning />
@@ -20,6 +25,6 @@ export default function Dashboard() {
           <TopCreators />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

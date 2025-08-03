@@ -15,9 +15,9 @@ export default function Question({ question }) {
   }
 
   return (
-    <div className="flex items-start dark:text-white">
+    <div className="flex items-start justify-between dark:text-white">
       {/* Left */}
-      <div className="flex gap-[10px]">
+      <div className="flex w-full gap-[10px]">
         {/* Question Number */}
         <div>{question.id}.</div>
 
@@ -44,7 +44,7 @@ export default function Question({ question }) {
         {/* Status */}
         <Link
           to={question.status === "Draft" ? `qna/${question.id}` : ""}
-          className="flex justify-center transition-colors dark:border-[1px] dark:border-dark-border dark:hover:bg-dark-hover dark:bg-dark-highlight dark:text-white cursor-pointer items-center bg-[rgba(230,230,230,1)] text-[15px] w-[170px] h-[35px] rounded-[5px] ml-[20px]"
+          className="flex bg-[hsl(0,0%,90%)] hover:bg-[hsl(0,0%,85%)] justify-center transition-colors dark:border-[1px] dark:border-dark-border dark:hover:bg-dark-hover dark:bg-dark-highlight dark:text-white cursor-pointer items-center text-[15px] w-[170px] h-[35px] rounded-[5px] ml-[20px]"
         >
           {question.status}
         </Link>

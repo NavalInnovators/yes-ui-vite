@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import SelectTopic from "../../../../components/SelectTopic";
-import Pagination from "../../../components/pagination/Pagination";
+import Pagination from "../../../../components/pagination/Pagination";
 
 export default function TopNavigationPanel({ setConfirmSubmit }) {
   const [selectedTopic, setSelectedTopic] = useState("Select a Topic");

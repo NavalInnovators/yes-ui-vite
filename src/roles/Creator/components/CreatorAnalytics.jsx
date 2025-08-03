@@ -10,7 +10,7 @@ function TotalX({ x, n }) {
 }
 export default function CreatorAnalytics() {
   return (
-    <div className="w-[60%] h-fit rounded-[8px] px-[35px] py-[30px] border-[1px] border-light-border flex flex-col gap-[20px]">
+    <div className="w-[60%] h-fit rounded-[10px] px-[35px] py-[30px] border-[1px] border-light-border flex flex-col gap-[20px]">
       <h1 className="text-[20px] font-medium">Creator Analytics</h1>
       <Line />
       <h2 className="text-[17px] font-medium">Total Submissions</h2>

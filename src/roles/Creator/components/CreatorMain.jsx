@@ -7,7 +7,7 @@ import YourEarning from "../pages/YourEarning";
 
 export default function CreatorMain() {
   return (
-    <div className="flex-1 overflow-y-auto w-screen">
+    <div className="flex-1 overflow-y-auto w-screen p-[20px]">
       <div>
         <Routes>
           <Route path="/" element={<Navigate to="dashboard" replace />} />
