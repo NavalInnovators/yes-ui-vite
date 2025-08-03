@@ -78,11 +78,11 @@ import hat from "./hat.svg";
 import star from "./star.svg";
 import dashboardIcon from "./dashboardIcon.svg";
 import updateLogo from './updateLogo.png';
-import logoheader from './logoheader.png';
+import navLogo from './navLogo.svg';
 import mailLogo from './mailLogo.png'
 
 export {
-  logoheader,
+  navLogo,
   mailLogo,
   updateLogo ,
   logo,
