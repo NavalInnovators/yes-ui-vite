@@ -1,204 +1,27 @@
 {
   "notifications": [
-    {
-      "title": "Time extended for AI Test",
-      "date": "2025-07-20T14:09:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Reminder: Computer Networks Practice Test in 2 days",
-      "date": "2025-07-15T22:10:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "You left 7 questions unattempted in DBMS Test",
-      "date": "2025-07-31T03:50:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New chapter added in DBMS",
-      "date": "2025-07-14T03:31:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "You left 11 questions unattempted in DBMS Test",
-      "date": "2025-07-12T00:06:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Quiz on DBMS uploaded!",
-      "date": "2025-07-19T00:12:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New chapter added in Web Development",
-      "date": "2025-07-24T04:26:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Quiz on Data Structures uploaded!",
-      "date": "2025-07-31T07:42:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Correction: Question 60 in Operating Systems had an incorrect answer key",
-      "date": "2025-07-08T06:34:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New mock test added for DBMS",
-      "date": "2025-07-19T19:35:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New quiz on Machine Learning uploaded!",
-      "date": "2025-07-17T14:52:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New chapter added in Python",
-      "date": "2025-07-22T00:28:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Time alert! 2 days left for your scheduled Java Practice Test",
-      "date": "2025-07-23T15:16:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Correction: Question 25 in DBMS had an incorrect answer key",
-      "date": "2025-07-21T04:18:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New mock test added for Python",
-      "date": "2025-07-31T11:42:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New set of mock questions added for AI",
-      "date": "2025-07-16T08:02:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Updated explanation for Q14 in Software Engineering",
-      "date": "2025-07-20T20:14:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Extra questions added in Operating Systems topic",
-      "date": "2025-07-27T13:33:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Correction: Question 19 in Java had an incorrect answer key",
-      "date": "2025-07-25T02:41:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Quiz on AI uploaded!",
-      "date": "2025-07-11T18:15:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "You left 9 questions unattempted in Operating Systems Test",
-      "date": "2025-07-29T21:23:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New chapter added in Computer Networks",
-      "date": "2025-07-10T11:58:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "You left 13 questions unattempted in AI Test",
-      "date": "2025-07-15T12:47:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Time extended for Web Development Test",
-      "date": "2025-07-28T08:13:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New mock test added for Software Engineering",
-      "date": "2025-07-14T23:49:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Updated explanation for Q41 in Data Structures",
-      "date": "2025-07-06T14:31:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Extra questions added in Java topic",
-      "date": "2025-07-09T06:01:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Correction: Question 91 in AI had an incorrect answer key",
-      "date": "2025-07-18T22:17:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New quiz on Computer Networks uploaded!",
-      "date": "2025-07-05T16:30:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Reminder: Web Development Practice Test in 2 days",
-      "date": "2025-07-13T19:19:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Correction: Question 88 in DBMS had an incorrect answer key",
-      "date": "2025-07-26T01:38:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "New set of mock questions added for Machine Learning",
-      "date": "2025-07-30T17:07:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "You left 18 questions unattempted in Python Test",
-      "date": "2025-07-03T10:41:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Reminder: Java Practice Test in 2 days",
-      "date": "2025-07-02T14:25:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Quiz on Software Engineering uploaded!",
-      "date": "2025-07-07T12:38:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Extra questions added in Machine Learning topic",
-      "date": "2025-07-01T17:56:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Updated explanation for Q66 in Web Development",
-      "date": "2025-07-04T15:17:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "You left 15 questions unattempted in Java Test",
-      "date": "2025-07-18T07:22:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Correction: Question 45 in Python had an incorrect answer key",
-      "date": "2025-07-12T05:37:00Z",
-      "marked_as_read": false
-    },
-    {
-      "title": "Time extended for Software Engineering Test",
-      "date": "2025-07-23T09:50:00Z",
-      "marked_as_read": false
-    }
+    { "title": "New set of extra questions has been added in the Operating Systems topic. Perfect for extra practice!", "date": "2025/07/27", "marked_as_read": false },
+  { "title": "Correction made: Question 19 in Java had an incorrect answer key. The updated version is now live.", "date": "2025/07/25", "marked_as_read": false },
+  { "title": "A fresh quiz on Artificial Intelligence is now available. Test your concepts and boost your score!", "date": "2025/07/11", "marked_as_read": false },
+  { "title": "You left 9 questions unattempted in your Operating Systems Test. Don't forget to go back and review them!", "date": "2025/07/29", "marked_as_read": false },
+  { "title": "New chapter released in the Computer Networks module. Stay on top of the latest additions!", "date": "2025/07/10", "marked_as_read": false },
+  { "title": "You left 13 questions unattempted in your AI Test. It's a good idea to revisit and practice those.", "date": "2025/07/15", "marked_as_read": false },
+  { "title": "Time extended for your Web Development Test. Make sure to utilize the added time wisely!", "date": "2025/07/28", "marked_as_read": false },
+  { "title": "A new mock test has been added to the Software Engineering section. Attempt it for extra preparation!", "date": "2025/07/14", "marked_as_read": false },
+  { "title": "Updated explanation available for Question 41 in Data Structures. Dive in and clarify your understanding.", "date": "2025/07/06", "marked_as_read": false },
+  { "title": "More extra questions have been added under the Java topic. Time to sharpen those coding skills!", "date": "2025/07/09", "marked_as_read": false },
+  { "title": "Correction issued: Question 91 in the AI section had a wrong answer key. Check out the corrected version now.", "date": "2025/07/18", "marked_as_read": false },
+  { "title": "A new quiz on Computer Networks has been uploaded. Ready to test your networking basics?", "date": "2025/07/05", "marked_as_read": false },
+  { "title": "Reminder: Your Web Development Practice Test is just 2 days away. Time to revise flexbox, grid and more!", "date": "2025/07/13", "marked_as_read": false },
+  { "title": "Correction made to DBMS: Question 88 had an incorrect answer key. It has been fixed for your reference.", "date": "2025/07/26", "marked_as_read": false },
+  { "title": "Fresh mock questions added for the Machine Learning module. Try them out to reinforce your learning.", "date": "2025/07/30", "marked_as_read": false },
+  { "title": "Whoa! You left 18 questions unattempted in your Python Test. Time to go back and close those gaps!", "date": "2025/07/03", "marked_as_read": false },
+  { "title": "Friendly reminder: Your Java Practice Test is in 2 days. Compile those concepts and be ready!", "date": "2025/07/02", "marked_as_read": false },
+  { "title": "New quiz uploaded for Software Engineering. Take it to see how well you've understood the core concepts!", "date": "2025/07/07", "marked_as_read": false },
+  { "title": "Bonus questions added in the Machine Learning topic. More chances to practice and improve!", "date": "2025/07/01", "marked_as_read": false },
+  { "title": "Explanation updated for Question 66 in Web Development. Check the revised details and learn the why behind the what.", "date": "2025/07/04", "marked_as_read": false },
+  { "title": "You left 15 questions unattempted in your Java Test. Don’t let those marks slip away—give them another look!", "date": "2025/07/18", "marked_as_read": false },
+  { "title": "Correction made: Question 45 in Python had an incorrect answer key. Updated and clarified now.", "date": "2025/07/12", "marked_as_read": false },
+  { "title": "Time extension granted for your Software Engineering Test. More time to get those diagrams perfect!", "date": "2025/07/23", "marked_as_read": false }
   ]
-}
+  }

@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "serve-notifications": "json-server --watch ./src/role/Reviewer/dummy_data/notifications.json --port 3001",
+    "serve-notifications": "json-server --watch ./dummy_data/notifications.json --port 3001",
     "serve-questions": "json-server --watch ./dummy_data/data.json --port 3002"
   },
   "dependencies": {

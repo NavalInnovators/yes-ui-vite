@@ -59,14 +59,18 @@
 
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  background-color: hsl(0, 0%, 95%);
-  width: 17px;
+  width: 14px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  margin: 5px 0;
+  background: hsl(0, 0%, 95%);
+  border-radius: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: hsl(0, 0%, 70%);
-  border-radius: 10px;
-  border: 4px solid hsl(0, 0%, 95%);
+  border-radius: 8px;
+  border: 2px solid hsl(0, 0%, 95%);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
