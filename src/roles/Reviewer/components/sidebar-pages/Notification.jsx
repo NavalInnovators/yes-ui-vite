@@ -32,25 +32,25 @@ export default function Notification() {
   }, []);
 
   return (
-    <div className="h-[calc(100vh-74px-77.5px-40px)] flex flex-col border border-gray-300 p-[30px] rounded-[10px]">
-      <h1 className="text-[20px]">Notifications</h1>
+    <div className="h-[calc(100vh-74px-77.5px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 p-[30px] rounded-[10px]">
+      <h1 className="text-[20px] dark:text-white mb-[20px]">Notifications</h1>
 
       <Line />
 
-      <div className="flex mt-[40px] justify-between items-center pr-[15px] font-light text-[14px] text-light-text border-b border-[#611fc5] pb-[20px]">
+      <div className="flex mt-[40px] dark:text-dark-text-muted justify-between items-center px-[20px] pr-[35px] font-light text-[14px] text-light-text border-b border-[#611fc5] pb-[20px]">
         <div className="flex-4">Name</div>
         <div className="flex flex-1 justify-center">Date</div>
         <div className="flex flex-1 justify-center">Actions</div>
       </div>
 
-      <div className="flex flex-col overflow-y-auto custom-scrollbar">
+      <div className="flex flex-col overflow-y-auto custom-scrollbar px-[20px]">
         {/* Notification Title */}
         {notifications.map((notification, i) => (
           <div
-            className={`flex items-center py-[20px] ${
+            className={`flex items-center py-[20px] dark:text-white ${
               i === notifications.length - 1
                 ? ""
-                : "border-b border-light-border"
+                : "border-b border-light-border dark:border-dark-border"
             }`}
             key={notification.id}
           >
@@ -61,7 +61,7 @@ export default function Notification() {
               {notification.date}
             </div>
             <div className="flex flex-1 justify-center mt-[1px]">
-              <button className="py-[4px] px-[15px] rounded-[6px] transition bg-light-hover border-2 border-light-hover hover:bg-transparent cursor-pointer">
+              <button className="dark:bg-dark-highlight dark:hover:bg-dark-more-highlighted dark:border-dark-border py-[4px] px-[15px] rounded-[6px] transition bg-light-hover border border-light-hover hover:bg-transparent cursor-pointer">
                 Mark as read
               </button>
             </div>
