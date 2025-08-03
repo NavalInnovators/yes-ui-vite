@@ -3,69 +3,103 @@ import { useNavigate } from "react-router-dom";
 import UserDashboardRight from "./UserDashboardRight";
 import { useMyCourses } from "./sharedQuery";
 
-
 function MySubjects({ searchQuery }) {
   const navigate = useNavigate();
   const { data: myCourses, isLoading, isError } = useMyCourses();
 
   // Filter the subjects based on the search query or show all if the query is empty
-  const filteredSubjects = myCourses ? myCourses.filter((subject) =>
-    subject.name.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : [];
-  console.log("Filtered Subjects: ", searchQuery, filteredSubjects,);
+  const courseData =
+    myCourses.length > 0
+      ? myCourses
+      : JSON.parse(sessionStorage.getItem("myCourses") || "[]");
+
+  const filteredSubjects =
+    courseData.length > 0
+      ? courseData.filter((course) => {
+          const query = searchQuery;
+
+          const nameMatch = course.name?.includes(query);
+          const universityMatch = course.universityName?.includes(query);
+          const yearMatch = String(course.year).includes(query);
+          const normalizeHyphen = (str) => str.replace(/\s*-\s*/g, "-");
+
+          const branchMatch = course.branchNames?.some((branch) =>
+            normalizeHyphen(branch.toLowerCase()).includes(
+              normalizeHyphen(query.toLowerCase())
+            )
+          );
+
+          const codeMatch = course.courseCodes?.some((code) =>
+            code.includes(query)
+          );
+
+          return (
+            nameMatch ||
+            universityMatch ||
+            yearMatch ||
+            branchMatch ||
+            codeMatch
+          );
+        })
+      : [];
+  console.log("Filtered Subjects: ", searchQuery, filteredSubjects);
 
   return (
     <div className="userdashboard-content-page">
       <div className="all-course-card-container">
-        {
-          isLoading ? (
-            <div>Please wait while we load your courses....</div>
-          ) : isError ? (
-            <div>Error loading your courses. Please try again!</div>
-          ) : filteredSubjects.length === 0 ? (
-            <div>No courses found.</div>
-          ) : (
-            filteredSubjects.map((subject, index) => {
-              return (
-                <div key={index} className="all-course-card pointer-cursor" onClick={() => {
-                  sessionStorage.setItem('selectedCourseCode', subject.courseCodes[0]);
+        {isLoading ? (
+          <div>Please wait while we load your courses....</div>
+        ) : isError ? (
+          <div>Error loading your courses. Please try again!</div>
+        ) : filteredSubjects.length === 0 ? (
+          <div>No courses found.</div>
+        ) : (
+          filteredSubjects.map((subject, index) => {
+            return (
+              <div
+                key={index}
+                className="all-course-card pointer-cursor"
+                onClick={() => {
+                  sessionStorage.setItem(
+                    "selectedCourseCode",
+                    subject.courseCodes[0]
+                  );
                   navigate(`/book-dashboard?subcode=${subject.courseCodes[0]}`);
-                }}>
-                  <div className="all-course-card-info-container">
-                    <div className="all-course-card-header-container">
-                      <div className="font-subheading-black">
-                        {subject.name}
-                      </div>
-                    </div>
-                    <div className="all-course-card-tags-container font-mark-read-btn">
-                      <div className="all-course-card-each-tag">
-                        {subject.universityName}
-                      </div>
-                      <div className="all-course-card-each-tag">
-                        {subject.year}
-                      </div>
-                      {subject.branchNames.map((branch, index) => (
-                        <div key={index} className="all-course-card-each-tag">
-                          {branch}
-                        </div>
-                      ))}
-                      {subject.courseCodes.map((courseCode, index) => (
-                        <div key={index} className="all-course-card-each-tag">
-                          {courseCode}
-                        </div>
-                      ))}
-                    </div>
+                }}
+              >
+                <div className="all-course-card-info-container">
+                  <div className="all-course-card-header-container">
+                    <div className="font-subheading-black">{subject.name}</div>
                   </div>
-                  {/* <div className="all-course-card-slider-container">
+                  <div className="all-course-card-tags-container font-mark-read-btn">
+                    <div className="all-course-card-each-tag">
+                      {subject.universityName}
+                    </div>
+                    <div className="all-course-card-each-tag">
+                      {subject.year}
+                    </div>
+                    {subject.branchNames.map((branch, index) => (
+                      <div key={index} className="all-course-card-each-tag">
+                        {branch}
+                      </div>
+                    ))}
+                    {subject.courseCodes.map((courseCode, index) => (
+                      <div key={index} className="all-course-card-each-tag">
+                        {courseCode}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* <div className="all-course-card-slider-container">
                       <MySubjectSlider
                         totalUnits={totalUnits}
                         completedUnits={completedUnits}
                       />
                     </div> */}
-                </div>
-              );
-            })
-          )}
+              </div>
+            );
+          })
+        )}
 
         {/* <div className="recommended-courses">
               <div className="recommended-heading heading-500-30-black">
