@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 
 export default function Questions({ filteredQuestions, start, end }) {
   if (filteredQuestions.length === 0) {
-    return <div>No Questions Found!</div>;
+    return <div>No Question Found!</div>;
   }
 
   return (

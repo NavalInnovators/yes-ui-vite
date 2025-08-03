@@ -14,7 +14,7 @@ import QuestionsContext from "../../context/QuestionsContext";
 export default function DraftPage() {
   const { id } = useParams();
   const { questions, isLoading } = useContext(QuestionsContext);
-  const [question, setQuestion] = useState({});
+  const [question, setQuestion] = useState(null);
 
   useEffect(() => {
     if (questions) {
@@ -49,13 +49,13 @@ export default function DraftPage() {
         damping: 25,
         mass: 1,
       }}
-      className="absolute top-0 left-0 bg-[#fff] z-[10]"
+      className="absolute top-0 w-[100vw] left-0 bg-[#fff] z-[10]"
     >
       <TopGradientBar />
+      <TopNavigationPanel setConfirmSubmit={setConfirmSubmit} />
 
       <CommentTextContext.Provider value={commentTextMemo}>
         <QuestionContext.Provider value={{ question, setQuestion }}>
-          <TopNavigationPanel setConfirmSubmit={setConfirmSubmit} />
           <Section />
         </QuestionContext.Provider>
       </CommentTextContext.Provider>

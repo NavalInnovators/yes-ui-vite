@@ -89,7 +89,7 @@ export default function ViewQNA() {
   }
 
   return (
-    <div className="w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border h-full flex flex-col gap-[20px] border border-gray-300 p-[30px] rounded-[10px]">
+    <div className="h-[calc(100vh-77.5px-74px-40px)] w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[20px] border border-gray-300 p-[30px] rounded-[10px]">
       <h1 className="text-[20px]">View Q&A</h1>
 
       <Line />
