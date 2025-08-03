@@ -14,18 +14,17 @@ import QuestionsContext from "../../context/QuestionsContext";
 export default function DraftPage() {
   const { id } = useParams();
   const { questions, isLoading } = useContext(QuestionsContext);
+  const [question, setQuestion] = useState({});
 
-  const [question, setQuestion] = useState({
-    id: 2,
-    content:
-      "What are some best practices for responsive design in modern web development workflows? What are some industry standards regarding this? Discuss any relevant libraries or tools.",
-    topic_name: "React",
-    answers_submitted_by_user: 2,
-    status: "Draft",
-    approved: "Accepted",
-    reviewed: true,
-    stars: 2.5,
-  });
+  useEffect(() => {
+    if (questions) {
+      setQuestion(questions.find((q) => q.id === parseInt(id)));
+      console.log(
+        "From DraftPage: ",
+        questions.find((q) => q.id === parseInt(id))
+      );
+    }
+  }, [questions, id]);
 
   const [commentText, setCommentText] = useState("");
   const [confirmSubmit, setConfirmSubmit] = useState(false);
@@ -55,7 +54,7 @@ export default function DraftPage() {
       <TopGradientBar />
 
       <CommentTextContext.Provider value={commentTextMemo}>
-        <QuestionContext.Provider value={question}>
+        <QuestionContext.Provider value={{ question, setQuestion }}>
           <TopNavigationPanel setConfirmSubmit={setConfirmSubmit} />
           <Section />
         </QuestionContext.Provider>

@@ -5,7 +5,10 @@ import StarRating from "../../../components/StarRating";
 
 export default function UserAnswer() {
   const { question } = useContext(QuestionContext);
-  console.log("From UserAnswer: ", question);
+
+  if (!question) {
+    return <div className="p-[20px]">Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col p-[30px] gap-[20px] bg-[#fff] rounded-[10px]">

@@ -26,34 +26,30 @@ export default function SidebarButtons() {
     <div className="flex flex-col gap-[20px]">
       <Line />
 
-      <p className="text-[14px]">Management</p>
-      <div className="flex flex-col gap-[10px]">
-        <MyLink to="dashboard">
-          <DashBoardIcon size={28} />
-          <p className="">Dashboard</p>
-        </MyLink>
+      <MyLink to="dashboard">
+        <DashBoardIcon size={28} />
+        <p className="">Dashboard</p>
+      </MyLink>
 
-        <MyLink to="notification">
-          <SidebarNotificationIcon size={28} />
-          <p>Notification</p>
-        </MyLink>
-      </div>
+      <MyLink to="new_qna">
+        <PageIcon size={28} />
+        <p>New Q&A</p>
+      </MyLink>
 
-      <Line />
+      <MyLink to="pending">
+        <PageIcon size={28} />
+        <p>Pending</p>
+      </MyLink>
 
-      <p className="text-[14px]">Review Answers</p>
+      <MyLink to="reviewed">
+        <PageIcon size={28} />
+        <p>Reviewed Q&A</p>
+      </MyLink>
 
-      <div className="flex flex-col gap-[10px]">
-        <MyLink to="new_qna">
-          <PageIcon size={28} />
-          <p>New Q&A</p>
-        </MyLink>
-
-        <MyLink to="reviewed_qna">
-          <PageIcon size={28} />
-          <p>Reviewed Q&A</p>
-        </MyLink>
-      </div>
+      <MyLink to="your_earning">
+        <PageIcon size={28} />
+        <p>Your Earning</p>
+      </MyLink>
     </div>
   );
 }

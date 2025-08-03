@@ -3,7 +3,7 @@ import TopicNameLabel from "../../../components/TopicNameLabel";
 import QuestionContext from "../context/QuestionContext";
 
 export default function Question() {
-  const question = useContext(QuestionContext);
+  const { question } = useContext(QuestionContext);
 
   if (!question) {
     return <div>No Question Found!</div>;
