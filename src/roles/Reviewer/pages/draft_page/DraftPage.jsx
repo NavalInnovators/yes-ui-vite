@@ -22,6 +22,17 @@ export default function DraftPage() {
     }
   }, [questions, id]);
 
+  // Remove Scrollbar while animating draft-page (Very important to prevent scrollbar flickering)
+  useEffect(() => {
+    document.documentElement.style.overflowY = "hidden";
+    document.body.style.overflowY = "hidden";
+
+    return () => {
+      document.documentElement.style.overflowY = "";
+      document.body.style.overflowY = "";
+    };
+  }, []);
+
   const [commentText, setCommentText] = useState("");
   const [confirmSubmit, setConfirmSubmit] = useState(false);
 
@@ -36,16 +47,16 @@ export default function DraftPage() {
 
   return (
     <motion.div
-      initial={{ translateY: "100%" }}
-      animate={{ translateY: "0%" }}
-      exit={{ translateY: "100%" }}
+      initial={{ y: "100vh" }}
+      animate={{ y: "0vh" }}
+      exit={{ y: "100vh" }}
       transition={{
         type: "spring",
         stiffness: 300,
         damping: 25,
-        mass: 1,
+        mass: 0.9,
       }}
-      className="absolute top-0 w-[100vw] left-0 bg-[#fff] z-[10]"
+      className="absolute top-0 w-[100vw] h-[100vh] left-0 bg-[#fff] z-[10]"
     >
       <TopGradientBar />
       <TopNavigationPanel setConfirmSubmit={setConfirmSubmit} />
