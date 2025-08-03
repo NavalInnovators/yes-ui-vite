@@ -19,19 +19,19 @@ function ContactPageLeft() {
       <div className="parent-contact-page-email-section">
         {/* <div className="contact-page-email-section"> */}
         {/* <a href="mailto:info@yourexamsaathi.com"> */}
-        {/* <div class="email-card">
+        <div class="email-card">
           <img src={mailLogo} alt="Gmail Icon" />
           <div class="email-text">
             <p class="label">Email us here</p>
             <a href="info@navalinnovators.com">info@navalinnovators.com</a>
           </div>
-        </div> */}
+        </div>
 
-        <img
+        {/* <img
           src={gmail}
           alt="Gmail Icon"
           onClick={() => window.open("info@navalinnovators.com")}
-        />
+        /> */}
         {/* </a> */}
         {/* </div> */}
         <div className="contact-page-app-icons">

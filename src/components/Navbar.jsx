@@ -1,5 +1,5 @@
 import {
-  navLogo,
+  logo,
   DayNightModeBtn,
   // homeImg, 
   profileIconNew,
@@ -122,7 +122,7 @@ const Navbar = () => {
         </div>
         <div className="navbar-logo">
           <Link to="/">
-            <img src={navLogo} alt="YES" />
+            <img src={logo} alt="YES" />
           </Link>
         </div>
       </div>
@@ -133,7 +133,7 @@ const Navbar = () => {
         <div className="mobile-nav-header">
           <div className="navbar-logo">
             <Link to="/" onClick={toggleMenu}>
-              <img src={navLogo} alt="YES" />
+              <img src={logo} alt="YES" />
             </Link>
           </div> {/* Logo */}
           <button className="cancel-btn" onClick={toggleMenu}>
