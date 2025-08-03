@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
+import {
+  CircleDollarSign,
+  FilePenLine,
+  FileText,
+  FileWarning,
+} from "lucide-react";
+
 import DashBoardIcon from "../../../components/icons/sidebar-icons/DashBoardIcon";
-import SidebarNotificationIcon from "../../../components/icons/sidebar-icons/SidebarNotificationIcon";
-import PageIcon from "../../../components/icons/sidebar-icons/PageIcon";
 import Line from "../../../components/Line";
 
 function MyLink({ children, to }) {
@@ -32,22 +37,22 @@ export default function SidebarButtons() {
       </MyLink>
 
       <MyLink to="new_qna">
-        <PageIcon size={28} />
+        <FileText />
         <p>New Q&A</p>
       </MyLink>
 
       <MyLink to="pending">
-        <PageIcon size={28} />
+        <FileWarning />
         <p>Pending</p>
       </MyLink>
 
       <MyLink to="reviewed">
-        <PageIcon size={28} />
+        <FilePenLine />
         <p>Reviewed Q&A</p>
       </MyLink>
 
       <MyLink to="your_earning">
-        <PageIcon size={28} />
+        <CircleDollarSign />
         <p>Your Earning</p>
       </MyLink>
     </div>

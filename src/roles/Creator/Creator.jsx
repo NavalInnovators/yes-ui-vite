@@ -6,7 +6,7 @@ import GradientDiv from "../components/GradientDiv";
 function TopGradientBar() {
   return (
     <GradientDiv>
-      <h1 className="text-[30px]">Creator Mode</h1>
+      <h1 className="text-[25px]">Creator Mode</h1>
     </GradientDiv>
   );
 }
