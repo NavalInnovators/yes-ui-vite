@@ -18,11 +18,7 @@ export default function DraftPage() {
 
   useEffect(() => {
     if (questions) {
-      setQuestion(questions.find((q) => q.id === parseInt(id)));
-      console.log(
-        "From DraftPage: ",
-        questions.find((q) => q.id === parseInt(id))
-      );
+      setQuestion(questions.find((q) => q.id.toString() === id));
     }
   }, [questions, id]);
 

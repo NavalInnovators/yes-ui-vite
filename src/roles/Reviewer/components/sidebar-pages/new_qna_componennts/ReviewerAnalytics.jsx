@@ -28,7 +28,7 @@ export default function ReviewerAnalytics({ showReviewed }) {
   ).length;
 
   return (
-    <div className="dark:bg-dark-card flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[20px] w-[280px] p-[30px] rounded-[8px]">
+    <div className="dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[20px] w-[280px] p-[30px] rounded-[8px]">
       <h1 className="text-[20px]">Reviewer Analytics</h1>
       <Line />
 
