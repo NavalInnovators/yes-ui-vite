@@ -5,10 +5,10 @@ export default function SearchBar({ filterBySearch, searchQuery }) {
   const smallScreen = useSmallScreen();
 
   const largePadding = "py-[7px] px-[15px]";
-  const smallPadding = "py-[5px] px-[10px]";
+  const smallPadding = "py-[7px] px-[12px]";
 
   const padding = smallScreen ? smallPadding : largePadding;
-  const textSize = smallScreen ? "text-[12px]" : "text-[14px]";
+  const textSize = smallScreen ? "text-[13px]" : "text-[14px]";
 
   return (
     <div className="dark:bg-dark-highlight flex flex-1 min-w-[130px] items-center bg-[rgba(230,230,230,1)] pr-[15px] rounded-[7px] cursor-pointer">

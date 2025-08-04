@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 
-import { line } from "../../../../components/constants";
 import SearchBar from "../../../../components/SearchBar";
 import SelectTopic from "../../../../components/SelectTopic";
 import DraftOnly from "./view_qna_components/DraftOnly";
@@ -10,6 +9,7 @@ import { options } from "../../../constants/constants";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
 import QuestionsContext from "../../../context/QuestionsContext";
+import useLine from "../../../../components/custom_hooks/useLine";
 
 export default function ViewQNA() {
   const { questions, setQuestions, isLoading } = useContext(QuestionsContext);
@@ -18,6 +18,8 @@ export default function ViewQNA() {
   const [selectedOption, setSelectedOption] = useState("Select a Topic");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const line = useLine();
 
   useEffect(() => {
     setFilteredQuestions(questions);

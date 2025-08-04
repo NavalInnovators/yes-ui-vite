@@ -1,10 +1,12 @@
 import { useContext } from "react";
 
 import QuestionsContext from "../../../context/QuestionsContext";
-import { line } from "../../../../components/constants";
+import useLine from "../../../../components/custom_hooks/useLine";
 
 export default function ReviewerAnalytics({ showReviewed }) {
   const { questions, setQuestions } = useContext(QuestionsContext);
+
+  const line = useLine();
 
   let totalQuestions;
   let reviewedQuestions = [];

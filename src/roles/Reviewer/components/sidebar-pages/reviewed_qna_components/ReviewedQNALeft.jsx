@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 
-import { line } from "../../../../components/constants";
 import { options as topic_options, status } from "../../../constants/constants";
 import SearchBar from "../../../../components/SearchBar";
 import SelectTopic from "../../../../components/SelectTopic";
@@ -11,6 +10,8 @@ import { fuzzySearch } from "../../../lib/fuzzySearch";
 
 import QuestionsContext from "../../../context/QuestionsContext";
 import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
+import usePadding from "../../../../components/custom_hooks/usePadding";
+import useLine from "../../../../components/custom_hooks/useLine";
 
 export default function ReviewedQNALeft() {
   const { questions, setQuestions } = useContext(QuestionsContext);
@@ -22,6 +23,7 @@ export default function ReviewedQNALeft() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const is600px = useSmallScreen(600);
+  const line = useLine();
 
   useEffect(() => {
     setFilteredQuestions(questions.filter((q) => q.reviewed));
@@ -80,8 +82,13 @@ export default function ReviewedQNALeft() {
     setCurrentPage(1);
   }
 
+  const padding = usePadding();
+  // const line =
+
   return (
-    <div className="border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card w-full dark:text-dark-text-muted h-full flex flex-col gap-[15px] px-[25px] py-[20px] rounded-[10px]">
+    <div
+      className={`${padding} border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card w-full dark:text-dark-text-muted h-full flex flex-col gap-[15px] rounded-[10px]`}
+    >
       <h1 className={`text-[18px] font-semibold dark:text-white ${line}`}>
         Reviewed Q&A
       </h1>

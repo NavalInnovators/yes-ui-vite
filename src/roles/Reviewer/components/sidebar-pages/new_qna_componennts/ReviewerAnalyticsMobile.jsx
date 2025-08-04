@@ -78,7 +78,7 @@ export default function ReviewerAnalyticsMobile({ showReviewed = false }) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
           className={`flex ${
-            isSmallScreen ? "flex-col p-[10px] gap-[20px]" : "items-center"
+            isSmallScreen ? "flex-col px-[30px] gap-[20px]" : "items-center"
           } justify-between gap-[20%] overflow-y-hidden`}
         >
           <div className="flex flex-1 items-center justify-between">

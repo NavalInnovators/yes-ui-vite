@@ -43,10 +43,11 @@ export default function SelectTopic({
   }
 
   const largePadding = "py-[7px] px-[15px]";
-  const smallPadding = "py-[5px] px-[10px]";
+  const smallPadding = "py-[7px] px-[12px]";
 
   const padding = smallScreen ? smallPadding : largePadding;
-  const textSize = smallScreen ? "text-[12px]" : "text-[14px]";
+  const textSize = smallScreen ? "text-[13px]" : "text-[14px]";
+
   const minWidth = smallScreen ? "min-w-[105px]" : "min-w-[140px]";
 
   return (
