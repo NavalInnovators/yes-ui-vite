@@ -4,92 +4,104 @@ import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, Tooltip, Title, ArcElement, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { getAnalyticData } from "../api/api"; // adjust path as needed
 
 Chart.register(Tooltip, Title, ArcElement, Legend, ChartDataLabels);
 
-function BookDashboardLeftPieChart() {
-  const [chartData, setChartData] = useState({
-    labels: ["A", "B", "C"],
-    datasets: [
-      {
-        data: [10, 20, 30],
-        backgroundColor: ["#FF6384", "#FFCE56", "#36A2EB"],
-      },
-    ],
-  });
+const COLORS = ["#FF6384", "#36A2EB", "#FFCE56"]; // Descriptive, Classification, Comparison
+const LABELS = ["Descriptive", "Classification", "Comparison"];
+
+export default function BookDashboardLeftPieChart({ subcode, selectedUnit }) {
+  const [chartData, setChartData] = useState(null);
+  const [unitTitle, setUnitTitle] = useState("");
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((res) => res.json())
-      .then((users) => {
-        const labels = users.map((user) => user.name);
-        const data = users.map((user) => user.id);
+    if (!subcode) return;
 
-        const colors = [
-          "#FF6384", "#FFCE56", "#36A2EB", "#4BC0C0", "#9966FF",
-          "#FF9F40", "#FFB6C1", "#8A2BE2", "#7FFF00", "#D2691E",
-          "#00BFFF", "#FF1493"
+    getAnalyticData(subcode)
+       .then((response) => {
+        const unit = response.data.find(
+          (unit) => unit.unit === selectedUnit
+        );
+
+        if (!unit) {
+          console.warn("Selected unit not found");
+          return;
+        }// first unit only
+        if (!unit || !unit.questiontypedata?.theory) return;
+
+        const theory = unit.questiontypedata.theory;
+
+        const data = [
+          theory.descriptive || 0,
+          theory.classification || 0,
+          theory.comparison || 0,
         ];
 
+        setUnitTitle(unit.unitTitle);
+
         setChartData({
-          labels,
+          labels: LABELS,
           datasets: [
             {
               data,
-              backgroundColor: colors.slice(0, users.length),
+              backgroundColor: COLORS,
             },
           ],
         });
       })
-      .catch((e) => console.error("error", e));
-  }, []);
+      .catch((error) => {
+        console.error("Error fetching analytics data:", error.message);
+        if (error.response) {
+          console.error("Status:", error.response.status);
+          console.error("Response data:", error.response.data);
+        }
+      });
+  }, [subcode]);
 
   const options = {
     plugins: {
       datalabels: {
         color: "black",
-        formatter: (value, context) => {
-          const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-          const percentage = ((value / total) * 100).toFixed(2);
-          return `${percentage}%`;
-        },
+        formatter: (value) => `${value.toFixed(1)}%`,
         anchor: "center",
         align: "center",
       },
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
     },
     maintainAspectRatio: false,
   };
 
-  return (
-    <div className="flex flex-col md:flex-row gap-4 w-full max-w-full items-center md:items-start">
-      {/* Chart */}
-      <div className="w-[232px] h-[232px] shrink-0 mx-auto md:mx-0">
+  if (!chartData) return <div className="text-sm text-gray-500">Loading chart...</div>;
+return (
+  <div className="flex flex-col items-center gap-4">
+    <h3 className="text-center font-medium text-base">{unitTitle}</h3>
+
+    {/* Wrap chart + legend in one box to keep them together */}
+    <div className="flex flex-col items-center relative">
+      {/* Chart centered */}
+      <div className="w-[232px] h-[232px]">
         <Pie data={chartData} options={options} />
       </div>
 
-      {/* Legend */}
-      <div className="flex flex-col gap-2 text-sm w-full max-w-[300px] px-2">
-        {chartData.labels.map((label, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis"
-            title={label}
-          >
+      {/* Legend directly below, aligned left to chart */}
+      <div className="flex gap-4 mt-1 self-start text-sm">
+        {LABELS.map((label, i) => (
+          <div key={i} className="flex items-center gap-1">
             <span
-              className="inline-block w-3 h-3 rounded-sm shrink-0"
-              style={{
-                backgroundColor: chartData.datasets[0].backgroundColor[index],
-              }}
+              className="w-3 h-3 rounded-full inline-block"
+              style={{ backgroundColor: COLORS[i] }}
             ></span>
-            <span className="truncate">{label}</span>
+            <span>{label}</span>
           </div>
         ))}
       </div>
     </div>
-  );
+  </div>
+);
+
+
 }
 
-export default BookDashboardLeftPieChart;
+
+

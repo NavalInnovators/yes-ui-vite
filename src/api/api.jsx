@@ -312,10 +312,17 @@ export const getUnitNotes = async (subCode) => {
   return response.data.data;
 }
 
-export const getAnalyticData = async () => {
+
+
+export const getAnalyticData = async (subCode) => {
   try {
-    const subcode = sessionStorage.getItem('courseCode');
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.warn("No token found in localStorage");
+      return;
+    }
+
     const config = {
       headers: {
         accept: "*/*",
@@ -323,17 +330,19 @@ export const getAnalyticData = async () => {
       },
     };
 
-    const response = await api.post(
-      `/api/analyticData/${subcode}`,
-      {},
-      config
-    );
-    console.log(`Data from Analysis api: =============>`, response.data);
+    const response = await api.get(`/api/analyticData/${subCode}`, config);
+    console.log("Data from Analysis API: =============>", response.data);
     return response.data;
   } catch (error) {
+    console.error("Error in getAnalyticData:", error.message);
+    if (error.response) {
+      console.error("Status:", error.response.status);
+      console.error("Response data:", error.response.data);
+    }
     throw error;
   }
-}
+};
+
 
 export const enrollCourse = async (course) => {
   try {

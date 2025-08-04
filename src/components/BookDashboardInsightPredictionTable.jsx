@@ -1,72 +1,91 @@
-import React from "react";
+import { getAnalyticData } from "../api/api";
+import React, { useEffect, useState } from "react";
 
-function BookDashboardInsightPredictionTable() {
-  const data = [
-    {
-      topic: "Topic 1",
-      probability: "85%",
-      date: "10 July 2024",
-      confidence: "High",
-    },
-    {
-      topic: "Topic 2",
-      probability: "75%",
-      date: "12 July 2024",
-      confidence: "Medium",
-    },
-    {
-      topic: "Topic 3",
-      probability: "75%",
-      date: "12 July 2024",
-      confidence: "Medium",
-    },
-    {
-      topic: "Topic 4",
-      probability: "75%",
-      date: "12 July 2024",
-      confidence: "Medium",
-    },
-    {
-      topic: "Topic 5",
-      probability: "75%",
-      date: "12 July 2024",
-      confidence: "Medium",
-    },
-    {
-      topic: "Topic 6",
-      probability: "75%",
-      date: "12 July 2024",
-      confidence: "Medium",
-    },
-    {
-      topic: "Topic 7",
-      probability: "75%",
-      date: "12 July 2024",
-      confidence: "Medium",
-    },
-  ];
+function BookDashboardInsightPredictionTable({ subcode, selectedUnit }) {
+  const [topics, setTopics] = useState([]);
+  const [unitTitle, setUnitTitle] = useState("");
+
+  useEffect(() => {
+    if (!subcode) {
+      console.warn("No subcode provided");
+      return;
+    }
+
+    getAnalyticData(subcode)
+      .then((response) => {
+        const unit = response.data.find(
+          (unit) => unit.unit === selectedUnit
+        );
+
+        if (!unit) {
+          console.warn("Selected unit not found");
+          return;
+        } 
+        setUnitTitle(unit.unitTitle);
+        setTopics(unit.topicfrequency || []);
+      })
+      .catch((err) => {
+        console.error("Error fetching prediction table data:", err);
+      });
+  }, [subcode]);
 
   return (
-    <table className="min-w-full table-auto text-sm text-left text-gray-800 border border-gray-300">
-      <thead className="bg-gray-100">
-        <tr>
-          <th className="px-4 py-2 text-center border border-gray-300">Topic Name</th>
-          <th className="px-4 py-2  text-center border border-gray-300">Theory</th>
-          <th className="px-4 py-2  text-center border border-gray-300">Numerical</th>
-          <th className="px-4 py-2   text-center border border-gray-300">Coding</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, idx) => (
-          <tr key={idx} className="hover:bg-gray-50">
-            <td className="px-4 py-2 text-center border border-gray-300">{item.topic}</td>
-            <td className="px-4 py-2 text-center border border-gray-300">{item.probability}</td>
-            <td className="px-4 py-2 text-center border border-gray-300">{item.date}</td>
-            <td className="px-4 py-2 text-center border border-gray-300">{item.confidence}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="space-y-3 max-w-4xl">
+      <h2 className="text-lg font-semibold text-gray-800 truncate">{unitTitle}</h2>
+      
+      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+        <table className="w-full text-sm border-collapse bg-white">
+          <thead>
+            <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+              <th className="px-4 py-3 text-left font-medium text-gray-900 border-r border-gray-200 w-2/5">
+                Topic Name
+              </th>
+              <th className="px-3 py-3 text-center font-medium text-gray-900 border-r border-gray-200 w-1/5">
+                Descriptive
+              </th>
+              <th className="px-3 py-3 text-center font-medium text-gray-900 border-r border-gray-200 w-1/5">
+                Classification
+              </th>
+              <th className="px-3 py-3 text-center font-medium text-gray-900 w-1/5">
+                Comparison
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {topics.map((topic, idx) => {
+              const theory = topic.questiontypedata?.theory || {};
+              return (
+                <tr 
+                  key={idx} 
+                  className="hover:bg-blue-50 transition-colors duration-150 group"
+                >
+                  <td className="px-4 py-3 text-left border-r border-gray-100 group-hover:border-blue-200">
+                    <div className="font-medium text-gray-900 truncate max-w-xs" title={topic.topic}>
+                      {topic.topic}
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 text-center border-r border-gray-100 group-hover:border-blue-200">
+                    {theory.descriptive?.toFixed(1) ?? "0.0"}%
+                  </td>
+                  <td className="px-3 py-3 text-center border-r border-gray-100 group-hover:border-blue-200">
+                    {theory.classification?.toFixed(1) ?? "0.0"}%
+                  </td>
+                  <td className="px-3 py-3 text-center">
+                    {theory.comparison?.toFixed(1) ?? "0.0"}%
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      
+      {topics.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          <p>No topic data available</p>
+        </div>
+      )}
+    </div>
   );
 }
 
