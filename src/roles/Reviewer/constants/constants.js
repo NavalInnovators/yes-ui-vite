@@ -14,4 +14,4 @@ export const options = [
 
 export const status = ["Accepted", "Not Approved", "In Progress"];
 
-export const PAGE_SIZE = 6;
+export const PAGE_SIZE = 5;

@@ -1,6 +1,5 @@
-export default function Line({
-  className,
-  color = "dark:bg-dark-border bg-gray-300",
-}) {
-  return <div className={`${className} h-[1px] ${color}`}></div>;
+export default function Line() {
+  return (
+    <div className={`h-[1px] w-full bg-light-border dark:bg-dark-border`}></div>
+  );
 }

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
-import Line from "../../../../components/Line";
+import { line } from "../../../../components/constants";
 import SearchBar from "../../../../components/SearchBar";
 import SelectTopic from "../../../../components/SelectTopic";
 import DraftOnly from "./view_qna_components/DraftOnly";
@@ -41,7 +41,7 @@ export default function ViewQNA() {
     setFilteredQuestions(
       questions.filter((q) => fuzzySearch(searchQuery, q.content))
     );
-  }, [searchQuery]);
+  }, [searchQuery, questions]);
 
   function filterBySearch(e) {
     setSearchQuery(e.target.value);
@@ -89,12 +89,10 @@ export default function ViewQNA() {
   }
 
   return (
-    <div className="h-[calc(100vh-77.5px-74px-40px)] w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[20px] border border-gray-300 p-[30px] rounded-[10px]">
-      <h1 className="text-[20px]">View Q&A</h1>
+    <div className=" w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 py-[20px] px-[25px] rounded-[10px]">
+      <h1 className={`text-[18px] ${line} font-semibold`}>View Q&A</h1>
 
-      <Line />
-
-      <div className="flex items-center gap-[7px] w-full">
+      <div className={`flex items-center gap-[7px] w-full ${line}`}>
         <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
 
         <SelectTopic
@@ -106,8 +104,6 @@ export default function ViewQNA() {
 
         <DraftOnly draftOnlyFilter={draftOnlyFilter} draftOnly={draftOnly} />
       </div>
-
-      <Line />
 
       {isLoading ? (
         <div className="text-2xl text-center mt-[100px]">

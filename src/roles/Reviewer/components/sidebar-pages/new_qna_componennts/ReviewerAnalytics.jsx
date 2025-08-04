@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import QuestionsContext from "../../../context/QuestionsContext";
-import Line from "../../../../components/Line";
+import { line } from "../../../../components/constants";
 
 export default function ReviewerAnalytics({ showReviewed }) {
   const { questions, setQuestions } = useContext(QuestionsContext);
@@ -28,39 +28,36 @@ export default function ReviewerAnalytics({ showReviewed }) {
   ).length;
 
   return (
-    <div className="dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[20px] w-[280px] p-[30px] rounded-[8px]">
-      <h1 className="text-[20px]">Reviewer Analytics</h1>
-      <Line />
+    <div className="dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[15px] w-[250px] p-[20px] rounded-[8px]">
+      <h1 className={`font-semibold ${line}`}>Reviewer Analytics</h1>
 
-      <h2 className="text-[16px]">Total Reviewed</h2>
+      <h2 className="text-[14px]">Total Reviewed</h2>
 
       <div>
-        <p className="text-[14px] dark:text-dark-text-muted text-gray-500 font-light">
+        <p className="text-[12px] dark:text-dark-text-muted text-gray-500 font-light">
           Total Questions
         </p>
-        <p className="text-[20px]">{totalQuestions}</p>
+        <p className="text-[18px]">{totalQuestions}</p>
       </div>
 
       <div>
-        <p className="text-[14px] dark:text-dark-text-muted text-gray-500 font-light">
+        <p className="text-[12px] dark:text-dark-text-muted text-gray-500 font-light">
           Total Accepted
         </p>
-        <p className="text-[20px]">{totalAccepted}</p>
+        <p className="text-[18px]">{totalAccepted}</p>
       </div>
 
-      <div>
-        <p className="text-[14px] dark:text-dark-text-muted text-gray-500 font-light">
+      <div className={`${line}`}>
+        <p className="text-[12px] dark:text-dark-text-muted text-gray-500 font-light">
           Total Rejected
         </p>
-        <p className="text-[20px]">{totalRejected}</p>
+        <p className="text-[18px]">{totalRejected}</p>
       </div>
 
-      <Line />
-
-      <h2>All in Review</h2>
+      <h2 className="text-[14px]">All in Review</h2>
 
       <div>
-        <p className="text-[14px] dark:text-dark-text-muted text-gray-500 font-light">
+        <p className="text-[12px] mt-[-5px] dark:text-dark-text-muted text-gray-500 font-light">
           Total in Pending
         </p>
         <p className="text-[20px]">{totalInPending}</p>

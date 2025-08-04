@@ -1,4 +1,4 @@
-export default function DarkModeIcon() {
+export default function DarkModeIcon({ size = 42 }) {
   function handleDarkMode() {
     const darkDiv = document.getElementById("needs-dark-mode");
     darkDiv.classList.toggle("dark");
@@ -6,8 +6,8 @@ export default function DarkModeIcon() {
 
   return (
     <svg
-      width="42"
-      height="42"
+      width={size}
+      height={size}
       viewBox="0 0 42 42"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

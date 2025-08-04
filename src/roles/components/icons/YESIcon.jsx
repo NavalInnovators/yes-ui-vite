@@ -1,8 +1,8 @@
-export default function YESIcon() {
+export default function YESIcon({ size = 35 }) {
   return (
     <svg
-      width="66"
-      height="38"
+      width={size}
+      height={size}
       viewBox="0 0 66 38"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

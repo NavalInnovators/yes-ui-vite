@@ -1,8 +1,8 @@
-export default function FilterIcon() {
+export default function FilterIcon({ size = 42 }) {
   return (
     <svg
-      width="41"
-      height="38"
+      width={size}
+      height={size}
       viewBox="0 0 41 38"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

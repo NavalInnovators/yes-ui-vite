@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import ProfileImage from "../../components/ProfileImage";
 
 export default function Profile() {
   const location = useLocation();
@@ -13,16 +14,14 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-[18px]">
-      <img
-        className="rounded-full w-[77px]"
-        src="/pfp.jpg"
-        alt="Profile Photo"
-      />
+    <div className="flex flex-col items-center justify-center gap-[11px]">
+      <ProfileImage size={62} />
 
       <div className="flex flex-col items-center justify-center">
-        <p className="font-bold">User Name</p>
-        <p className="dark:text-dark-text-muted text-gray-500 font-light text-[15px]">
+        <p className="text-slate-700 dark:text-white font-bold text-[15px]">
+          User Name
+        </p>
+        <p className="dark:text-dark-text-muted text-gray-500 font-light text-[13px]">
           Role: {role}
         </p>
       </div>

@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
 import WelcomeBar from "./components/WelcomeBar";
-import SideBar from "../components/sidebar/SideBar";
 import { useEffect, useState } from "react";
 import QuestionsContext from "./context/QuestionsContext";
+import ReviewerSidebar from "./components/ReviewerSidebar";
 
 const QUESTIONS_URL = "http://localhost:3002/questions";
 
@@ -22,7 +22,7 @@ export default function HomeLayout() {
 
         setQuestions(fetchedQuestions);
       } catch (err) {
-        console.log("An error occurred");
+        console.log("An error occurred: ", err);
       } finally {
         setIsLoading(false);
       }
@@ -37,7 +37,7 @@ export default function HomeLayout() {
       <WelcomeBar />
 
       <div className="flex">
-        {isSidebarOpen && <SideBar />}
+        {isSidebarOpen && <ReviewerSidebar />}
 
         <div className="p-[20px] w-full dark:bg-black">
           <QuestionsContext.Provider
