@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 import QuestionsContext from "../../../context/QuestionsContext";
-import { line } from "../../../../components/constants";
 import { ArrowDownFromLine, ArrowUpFromLine } from "lucide-react";
 
 function ParaWithNumber({ text, number }) {
@@ -43,12 +42,12 @@ export default function ReviewerAnalytics({ showReviewed }) {
   ).length;
 
   return (
-    <div className="dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[15px] p-[20px] rounded-[8px]">
+    <div className="dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[15px]  rounded-[8px] px-[20px] py-[10px]">
       <div className={`flex items-center justify-between`}>
-        <h1 className={`font-semibold `}>Reviewer Analytics</h1>
+        <h1 className={`font-semibold`}>Reviewer Analytics</h1>
         <div
-          className="flex items-center gap-[5px] text-[14px] text-[#fff] bg-black py-[5px] px-[15px] rounded-[7px] cursor-pointer"
-          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-[5px] text-[14px] text-[#fff] dark:text-black dark:bg-[#fff] bg-black py-[5px] px-[15px] rounded-[7px] cursor-pointer"
+          onClick={() => setIsOpen((prev) => !prev)}
         >
           {isOpen ? (
             <ArrowUpFromLine size={15} />
@@ -59,21 +58,19 @@ export default function ReviewerAnalytics({ showReviewed }) {
         </div>
       </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="flex justify-between items-center gap-[10px] overflow-y-hidden"
-          >
-            <ParaWithNumber text="Total Questions" number={totalQuestions} />
-            <ParaWithNumber text="Total Accepted" number={totalAccepted} />
-            <ParaWithNumber text="Total Rejected" number={totalRejected} />
-            <ParaWithNumber text="Total in Pending" number={totalInPending} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="flex justify-between items-center gap-[10px] overflow-y-hidden"
+        >
+          <ParaWithNumber text="Total Questions" number={totalQuestions} />
+          <ParaWithNumber text="Total Accepted" number={totalAccepted} />
+          <ParaWithNumber text="Total Rejected" number={totalRejected} />
+          <ParaWithNumber text="Total in Pending" number={totalInPending} />
+        </motion.div>
+      )}
     </div>
   );
 }

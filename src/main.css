@@ -61,7 +61,7 @@
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   margin: 5px 0;
-  background: hsl(0, 0%, 95%);
+  background: hsl(0, 0%, 100%);
   border-radius: 8px;
 }
 

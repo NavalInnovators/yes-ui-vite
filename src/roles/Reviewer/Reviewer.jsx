@@ -11,6 +11,15 @@ import { AnimatePresence } from "motion/react";
 function Reviewer() {
   const location = useLocation();
 
+  if (location.pathname.startsWith("/reviewer")) {
+    console.log("Reviewer path detected:", location.pathname);
+    document.documentElement.overflowX = "hidden";
+    document.documentElement.overflowY = "hidden";
+
+    document.body.overflowX = "hidden";
+    document.body.overflowY = "hidden";
+  }
+
   return (
     <AnimatePresence>
       <Routes location={location} key={location.pathname}>

@@ -16,7 +16,6 @@ export default function NewQNA() {
       {smallScreen && <ReviewerAnalyticsMobile showReviewed={false} />}
       <ViewQNA />
       {!smallScreen && <ReviewerAnalytics showReviewed={false} />}
-
       {/* Draft Page */}
       <Outlet />
     </div>
