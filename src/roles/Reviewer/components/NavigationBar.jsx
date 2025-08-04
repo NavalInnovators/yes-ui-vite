@@ -3,10 +3,15 @@ import FilterIcon from "../../components/icons/FilterIcon";
 import DarkModeIcon from "../../components/icons/DarkModeIcon";
 import NotificationsIcon from "../../components/icons/NotificationsIcon";
 import ProfileIcon from "../../components/icons/ProfileIcon";
+import useMarginPadding from "../../components/custom_hooks/useMarginPadding";
 
 export default function NavigationBar({ setIsMobileSidebarOpen }) {
+  const marginPadding = useMarginPadding();
+
   return (
-    <div className="flex dark:bg-black dark:text-white text-black items-center h-[64px] gap-[10px] justify-between py-[20px] px-[25px]">
+    <div
+      className={`${marginPadding} flex dark:bg-black dark:text-white text-black items-center h-[64px] gap-[10px] justify-between`}
+    >
       <div className="flex items-center ">
         <div
           className="pl-[10px] ml-[-10px]"

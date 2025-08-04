@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { motion } from "motion/react";
 
 import Line from "../../../components/Line";
+import useSmallScreen from "../../../components/custom_hooks/useSmallScreen";
+import useMarginPadding from "../../../components/custom_hooks/useMarginPadding";
 
 const NOTIFICATIONS_URL = "http://localhost:3001/notifications";
 
@@ -9,6 +11,9 @@ export default function Notification() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const isSmallScreen = useSmallScreen();
+  const marginPadding = useMarginPadding();
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -40,7 +45,7 @@ export default function Notification() {
     <motion.div
       initial={{ x: "-1%", opacity: 0 }}
       animate={{ x: "0%", opacity: 1 }}
-      className="h-[calc(100vh-63px-64px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 py-[20px] px-[25px] rounded-[10px]"
+      className={`${marginPadding} overflow-x-hidden h-[calc(100vh-63px-64px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 rounded-[10px]`}
     >
       <h1 className="text-[18px] dark:text-white font-semibold mb-[15px]">
         Notifications
@@ -48,13 +53,15 @@ export default function Notification() {
 
       <Line />
 
-      <div className="flex mt-[30px] gap-[10px] dark:text-dark-text-muted justify-between items-center px-[15px] pr-[25px] font-light text-xs text-light-text border-b border-[#611fc5] pb-[20px]">
-        <div className="flex-4">Name</div>
-        <div className="flex flex-1 justify-center">Date</div>
-        <div className="flex flex-1 justify-center">Actions</div>
-      </div>
+      {!isSmallScreen && (
+        <div className="flex mt-[30px] gap-[10px] dark:text-dark-text-muted justify-between pr-[10px] items-center font-light text-xs text-light-text border-b border-[#611fc5] pb-[20px]">
+          <div className="flex-4">Name</div>
+          <div className="flex flex-1 justify-center">Date</div>
+          <div className="flex flex-1 justify-center">Actions</div>
+        </div>
+      )}
 
-      <div className="flex flex-col overflow-y-auto custom-scrollbar px-[15px] text-sm">
+      <div className="flex flex-col overflow-y-auto custom-scrollbar text-sm">
         {/* Notification Title */}
         {notifications.map((notification, i) => (
           <div

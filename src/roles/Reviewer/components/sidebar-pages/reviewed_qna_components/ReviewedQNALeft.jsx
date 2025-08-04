@@ -10,6 +10,7 @@ import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
 
 import QuestionsContext from "../../../context/QuestionsContext";
+import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
 
 export default function ReviewedQNALeft() {
   const { questions, setQuestions } = useContext(QuestionsContext);
@@ -19,6 +20,8 @@ export default function ReviewedQNALeft() {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const is600px = useSmallScreen(600);
 
   useEffect(() => {
     setFilteredQuestions(questions.filter((q) => q.reviewed));
@@ -41,7 +44,7 @@ export default function ReviewedQNALeft() {
     );
 
     setCurrentPage(1);
-  }, [searchQuery]);
+  }, [searchQuery, questions]);
 
   function filterBySearch(e) {
     setSearchQuery(e.target.value);
@@ -83,22 +86,28 @@ export default function ReviewedQNALeft() {
         Reviewed Q&A
       </h1>
 
-      <div className={`flex items-center gap-[7px] w-full ${line}`}>
+      <div
+        className={`flex items-center gap-[7px] w-full ${line} ${
+          is600px && "flex-wrap"
+        }`}
+      >
         <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
 
-        <SelectTopic
-          options={topic_options}
-          filterByTopicName={filterByTopicName}
-          selectedOption={selectedTopic}
-          setSelectedOption={setSelectedTopic}
-        />
+        <div className="flex items-center gap-[7px] flex-1">
+          <SelectTopic
+            options={topic_options}
+            filterByTopicName={filterByTopicName}
+            selectedOption={selectedTopic}
+            setSelectedOption={setSelectedTopic}
+          />
 
-        <SelectTopic
-          options={status}
-          filterByTopicName={filterByStatus}
-          selectedOption={selectedStatus}
-          setSelectedOption={setSelectedStatus}
-        />
+          <SelectTopic
+            options={status}
+            filterByTopicName={filterByStatus}
+            selectedOption={selectedStatus}
+            setSelectedOption={setSelectedStatus}
+          />
+        </div>
       </div>
 
       <ReviewedQNAQuestions

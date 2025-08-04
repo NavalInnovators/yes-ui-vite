@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import QuestionsContext from "./context/QuestionsContext";
 import ReviewerSidebar from "./components/ReviewerSidebar";
 import SidebarMobile from "./components/SidebarMobile";
+import useMarginPadding from "../components/custom_hooks/useMarginPadding";
 
 const QUESTIONS_URL = "http://localhost:3002/questions";
 
@@ -16,6 +17,8 @@ export default function HomeLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   // Mobile Sidebar
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const marginPadding = useMarginPadding(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,7 +66,9 @@ export default function HomeLayout() {
       <div className="flex">
         {isSidebarOpen && <ReviewerSidebar />}
 
-        <div className="p-[20px] w-full dark:bg-black h-[calc(100vh-64px-63px)] overflow-y-scroll custom-scrollbar">
+        <div
+          className={`${marginPadding} w-full dark:bg-black h-[calc(100vh-64px-63px)] overflow-y-scroll custom-scrollbar`}
+        >
           <QuestionsContext.Provider
             value={{ questions, setQuestions, isLoading }}
           >

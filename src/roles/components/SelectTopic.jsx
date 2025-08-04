@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import useSmallScreen from "./custom_hooks/useSmallScreen";
 
 export default function SelectTopic({
   options,
@@ -10,6 +11,7 @@ export default function SelectTopic({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const selectTopicRef = useRef(null);
+  const smallScreen = useSmallScreen();
 
   useEffect(() => {
     function handleOutsideClick(e) {
@@ -40,13 +42,22 @@ export default function SelectTopic({
     setIsOpen(false);
   }
 
+  const largePadding = "py-[7px] px-[15px]";
+  const smallPadding = "py-[5px] px-[10px]";
+
   return (
     <div
-      className="dark:bg-dark-highlight relative flex items-center transition-all bg-[rgba(230,230,230,1)] rounded-[5px] pr-[15px] cursor-pointer justify-between"
+      className={`${
+        smallScreen ? "pr-[10px]" : "15px"
+      } dark:bg-dark-highlight relative flex flex-1 items-center transition-all bg-[rgba(230,230,230,1)] rounded-[5px] cursor-pointer justify-between`}
       onClick={() => setIsOpen((prev) => !prev)}
       ref={selectTopicRef}
     >
-      <div className="select-none min-w-[200px] dark:bg-dark-highlight dark:text-white bg-[rgba(230,230,230,1)] outline-none rounded-[5px] border-none text-[14px] font-light placeholder:text-gray-800 text-black py-[7px] px-[15px] cursor-pointer">
+      <div
+        className={`${
+          smallScreen ? smallPadding : largePadding
+        } select-none min-w-[125px] dark:bg-dark-highlight dark:text-white bg-[rgba(230,230,230,1)] outline-none rounded-[5px] border-none text-[14px] font-light placeholder:text-gray-800 text-black  cursor-pointer`}
+      >
         {selectedOption}
       </div>
 

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import QuestionsContext from "../../../context/QuestionsContext";
 import { ArrowDownFromLine, ArrowUpFromLine } from "lucide-react";
+import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
 
 function ParaWithNumber({ text, number }) {
   return (
@@ -15,10 +16,11 @@ function ParaWithNumber({ text, number }) {
   );
 }
 
-export default function ReviewerAnalytics({ showReviewed }) {
+export default function ReviewerAnalyticsMobile({ showReviewed = false }) {
   const { questions, setQuestions } = useContext(QuestionsContext);
 
   const [isOpen, setIsOpen] = useState(false);
+  const isSmallScreen = useSmallScreen(600);
 
   let totalQuestions;
   let reviewedQuestions = [];
@@ -41,18 +43,22 @@ export default function ReviewerAnalytics({ showReviewed }) {
     (q) => q.approved === "In Progress"
   ).length;
 
+  const padding = isSmallScreen ? "px-[10px] py-[7px]" : "px-[20px] py-[10px]";
+
   return (
-    <div className="dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[15px]  rounded-[8px] px-[20px] py-[10px]">
+    <div
+      className={`${padding} dark:bg-dark-card h-fit flex flex-col dark:text-white border-[1px] border-light-border dark:border-dark-border gap-[15px]  rounded-[8px]`}
+    >
       <div className={`flex items-center justify-between`}>
         <h1 className={`font-semibold`}>Reviewer Analytics</h1>
         <div
-          className="flex items-center gap-[5px] text-[14px] text-[#fff] dark:text-black dark:bg-[#fff] bg-black py-[5px] px-[15px] rounded-[7px] cursor-pointer"
+          className="flex items-center gap-[5px] text-[12px] text-[#fff] dark:text-black dark:bg-[#fff] bg-black hover:bg-dark-more-highlighted dark:hover:bg-[hsl(0,0%,90%)] py-[5px] px-[10px] rounded-[7px] cursor-pointer transition hover:scale-[0.97]"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           {isOpen ? (
-            <ArrowUpFromLine size={15} />
+            <ArrowUpFromLine size={13} />
           ) : (
-            <ArrowDownFromLine size={15} />
+            <ArrowDownFromLine size={13} />
           )}
           <p>{isOpen ? "Collapse" : "Expand"}</p>
         </div>
