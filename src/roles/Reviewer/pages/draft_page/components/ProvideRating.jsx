@@ -3,8 +3,8 @@ import StarRating from "../../../components/StarRating";
 function RatingWithFactor({ factor }) {
   return (
     <div className="flex items-center gap-[20px]">
-      <StarRating maxRating={5} size={25} defaultRating={0} />
-      <p className="text-[15px] font-light">{factor}</p>
+      <StarRating maxRating={5} size={20} defaultRating={0} />
+      <p className="text-[13px] font-light">{factor}</p>
     </div>
   );
 }
@@ -19,18 +19,18 @@ export default function ProvideRating() {
   ];
 
   return (
-    <div className="bg-[#fff] p-[30px] rounded-[10px]">
+    <div className="bg-[#fff] px-[25px] py-[20px] rounded-[6px]">
       {/* Header */}
       <div className="flex items-center justify-between text-[18px]">
-        <h1>Provide the Ratings</h1>
-        <div className="text-[23px] flex items-center gap-[5px]">
-          <StarRating maxRating={1} defaultRating={1} fixed={true} size={35} />
+        <h1 className="text-sm font-semibold">Provide the Ratings</h1>
+        <div className="text-lg flex items-center gap-[5px]">
+          <StarRating maxRating={1} defaultRating={1} fixed={true} size={20} />
           3.5
         </div>
       </div>
 
       {/* Star Rating Components */}
-      <div className="flex flex-col gap-[8px] mt-[25px]">
+      <div className="flex flex-col gap-[8px] mt-[15px]">
         {factors.map((factor, i) => (
           <RatingWithFactor key={i} factor={factor} />
         ))}

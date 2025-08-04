@@ -6,7 +6,7 @@ export default function Question() {
   const { question } = useContext(QuestionContext);
 
   return (
-    <div className="flex flex-col text-[18px] bg-[#fff] rounded-[10px] p-[30px] gap-[20px]">
+    <div className="flex flex-col text-sm bg-[#fff] rounded-[6px] px-[25px] py-[22px] gap-[20px]">
       {question ? (
         <>
           <h1>Question {question.id}:</h1>
@@ -14,7 +14,7 @@ export default function Question() {
           <TopicNameLabel topicName={question.topic_name} />
         </>
       ) : (
-        <h1 className="text-[20px] flex items-center font-medium gap-[20px]">
+        <h1 className="text-sm flex items-center font-medium gap-[20px]">
           Loading...
         </h1>
       )}

@@ -6,8 +6,8 @@ export default function WriteYourComment() {
   const { commentText, setCommentText } = useContext(CommentTextContext);
 
   return (
-    <div className="bg-[#fff] p-[30px] rounded-[10px] flex flex-col flex-1 gap-[20px]">
-      <h1>Write Your Comment</h1>
+    <div className="bg-[#fff] py-[20px] px-[25px] rounded-[10px] flex flex-col flex-1 gap-[15px]">
+      <h1 className="text-sm font-semibold">Write Your Comment</h1>
 
       <CKEditor
         editorUrl="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"
@@ -18,6 +18,7 @@ export default function WriteYourComment() {
           ],
           versionCheck: false,
           resize_enabled: false,
+          height: "40%",
         }}
         initData="<p>Write your comment here!</p>"
         onChange={({ editor }) => {

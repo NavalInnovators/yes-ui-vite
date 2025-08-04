@@ -32,7 +32,7 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
   function filterByTopicName() {}
 
   return (
-    <div className="py-[10px] px-[25px] flex justify-between items-center">
+    <div className="py-[8px] px-[25px] flex justify-between items-center">
       <div className="flex items-center gap-[10px]">
         <SelectTopic
           options={topics}
@@ -56,18 +56,18 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
         setCurrentPage={setCurrentPage}
       />
 
-      <div className="flex items-center gap-[3px] text-[18px] font-medium">
-        <button className="transition-colors cursor-pointer border-[2px] border-red-200 hover:bg-red-200 py-[7px] px-[20px] text-red-600 rounded-l-[7px]">
+      <div className="flex items-center gap-[3px] text-sm font-medium">
+        <button className="transition-colors cursor-pointer border-[2px] border-red-200 hover:bg-red-200 py-[5px] px-[15px] text-red-600 rounded-l-[7px]">
           Reject
         </button>
 
-        <button className="transition-colors cursor-pointer border-[2px] border-green-200 hover:bg-green-200 py-[7px] px-[20px] text-green-600 rounded-r-[7px]">
+        <button className="transition-colors cursor-pointer border-[2px] border-green-200 hover:bg-green-200 py-[5px] px-[15px] text-green-600 rounded-r-[7px]">
           Approve
         </button>
 
         <button
           onClick={handleConfirmSubmit}
-          className="transition-colors hover:text-white hover:bg-transparent ml-[15px] rounded-[8px] cursor-pointer bg-[#fff] py-[7px] px-[20px] relative gradient-button"
+          className="transition-colors hover:text-white hover:bg-transparent ml-[15px] rounded-[5px] cursor-pointer bg-[#fff] py-[5px] px-[20px] relative gradient-button"
         >
           Submit Comment
         </button>
