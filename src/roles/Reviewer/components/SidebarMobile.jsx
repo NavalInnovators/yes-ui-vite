@@ -7,10 +7,10 @@ import { ArrowLeft, CircleQuestionMark } from "lucide-react";
 function CloseButton({ setIsMobileSidebarOpen }) {
   return (
     <div
-      className="cursor-pointer w-fit bg-light-card rounded-full p-[5px] hover:bg-light-hover"
+      className="cursor-pointer w-fit bg-light-card rounded-full p-[8px] dark:bg-dark-highlight dark:hover:bg-dark-more-highlighted hover:bg-light-hover"
       onClick={() => setIsMobileSidebarOpen(false)}
     >
-      <ArrowLeft size={27} className="text-gray-500" />
+      <ArrowLeft size={24} className="text-gray-500 dark:text-white" />
     </div>
   );
 }

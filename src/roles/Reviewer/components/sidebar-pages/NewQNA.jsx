@@ -10,7 +10,9 @@ export default function NewQNA() {
 
   return (
     <div
-      className={`flex ${smallScreen && "flex-col"} gap-[15px] justify-between`}
+      className={`flex ${
+        smallScreen ? "flex-col gap-[10px]" : "gap-[15px]"
+      } justify-between`}
     >
       {/* Reviewer Analytics for Mobile Screens */}
       {smallScreen && <ReviewerAnalyticsMobile />}

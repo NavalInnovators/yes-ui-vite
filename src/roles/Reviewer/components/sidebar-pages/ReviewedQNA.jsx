@@ -5,6 +5,7 @@ import useSmallScreen from "../../../components/custom_hooks/useSmallScreen";
 
 export default function ReviewedQNA() {
   const isSmallScreen = useSmallScreen(1020);
+  const is800px = useSmallScreen(800);
 
   return (
     <div

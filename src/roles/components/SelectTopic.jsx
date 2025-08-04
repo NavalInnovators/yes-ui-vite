@@ -45,18 +45,20 @@ export default function SelectTopic({
   const largePadding = "py-[7px] px-[15px]";
   const smallPadding = "py-[5px] px-[10px]";
 
+  const padding = smallScreen ? smallPadding : largePadding;
+  const textSize = smallScreen ? "text-[12px]" : "text-[14px]";
+  const minWidth = smallScreen ? "min-w-[105px]" : "min-w-[140px]";
+
   return (
     <div
       className={`${
-        smallScreen ? "pr-[10px]" : "15px"
+        smallScreen ? "pr-[5px]" : "pr-[10px]"
       } dark:bg-dark-highlight relative flex flex-1 items-center transition-all bg-[rgba(230,230,230,1)] rounded-[5px] cursor-pointer justify-between`}
       onClick={() => setIsOpen((prev) => !prev)}
       ref={selectTopicRef}
     >
       <div
-        className={`${
-          smallScreen ? smallPadding : largePadding
-        } select-none min-w-[125px] dark:bg-dark-highlight dark:text-white bg-[rgba(230,230,230,1)] outline-none rounded-[5px] border-none text-[14px] font-light placeholder:text-gray-800 text-black  cursor-pointer`}
+        className={`${padding} ${textSize} ${minWidth} select-none dark:bg-dark-highlight dark:text-white bg-[rgba(230,230,230,1)] outline-none rounded-[5px] border-none font-light placeholder:text-gray-800 text-black  cursor-pointer`}
       >
         {selectedOption}
       </div>

@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 
 import Line from "../../../components/Line";
 import useSmallScreen from "../../../components/custom_hooks/useSmallScreen";
-import useMarginPadding from "../../../components/custom_hooks/useMarginPadding";
+import usePadding from "../../../components/custom_hooks/usePadding";
 
 const NOTIFICATIONS_URL = "http://localhost:3001/notifications";
 
@@ -13,7 +13,7 @@ export default function Notification() {
   const [error, setError] = useState(null);
 
   const isSmallScreen = useSmallScreen();
-  const marginPadding = useMarginPadding();
+  const padding = usePadding();
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -45,7 +45,7 @@ export default function Notification() {
     <motion.div
       initial={{ x: "-1%", opacity: 0 }}
       animate={{ x: "0%", opacity: 1 }}
-      className={`${marginPadding} overflow-x-hidden h-[calc(100vh-63px-64px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 rounded-[10px]`}
+      className={`${padding} overflow-x-hidden h-[calc(100vh-63px-64px-40px)] dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 rounded-[10px]`}
     >
       <h1 className="text-[18px] dark:text-white font-semibold mb-[15px]">
         Notifications

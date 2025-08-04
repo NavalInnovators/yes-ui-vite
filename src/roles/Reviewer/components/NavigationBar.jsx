@@ -3,14 +3,14 @@ import FilterIcon from "../../components/icons/FilterIcon";
 import DarkModeIcon from "../../components/icons/DarkModeIcon";
 import NotificationsIcon from "../../components/icons/NotificationsIcon";
 import ProfileIcon from "../../components/icons/ProfileIcon";
-import useMarginPadding from "../../components/custom_hooks/useMarginPadding";
+import usePadding from "../../components/custom_hooks/usePadding";
 
 export default function NavigationBar({ setIsMobileSidebarOpen }) {
-  const marginPadding = useMarginPadding();
+  const padding = usePadding();
 
   return (
     <div
-      className={`${marginPadding} flex dark:bg-black dark:text-white text-black items-center h-[64px] gap-[10px] justify-between`}
+      className={`${padding} flex dark:bg-black dark:text-white text-black items-center h-[64px] gap-[10px] justify-between`}
     >
       <div className="flex items-center ">
         <div

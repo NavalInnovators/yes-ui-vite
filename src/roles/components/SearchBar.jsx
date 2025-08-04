@@ -1,11 +1,20 @@
 import { Search } from "lucide-react";
+import useSmallScreen from "./custom_hooks/useSmallScreen";
 
 export default function SearchBar({ filterBySearch, searchQuery }) {
+  const smallScreen = useSmallScreen();
+
+  const largePadding = "py-[7px] px-[15px]";
+  const smallPadding = "py-[5px] px-[10px]";
+
+  const padding = smallScreen ? smallPadding : largePadding;
+  const textSize = smallScreen ? "text-[12px]" : "text-[14px]";
+
   return (
     <div className="dark:bg-dark-highlight flex flex-1 min-w-[130px] items-center bg-[rgba(230,230,230,1)] pr-[15px] rounded-[7px] cursor-pointer">
       <input
         type="text"
-        className="dark:bg-dark-highlight dark:placeholder:text-white dark:text-white bg-[rgba(230,230,230,1)] w-full outline-none rounded-[7px] border-none text-[14px] font-light placeholder:text-black text-text-black py-[7px] px-[15px]"
+        className={`${padding} ${textSize} dark:bg-dark-highlight dark:placeholder:text-white dark:text-white bg-[rgba(230,230,230,1)] w-full outline-none rounded-[7px] border-none font-light placeholder:text-black text-text-black `}
         placeholder="Search"
         autoComplete="off"
         onChange={(e) => filterBySearch(e)}
