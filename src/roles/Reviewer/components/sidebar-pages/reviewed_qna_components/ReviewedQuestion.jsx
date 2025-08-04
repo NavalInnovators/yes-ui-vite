@@ -16,7 +16,7 @@ export default function Question({ question }) {
   }
 
   return (
-    <div className="flex justify-between items-start dark:text-white">
+    <div className="flex justify-between items-start dark:text-white text-[14px]">
       {/* Left */}
       <div className="flex gap-[10px]">
         {/* Question Number */}
@@ -28,13 +28,13 @@ export default function Question({ question }) {
         {/* Status*/}
         <div className="flex flex-col items-center gap-[3px] font-bold">
           <div
-            className={`flex items-center w-[100px] justify-center ${color} text-[13px] h-[24px] p-[5px] rounded-[5px]`}
+            className={`flex items-center w-[85px] justify-center ${color} text-[11px] h-fit py-[2px] rounded-[5px]`}
           >
             {question.approved}
           </div>
 
           {question.approved === "Accepted" ? (
-            <div className="w-[100px] flex items-center text-yellow-600 bg-yellow-100 justify-center text-[13px] h-[24px] p-[5px] rounded-[5px]">
+            <div className="w-[85px] flex items-center text-yellow-600 bg-yellow-100 justify-center text-[11px] h-fit py-[2px] rounded-[5px]">
               {question.stars}
             </div>
           ) : (
@@ -44,7 +44,7 @@ export default function Question({ question }) {
 
         {/* Status */}
         <button
-          className={`flex justify-center hover:border-[1px] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover dark:bg-dark-highlight dark:text-white cursor-pointer items-center bg-[rgba(230,230,230,1)] text-[15px] w-[155px] h-[35px] rounded-[5px] ml-[20px]`}
+          className={`flex text-[13px] h-fit py-[5px] justify-center border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover dark:bg-dark-highlight dark:text-white cursor-pointer items-center bg-[rgba(230,230,230,1)] w-[125px] rounded-[5px] ml-[20px]`}
         >
           View Comment
         </button>
