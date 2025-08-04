@@ -1,9 +1,8 @@
 /* index.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 @import "tailwindcss";
-
 
 /* ------------ For Reviewer Mode ------------ */
 @theme {
@@ -23,7 +22,6 @@
   --color-light-border: hsl(0, 0%, 80%);
   --color-light-hover: hsl(0, 0%, 90%);
 }
-
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -46,11 +44,11 @@
 
 /* Gradient Border */
 .gradient-button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   left: -2px;
-  background: linear-gradient(90deg, #381AB2, #9B32AD, #FEAC2F);
+  background: linear-gradient(90deg, #381ab2, #9b32ad, #feac2f);
   z-index: -1;
   border-radius: 8px;
   width: calc(100% + 4px);
@@ -59,7 +57,7 @@
 
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 14px;
+  width: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   margin: 5px 0;
@@ -86,7 +84,6 @@
 
 /* --------------------------------------------- */
 
-
 /*
 // <uniquifier>: Use a unique and descriptive class name
 // <weight>: Use a value from 100 to 900
@@ -111,22 +108,19 @@
 */
 
 :root {
-  --colour-gradient: linear-gradient(45deg,
-      #FEAC2F 25%,
-      /* Color 1 starts at 10% */
-      #9B32AD 45%,
-      /* Color 2 starts at 25% */
-      #381AB2 65%,
-      /* Color 3 starts at 40% */
-      #17082C 85%
-      /* Color 4 starts at 60% */
-    );
+  --colour-gradient: linear-gradient(
+    45deg,
+    #feac2f 25%,
+    /* Color 1 starts at 10% */ #9b32ad 45%,
+    /* Color 2 starts at 25% */ #381ab2 65%,
+    /* Color 3 starts at 40% */ #17082c 85% /* Color 4 starts at 60% */
+  );
 }
 
 html,
 body {
   margin: 0;
-  padding: 0; 
+  padding: 0;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -169,7 +163,7 @@ root {
   position: relative;
   display: inline-block;
   border-radius: 8px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   /* Default background color */
   padding: 20px 40px;
   margin: 2%;
@@ -184,7 +178,7 @@ root {
 }
 
 .colourful-border-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -193,18 +187,16 @@ root {
   border-radius: 8px;
   padding: 3px;
   /* The size of the border */
-  background: linear-gradient(45deg,
-      #FEAC2F 20%,
-      #9B32AD 45%,
-      #381AB2 75%,
-      #17082C 95%);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+  background: linear-gradient(
+    45deg,
+    #feac2f 20%,
+    #9b32ad 45%,
+    #381ab2 75%,
+    #17082c 95%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   /* Clips the background to the border */
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   /* Ensures the background only appears on the border */
   z-index: -1;
@@ -220,7 +212,7 @@ root {
 .colourful-border-btn:hover {
   color: #000000;
   /* Change text color */
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   /* Keep the button's background color unchanged */
   border: none;
   /* Ensure no default border appears */
@@ -246,7 +238,6 @@ root {
   background-color: transparent;
   transition: all 0.3s ease-in;
 }
-
 
 .font-inter {
   font-family: "Inter", sans-serif;
@@ -287,7 +278,7 @@ root {
   font-size: 16px;
   line-height: 18.8px;
   align-items: center;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .font-paragraph {
@@ -343,7 +334,7 @@ root {
   font-size: 60px;
   line-height: 74px;
   align-items: right;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: -3%;
 }
 
@@ -355,7 +346,7 @@ root {
   font-size: 16px;
   line-height: 25px;
   align-items: light;
-  color: #F9F9F9;
+  color: #f9f9f9;
   text-align: justify;
 }
 
@@ -367,7 +358,7 @@ root {
   font-size: 16px;
   line-height: 25px;
   align-items: light;
-  color: #2F2F2F;
+  color: #2f2f2f;
 }
 
 .font-paragraph-grey {
@@ -441,9 +432,8 @@ root {
   font-style: normal;
   font-size: 16px;
   line-height: 22px;
-  color: #2F2F2F;
+  color: #2f2f2f;
 }
-
 
 .heading-500-30-black {
   font-family: "Public Sans", sans-serif;
@@ -537,7 +527,6 @@ root {
   align-items: center;
 }
 
-
 .border-left-both-corner {
   border-radius: 8px 0px 0px 8px;
 }
@@ -554,7 +543,6 @@ root {
   text-align: center;
   color: #000000;
 }
-
 
 @media (max-width: 1024px) {
   .font-heading-black {
@@ -575,7 +563,6 @@ root {
     line-height: 47px;
     letter-spacing: -0.03em;
     text-align: center;
-
   }
 }
 
@@ -587,7 +574,6 @@ root {
     line-height: 29.38px;
     letter-spacing: -0.03em;
     text-align: left;
-
   }
 
   .font-subheading-black {
@@ -637,7 +623,7 @@ root {
   font-weight: 400;
   font-style: normal;
   font-size: 55px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: left;
 }
 
@@ -647,7 +633,7 @@ root {
   font-weight: 400;
   line-height: 28px;
   text-align: left;
-  color: #2F2F2F;
+  color: #2f2f2f;
 }
 
 .font-heading {

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
-import Line from "../../../../components/Line";
+import { line } from "../../../../components/constants";
 import { options as topic_options, status } from "../../../constants/constants";
 import SearchBar from "../../../../components/SearchBar";
 import SelectTopic from "../../../../components/SelectTopic";
@@ -78,14 +78,12 @@ export default function ReviewedQNALeft() {
   }
 
   return (
-    <div className="border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card w-full dark:text-dark-text-muted h-full flex flex-col gap-[20px] px-[25px] py-[20px] rounded-[10px]">
-      <h1 className="text-[18px] font-semibold dark:text-white">
+    <div className="border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card w-full dark:text-dark-text-muted h-full flex flex-col gap-[15px] px-[25px] py-[20px] rounded-[10px]">
+      <h1 className={`text-[18px] font-semibold dark:text-white ${line}`}>
         Reviewed Q&A
       </h1>
 
-      <Line />
-
-      <div className="flex items-center gap-[7px] w-full">
+      <div className={`flex items-center gap-[7px] w-full ${line}`}>
         <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
 
         <SelectTopic
@@ -102,8 +100,6 @@ export default function ReviewedQNALeft() {
           setSelectedOption={setSelectedStatus}
         />
       </div>
-
-      <Line />
 
       <ReviewedQNAQuestions
         filteredQuestions={filteredQuestions}
