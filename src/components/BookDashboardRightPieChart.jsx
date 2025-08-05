@@ -91,21 +91,19 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
             plugins: {
               legend: {
                 display: false,
-                
-                
-                
+
+
+
               },
+
               tooltip: {
+                displayColors: true,
                 callbacks: {
-                  label: function(context) {
-                    const label = context.label || '';
-                    const value = context.parsed;
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = ((value / total) * 100).toFixed(1);
-                    return `${label}: ${percentage}%`;
-                  },
+
                 },
               },
+
+
               datalabels: {
                 display: true, // Show labels on all slices
                 color: '#000',
@@ -129,7 +127,7 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
                   weight: 'bold',
                 },
                 // Position labels better for small slices
-                offset: function(context) {
+                offset: function (context) {
                   const value = context.parsed;
                   const total = context.dataset.data.reduce((a, b) => a + b, 0);
                   const percentage = (value / total) * 100;
