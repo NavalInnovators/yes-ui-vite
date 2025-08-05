@@ -14,13 +14,17 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
     setIsPrediction(tab === "Prediction");
   };
 
+  const [selectedUnit, setSelectedUnit] = useState(1);
+
  
 
   return (
-    <div className="book-dashboard-insight-analytics">
+    // <div className="book-dashboard-insight-analytics">
+    <div>
       {/* For Small Screens Unit Dropdown */}
       <div className="for-small-screens">
-        <BookDashboardUnitsResponsiveUnitDropdown />
+        <BookDashboardUnitsResponsiveUnitDropdown selectedUnit={selectedUnit}
+  setSelectedUnit={setSelectedUnit} />
       </div>
 
       <hr />
@@ -53,7 +57,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
       <div className="book-dashboard-analytics">
         {/* TOPIC BOX */}
         <div className="md:w-[1000px] w-full mx-auto flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
-          Topic: These analytics graphs are based on unit 1
+          Topic: These analytics graphs are based on Unit 1
         </div>
        
 
@@ -62,21 +66,22 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
           {/* LEFT COLUMN */}
           <div className="flex flex-col w-full md:w-[60%] gap-4  p-2 ">
             {/* Upper Left */}
-            <div className="h-auto p-4 rounded-md flex justify-center items-center shadow-sm bg-gray-100">
-              <BookDashboardLeftPieChart subcode="khu702" selectedUnit={1}/>
-            </div>
+            {/* <div className="h-auto p-4 rounded-md flex  shadow-sm justify-center bg-gray-100"> */}
+  <BookDashboardLeftPieChart subcode="khu702" selectedUnit={selectedUnit} />
+{/* </div> */}
+
 
 
             {/* Lower Left */}
             <div className="h-full border p-4 mx-2 md:!mb-40 bg-gray-100 shadow-sm overflow-x-auto">
-              <BookDashboardInsightPredictionTable subcode="khu702"  selectedUnit={1}/>
+              <BookDashboardInsightPredictionTable subcode="khu702"  selectedUnit={selectedUnit}/>
             </div>
           </div>
 
           {/* RIGHT COLUMN */}
           <div className="flex-1  h-full p-4 w-full  md:max-w-[40%] overflow-x-auto bg-gray-100 shadow-sm">
 
-            <BookDashboardRightPieChart subcode="khu702" selectedUnit={1}/>
+            <BookDashboardRightPieChart subcode="khu702" selectedUnit={selectedUnit}/>
             <div className="text-center mt-4">
               <p className="text-gray-700 mb-3">
                 Click and find the answer on topic page
@@ -97,7 +102,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
         {/* Render full-width table if in Prediction mode only */}
         {isPrediction && (
           <div className="mt-4">
-            <BookDashboardInsightPredictionTable />
+            <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit={selectedUnit} />
           </div>
         )}
       </div>

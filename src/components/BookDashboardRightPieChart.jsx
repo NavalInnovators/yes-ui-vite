@@ -33,7 +33,7 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
     getAnalyticData(subcode)
       .then((response) => {
         const unitData = response.data.find(
-          (unit) => unit.unit === selectedUnit
+          (unit) => unit.unit === Number(selectedUnit)
         );
 
         if (!unitData) {
@@ -91,6 +91,9 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
             plugins: {
               legend: {
                 display: false,
+                
+                
+                
               },
               tooltip: {
                 callbacks: {

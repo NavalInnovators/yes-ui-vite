@@ -21,7 +21,7 @@ export default function BookDashboardLeftPieChart({ subcode, selectedUnit }) {
     getAnalyticData(subcode)
        .then((response) => {
         const unit = response.data.find(
-          (unit) => unit.unit === selectedUnit
+          (unit) => unit.unit === Number(selectedUnit)
         );
 
         if (!unit) {
@@ -57,10 +57,11 @@ export default function BookDashboardLeftPieChart({ subcode, selectedUnit }) {
           console.error("Response data:", error.response.data);
         }
       });
-  }, [subcode]);
+  }, [subcode, selectedUnit]);
 
   const options = {
     plugins: {
+       
       datalabels: {
         color: "black",
         formatter: (value) => `${value.toFixed(1)}%`,
@@ -73,32 +74,36 @@ export default function BookDashboardLeftPieChart({ subcode, selectedUnit }) {
   };
 
   if (!chartData) return <div className="text-sm text-gray-500">Loading chart...</div>;
+
 return (
-  <div className="flex flex-col items-center gap-4">
-    <h3 className="text-center font-medium text-base">{unitTitle}</h3>
+  <div className="flex flex-col items-center gap-4 bg-gray-100">
+    <h3 className="text-center font-medium text-base">{unitTitle}</h3>
 
-    {/* Wrap chart + legend in one box to keep them together */}
-    <div className="flex flex-col items-center relative">
-      {/* Chart centered */}
-      <div className="w-[232px] h-[232px]">
-        <Pie data={chartData} options={options} />
-      </div>
+    <div className="relative w-full h-[232px] items-center">
+      {/* Chart */}
+      <Pie key={selectedUnit} data={chartData} options={options} />
 
-      {/* Legend directly below, aligned left to chart */}
-      <div className="flex gap-4 mt-1 self-start text-sm">
-        {LABELS.map((label, i) => (
-          <div key={i} className="flex items-center gap-1">
-            <span
-              className="w-3 h-3 rounded-full inline-block"
-              style={{ backgroundColor: COLORS[i] }}
-            ></span>
-            <span>{label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
+      {/* Legend absolutely positioned to bottom-left */}
+
+      <div className="absolute bottom-2 left-2 flex flex-col gap-2 text-sm bg-gray-100 px-2 py-1 rounded">
+        {LABELS.map((label, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span
+              className="w-3 h-3 rounded-full inline-block"
+              style={{ backgroundColor: COLORS[i] }}
+            ></span>
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
+      
+    </div>
+
+    
+  </div>
 );
+
+  
 
 
 }
