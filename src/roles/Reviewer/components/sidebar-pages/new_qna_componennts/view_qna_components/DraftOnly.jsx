@@ -1,4 +1,8 @@
+import useSmallScreen from "../../../../../components/custom_hooks/useSmallScreen";
+
 export default function DraftOnly({ draftOnlyFilter, draftOnly }) {
+  const smallScreen = useSmallScreen();
+
   return (
     <div
       className={`outline-none rounded-[7px] border-none text-[14px] cursor-pointer font-medium placeholder:text-black py-[7px] px-[15px] ${

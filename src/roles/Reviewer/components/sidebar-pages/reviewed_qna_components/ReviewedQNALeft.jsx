@@ -23,6 +23,7 @@ export default function ReviewedQNALeft() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const is600px = useSmallScreen(600);
+  const is800px = useSmallScreen();
   const line = useLine();
 
   useEffect(() => {
@@ -87,20 +88,22 @@ export default function ReviewedQNALeft() {
 
   return (
     <div
-      className={`${padding} border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card w-full dark:text-dark-text-muted h-full flex flex-col gap-[15px] rounded-[10px]`}
+      className={`${padding} border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card w-full dark:text-dark-text-muted h-full flex flex-col ${
+        is800px ? "gap-[10px]" : "gap-[15px]"
+      } rounded-[10px]`}
     >
       <h1 className={`text-[18px] font-semibold dark:text-white ${line}`}>
         Reviewed Q&A
       </h1>
 
       <div
-        className={`flex items-center gap-[7px] w-full ${line} ${
-          is600px && "flex-wrap"
+        className={`flex gap-[7px] w-full ${line} ${
+          is600px ? "flex-col" : "items-center"
         }`}
       >
         <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
 
-        <div className="flex items-center gap-[7px] flex-1">
+        <div className="flex items-center gap-[7px] flex-2">
           <SelectTopic
             options={topic_options}
             filterByTopicName={filterByTopicName}
