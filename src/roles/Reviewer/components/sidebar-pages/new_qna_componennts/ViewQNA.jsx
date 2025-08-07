@@ -25,7 +25,6 @@ export default function ViewQNA() {
   const is600px = windowWidth < 600;
   const line = useLine();
 
-  // Responsive padding like ReviewerAnalyticsMobile
   const padding = is600px ? "px-[17px] py-[17px]" : "px-[20px] py-[20px]";
 
   useEffect(() => {
@@ -102,7 +101,6 @@ export default function ViewQNA() {
       <h1 className={`text-[18px] ${line} font-semibold`}>View Q&A</h1>
 
       {isSmallScreen ? (
-        // Small screen layout: Search bar full width, others below
         <div className={`flex flex-col gap-[10px] w-full ${line}`}>
           <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
           <div className="flex items-center gap-[7px] w-full">
@@ -116,7 +114,6 @@ export default function ViewQNA() {
           </div>
         </div>
       ) : (
-        // Large screen layout: All elements in one row
         <div className={`flex items-center gap-[7px] w-full ${line}`}>
           <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
           <SelectTopic

@@ -8,8 +8,7 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
   const [selectedResponse, setSelectedResponse] = useState("View all Answers");
   const [currentPage, setCurrentPage] = useState(1);
   const windowWidth = useContext(WindowWidthContext);
-  const smallScreen = windowWidth < 1000;
-  const is500px = windowWidth < 500;
+  const smallScreen = windowWidth < 1100;
 
   const totalQuestions = 10;
 
@@ -34,10 +33,11 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
   // Cannot proceed with this function without backend
   function filterByTopicName() {}
 
-  const smallStyles = smallScreen ? "flex-col gap-[20px]" : "items-center";
+  const smallStyles = smallScreen ? "flex-col gap-[10px]" : "items-center gap-[10px]";
+  const darkStyles = "dark:bg-dark-card"
 
   return (
-    <div className={`flex ${smallStyles} justify-between py-[8px] px-[25px]`}>
+    <div className={`flex ${darkStyles} ${smallStyles} ${smallScreen ? "justify-center" : "justify-between"} py-[10px] px-[25px]`}>
       <div className="flex flex-2 items-center gap-[10px]">
         <SelectTopic
           options={topics}
@@ -54,14 +54,16 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
         />
       </div>
 
-      <div className="flex-1">
-        <Pagination
-          totalQuestions={totalQuestions}
-          PAGE_SIZE={4}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
+      {!smallScreen && (
+        <div className="flex-1">
+          <Pagination
+            totalQuestions={totalQuestions}
+            PAGE_SIZE={4}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+      )}
 
       <div
         className={`${
@@ -88,7 +90,7 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
           onClick={handleConfirmSubmit}
           className={`${
             smallScreen ? "flex-2" : ""
-          } transition-colors hover:text-white hover:bg-transparent ml-[15px] rounded-[5px] cursor-pointer bg-[#fff] py-[5px] px-[20px] relative gradient-button`}
+          } transition-colors hover:text-white hover:bg-transparent ml-[10px] rounded-[5px] cursor-pointer whitespace-nowrap bg-[#fff] dark:bg-dark-highlight dark:text-white py-[5px] px-[20px] relative gradient-button`}
         >
           Submit Comment
         </button>

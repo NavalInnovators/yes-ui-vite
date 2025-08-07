@@ -11,7 +11,7 @@ export default function UserAnswer() {
   }
 
   return (
-    <div className="flex flex-col flex-1 px-[25px] py-[22px] gap-[20px] bg-[#fff] rounded-[10px]">
+    <div className="dark:bg-dark-card dark:text-white dark:border dark:border-dark-border flex flex-col flex-1 px-[25px] py-[22px] gap-[20px] bg-[#fff] rounded-[10px]">
       {/* Heading */}
       <div className="flex items-center justify-between">
         <h1 className="text-sm">User's Answer</h1>
@@ -20,9 +20,9 @@ export default function UserAnswer() {
       </div>
 
       {/* User's Submitted Answer Section */}
-      <div className="flex flex-col font-light text-sm bg-light-card rounded-[6px]">
+      <div className="dark:bg-dark-highlight dark:border dark:border-dark-border dark:text-white flex flex-col font-light text-sm bg-light-card rounded-[6px]">
         {/* Rated Stars */}
-        <div className="flex items-center justify-between border-b-[1px] px-[30px] py-[20px] border-light-border pb-[15px]">
+        <div className="flex items-center justify-between border-b-[1px] px-[30px] py-[20px] border-light-border dark:border-dark-border pb-[15px]">
           <p className="bg-[oklch(98.5%_0.09_101.54)] text-xs text-yellow-700 w-fit py-[2px] px-[10px] rounded-[7px]">
             {question?.stars} Star
           </p>

@@ -6,7 +6,7 @@ export default function WriteYourComment() {
   const { commentText, setCommentText } = useContext(CommentTextContext);
 
   return (
-    <div className="bg-[#fff] py-[20px] px-[25px] rounded-[10px] flex flex-col flex-1 gap-[15px]">
+    <div className="dark:bg-dark-card dark:text-white dark:border dark:border-dark-border bg-[#fff] py-[20px] px-[25px] rounded-[10px] flex flex-col flex-1 gap-[15px]">
       <h1 className="text-sm font-semibold">Write Your Comment</h1>
 
       <CKEditor
@@ -14,7 +14,7 @@ export default function WriteYourComment() {
         config={{
           contentsCss: [
             "https://fonts.googleapis.com/css2?family=Public+Sans&display=swap",
-            "body { font-size: 17px !important; padding-left: 10px; font-family: 'Public Sans'; color: hsl(0, 0%, 24%);}",
+            "body { font-size: 13px !important; padding-left: 10px; font-family: 'Public Sans'; color: hsl(0, 0%, 24%);}",
           ],
           versionCheck: false,
           resize_enabled: false,

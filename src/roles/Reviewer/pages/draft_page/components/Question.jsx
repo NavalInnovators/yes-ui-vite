@@ -6,7 +6,7 @@ export default function Question() {
   const { question } = useContext(QuestionContext);
 
   return (
-    <div className="flex flex-col text-sm bg-[#fff] rounded-[6px] px-[25px] py-[22px] gap-[20px]">
+    <div className="dark:bg-dark-card dark:text-white dark:border dark:border-dark-border flex flex-col text-sm bg-[#fff] rounded-[6px] px-[25px] py-[22px] gap-[20px]">
       {question ? (
         <>
           <h1>Question {question.id}:</h1>

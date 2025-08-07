@@ -48,7 +48,7 @@ export default function Question({ question }) {
           </div>
           <Link
             to={question.status === "Draft" ? `qna/${question.id}` : ""}
-            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight w-[120px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight min-w-[140px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
           >
             {question.status}
           </Link>

@@ -30,6 +30,7 @@
 .info-tooltip {
     z-index: 10;
     background: white;
+    color: black;
 }
 
 .info-tooltip::after {
@@ -41,6 +42,18 @@
     text-shadow: 0px -1px 1px rgb(190, 189, 189);
     color: rgb(255, 255, 255);
     z-index: 1;
+}
+
+/* Dark mode tooltip */
+.dark .info-tooltip {
+    background: hsl(0, 0%, 5%);
+    color: white;
+    border: 1px solid hsl(0, 0%, 20%);
+}
+
+.dark .info-tooltip::after {
+    color: hsl(0, 0%, 5%);
+    text-shadow: 0px -1px 1px rgb(50, 50, 50);
 }
 
 /* Gradient Border */

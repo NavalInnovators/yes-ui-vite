@@ -45,7 +45,7 @@ export default function DraftPage() {
         damping: 25,
         mass: 0.9,
       }}
-      className="absolute top-0 w-[calc(100%)] overflow-hidden left-0 bg-[#fff] z-[10]"
+      className="absolute top-0 w-full overflow-y-auto left-0 bg-[#fff] z-[10]"
     >
       <TopGradientBar />
       <TopNavigationPanel setConfirmSubmit={setConfirmSubmit} />
