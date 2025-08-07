@@ -23,10 +23,9 @@ function RatingWithFactor({ factor, index, setRatings }) {
 }
 
 export default function ProvideRating() {
-  const arrayOfRatings = Array.from({ length: factors.length });
-  const [ratings, setRatings] = useState(arrayOfRatings);
+  const [ratings, setRatings] = useState(Array(factors.length).fill(0));
 
-  const averageRating = ratings.reduce((acc, currRating) => acc + currRating) / factors.length;
+  const averageRating = ratings.reduce((acc, currRating) => acc + currRating, 0) / factors.length;
 
   return (
     <div className="dark:bg-dark-card dark:text-white dark:border dark:border-dark-border bg-[#fff] px-[25px] py-[20px] rounded-[6px]">
