@@ -1,7 +1,9 @@
-import useSmallScreen from "../../../../../components/custom_hooks/useSmallScreen";
+import { useContext } from "react";
+import WindowWidthContext from "../../../../context/WindowWidthContext";
 
 export default function DraftOnly({ draftOnlyFilter, draftOnly }) {
-  const smallScreen = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 1020;
 
   return (
     <div

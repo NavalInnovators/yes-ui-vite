@@ -1,7 +1,7 @@
-import { use, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import useSmallScreen from "./custom_hooks/useSmallScreen";
+import WindowWidthContext from "../Reviewer/context/WindowWidthContext";
 
 export default function SelectTopic({
   options,
@@ -11,7 +11,8 @@ export default function SelectTopic({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const selectTopicRef = useRef(null);
-  const smallScreen = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 1020;
 
   useEffect(() => {
     function handleOutsideClick(e) {
@@ -27,7 +28,7 @@ export default function SelectTopic({
   function Option({ value }) {
     return (
       <div
-        className="px-[10px] py-[5px] hover:text-black dark:hover:text-white hover:bg-light-hover dark:hover:bg-dark-hover rounded-[6px]"
+        className="px-[10px] py-[5px] hover:text-black dark:hover:text-white hover:bg-light-hover dark:hover:bg-dark-hover rounded-[6px] whitespace-nowrap"
         onClick={(e) => handleSelectTopic(e, value)}
       >
         {value}
@@ -48,7 +49,9 @@ export default function SelectTopic({
   const padding = smallScreen ? smallPadding : largePadding;
   const textSize = smallScreen ? "text-[13px]" : "text-[14px]";
 
-  const minWidth = smallScreen ? "min-w-[105px]" : "min-w-[140px]";
+  // Increase min-width and add max-w with ellipsis for long text
+  const minWidth = smallScreen ? "min-w-[130px]" : "min-w-[170px]";
+  const maxWidth = smallScreen ? "max-w-[160px]" : "max-w-[220px]";
 
   return (
     <div
@@ -59,7 +62,8 @@ export default function SelectTopic({
       ref={selectTopicRef}
     >
       <div
-        className={`${padding} ${textSize} ${minWidth} select-none dark:bg-dark-highlight dark:text-white bg-[rgba(230,230,230,1)] outline-none rounded-[5px] border-none font-light placeholder:text-gray-800 text-black  cursor-pointer`}
+        className={`${padding} ${textSize} ${minWidth} ${maxWidth} select-none dark:bg-dark-highlight dark:text-white bg-[rgba(230,230,230,1)] outline-none rounded-[5px] border-none font-light placeholder:text-gray-800 text-black cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis`}
+        style={{ minWidth: smallScreen ? 130 : 170, maxWidth: smallScreen ? 160 : 220 }}
       >
         {selectedOption}
       </div>

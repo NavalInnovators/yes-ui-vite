@@ -9,6 +9,7 @@ import { options } from "../../../constants/constants";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
 import QuestionsContext from "../../../context/QuestionsContext";
+import WindowWidthContext from "../../../context/WindowWidthContext";
 import useLine from "../../../../components/custom_hooks/useLine";
 
 export default function ViewQNA() {
@@ -19,7 +20,13 @@ export default function ViewQNA() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 800;
+  const is600px = windowWidth < 600;
   const line = useLine();
+
+  // Responsive padding like ReviewerAnalyticsMobile
+  const padding = is600px ? "px-[17px] py-[17px]" : "px-[20px] py-[20px]";
 
   useEffect(() => {
     setFilteredQuestions(questions);
@@ -91,21 +98,36 @@ export default function ViewQNA() {
   }
 
   return (
-    <div className=" w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 py-[20px] px-[25px] rounded-[10px]">
+    <div className={`w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 ${padding} rounded-[10px]`}>
       <h1 className={`text-[18px] ${line} font-semibold`}>View Q&A</h1>
 
-      <div className={`flex items-center gap-[7px] w-full ${line}`}>
-        <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
-
-        <SelectTopic
-          options={options}
-          filterByTopicName={filterByTopicName}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-        />
-
-        <DraftOnly draftOnlyFilter={draftOnlyFilter} draftOnly={draftOnly} />
-      </div>
+      {isSmallScreen ? (
+        // Small screen layout: Search bar full width, others below
+        <div className={`flex flex-col gap-[10px] w-full ${line}`}>
+          <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
+          <div className="flex items-center gap-[7px] w-full">
+            <SelectTopic
+              options={options}
+              filterByTopicName={filterByTopicName}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+            />
+            <DraftOnly draftOnlyFilter={draftOnlyFilter} draftOnly={draftOnly} />
+          </div>
+        </div>
+      ) : (
+        // Large screen layout: All elements in one row
+        <div className={`flex items-center gap-[7px] w-full ${line}`}>
+          <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
+          <SelectTopic
+            options={options}
+            filterByTopicName={filterByTopicName}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+          />
+          <DraftOnly draftOnlyFilter={draftOnlyFilter} draftOnly={draftOnly} />
+        </div>
+      )}
 
       {isLoading ? (
         <div className="text-2xl text-center mt-[100px]">

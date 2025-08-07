@@ -1,8 +1,10 @@
-import useSmallScreen from "../../components/custom_hooks/useSmallScreen";
+import { useContext } from "react";
 import GradientDiv from "../../components/GradientDiv";
+import WindowWidthContext from "../context/WindowWidthContext";
 
 export default function WelcomeBar() {
-  const smallScreen = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 1020;
 
   const headingSize = smallScreen ? "text-[18px]" : "text-[20px]";
   const rolePadding = smallScreen ? "px-[6px] py-[1px]" : "px-[10px] py-[2px]";

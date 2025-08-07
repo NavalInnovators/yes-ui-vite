@@ -11,7 +11,7 @@ export default function Questions({ filteredQuestions, start, end }) {
       key={start + end + filteredQuestions.length}
       initial={{ x: "-1%", opacity: 0 }}
       animate={{ x: "0%", opacity: 1 }}
-      className="flex flex-col gap-[20px]"
+      className="flex flex-col gap-[12px]"
     >
       {filteredQuestions.slice(start, end).map((question) => (
         <ReviewedQuestion key={question.id} question={question} />

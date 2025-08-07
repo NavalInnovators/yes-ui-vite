@@ -1,5 +1,6 @@
 import useLine from "../../../../components/custom_hooks/useLine";
-import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
+import { useContext } from "react";
+import WindowWidthContext from "../../../context/WindowWidthContext";
 
 function Tag({ color, text }) {
   return <div className={`${color}`}>{text}</div>;
@@ -8,7 +9,8 @@ function Tag({ color, text }) {
 export default function Question({ question }) {
   const dark_bg_button = "#212121";
 
-  const smallerThan600px = useSmallScreen(600);
+  const windowWidth = useContext(WindowWidthContext);
+  const smallerThan600px = windowWidth < 600;
   const line = useLine();
 
   let color;

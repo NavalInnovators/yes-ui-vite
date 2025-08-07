@@ -6,6 +6,7 @@ export default function Pagination({
   PAGE_SIZE,
   currentPage,
   setCurrentPage,
+  className = ""
 }) {
   const totalPages = Math.ceil(totalQuestions / PAGE_SIZE);
 
@@ -41,7 +42,7 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex justify-center items-center gap-[20px]">
+    <div className={`${className} flex justify-center items-center gap-[20px]`}>
       {currentPage > 1 && (
         <button
           className="flex items-center dark:hover:text-white text-gray-400 dark:text-dark-text-muted transition duration-100 text-[14px] gap-[5px] cursor-pointer hover:text-black"

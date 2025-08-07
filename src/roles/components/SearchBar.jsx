@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { Search } from "lucide-react";
-import useSmallScreen from "./custom_hooks/useSmallScreen";
+import WindowWidthContext from "../../roles/Reviewer/context/WindowWidthContext";
 
 export default function SearchBar({ filterBySearch, searchQuery }) {
-  const smallScreen = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 1020;
 
   const largePadding = "py-[7px] px-[15px]";
   const smallPadding = "py-[7px] px-[12px]";

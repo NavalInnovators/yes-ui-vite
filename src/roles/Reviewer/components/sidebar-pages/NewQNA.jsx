@@ -3,16 +3,18 @@ import { Outlet } from "react-router-dom";
 import ReviewerAnalytics from "./new_qna_componennts/ReviewerAnalytics";
 import ReviewerAnalyticsMobile from "./new_qna_componennts/ReviewerAnalyticsMobile";
 import ViewQNA from "./new_qna_componennts/ViewQNA";
-import useSmallScreen from "../../../components/custom_hooks/useSmallScreen";
+import { useContext } from "react";
+import WindowWidthContext from "../../context/WindowWidthContext";
 
 export default function NewQNA() {
-  const smallScreen = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 1020;
 
   return (
     <div
       className={`flex ${
-        smallScreen ? "flex-col gap-[10px]" : "gap-[15px]"
-      } justify-between`}
+        smallScreen ? "flex-col" : ""
+      } justify-between gap-[15px]`}
     >
       {/* Reviewer Analytics for Mobile Screens */}
       {smallScreen && <ReviewerAnalyticsMobile />}

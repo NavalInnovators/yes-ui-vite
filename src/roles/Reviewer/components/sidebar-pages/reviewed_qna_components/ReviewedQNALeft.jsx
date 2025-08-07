@@ -9,8 +9,7 @@ import { PAGE_SIZE } from "../../../constants/constants";
 import { fuzzySearch } from "../../../lib/fuzzySearch";
 
 import QuestionsContext from "../../../context/QuestionsContext";
-import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
-import usePadding from "../../../../components/custom_hooks/usePadding";
+import WindowWidthContext from "../../../context/WindowWidthContext";
 import useLine from "../../../../components/custom_hooks/useLine";
 
 export default function ReviewedQNALeft() {
@@ -22,9 +21,13 @@ export default function ReviewedQNALeft() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const is600px = useSmallScreen(600);
-  const is800px = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const is600px = windowWidth < 600;
+  const is800px = windowWidth < 800;
   const line = useLine();
+
+  // Responsive padding like ReviewerAnalyticsMobile
+  const padding = is600px ? "px-[17px] py-[17px]" : "px-[20px] py-[20px]";
 
   useEffect(() => {
     setFilteredQuestions(questions.filter((q) => q.reviewed));
@@ -82,9 +85,6 @@ export default function ReviewedQNALeft() {
     setSearchQuery("");
     setCurrentPage(1);
   }
-
-  const padding = usePadding();
-  // const line =
 
   return (
     <div

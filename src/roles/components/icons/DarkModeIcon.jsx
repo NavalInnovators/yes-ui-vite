@@ -1,8 +1,7 @@
+import { useDarkMode } from "../../Reviewer/context/DarkModeContext";
+
 export default function DarkModeIcon({ size = 42 }) {
-  function handleDarkMode() {
-    const darkDiv = document.getElementById("needs-dark-mode");
-    darkDiv.classList.toggle("dark");
-  }
+  const { toggleDarkMode } = useDarkMode();
 
   return (
     <svg
@@ -12,7 +11,7 @@ export default function DarkModeIcon({ size = 42 }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ cursor: "pointer" }}
-      onClick={handleDarkMode}
+      onClick={toggleDarkMode}
     >
       <path
         fillRule="evenodd"

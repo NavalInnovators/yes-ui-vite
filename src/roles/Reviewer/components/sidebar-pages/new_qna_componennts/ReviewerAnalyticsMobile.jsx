@@ -3,29 +3,29 @@ import { motion } from "motion/react";
 
 import QuestionsContext from "../../../context/QuestionsContext";
 import { ArrowDownFromLine, ArrowUpFromLine } from "lucide-react";
-import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
+import WindowWidthContext from "../../../context/WindowWidthContext";
 
-function ParaWithNumber({ text, number, isSmallScreen }) {
-  const textSize = isSmallScreen ? "text-[10px]" : "text-[12px]";
-  const numberSize = isSmallScreen ? "text-[14px]" : "text-[18px]";
+function ParaWithNumber({ text, number }) {
+  // Always use the larger text size
 
   return (
     <div className="flex flex-col items-center">
       <p
-        className={`${textSize} dark:text-dark-text-muted text-gray-500 font-light`}
+        className={`text-[12px] dark:text-dark-text-muted text-gray-500 font-light`}
       >
         {text}
       </p>
-      <p className={`${numberSize}`}>{number}</p>
+      <p className={`text-[18px]`}>{number}</p>
     </div>
   );
 }
 
 export default function ReviewerAnalyticsMobile({ showReviewed = false }) {
   const { questions, setQuestions } = useContext(QuestionsContext);
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 600;
 
   const [isOpen, setIsOpen] = useState(false);
-  const isSmallScreen = useSmallScreen(600);
 
   let totalQuestions;
   let reviewedQuestions = [];
@@ -48,7 +48,7 @@ export default function ReviewerAnalyticsMobile({ showReviewed = false }) {
     (q) => q.approved === "In Progress"
   ).length;
 
-  const padding = isSmallScreen ? "px-[12px] py-[10px]" : "px-[20px] py-[10px]";
+  const padding = isSmallScreen ? "px-[17px] py-[12px]" : "px-[20px] py-[15px]";
   const buttonPadding = isSmallScreen
     ? "py-[4px] px-[7px]"
     : "py-[5px] px-[10px]";
@@ -85,12 +85,10 @@ export default function ReviewerAnalyticsMobile({ showReviewed = false }) {
             <ParaWithNumber
               text="Total Questions"
               number={totalQuestions}
-              isSmallScreen={isSmallScreen}
             />
             <ParaWithNumber
               text="Total Accepted"
               number={totalAccepted}
-              isSmallScreen={isSmallScreen}
             />
           </div>
 
@@ -98,12 +96,10 @@ export default function ReviewerAnalyticsMobile({ showReviewed = false }) {
             <ParaWithNumber
               text="Total Rejected"
               number={totalRejected}
-              isSmallScreen={isSmallScreen}
             />
             <ParaWithNumber
               text="Total in Pending"
               number={totalInPending}
-              isSmallScreen={isSmallScreen}
             />
           </div>
         </motion.div>

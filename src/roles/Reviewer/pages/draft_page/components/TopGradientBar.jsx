@@ -1,9 +1,11 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import GradientDiv from "../../../../components/GradientDiv";
-import useSmallScreen from "../../../../components/custom_hooks/useSmallScreen";
+import WindowWidthContext from "../../../context/WindowWidthContext";
 
 export default function TopGradientBar() {
-  const smallScreen = useSmallScreen();
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 1020;
   const headingSize = smallScreen ? "text-[18px]" : "text-[22px]";
 
   return (

@@ -3,10 +3,9 @@ import FilterIcon from "../../components/icons/FilterIcon";
 import DarkModeIcon from "../../components/icons/DarkModeIcon";
 import NotificationsIcon from "../../components/icons/NotificationsIcon";
 import ProfileIcon from "../../components/icons/ProfileIcon";
-import usePadding from "../../components/custom_hooks/usePadding";
 
 export default function NavigationBar({ setIsMobileSidebarOpen }) {
-  const padding = usePadding();
+  const padding = "p-[20px]";
 
   return (
     <div

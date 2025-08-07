@@ -7,6 +7,7 @@ import NewQNA from "./components/sidebar-pages/NewQNA";
 import HomeLayout from "./HomeLayout";
 import DraftPage from "./pages/draft_page/DraftPage";
 import { AnimatePresence } from "motion/react";
+import { DarkModeProvider } from "./context/DarkModeContext";
 
 function Reviewer() {
   const location = useLocation();
@@ -21,25 +22,27 @@ function Reviewer() {
   }
 
   return (
-    <AnimatePresence>
-      <Routes location={location} key={location.pathname}>
-        {/* Home */}
-        <Route path="/" element={<HomeLayout />}>
-          <Route index element={<Navigate to="dashboard" replace />} />
+    <DarkModeProvider>
+      <AnimatePresence>
+        <Routes location={location}>
+          {/* Home */}
+          <Route path="/" element={<HomeLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
 
-          <Route path="dashboard" element={<DashBoard />} />
+            <Route path="dashboard" element={<DashBoard />} />
 
-          <Route path="notification" element={<Notification />} />
+            <Route path="notification" element={<Notification />} />
 
-          <Route path="new_qna" element={<NewQNA />}>
-            {/* Draft Page */}
-            <Route path="qna/:id" element={<DraftPage />} />
+            <Route path="new_qna" element={<NewQNA />}>
+              {/* Draft Page */}
+              <Route path="qna/:id" element={<DraftPage />} />
+            </Route>
+
+            <Route path="reviewed_qna" element={<ReviewedQNA />} />
           </Route>
-
-          <Route path="reviewed_qna" element={<ReviewedQNA />} />
-        </Route>
-      </Routes>
-    </AnimatePresence>
+        </Routes>
+      </AnimatePresence>
+    </DarkModeProvider>
   );
 }
 
