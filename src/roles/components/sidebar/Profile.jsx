@@ -14,7 +14,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-[11px]">
+    <div className="flex flex-col items-center justify-center gap-[11px] border-b-[1px] border-light-border dark:border-dark-border pb-[20px]">
       <ProfileImage size={62} />
 
       <div className="flex flex-col items-center justify-center">

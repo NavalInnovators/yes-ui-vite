@@ -9,7 +9,7 @@ function TotalX({ x, n }) {
 
 export default function CreatorAnalytics() {
   return (
-    <div className="w-[60%] h-fit rounded-[10px] px-[20px] py-[20px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white flex flex-col gap-[15px]">
+    <div className="h-fit rounded-[10px] px-[20px] py-[20px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white flex flex-col gap-[15px]">
       <h1 className="text-[16px] font-medium border-b border-light-border dark:border-dark-border pb-[15px]">Creator Analytics</h1>
       
       <div className="border-b border-light-border dark:border-dark-border pb-[15px]">

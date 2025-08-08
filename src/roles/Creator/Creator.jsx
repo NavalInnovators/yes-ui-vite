@@ -1,14 +1,13 @@
-import NavigationBar from "../Reviewer/components/NavigationBar";
+import NavigationBar from "./components/NavigationBar";
 import SideBar from "./components/sidebar/SideBar";
+import SidebarMobile from "./components/SidebarMobile";
 import CreatorMain from "./components/CreatorMain";
 import GradientDiv from "../components/GradientDiv";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import QuestionsContext from "./context/QuestionsContext";
 import WindowWidthContext, { WindowWidthProvider } from "./context/WindowWidthContext";
 import { DarkModeProvider } from "../Reviewer/context/DarkModeContext";
-
-
 
 function TopGradientBar() {
   const windowWidth = useContext(WindowWidthContext);
@@ -27,8 +26,30 @@ const QUESTIONS_URL = "http://localhost:3003/creator_questions";
 
 export default function Creator() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Update window width on resize
+  const handleResize = useCallback(() => {
+    setWindowWidth(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
+
+  // Changing Sidebar State according to screen size
+  useEffect(() => {
+    if (windowWidth < 1000) {
+      setIsSidebarOpen(false);
+      setIsMobileSidebarOpen(false);
+    } else {
+      setIsSidebarOpen(true);
+    }
+  }, [windowWidth]);
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -51,8 +72,12 @@ export default function Creator() {
   return (
     <DarkModeProvider>
       <WindowWidthProvider>
-        <div className="h-screen flex flex-col">
-          <NavigationBar />
+        <div className="h-screen flex flex-col" id="needs-dark-mode">
+          {!isSidebarOpen && isMobileSidebarOpen && (
+            <SidebarMobile setIsMobileSidebarOpen={setIsMobileSidebarOpen} />
+          )}
+
+          <NavigationBar setIsMobileSidebarOpen={setIsMobileSidebarOpen} />
           <TopGradientBar />
 
           <div className="flex overflow-hidden">

@@ -25,7 +25,7 @@ export default function NewQuestions() {
   function filterByTopicName() {}
 
   return (
-    <div className="w-[60%] flex flex-col gap-[15px] rounded-[8px] p-[20px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white">
+    <div className="flex flex-col gap-[15px] rounded-[8px] p-[20px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white">
       <h1 className="text-[16px] border-b border-light-border dark:border-dark-border pb-[15px]">New Questions</h1>
 
       <div className="border-b border-light-border dark:border-dark-border pb-[15px]">
@@ -51,10 +51,10 @@ export default function NewQuestions() {
         )}
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-[20px]">
         <Link
           to="/creator/new_qna"
-          className="bg-black text-center border-[1px] border-light-border dark:border-dark-border hover:text-black hover:bg-transparent text-[#fff] dark:text-white font-medium text-[14px] py-[6px] px-[16px] rounded-[5px] hover:bg-dark-highlight transition-all duration-200 hover:translate-y-[-3px]  hover:shadow-[0px_5px_10px_hsl(0,0%,70%)]"
+          className="bg-black text-center border-[1px] border-light-border dark:border-white dark:hover:bg-white text-[#fff] dark:bg-white dark:text-black font-medium text-[14px] py-[6px] px-[16px] rounded-[5px] dark:hover:shadow-[0px_0px_20px_hsl(0,0%,50%)] hover:bg-dark-highlight transition-all duration-200 hover:translate-y-[-3px]  hover:shadow-[0px_0px_20px_hsl(0,0%,50%)]"
         >
           View All
         </Link>

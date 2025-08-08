@@ -29,8 +29,6 @@ function MyLink({ children, to }) {
 export default function SidebarButtons() {
   return (
     <div className="flex flex-col gap-[15px]">
-      <Line />
-
       <MyLink to="dashboard">
         <DashBoardIcon size={21} />
         <p className="">Dashboard</p>
