@@ -9,7 +9,6 @@ export default function ReviewerSidebar() {
     <SideBar>
       <div className="flex flex-col gap-[20px]">
         <Profile />
-        <Line />
         <SidebarButtons />
       </div>
 

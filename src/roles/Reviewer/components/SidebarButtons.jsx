@@ -8,7 +8,7 @@ export default function SidebarButtons() {
   return (
     <div className="flex flex-col gap-[15px]">
       <p className="text-[12px]">Management</p>
-      <div className="flex flex-col gap-[5px]">
+      <div className="flex flex-col gap-[5px] border-b-[1px] border-light-border dark:border-dark-border pb-[20px]">
         <SidebarLink to="dashboard">
           <DashBoardIcon size={21} />
           <p className="">Dashboard</p>
@@ -19,8 +19,6 @@ export default function SidebarButtons() {
           <p>Notification</p>
         </SidebarLink>
       </div>
-
-      <Line />
 
       <p className="text-[12px]">Review Answers</p>
 

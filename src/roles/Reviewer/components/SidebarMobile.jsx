@@ -26,7 +26,6 @@ export default function SidebarMobile({ setIsMobileSidebarOpen }) {
       <div className="relative flex flex-col h-full">
         <div className="flex flex-col gap-[20px] mt-[10%]">
           <Profile />
-          <Line />
           <SidebarButtons />
         </div>
 

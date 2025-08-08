@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { motion } from "motion/react";
 
-import Line from "../../../components/Line";
 import WindowWidthContext from "../../context/WindowWidthContext";
 
 const NOTIFICATIONS_URL = "http://localhost:3001/notifications";
@@ -15,7 +14,7 @@ export default function Notification() {
   const isSmallScreen = windowWidth < 1020;
   const isMobile = windowWidth < 700;
   const is600px = windowWidth < 600;
-  
+
   // Responsive padding like ReviewerAnalyticsMobile
   const padding = is600px ? "px-[17px] py-[17px]" : "px-[20px] py-[20px]";
 
@@ -55,11 +54,9 @@ export default function Notification() {
       animate={{ x: "0%", opacity: 1 }}
       className={`${padding} overflow-x-hidden ${notificationHeight} dark:bg-dark-card flex flex-col border dark:border-dark-border border-gray-300 rounded-[10px]`}
     >
-      <h1 className="text-[18px] dark:text-white font-semibold mb-[15px]">
+      <h1 className="text-[18px] dark:text-white font-semibold border-b-[1px] border-light-border dark:border-dark-border pb-[15px]">
         Notifications
       </h1>
-
-      <Line />
 
       {!isSmallScreen && (
         <div className="flex mt-[30px] gap-[10px] dark:text-dark-text-muted justify-between pr-[10px] items-center font-light text-xs text-light-text border-b border-[#611fc5] pb-[20px]">
@@ -74,7 +71,9 @@ export default function Notification() {
         {notifications.map((notification, i) => (
           <div
             key={notification.id}
-            className={`${isMobile ? "flex-col items-start" : "flex items-center"} py-[15px] dark:text-white gap-[10px] ${
+            className={`${
+              isMobile ? "flex-col items-start" : "flex items-center"
+            } py-[15px] dark:text-white gap-[10px] ${
               i === notifications.length - 1
                 ? ""
                 : "border-b border-light-border dark:border-dark-border"
