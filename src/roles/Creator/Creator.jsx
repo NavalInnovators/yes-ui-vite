@@ -4,10 +4,11 @@ import SidebarMobile from "./components/SidebarMobile";
 import CreatorMain from "./components/CreatorMain";
 import GradientDiv from "../components/GradientDiv";
 
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useContext, useEffect, useState, useCallback, useRef } from "react";
 import QuestionsContext from "./context/QuestionsContext";
 import WindowWidthContext, { WindowWidthProvider } from "./context/WindowWidthContext";
 import { DarkModeProvider } from "../Reviewer/context/DarkModeContext";
+import { AnimatePresence } from "motion/react";
 
 function TopGradientBar() {
   const windowWidth = useContext(WindowWidthContext);
@@ -30,6 +31,7 @@ export default function Creator() {
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const sidebarRef = useRef(null);
 
   // Update window width on resize
   const handleResize = useCallback(() => {
@@ -40,6 +42,23 @@ export default function Creator() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [handleResize]);
+
+  // Click outside listener to close mobile sidebar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+
+    if (isMobileSidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileSidebarOpen]);
 
   // Changing Sidebar State according to screen size
   useEffect(() => {
@@ -73,9 +92,14 @@ export default function Creator() {
     <DarkModeProvider>
       <WindowWidthProvider>
         <div className="h-screen flex flex-col" id="needs-dark-mode">
-          {!isSidebarOpen && isMobileSidebarOpen && (
-            <SidebarMobile setIsMobileSidebarOpen={setIsMobileSidebarOpen} />
-          )}
+          <AnimatePresence>
+            {!isSidebarOpen && isMobileSidebarOpen && (
+              <SidebarMobile 
+                setIsMobileSidebarOpen={setIsMobileSidebarOpen} 
+                ref={sidebarRef}
+              />
+            )}
+          </AnimatePresence>
 
           <NavigationBar setIsMobileSidebarOpen={setIsMobileSidebarOpen} />
           <TopGradientBar />

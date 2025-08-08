@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
 import WelcomeBar from "./components/WelcomeBar";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import QuestionsContext from "./context/QuestionsContext";
 import ReviewerSidebar from "./components/ReviewerSidebar";
 import SidebarMobile from "./components/SidebarMobile";
 import WindowWidthContext from "./context/WindowWidthContext";
+import { AnimatePresence } from "motion/react";
 
 const QUESTIONS_URL = "http://localhost:3002/questions";
 
@@ -20,6 +21,7 @@ export default function HomeLayout() {
 
   // Window Width State
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const sidebarRef = useRef(null);
 
   // Update window width on resize
   const handleResize = useCallback(() => {
@@ -30,6 +32,23 @@ export default function HomeLayout() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [handleResize]);
+
+  // Click outside listener to close mobile sidebar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+
+    if (isMobileSidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileSidebarOpen]);
 
   // Responsive padding like other components
   const is600px = windowWidth < 600;
@@ -71,9 +90,14 @@ export default function HomeLayout() {
 
   return (
     <div className="select-none" id="needs-dark-mode">
-      {!isSidebarOpen && isMobileSidebarOpen && (
-        <SidebarMobile setIsMobileSidebarOpen={setIsMobileSidebarOpen} />
-      )}
+      <AnimatePresence>
+        {!isSidebarOpen && isMobileSidebarOpen && (
+          <SidebarMobile 
+            setIsMobileSidebarOpen={setIsMobileSidebarOpen} 
+            ref={sidebarRef}
+          />
+        )}
+      </AnimatePresence>
 
       <NavigationBar setIsMobileSidebarOpen={setIsMobileSidebarOpen} />
       <WelcomeBar />
