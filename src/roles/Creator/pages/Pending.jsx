@@ -216,11 +216,12 @@ function PendingQuestion({ question }) {
               View Answer
             </Link>
           ) : (
-            <button
+            <Link
+              to={`review-edit/${question.id}`}
               className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight min-w-[140px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
             >
               Review and Edit
-            </button>
+            </Link>
           )}
         </div>
       </div>
@@ -245,12 +246,13 @@ function PendingQuestion({ question }) {
             View Answer
           </Link>
         ) : (
-          <button
+          <Link
+            to={`review-edit/${question.id}`}
             className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight w-[135px] text-[13px] h-fit py-[5px] rounded-[5px] ml-[20px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
             style={{ minWidth: 100 }}
           >
             Review and Edit
-          </button>
+          </Link>
         )}
       </div>
     </div>

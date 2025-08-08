@@ -8,6 +8,9 @@
 @theme {
   --color-white: hsl(0, 0%, 95%);
   --color-purple: hsl(291, 55%, 50%);
+  --color-green: hsl(144, 67%, 38%);
+
+  --color-green-hover: hsl(144, 67%, 30%);
 
   /* Dark Mode */
   --color-dark-card: hsl(0, 0%, 5%);

@@ -6,6 +6,7 @@ import Reviewed from "../pages/Reviewed";
 import YourEarning from "../pages/YourEarning";
 import SubmitAnswer from "../pages/SubmitAnswer";
 import ViewAnswer from "../pages/ViewAnswer";
+import ReviewAndEdit from "../pages/ReviewAndEdit";
 import { useContext } from "react";
 import WindowWidthContext from "../context/WindowWidthContext";
 
@@ -25,6 +26,7 @@ export default function CreatorMain() {
           </Route>
           <Route path="pending" element={<Pending />}>
             <Route path="view-answer/:id" element={<ViewAnswer />} />
+            <Route path="review-edit/:id" element={<ReviewAndEdit />} />
           </Route>
           <Route path="reviewed" element={<Reviewed />} />
           <Route path="your_earning" element={<YourEarning />} />
