@@ -26,7 +26,9 @@ export default function NewQuestions() {
 
   return (
     <div className="flex flex-col gap-[15px] rounded-[8px] p-[20px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white">
-      <h1 className="text-[16px] border-b border-light-border dark:border-dark-border pb-[15px]">New Questions</h1>
+      <h1 className="text-[16px] border-b border-light-border dark:border-dark-border pb-[15px]">
+        New Questions
+      </h1>
 
       <div className="border-b border-light-border dark:border-dark-border pb-[15px]">
         <SelectTopic
@@ -40,14 +42,21 @@ export default function NewQuestions() {
       <div className="pt-[5px]">
         {isLoading ? (
           <div className="flex justify-center items-center h-[150px]">
-            <p className="text-gray-500 dark:text-dark-text-muted">Loading questions...</p>
+            <p className="text-gray-500 dark:text-dark-text-muted">
+              Loading questions...
+            </p>
           </div>
         ) : questions.length === 0 ? (
           <div className="flex justify-center items-center h-[150px]">
-            <p className="text-gray-500 dark:text-dark-text-muted">No questions available</p>
+            <p className="text-gray-500 dark:text-dark-text-muted">
+              No questions available
+            </p>
           </div>
         ) : (
-          <Questions filteredQuestions={questions.slice(0, 3)} showOnlyTopic={true}/>
+          <Questions
+            filteredQuestions={questions.slice(0, 3)}
+            showOnlyTopic={true}
+          />
         )}
       </div>
 

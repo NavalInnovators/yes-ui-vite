@@ -9,9 +9,18 @@ import ReviewAndEditOnly from "../components/ReviewAndEditOnly";
 
 // Context
 import QuestionsContext from "../context/QuestionsContext";
+import WindowWidthContext from "../context/WindowWidthContext";
+import useLine from "../../components/custom_hooks/useLine";
 
 export default function Pending() {
   const { questions, isLoading } = useContext(QuestionsContext);
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 760;
+  const is600px = windowWidth < 600;
+  const line = useLine();
+  
+  const padding = is600px ? "p-[17px]" : "p-[20px]";
+  
   const [pendingQuestions, setPendingQuestions] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Select a Topic");
@@ -104,22 +113,38 @@ export default function Pending() {
     <motion.div
       initial={{ x: "-1%", opacity: 0 }}
       animate={{ x: "0%", opacity: 1 }}
-      className="w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 px-[20px] py-[20px] rounded-[10px]"
+      className={`w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 ${padding} rounded-[10px]`}
     >
-      <h1 className="text-[18px] font-semibold border-b border-light-border dark:border-dark-border pb-[15px]">In Review</h1>
+      <h1 className={`text-[18px] font-semibold ${line}`}>In Review</h1>
 
-      <div className="flex items-center gap-[7px] w-full border-b border-light-border dark:border-dark-border pb-[15px]">
-        <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
-
-        <SelectTopic
-          options={options}
-          filterByTopicName={filterByTopicName}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-        />
-
-        <ReviewAndEditOnly reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} reviewAndEditOnly={reviewAndEditOnly} />
-      </div>
+      {isSmallScreen ? (
+        <div className={`flex flex-col gap-[10px] w-full ${line}`}>
+          <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
+          <div className={`flex items-center gap-[7px] w-full`}>
+            <SelectTopic
+              options={options}
+              filterByTopicName={filterByTopicName}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+            />
+            <ReviewAndEditOnly 
+              reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} 
+              reviewAndEditOnly={reviewAndEditOnly}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className={`flex items-center gap-[7px] w-full ${line}`}>
+          <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
+          <SelectTopic
+            options={options}
+            filterByTopicName={filterByTopicName}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+          />
+          <ReviewAndEditOnly reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} reviewAndEditOnly={reviewAndEditOnly} />
+        </div>
+      )}
 
       {isLoading ? (
         <div className="text-2xl text-center mt-[100px]">
@@ -152,10 +177,44 @@ export default function Pending() {
 }
 
 function PendingQuestion({ question }) {
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 760;
+
   if (!question) {
     return <div>Loading...</div>;
   }
 
+  let trimmedQuestion = question.content.split(" ").slice(0, 30).join(" ");
+  if (trimmedQuestion.length < question.content.length) {
+    trimmedQuestion = trimmedQuestion + "...";
+  }
+
+  if (isSmallScreen) {
+    return (
+      <div className="flex flex-col w-full dark:text-white text-[14px] gap-2 pb-3 border-b border-light-border dark:border-dark-border">
+        {/* Top: Question number and content */}
+        <div className="flex gap-[10px] w-full">
+          <div>{question.id}.</div>
+          <div className="flex-1">{trimmedQuestion}</div>
+        </div>
+        {/* Bottom: Topic name on left, button on right */}
+        <div className="flex w-full justify-between items-center gap-4">
+          <div className="flex gap-2 items-center ml-[20px]">
+            <div className="flex items-center justify-center bg-[rgba(230,230,230,1)] dark:bg-dark-highlight text-[11px] py-[2px] px-[5px] h-fit rounded-[5px] whitespace-nowrap overflow-hidden text-ellipsis dark:text-white">
+              {question.topic_name}
+            </div>
+          </div>
+          <button
+            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight min-w-[140px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+          >
+            {question.answered ? "View Answer" : "Review and Edit"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Large screen layout (unchanged)
   return (
     <div className="flex items-start dark:text-white text-[14px] pb-3 border-b border-light-border dark:border-dark-border">
       <div className="flex gap-[10px] w-full items-start">

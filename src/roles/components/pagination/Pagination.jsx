@@ -1,5 +1,7 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useContext } from "react";
 import Page from "./Page";
+import WindowWidthContext from "../../Creator/context/WindowWidthContext";
 
 export default function Pagination({
   totalQuestions,
@@ -8,6 +10,9 @@ export default function Pagination({
   setCurrentPage,
   className = ""
 }) {
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 600;
+  
   const totalPages = Math.ceil(totalQuestions / PAGE_SIZE);
 
   const paginationArray = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -49,7 +54,7 @@ export default function Pagination({
           onClick={handlePreviousButton}
         >
           <ArrowLeft size={20} />
-          Previous
+          {!isSmallScreen && "Previous"}
         </button>
       )}
 
@@ -75,7 +80,7 @@ export default function Pagination({
           className="flex items-center dark:hover:text-white dark:text-dark-text-muted text-gray-400 text-[14px] transition duration-100 gap-[5px] cursor-pointer hover:text-black"
           onClick={handleNextButton}
         >
-          Next
+          {!isSmallScreen && "Next"}
           <ArrowRight size={20} />
         </button>
       )}

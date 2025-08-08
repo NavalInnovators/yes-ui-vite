@@ -33,7 +33,7 @@ export default function HomeLayout() {
 
   // Responsive padding like other components
   const is600px = windowWidth < 600;
-  const padding = is600px ? "px-[17px] py-[17px]" : "px-[20px] py-[20px]";
+  const padding = is600px ? "p-[17px]" : "p-[20px]";
 
   // Changing Sidebar State according to screen size
   useEffect(() => {
