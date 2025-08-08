@@ -63,10 +63,6 @@ export default function NewQnA() {
     "Machine Learning",
     "Artificial Intelligence",
     "Web Development",
-    "Mobile Development",
-    "Cybersecurity",
-    "DevOps",
-    "Cloud Computing",
     "Software Engineering",
     "System Design",
   ];
