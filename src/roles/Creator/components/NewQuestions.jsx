@@ -1,12 +1,15 @@
-import Line from "../../components/Line";
 import SelectTopic from "../../components/SelectTopic";
 import { useContext, useState } from "react";
 import Questions from "./Questions";
 import QuestionsContext from "../context/QuestionsContext";
 import { Link } from "react-router-dom";
+import WindowWidthContext from "../../Reviewer/context/WindowWidthContext";
 
 export default function NewQuestions() {
   const { questions, isLoading } = useContext(QuestionsContext);
+  const windowWidth = useContext(WindowWidthContext);
+
+  const is1200px = windowWidth < 1200;
 
   const options = [
     "Option 1",
@@ -22,38 +25,40 @@ export default function NewQuestions() {
   function filterByTopicName() {}
 
   return (
-    <div className="w-[60%] flex flex-col gap-[20px] rounded-[8px] p-[30px] border-[1px] border-light-border">
-      <h1 className="text-[20px]">New Questions</h1>
+    <div className="w-[60%] flex flex-col gap-[15px] rounded-[8px] p-[20px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white">
+      <h1 className="text-[16px] border-b border-light-border dark:border-dark-border pb-[15px]">New Questions</h1>
 
-      <Line />
+      <div className="border-b border-light-border dark:border-dark-border pb-[15px]">
+        <SelectTopic
+          options={options}
+          filterByTopicName={filterByTopicName}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
+      </div>
 
-      <SelectTopic
-        options={options}
-        filterByTopicName={filterByTopicName}
-        selectedOption={selectedOption}
-        setSelectedOption={setSelectedOption}
-      />
+      <div className="pt-[5px]">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-[150px]">
+            <p className="text-gray-500 dark:text-dark-text-muted">Loading questions...</p>
+          </div>
+        ) : questions.length === 0 ? (
+          <div className="flex justify-center items-center h-[150px]">
+            <p className="text-gray-500 dark:text-dark-text-muted">No questions available</p>
+          </div>
+        ) : (
+          <Questions filteredQuestions={questions.slice(0, 3)} showOnlyTopic={true}/>
+        )}
+      </div>
 
-      <Line />
-
-      {isLoading ? (
-        <div className="flex justify-center items-center h-[200px]">
-          <p className="text-gray-500">Loading questions...</p>
-        </div>
-      ) : questions.length === 0 ? (
-        <div className="flex justify-center items-center h-[200px]">
-          <p className="text-gray-500">No questions available</p>
-        </div>
-      ) : (
-        <Questions filteredQuestions={questions.slice(0, 3)} />
-      )}
-
-      <Link
-        to="/creator/new_qna"
-        className="bg-black text-center text-[#fff] mx-auto w-fit mt-[20px] font-medium text-[17px] py-[7px] px-[20px] rounded-[5px] hover:shadow-[0px_5px_10px_hsl(0,0%,70%)] transition-all duration-200 translate-y-[3px] hover:translate-y-0"
-      >
-        View All
-      </Link>
+      <div className="flex justify-center">
+        <Link
+          to="/creator/new_qna"
+          className="bg-black text-center border-[1px] border-light-border dark:border-dark-border hover:text-black hover:bg-transparent text-[#fff] dark:text-white font-medium text-[14px] py-[6px] px-[16px] rounded-[5px] hover:bg-dark-highlight transition-all duration-200 hover:translate-y-[-3px]  hover:shadow-[0px_5px_10px_hsl(0,0%,70%)]"
+        >
+          View All
+        </Link>
+      </div>
     </div>
   );
 }

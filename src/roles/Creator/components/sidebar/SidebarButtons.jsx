@@ -14,7 +14,7 @@ function MyLink({ children, to }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center transition-transform hover:scale-[1.07] justify-start gap-[20px] rounded-2xl px-[15px] py-[10px] ml-[-3px] ${
+        `flex items-center text-[13px] transition-transform hover:scale-[1.07] justify-start gap-[15px] rounded-2xl px-[15px] py-[10px] ml-[-3px] ${
           isActive
             ? "bg-gray-100 text-black dark:text-white dark:bg-dark-highlight"
             : "text-gray-500 dark:text-dark-text-muted"
@@ -28,31 +28,31 @@ function MyLink({ children, to }) {
 
 export default function SidebarButtons() {
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[15px]">
       <Line />
 
       <MyLink to="dashboard">
-        <DashBoardIcon size={28} />
+        <DashBoardIcon size={21} />
         <p className="">Dashboard</p>
       </MyLink>
 
       <MyLink to="new_qna">
-        <FileText />
+        <FileText size={21} />
         <p>New Q&A</p>
       </MyLink>
 
       <MyLink to="pending">
-        <FileWarning />
+        <FileWarning size={21} />
         <p>Pending</p>
       </MyLink>
 
       <MyLink to="reviewed">
-        <FilePenLine />
+        <FilePenLine size={21} />
         <p>Reviewed Q&A</p>
       </MyLink>
 
       <MyLink to="your_earning">
-        <CircleDollarSign />
+        <CircleDollarSign size={21} />
         <p>Your Earning</p>
       </MyLink>
     </div>

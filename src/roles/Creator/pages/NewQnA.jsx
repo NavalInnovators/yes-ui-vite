@@ -4,11 +4,11 @@ import { motion } from "motion/react";
 import Line from "../../components/Line";
 import SearchBar from "../../components/SearchBar";
 import SelectTopic from "../../components/SelectTopic";
-import DraftOnly from "../../Reviewer/components/sidebar-pages/new_qna_componennts/view_qna_components/DraftOnly";
+import DraftOnly from "../components/DraftOnly";
 import Pagination from "../../components/pagination/Pagination";
 
 // Context
-import QuestionsContext from "../../Creator/context/QuestionsContext";
+import QuestionsContext from "../context/QuestionsContext";
 import Questions from "../components/Questions";
 
 export default function NewQnA() {

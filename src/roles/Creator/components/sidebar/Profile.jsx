@@ -14,12 +14,14 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-[18px]">
-      <ProfileImage size="130px" />
+    <div className="flex flex-col items-center justify-center gap-[11px]">
+      <ProfileImage size={62} />
 
       <div className="flex flex-col items-center justify-center">
-        <p className="font-bold">User Name</p>
-        <p className="dark:text-dark-text-muted text-gray-500 font-light text-[15px]">
+        <p className="text-slate-700 dark:text-white font-bold text-[15px]">
+          User Name
+        </p>
+        <p className="dark:text-dark-text-muted text-gray-500 font-light text-[13px]">
           Role: {role}
         </p>
       </div>

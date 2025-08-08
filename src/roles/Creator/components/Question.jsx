@@ -3,8 +3,12 @@ import HoverInfo from "./HoverInfo";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Question({ question }) {
+export default function Question({ question, showOnlyTopic = false }) {
   const [openToolTip, setOpenToolTip] = useState(false);
+
+  if (!question) {
+    return <div>Loading...</div>;
+  }
 
   function handleHover() {
     setOpenToolTip(true);
@@ -14,40 +18,41 @@ export default function Question({ question }) {
     setOpenToolTip(false);
   }
 
+  let trimmedQuestion = question.content.split(" ").slice(0, 30).join(" ");
+  if (trimmedQuestion.length < question.content.length) {
+    trimmedQuestion = trimmedQuestion + "...";
+  }
+
   return (
-    <div className="flex items-start justify-between dark:text-white">
-      {/* Left */}
-      <div className="flex w-full gap-[10px]">
-        {/* Question Number */}
+    <div className="flex items-start dark:text-white text-[14px] pb-3 border-b border-light-border dark:border-dark-border">
+      <div className="flex gap-[10px] w-full items-start">
         <div>{question.id}.</div>
-
-        {/* Question Text */}
-        <div className="flex-1">{question.content}</div>
-
-        {/* Topic Name */}
-        <div className="flex items-center dark:bg-dark-more-highlighted dark:text-dark-text-muted justify-center font-light bg-[rgba(230,230,230,1)] text-[12px] h-[24px] p-[5px] rounded-[5px] ml-[5px]">
+        <div className="flex-1">{trimmedQuestion}</div>
+        <div className="flex items-center justify-center bg-[rgba(230,230,230,1)] dark:bg-dark-highlight text-[11px] py-[2px] px-[5px] h-fit rounded-[5px] ml-[5px] whitespace-nowrap overflow-hidden text-ellipsis dark:text-white">
           {question.topic_name}
         </div>
 
-        {/* No of Answers Submitted */}
-        <div className="flex w-[60px] dark:bg-dark-more-highlighted dark:text-dark-text-muted items-center relative justify-center gap-[5px] font-light bg-[rgba(230,230,230,1)] text-[14px] h-[24px] p-[5px] rounded-[5px]">
-          <div>{question.answers_submitted_by_user}/3</div>
-          <Info
-            size={15}
-            onMouseEnter={handleHover}
-            onMouseLeave={handleHoverGone}
-          />
+        {!showOnlyTopic && (
+          <div className="flex items-center relative gap-[5px] font-light bg-[rgba(230,230,230,1)] dark:bg-dark-highlight text-[11px] h-fit py-[2px] px-[5px] rounded-[5px] whitespace-nowrap dark:text-white">
+            <div>{question.answers_submitted_by_user}/3</div>
+            <Info
+              size={10}
+              onMouseEnter={handleHover}
+              onMouseLeave={handleHoverGone}
+            />
+            {openToolTip && <HoverInfo />}
+          </div>
+        )}
 
-          {openToolTip && <HoverInfo />}
-        </div>
-
-        {/* Status */}
-        <Link
-          to={question.status === "Draft" ? `qna/${question.id}` : ""}
-          className="flex bg-[hsl(0,0%,90%)] hover:bg-[hsl(0,0%,85%)] justify-center transition-colors dark:border-[1px] dark:border-dark-border dark:hover:bg-dark-hover dark:bg-dark-highlight dark:text-white cursor-pointer items-center text-[15px] w-[170px] h-[35px] rounded-[5px] ml-[20px]"
-        >
-          {question.status}
-        </Link>
+        {!showOnlyTopic && (
+          <Link
+            to={question.status === "Draft" ? `qna/${question.id}` : ""}
+            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight w-[135px] text-[13px] h-fit py-[5px] rounded-[5px] ml-[20px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+            style={{ minWidth: 100 }}
+          >
+            {question.status}
+          </Link>
+        )}
       </div>
     </div>
   );

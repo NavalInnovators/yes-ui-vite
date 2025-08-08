@@ -5,6 +5,8 @@ import GradientDiv from "../components/GradientDiv";
 
 import { useEffect, useState } from "react";
 import QuestionsContext from "./context/QuestionsContext";
+import { WindowWidthProvider } from "./context/WindowWidthContext";
+import { DarkModeProvider } from "../Reviewer/context/DarkModeContext";
 
 function TopGradientBar() {
   return (
@@ -41,19 +43,23 @@ export default function Creator() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col">
-      <NavigationBar />
-      <TopGradientBar />
+    <DarkModeProvider>
+      <WindowWidthProvider>
+        <div className="h-screen flex flex-col">
+          <NavigationBar />
+          <TopGradientBar />
 
-      <div className="flex overflow-hidden">
-        {isSidebarOpen && <SideBar />}
+          <div className="flex overflow-hidden">
+            {isSidebarOpen && <SideBar />}
 
-        <QuestionsContext.Provider
-          value={{ questions, setQuestions, isLoading }}
-        >
-          <CreatorMain />
-        </QuestionsContext.Provider>
-      </div>
-    </div>
+            <QuestionsContext.Provider
+              value={{ questions, setQuestions, isLoading }}
+            >
+              <CreatorMain />
+            </QuestionsContext.Provider>
+          </div>
+        </div>
+      </WindowWidthProvider>
+    </DarkModeProvider>
   );
 }

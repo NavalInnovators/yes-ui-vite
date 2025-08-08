@@ -1,9 +1,4 @@
-import { useContext } from "react";
-import WindowWidthContext from "../Reviewer/context/WindowWidthContext";
-
 export default function GradientDiv({ children }) {
-  const windowWidth = useContext(WindowWidthContext);
-  
   const padding = "p-[20px]";
 
   return (
