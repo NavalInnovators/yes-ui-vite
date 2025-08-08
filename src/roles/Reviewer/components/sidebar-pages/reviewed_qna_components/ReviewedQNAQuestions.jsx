@@ -1,5 +1,6 @@
 import ReviewedQuestion from "../reviewed_qna_components/ReviewedQuestion";
 import { motion } from "motion/react";
+import { Outlet } from "react-router-dom";
 
 export default function Questions({ filteredQuestions, start, end }) {
   if (filteredQuestions.length === 0) {
@@ -16,6 +17,7 @@ export default function Questions({ filteredQuestions, start, end }) {
       {filteredQuestions.slice(start, end).map((question) => (
         <ReviewedQuestion key={question.id} question={question} />
       ))}
+      <Outlet />
     </motion.div>
   );
 }

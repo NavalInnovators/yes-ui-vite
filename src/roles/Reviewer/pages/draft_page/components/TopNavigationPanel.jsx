@@ -3,12 +3,13 @@ import SelectTopic from "../../../../components/SelectTopic";
 import Pagination from "../../../../components/pagination/Pagination";
 import WindowWidthContext from "../../../context/WindowWidthContext";
 
-export default function TopNavigationPanel({ setConfirmSubmit }) {
+export default function TopNavigationPanel({ setConfirmSubmit, renderActions = true, statusText }) {
   const [selectedTopic, setSelectedTopic] = useState("Select a Topic");
   const [selectedResponse, setSelectedResponse] = useState("View all Answers");
   const [currentPage, setCurrentPage] = useState(1);
   const windowWidth = useContext(WindowWidthContext);
   const smallScreen = windowWidth < 1100;
+  const is800px = windowWidth < 800;
 
   const totalQuestions = 10;
 
@@ -33,7 +34,7 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
   // Cannot proceed with this function without backend
   function filterByTopicName() {}
 
-  const smallStyles = smallScreen ? "flex-col gap-[10px]" : "items-center gap-[10px]";
+  const smallStyles = is800px ? "flex-col gap-[10px]" : "items-center gap-[10px]";
   const darkStyles = "dark:bg-dark-card"
 
   return (
@@ -70,30 +71,38 @@ export default function TopNavigationPanel({ setConfirmSubmit }) {
           smallScreen ? "justify-center flex-wrap" : ""
         } flex items-center gap-[3px] text-sm font-medium`}
       >
-        <button
-          className={`${
-            smallScreen ? "flex-1" : ""
-          } transition-colors cursor-pointer border-[2px] border-red-200 hover:bg-red-200 py-[5px] px-[15px] text-red-600 rounded-l-[7px]`}
-        >
-          Reject
-        </button>
+        {renderActions ? (
+          <>
+            <button
+              className={`${
+                smallScreen ? "flex-1" : ""
+              } transition-colors cursor-pointer border-[2px] border-red-200 hover:bg-red-200 py-[5px] px-[15px] text-red-600 rounded-l-[7px]`}
+            >
+              Reject
+            </button>
 
-        <button
-          className={`${
-            smallScreen ? "flex-1" : ""
-          } transition-colors cursor-pointer border-[2px] border-green-200 hover:bg-green-200 py-[5px] px-[15px] text-green-600 rounded-r-[7px]`}
-        >
-          Approve
-        </button>
+            <button
+              className={`${
+                smallScreen ? "flex-1" : ""
+              } transition-colors cursor-pointer border-[2px] border-green-200 hover:bg-green-200 py-[5px] px-[15px] text-green-600 rounded-r-[7px]`}
+            >
+              Approve
+            </button>
 
-        <button
-          onClick={handleConfirmSubmit}
-          className={`${
-            smallScreen ? "flex-2" : ""
-          } transition-colors hover:text-white hover:bg-transparent ml-[10px] rounded-[5px] cursor-pointer whitespace-nowrap bg-[#fff] dark:bg-dark-highlight dark:text-white py-[5px] px-[20px] relative gradient-button`}
-        >
-          Submit Comment
-        </button>
+            <button
+              onClick={handleConfirmSubmit}
+              className={`${
+                smallScreen ? "flex-2" : ""
+              } transition-colors hover:text-white hover:bg-transparent ml-[10px] rounded-[5px] cursor-pointer whitespace-nowrap bg-[#fff] dark:bg-dark-highlight dark:text-white py-[5px] px-[20px] relative gradient-button`}
+            >
+              Submit Comment
+            </button>
+          </>
+        ) : (
+          <div className="ml-[10px] py-[6px] px-[12px] rounded-[7px] bg-light-card dark:bg-dark-highlight dark:text-white">
+            {statusText}
+          </div>
+        )}
       </div>
     </div>
   );

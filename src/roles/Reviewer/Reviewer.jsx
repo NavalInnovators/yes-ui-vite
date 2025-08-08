@@ -8,6 +8,7 @@ import HomeLayout from "./HomeLayout";
 import DraftPage from "./pages/draft_page/DraftPage";
 import { AnimatePresence } from "motion/react";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import ViewCommentPage from "./components/sidebar-pages/reviewed_qna_components/ViewCommentPage";
 
 function Reviewer() {
   const location = useLocation();
@@ -38,7 +39,9 @@ function Reviewer() {
               <Route path="qna/:id" element={<DraftPage />} />
             </Route>
 
-            <Route path="reviewed_qna" element={<ReviewedQNA />} />
+            <Route path="reviewed_qna" element={<ReviewedQNA />}>
+              <Route path=":id" element={<ViewCommentPage />} />
+            </Route>
           </Route>
         </Routes>
       </AnimatePresence>

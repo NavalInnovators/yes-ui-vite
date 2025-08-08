@@ -1,6 +1,7 @@
 import useLine from "../../../../components/custom_hooks/useLine";
 import { useContext } from "react";
 import WindowWidthContext from "../../../context/WindowWidthContext";
+import { Link } from "react-router-dom";
 
 function Tag({ color, text }) {
   return <div className={`${color}`}>{text}</div>;
@@ -55,12 +56,13 @@ export default function Question({ question }) {
             )}
           </div>
 
-          {/* Status */}
-          <button
+          {/* View Comment */}
+          <Link
+            to={`${question.id}`}
             className={`flex text-[13px] h-fit py-[5px] justify-center border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover dark:bg-dark-highlight dark:text-white cursor-pointer items-center bg-[rgba(230,230,230,1)] min-w-[125px] rounded-[5px] ml-[10px]`}
           >
             View Comment
-          </button>
+          </Link>
         </div>
       </div>
     </div>

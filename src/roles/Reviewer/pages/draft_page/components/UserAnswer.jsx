@@ -22,7 +22,7 @@ export default function UserAnswer() {
       {/* User's Submitted Answer Section */}
       <div className="dark:bg-dark-highlight dark:border dark:border-dark-border dark:text-white flex flex-col font-light text-sm bg-light-card rounded-[6px]">
         {/* Rated Stars */}
-        <div className="flex items-center justify-between border-b-[1px] px-[30px] py-[20px] border-light-border dark:border-dark-border pb-[15px]">
+        <div className="flex items-center justify-between border-b-[1px] p-[25px] border-light-border dark:border-dark-border pb-[15px]">
           <p className="bg-[oklch(98.5%_0.09_101.54)] text-xs text-yellow-700 w-fit py-[2px] px-[10px] rounded-[7px]">
             {question?.stars} Star
           </p>
@@ -35,7 +35,7 @@ export default function UserAnswer() {
         </div>
 
         {/* Submitted Answer */}
-        <div className="py-[26px] px-[30px] overflow-y-scroll custom-scrollbar">
+        <div className="p-[25px] overflow-y-scroll custom-scrollbar">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta itaque
           praesentium adipisci, vero iure omnis atque nobis perspiciatis
           doloremque magni, velit amet vel. Doloremque, ipsa magnam molestiae
