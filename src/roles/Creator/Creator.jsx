@@ -43,7 +43,7 @@ export default function Creator() {
 
   // Changing Sidebar State according to screen size
   useEffect(() => {
-    if (windowWidth < 1000) {
+    if (windowWidth < 1100) {
       setIsSidebarOpen(false);
       setIsMobileSidebarOpen(false);
     } else {

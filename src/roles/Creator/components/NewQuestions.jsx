@@ -63,7 +63,7 @@ export default function NewQuestions() {
       <div className="flex justify-center mt-[20px]">
         <Link
           to="/creator/new_qna"
-          className="bg-black text-center border-[1px] border-light-border dark:border-white dark:hover:bg-white text-[#fff] dark:bg-white dark:text-black font-medium text-[14px] py-[6px] px-[16px] rounded-[5px] dark:hover:shadow-[0px_0px_20px_hsl(0,0%,50%)] hover:bg-dark-highlight transition-all duration-200 hover:translate-y-[-3px]  hover:shadow-[0px_0px_20px_hsl(0,0%,50%)]"
+          className="bg-black text-center border-[1px] border-light-border dark:border-white dark:hover:bg-white text-[#fff] dark:bg-white dark:text-black font-medium text-[14px] py-[6px] px-[16px] rounded-[5px] dark:hover:shadow-[0px_0px_20px_hsl(0,0%,50%)] hover:bg-dark-highlight transition-all duration-200 hover:translate-y-[-3px]  hover:shadow-[0px_0px_20px_hsl(0,0%,50%)] cursor-pointer"
         >
           View All
         </Link>

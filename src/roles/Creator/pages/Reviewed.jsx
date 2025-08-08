@@ -1,8 +1,35 @@
+import { useContext } from "react";
+import { Outlet } from "react-router-dom";
+import WindowWidthContext from "../context/WindowWidthContext";
+import YourContribution from "./Reviewed/YourContribution";
+import CreatorAnalytics from "./Reviewed/CreatorAnalytics";
+import CreatorAnalyticsMobile from "./Reviewed/CreatorAnalyticsMobile";
+
 export default function Reviewed() {
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 1000;
+
   return (
-    <div className="flex flex-col gap-[20px] p-[30px] border-[1px] border-light-border dark:border-dark-border dark:bg-dark-card dark:text-white rounded-[10px]">
-      <h1 className="text-[20px] font-medium">Reviewed Questions</h1>
-      <p className="text-gray-500 dark:text-dark-text-muted">No reviewed questions at the moment.</p>
-    </div>
+    <>
+      <Outlet />
+      <div className={`flex gap-[20px] w-full ${isSmallScreen ? "flex-col" : ""}`}>
+        {/* Mobile Analytics - shown on small screens */}
+        {isSmallScreen && (
+          <CreatorAnalyticsMobile />
+        )}
+
+        {/* Left side - YourContribution component */}
+        <div className={`${isSmallScreen ? "w-full" : "flex-1"}`}>
+          <YourContribution />
+        </div>
+
+        {/* Right side - CreatorAnalytics component */}
+        {!isSmallScreen && (
+          <div className="w-[250px]">
+            <CreatorAnalytics />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

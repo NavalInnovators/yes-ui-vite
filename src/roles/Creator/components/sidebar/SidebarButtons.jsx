@@ -46,7 +46,7 @@ export default function SidebarButtons() {
 
       <MyLink to="reviewed">
         <FilePenLine size={21} />
-        <p>Reviewed Q&A</p>
+        <p>Reviewed</p>
       </MyLink>
 
       <MyLink to="your_earning">
