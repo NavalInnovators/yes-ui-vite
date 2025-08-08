@@ -11,6 +11,9 @@ import Pagination from "../../components/pagination/Pagination";
 import QuestionsContext from "../context/QuestionsContext";
 import Questions from "../components/Questions";
 
+// Import fuzzySearch from Reviewer's lib
+import { fuzzySearch } from "../../Reviewer/lib/fuzzySearch";
+
 export default function NewQnA() {
   const { questions, isLoading } = useContext(QuestionsContext);
   const [selectedOption, setSelectedOption] = useState("Select a Topic");
@@ -22,6 +25,23 @@ export default function NewQnA() {
   useEffect(() => {
     setFilteredQuestions(questions);
   }, [questions]);
+
+  // Search functionality
+  useEffect(() => {
+    if (searchQuery === "") {
+      setFilteredQuestions(questions);
+      setCurrentPage(1);
+      return;
+    }
+
+    setDraftOnly(false);
+    setSelectedOption("All");
+    setCurrentPage(1);
+
+    setFilteredQuestions(
+      questions.filter((q) => fuzzySearch(searchQuery, q.content))
+    );
+  }, [searchQuery, questions]);
 
   const PAGE_SIZE = 7;
   const options = [
@@ -46,7 +66,13 @@ export default function NewQnA() {
   const start = (currentPage - 1) * PAGE_SIZE;
   let end = Math.min(start + PAGE_SIZE, filteredQuestions.length);
 
-  function filterBySearch() {}
+  function filterBySearch(e) {
+    setSearchQuery(e.target.value);
+
+    // Reset Other Filters
+    setSelectedOption("Select a Topic");
+    setDraftOnly(false);
+  }
 
   function filterByTopicName(topic_name) {
     const filteredByTopicName = questions.filter(
@@ -89,13 +115,11 @@ export default function NewQnA() {
     <motion.div
       initial={{ x: "-1%", opacity: 0 }}
       animate={{ x: "0%", opacity: 1 }}
-      className="h-[calc(100vh-77.5px-74px-40px)] w-full max-w-[1400px] dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[20px] border border-gray-300 p-[30px] rounded-[10px]"
+      className="w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 px-[20px] py-[20px] rounded-[10px]"
     >
-      <h1 className="text-[20px]">New Questions</h1>
+      <h1 className="text-[18px] font-semibold border-b border-light-border dark:border-dark-border pb-[15px]">New Questions</h1>
 
-      <Line />
-
-      <div className="flex items-center gap-[7px] w-full">
+      <div className="flex items-center gap-[7px] w-full border-b border-light-border dark:border-dark-border pb-[15px]">
         <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
 
         <SelectTopic
@@ -107,8 +131,6 @@ export default function NewQnA() {
 
         <DraftOnly draftOnlyFilter={draftOnlyFilter} draftOnly={draftOnly} />
       </div>
-
-      <Line />
 
       {isLoading ? (
         <div className="text-2xl text-center mt-[100px]">
@@ -122,8 +144,6 @@ export default function NewQnA() {
           end={end}
         />
       )}
-
-      <div className="mb-[10px]"></div>
 
       <Pagination
         totalQuestions={totalQuestions}

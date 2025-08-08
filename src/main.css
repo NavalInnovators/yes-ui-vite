@@ -7,6 +7,7 @@
 /* ------------ For Reviewer Mode ------------ */
 @theme {
   --color-white: hsl(0, 0%, 95%);
+  --color-purple: hsl(291, 55%, 44%);
 
   /* Dark Mode */
   --color-dark-card: hsl(0, 0%, 5%);

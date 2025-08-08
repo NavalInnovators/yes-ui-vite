@@ -3,15 +3,21 @@ import SideBar from "./components/sidebar/SideBar";
 import CreatorMain from "./components/CreatorMain";
 import GradientDiv from "../components/GradientDiv";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import QuestionsContext from "./context/QuestionsContext";
-import { WindowWidthProvider } from "./context/WindowWidthContext";
+import WindowWidthContext, { WindowWidthProvider } from "./context/WindowWidthContext";
 import { DarkModeProvider } from "../Reviewer/context/DarkModeContext";
 
+
+
 function TopGradientBar() {
+  const windowWidth = useContext(WindowWidthContext);
+  const smallScreen = windowWidth < 800;
+  const headingSize = smallScreen ? "text-[18px]" : "text-[20px]";
+
   return (
     <GradientDiv>
-      <h1 className="text-[25px]">Creator Mode</h1>
+      <p className={`${headingSize} font-medium`}>Creator Mode</p>
       <p>New Updates</p>
     </GradientDiv>
   );
