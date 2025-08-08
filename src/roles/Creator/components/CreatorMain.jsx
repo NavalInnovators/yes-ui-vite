@@ -5,6 +5,7 @@ import Pending from "../pages/Pending";
 import Reviewed from "../pages/Reviewed";
 import YourEarning from "../pages/YourEarning";
 import SubmitAnswer from "../pages/SubmitAnswer";
+import ViewAnswer from "../pages/ViewAnswer";
 import { useContext } from "react";
 import WindowWidthContext from "../context/WindowWidthContext";
 
@@ -22,7 +23,9 @@ export default function CreatorMain() {
           <Route path="new_qna" element={<NewQnA />}>
             <Route path="submit-answer/:id" element={<SubmitAnswer />} />
           </Route>
-          <Route path="pending" element={<Pending />} />
+          <Route path="pending" element={<Pending />}>
+            <Route path="view-answer/:id" element={<ViewAnswer />} />
+          </Route>
           <Route path="reviewed" element={<Reviewed />} />
           <Route path="your_earning" element={<YourEarning />} />
         </Routes>

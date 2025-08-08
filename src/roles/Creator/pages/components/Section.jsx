@@ -16,7 +16,7 @@ export default function Section({ showEditor = true }) {
         {showEditor ? (
           <WriteYourComment />
         ) : (
-          <div className="dark:bg-dark-card dark:text-white dark:border dark:border-dark-border bg-[#fff] py-[20px] px-[25px] rounded-[10px] flex flex-col flex-1 gap-[15px]">
+          <div className="dark:bg-dark-card flex-2 dark:text-white dark:border dark:border-dark-border bg-[#fff] py-[20px] px-[25px] rounded-[10px] flex flex-col flex-1 gap-[15px]">
             <h1 className="text-sm font-semibold">Your Response</h1>
             <div className="dark:bg-dark-highlight p-[25px] rounded-[6px] text-sm leading-6 text-gray-700 dark:text-gray-300">
               {`Thank you for your submission. After careful review, this response has been finalized. The content is clear, well-structured, and meets our quality standards. No further changes are required at this time. If new information arises, we will update the decision accordingly. Thank you for your submission. After careful review, this response has been finalized. The content is clear, well-structured, and meets our quality standards. No further changes are required at this time. If new information arises, we will update the decision accordingly. Thank you for your submission. After careful review, this response has been finalized. The content is clear, well-structured, and meets our quality standards. No further changes are required at this time. If new information arises, we will update the decision accordingly.`}

@@ -50,32 +50,40 @@ export default function TopNavigationPanel({ setConfirmSubmit, renderActions = t
             setSelectedOption={setSelectedTopic}
           />
 
-          <SelectTopic
-            options={responses}
-            filterByTopicName={filterByTopicName}
-            selectedOption={selectedResponse}
-            setSelectedOption={setSelectedResponse}
-          />
+          {renderActions && (
+            <SelectTopic
+              options={responses}
+              filterByTopicName={filterByTopicName}
+              selectedOption={selectedResponse}
+              setSelectedOption={setSelectedResponse}
+            />
+          )}
 
-          <div className="flex flex-col gap-[10px] w-full">
-            <button
-              className="transition-colors cursor-pointer border-[2px] border-green-200 hover:bg-green-200 py-[5px] px-[10px] text-green-600 rounded-[7px] flex items-center justify-center gap-[8px] w-full"
-            >
-              <Eye size={16} className="mt-[1px]"/>
-              <span>Preview</span>
-            </button>
+          {renderActions ? (
+            <div className="flex flex-col gap-[10px] w-full">
+              <button
+                className="transition-colors cursor-pointer border-[2px] border-green-200 hover:bg-green-200 py-[5px] px-[10px] text-green-600 rounded-[7px] flex items-center justify-center gap-[8px] w-full"
+              >
+                <Eye size={16} className="mt-[1px]"/>
+                <span>Preview</span>
+              </button>
 
-            <button
-              onClick={handleConfirmSubmit}
-              className="transition-colors hover:text-white hover:bg-transparent rounded-[5px] cursor-pointer whitespace-nowrap bg-[#fff] dark:bg-dark-highlight dark:text-white py-[5px] px-[20px] relative gradient-button w-full"
-            >
-              Submit Answer
-            </button>
-          </div>
+              <button
+                onClick={handleConfirmSubmit}
+                className="transition-colors hover:text-white hover:bg-transparent rounded-[5px] cursor-pointer whitespace-nowrap bg-[#fff] dark:bg-dark-highlight dark:text-white py-[5px] px-[20px] relative gradient-button w-full"
+              >
+                Submit Answer
+              </button>
+            </div>
+          ) : (
+            <div className="py-[4px] px-[10px] rounded-[7px] bg-gray-100 dark:bg-dark-more-highlighted text-gray-600 dark:text-gray-300 text-[11px] w-fit">
+              {statusText}
+            </div>
+          )}
         </div>
       ) : (
         <>
-          <div className="flex flex-2 items-center gap-[10px]">
+          <div className={`flex ${renderActions ? "flex-2" : "flex-1"} items-center gap-[10px]`}>
             <SelectTopic
               options={topics}
               filterByTopicName={filterByTopicName}
@@ -83,12 +91,14 @@ export default function TopNavigationPanel({ setConfirmSubmit, renderActions = t
               setSelectedOption={setSelectedTopic}
             />
 
-            <SelectTopic
-              options={responses}
-              filterByTopicName={filterByTopicName}
-              selectedOption={selectedResponse}
-              setSelectedOption={setSelectedResponse}
-            />
+            {renderActions && (
+              <SelectTopic
+                options={responses}
+                filterByTopicName={filterByTopicName}
+                selectedOption={selectedResponse}
+                setSelectedOption={setSelectedResponse}
+              />
+            )}
           </div>
 
           {!smallScreen && (
@@ -128,7 +138,7 @@ export default function TopNavigationPanel({ setConfirmSubmit, renderActions = t
                 </button>
               </>
             ) : (
-              <div className="ml-[10px] py-[6px] px-[12px] rounded-[7px] bg-light-card dark:bg-dark-highlight dark:text-white">
+              <div className="py-[4px] px-[10px] rounded-[7px] bg-gray-100 dark:bg-dark-more-highlighted text-gray-600 dark:text-gray-300 text-[11px] w-fit">
                 {statusText}
               </div>
             )}

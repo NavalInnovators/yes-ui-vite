@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { Outlet, Link } from "react-router-dom";
 
 import SearchBar from "../../components/SearchBar";
 import SelectTopic from "../../components/SelectTopic";
@@ -110,69 +111,72 @@ export default function Pending() {
   }
 
   return (
-    <motion.div
-      initial={{ x: "-1%", opacity: 0 }}
-      animate={{ x: "0%", opacity: 1 }}
-      className={`w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 ${padding} rounded-[10px]`}
-    >
-      <h1 className={`text-[18px] font-semibold ${line}`}>In Review</h1>
+    <>
+      <Outlet />
+      <motion.div
+        initial={{ x: "-1%", opacity: 0 }}
+        animate={{ x: "0%", opacity: 1 }}
+        className={`w-full dark:bg-dark-card dark:text-gray-300 dark:border-dark-border flex flex-col gap-[15px] border border-gray-300 ${padding} rounded-[10px]`}
+      >
+        <h1 className={`text-[18px] font-semibold ${line}`}>In Review</h1>
 
-      {isSmallScreen ? (
-        <div className={`flex flex-col gap-[10px] w-full ${line}`}>
-          <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
-          <div className={`flex items-center gap-[7px] w-full`}>
+        {isSmallScreen ? (
+          <div className={`flex flex-col gap-[10px] w-full ${line}`}>
+            <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
+            <div className={`flex items-center gap-[7px] w-full`}>
+              <SelectTopic
+                options={options}
+                filterByTopicName={filterByTopicName}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
+              <ReviewAndEditOnly 
+                reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} 
+                reviewAndEditOnly={reviewAndEditOnly}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className={`flex items-center gap-[7px] w-full ${line}`}>
+            <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
             <SelectTopic
               options={options}
               filterByTopicName={filterByTopicName}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
             />
-            <ReviewAndEditOnly 
-              reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} 
-              reviewAndEditOnly={reviewAndEditOnly}
-            />
+            <ReviewAndEditOnly reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} reviewAndEditOnly={reviewAndEditOnly} />
           </div>
-        </div>
-      ) : (
-        <div className={`flex items-center gap-[7px] w-full ${line}`}>
-          <SearchBar filterBySearch={filterBySearch} searchQuery={searchQuery} />
-          <SelectTopic
-            options={options}
-            filterByTopicName={filterByTopicName}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-          <ReviewAndEditOnly reviewAndEditOnlyFilter={reviewAndEditOnlyFilter} reviewAndEditOnly={reviewAndEditOnly} />
-        </div>
-      )}
+        )}
 
-      {isLoading ? (
-        <div className="text-2xl text-center mt-[100px]">
-          Loading Questions...
-        </div>
-      ) : (
-        !filteredQuestions.length ? (
-          <div className="text-xl text-center mt-[15px]">
-            No questions found
+        {isLoading ? (
+          <div className="text-2xl text-center mt-[100px]">
+            Loading Questions...
           </div>
         ) : (
-        <div className="flex flex-col gap-[10px]">
-          {filteredQuestions.slice(start, end).map((question) => (
-            <PendingQuestion key={question.id} question={question} />
-            ))}
-          </div>
-        )
-      )}
+          !filteredQuestions.length ? (
+            <div className="text-xl text-center mt-[15px]">
+              No questions found
+            </div>
+          ) : (
+          <div className="flex flex-col gap-[10px]">
+            {filteredQuestions.slice(start, end).map((question) => (
+              <PendingQuestion key={question.id} question={question} />
+              ))}
+            </div>
+          )
+        )}
 
-      <Pagination
-        totalQuestions={totalQuestions}
-        PAGE_SIZE={PAGE_SIZE}
-        start={start}
-        end={end}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
-    </motion.div>
+        <Pagination
+          totalQuestions={totalQuestions}
+          PAGE_SIZE={PAGE_SIZE}
+          start={start}
+          end={end}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </motion.div>
+    </>
   );
 }
 
@@ -204,11 +208,20 @@ function PendingQuestion({ question }) {
               {question.topic_name}
             </div>
           </div>
-          <button
-            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight min-w-[140px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
-          >
-            {question.answered ? "View Answer" : "Review and Edit"}
-          </button>
+          {question.answered ? (
+            <Link
+              to={`view-answer/${question.id}`}
+              className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight min-w-[140px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+            >
+              View Answer
+            </Link>
+          ) : (
+            <button
+              className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight min-w-[140px] text-[13px] h-fit py-[5px] rounded-[5px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+            >
+              Review and Edit
+            </button>
+          )}
         </div>
       </div>
     );
@@ -223,12 +236,22 @@ function PendingQuestion({ question }) {
         <div className="flex items-center justify-center bg-[rgba(230,230,230,1)] dark:bg-dark-highlight text-[11px] py-[2px] px-[5px] h-fit rounded-[5px] ml-[5px] whitespace-nowrap overflow-hidden text-ellipsis dark:text-white">
           {question.topic_name}
         </div>
-        <button
-          className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight w-[135px] text-[13px] h-fit py-[5px] rounded-[5px] ml-[20px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
-          style={{ minWidth: 100 }}
-        >
-          {question.answered ? "View Answer" : "Review and Edit"}
-        </button>
+        {question.answered ? (
+          <Link
+            to={`view-answer/${question.id}`}
+            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight w-[135px] text-[13px] h-fit py-[5px] rounded-[5px] ml-[20px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+            style={{ minWidth: 100 }}
+          >
+            View Answer
+          </Link>
+        ) : (
+          <button
+            className="flex justify-center items-center transition-colors bg-[rgba(230,230,230,1)] dark:bg-dark-highlight w-[135px] text-[13px] h-fit py-[5px] rounded-[5px] ml-[20px] dark:text-white border-[1px] dark:border-dark-border border-[rgba(230,230,230,1)] dark:hover:border-[1px] dark:hover:border-dark-border dark:hover:bg-dark-hover"
+            style={{ minWidth: 100 }}
+          >
+            Review and Edit
+          </button>
+        )}
       </div>
     </div>
   );
