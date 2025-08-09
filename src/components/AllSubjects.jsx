@@ -38,20 +38,23 @@ const AllSubjects = ({ searchQuery }) => {
       ? allCourses
       : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
   ).filter((course) => {
-    const query = searchQuery;
+    // Common normalizer
+    const normalize = (str) => str?.trimEnd().toLowerCase(); // removes trailing spaces + lowercases
 
-    const nameMatch = course.name?.includes(query);
-    const universityMatch = course.universityName?.includes(query);
-    const yearMatch = String(course.year).includes(query);
-    const normalizeHyphen = (str) => str.replace(/\s*-\s*/g, "-");
+    // Special case for branch hyphen spacing
+    const normalizeHyphen = (str) => normalize(str).replace(/\s*-\s*/g, "-");
 
+    const query = normalize(searchQuery);
+
+    const nameMatch = normalize(course.name)?.includes(query);
+    const universityMatch = normalize(course.universityName)?.includes(query);
+    const yearMatch = String(course.year).toLowerCase().includes(query);
     const branchMatch = course.branchNames?.some((branch) =>
-      normalizeHyphen(branch.toLowerCase()).includes(
-        normalizeHyphen(searchQuery.toLowerCase())
-      )
+      normalizeHyphen(branch).includes(normalizeHyphen(searchQuery))
     );
-
-    const codeMatch = course.courseCodes?.some((code) => code.includes(query));
+    const codeMatch = course.courseCodes?.some((code) =>
+      normalize(code)?.includes(query)
+    );
 
     return (
       nameMatch || universityMatch || yearMatch || branchMatch || codeMatch

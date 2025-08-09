@@ -8,42 +8,24 @@ function MySubjects({ searchQuery }) {
   const { data: myCourses, isLoading, isError } = useMyCourses();
 
   // Filter the subjects based on the search query or show all if the query is empty
-  const courseData =
-    myCourses.length > 0
-      ? myCourses
-      : JSON.parse(sessionStorage.getItem("myCourses") || "[]");
+  const filteredSubjects = myCourses
+    ? myCourses.filter((subject) => {
+        const normalize = (str) => str?.toLowerCase().trim();
+        const normalizeHyphen = (str) =>
+          normalize(str).replace(/\s*-\s*/g, "-");
+        const query = normalizeHyphen(searchQuery);
 
-  const filteredSubjects =
-    courseData.length > 0
-      ? courseData.filter((course) => {
-          const query = searchQuery;
-
-          const nameMatch = course.name?.includes(query);
-          const universityMatch = course.universityName?.includes(query);
-          const yearMatch = String(course.year).includes(query);
-          const normalizeHyphen = (str) => str.replace(/\s*-\s*/g, "-");
-
-          const branchMatch = course.branchNames?.some((branch) =>
-            normalizeHyphen(branch.toLowerCase()).includes(
-              normalizeHyphen(query.toLowerCase())
-            )
-          );
-
-          const codeMatch = course.courseCodes?.some((code) =>
-            code.includes(query)
-          );
-
-          return (
-            nameMatch ||
-            universityMatch ||
-            yearMatch ||
-            branchMatch ||
-            codeMatch
-          );
-        })
-      : [];
-  console.log("Filtered Subjects: ", searchQuery, filteredSubjects);
-
+        return (
+          normalize(subject.name)?.includes(query) ||
+          normalize(subject.universityName)?.includes(query) ||
+          String(subject.year).toLowerCase().includes(query) ||
+          subject.branchNames?.some((branch) =>
+            normalizeHyphen(branch).includes(query)
+          ) ||
+          subject.courseCodes?.some((code) => normalize(code).includes(query))
+        );
+      })
+    : [];
   return (
     <div className="userdashboard-content-page">
       <div className="all-course-card-container">
