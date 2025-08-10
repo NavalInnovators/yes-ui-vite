@@ -7,43 +7,50 @@ import {
   UserIcon,
   PhoneIcon,
 } from "../assets";
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthProvider";
-import {
-  getRandomAvatarKey,
-  saveAvatarKeyForUser,
-} from "../utils/avatarUtils"; 
-
+import { getRandomAvatarKey, saveAvatarKeyForUser } from "../utils/avatarUtils";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { setToken, setProfileId, setEmail } = useAuth();
-  
-  const [currentAvatarKey, setCurrentAvatarKey] = useState(""); 
+
+  const [currentAvatarKey, setCurrentAvatarKey] = useState("");
   useEffect(() => {
     setCurrentAvatarKey(getRandomAvatarKey());
   }, []);
 
-
   const { mutate, status } = useMutation({
     mutationFn: async (data) => {
+      // This is a mock API call for demonstration.
+      // In a real application, you would replace this with an actual API request.
+      console.log("Mock API call with data:", data);
       return new Promise((resolve) => {
-        setTimeout(
-          () => resolve({ accessToken: "demo-token", profileId: "demo-id" }),
-          500
-        );
+        setTimeout(() => {
+          // Mock successful response
+          resolve({
+            accessToken: "demo-token",
+            profileId: Math.floor(Math.random() * 1000).toString(),
+          });
+        }, 500);
       });
     },
     onSuccess: (data) => {
-      setToken(data.accessToken);
-      setProfileId(data.profileId);
-      navigate("/otp-verification");
+      // On successful signup, store the random avatar for the new user
+      if (data.profileId) {
+        saveAvatarKeyForUser(data.profileId, currentAvatarKey);
+        setEmail(formData.email);
+      }
+
+      // No OTP verification, so we redirect to login directly
+      toast.success("Signup successful! Please log in to continue.");
+      navigate("/login");
     },
     onError: (error) => {
-      toast.error(error?.message || "Something went wrong");
+      toast.error(error?.message || "Something went wrong during signup.");
     },
   });
 
@@ -73,7 +80,7 @@ const SignUp = () => {
       return "Password must contain at least 1 lowercase letter.";
     if (!/[0-9]/.test(password))
       return "Password must contain at least 1 number.";
-    if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password))
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
       return "Password must contain at least 1 special character.";
     return null;
   };
@@ -86,7 +93,7 @@ const SignUp = () => {
     if (!formData.email) newErrors.email = "Email is required";
     else if (!validateEmail(formData.email))
       newErrors.email = "Invalid email format";
-    if (!validatePhone(formData.phone))
+    if (formData.phone && !validatePhone(formData.phone))
       newErrors.phone = "Invalid Phone Number";
     const passwordError = validatePassword(formData.password);
     if (passwordError) newErrors.password = passwordError;
@@ -110,17 +117,13 @@ const SignUp = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    
-
     const userName = formData.firstName + formData.email.split("@")[0];
 
     const reqData = {
       ...formData,
       userName,
-      avatarUrl:currentAvatarKey,
+      avatarUrl: currentAvatarKey,
     };
-
-    setEmail(formData.email);
 
     mutate(reqData);
   };
