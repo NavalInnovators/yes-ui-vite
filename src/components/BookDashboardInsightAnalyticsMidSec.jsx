@@ -5,7 +5,6 @@ import BookDashboardInsightPredictionTable from "./BookDashboardInsightPredictio
 import BookDashboardUnitsResponsiveUnitDropdown from "./BookDashboardUnitsResponsiveUnitDropdown";
 import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
 import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
-import { getAnalyticData } from "../api/api";
 import { useBookDashboard } from "../context/book-dashboard-context";
 
 
