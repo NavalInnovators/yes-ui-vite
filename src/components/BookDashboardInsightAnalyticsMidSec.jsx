@@ -85,8 +85,8 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
           {/* RIGHT COLUMN */}
           <div className="flex-1  h-full p-4 w-full  md:max-w-[40%] overflow-x-auto bg-gray-100 shadow-sm">
 
-            <BookDashboardRightPieChart subcode="khu702" selectedUnit2={selectedUnit2} />
-            <div className="text-center mt-4">
+            <BookDashboardRightPieChart useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
+            {/* <div className="text-center mt-4">
               <p className="text-gray-700 mb-3">
                 Click and find the answer on topic page
               </p>
@@ -95,7 +95,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
               >
                 Go To Topic
               </button>
-            </div>
+            </div> */}
 
 
 
@@ -104,11 +104,11 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
         </div>
 
         {/* Render full-width table if in Prediction mode only */}
-        {isPrediction && (
+        {/* {isPrediction && (
           <div className="mt-4">
             <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit2={selectedUnit2} />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

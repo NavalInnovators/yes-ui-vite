@@ -1,25 +1,28 @@
-
-
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, Tooltip, Title, ArcElement, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { getAnalyticData } from "../api/api";
 
 Chart.register(Tooltip, Title, ArcElement, Legend, ChartDataLabels);
 
-function BookDashboardRightPieChart({ subcode, selectedUnit }) {
-  const [chartData, setChartData] = useState({
-    datasets: [
-      {
-        data: [],
-        backgroundColor: [],
-      },
-    ],
-    labels: [],
-  });
-
+function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
+  const [loading, setLoading] = useState(true);
+  const [chartData, setChartData] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // const [chartData, setChartData] = useState({
+  //   datasets: [
+  //     {
+  //       data: [],
+  //       backgroundColor: [],
+  //     },
+  //   ],
+  //   labels: [],
+  // });
+
+  // if (!useTopicFrequency || useTopicFrequency.length === 0) {
+  //   return <div className="text-sm text-gray-500">Loading topic frequency data...</div>;
+  // }
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -28,53 +31,51 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
   }, []);
 
   useEffect(() => {
-    if (!subcode) return;
+    if (!useTopicFrequency || useTopicFrequency.length === 0) {
+      setLoading(true);
+      return;
+    }
+    const labels = useTopicFrequency.map((t) => {
+      // Keep full labels for proper wrapping
+      return t.topic;
+    });
+    const data = useTopicFrequency.map((t) =>
+      Number(t.count_percentage.toFixed(2))
+    );
 
-    getAnalyticData(subcode)
-      .then((response) => {
-        const unitData = response.data.find(
-          (unit) => unit.unit === Number(selectedUnit)
-        );
+    const colors = [
+      "#FF6384", "#FFCE56", "#36A2EB", "#4BC0C0", "#9966FF",
+      "#FF9F40", "#FFB6C1", "#8A2BE2", "#7FFF00", "#D2691E",
+      "#00BFFF", "#FF1493", "#20B2AA", "#FF6347", "#90EE90",
+    ];
 
-        if (!unitData) {
-          console.warn("Selected unit not found");
-          return;
-        }
+    setChartData({
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: colors.slice(0, data.length),
+          borderWidth: 1,
+          borderColor: '#fff',
+        },
+      ],
+    });
+    setLoading(false);
+  }, [useTopicFrequency]);
 
-        const labels = unitData.topicfrequency.map((t) => {
-          // Keep full labels for proper wrapping
-          return t.topic;
-        });
-        const data = unitData.topicfrequency.map((t) =>
-          Number(t.count_percentage.toFixed(2))
-        );
+  if (loading || !chartData) {
+    return (
+      <div className="w-full md:h-110 flex justify-center items-center">
+        Loading chart...
+      </div>
+    );
+  }
 
-        const colors = [
-          "#FF6384", "#FFCE56", "#36A2EB", "#4BC0C0", "#9966FF",
-          "#FF9F40", "#FFB6C1", "#8A2BE2", "#7FFF00", "#D2691E",
-          "#00BFFF", "#FF1493", "#20B2AA", "#FF6347", "#90EE90",
-        ];
-
-        setChartData({
-          labels,
-          datasets: [
-            {
-              data,
-              backgroundColor: colors.slice(0, data.length),
-              borderWidth: 1,
-              borderColor: '#fff',
-            },
-          ],
-        });
-      })
-      .catch((err) => {
-        console.error("Error loading pie chart:", err);
-      });
-  }, [subcode, selectedUnit]);
 
   return (
-    <div className="w-full h-80 md:h-96 flex justify-center items-center relative">
-      <div className="w-full h-full max-w-full max-h-full">
+    <div className="w-full md:h-110 flex justify-center items-center relative">
+      <div className="w-full h-full overflow-hidden text-center ">
+        Topic and their repeat %
         <Pie
           data={chartData}
           options={{
@@ -91,9 +92,6 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
             plugins: {
               legend: {
                 display: false,
-
-
-
               },
 
               tooltip: {
@@ -102,7 +100,6 @@ function BookDashboardRightPieChart({ subcode, selectedUnit }) {
 
                 },
               },
-
 
               datalabels: {
                 display: true, // Show labels on all slices

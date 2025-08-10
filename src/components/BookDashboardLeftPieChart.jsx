@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, Tooltip, Title, ArcElement, Legend } from "chart.js";
@@ -11,12 +9,15 @@ const COLORS = ["#FF6384", "#36A2EB", "#FFCE56"]; // Descriptive, Classification
 const LABELS = ["Descriptive", "Classification", "Comparison"];
 
 export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTypeData }) {
+  const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState(null);
   
   useEffect(() => {
-    if (!useQuestionTypeData) return;
-  
-    const theory = useQuestionTypeData.theory || {};
+    if (!useQuestionTypeData || !useQuestionTypeData.theory) {
+      setLoading(true);
+      return;
+    }
+    const theory = useQuestionTypeData.theory;
     const data = [
       theory.descriptive || 0,
       theory.classification || 0,
@@ -32,6 +33,7 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
         },
       ],
     });
+    setLoading(false);
   }, [useQuestionTypeData]);
 
   const options = {
@@ -46,8 +48,8 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
     },
     maintainAspectRatio: false,
   };
-  if (!useQuestionTypeData || !chartData) {
-    return <div className="text-sm text-gray-500">Loading data</div>;
+  if (loading || !chartData) {
+    return <div className="text-sm text-gray-500">Loading data...</div>;
   }
   return (
     <div className="flex flex-col items-center gap-4 bg-gray-100">
