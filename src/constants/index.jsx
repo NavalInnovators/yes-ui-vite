@@ -267,7 +267,7 @@ export const footerLinks = [
       // },
       {
         title: "LinkedIn",
-        id: "https://www.linkedin.com/company/your-exam-saathi/",
+        id: "https://www.linkedin.com/company/yourexamsaathi/",
       },
       {
         title: "YouTube",
