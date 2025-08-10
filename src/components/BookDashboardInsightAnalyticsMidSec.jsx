@@ -6,6 +6,7 @@ import BookDashboardUnitsResponsiveUnitDropdown from "./BookDashboardUnitsRespon
 import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
 import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import "./BookDashboardUnitMidSec.css";
 
 
 function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChange }) {
@@ -23,14 +24,14 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
 
   return (
     // <div className="book-dashboard-insight-analytics">
-    <div>
+    <div className="parent-book-dashboard-unit">
       {/* For Small Screens Unit Dropdown */}
-      <div className="for-small-screens">
-        <BookDashboardUnitsResponsiveUnitDropdown selectedUnit2={selectedUnit2}
-          setSelectedUnit={setSelectedUnit} />
-      </div>
+      {/* <div className="for-small-screens"> */}
+        {/* <BookDashboardUnitsResponsiveUnitDropdown selectedUnit2={selectedUnit2}
+          setSelectedUnit={setSelectedUnit} /> */}
+      {/* </div> */}
 
-      <hr />
+      {/* <hr /> */}
 
       {/* Navbar */}
       <BookDashboardNavbar
@@ -59,7 +60,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
       {/* MAIN CONTENT */}
       <div className="book-dashboard-analytics">
         {/* TOPIC BOX */}
-        <div className="md:w-[1000px] w-full mx-auto flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
+        <div className="md: w-full flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
          Unit {selectedUnit} - { insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
         </div>
 

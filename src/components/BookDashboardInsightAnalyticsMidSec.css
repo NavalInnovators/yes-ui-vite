@@ -4,6 +4,7 @@
   align-items: center;
   max-width: 58vw;
   box-sizing: border-box;
+  background-color: green;
 }
 
 .book-dashboard-toggle-bar {
@@ -56,7 +57,7 @@
 
 /* ===== Content ===== */
 .book-dashboard-analytics {
-  margin-top: 7vh;
+  margin-top: 2vh;
 }
 .book-dashboard-analytics-question {
   box-sizing: border-box;
