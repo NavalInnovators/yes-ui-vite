@@ -8,7 +8,7 @@ function BookDashboardUnitsResponsiveUnitDropdown({selectedUnit, setSelectedUnit
   }
   return (
     <div className="units-section-unit-dropdown">
-      <select name="" class="units-section-unit-dropdown-select"
+      <select name="" className="units-section-unit-dropdown-select"
       value={selectedUnit} onChange={handleChange}>
         <option value="1">Unit 1</option>
         <option value="2">Unit 2</option>
