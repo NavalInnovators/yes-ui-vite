@@ -19,7 +19,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
   };
   const [selectedUnit2, setSelectedUnit] = useState(1);
   const useUnitTitle = unitInsights[selectedUnit]?.unitTitle;
-  // const topicfrequency = unitStats[selectedUnit]?.topicfrequency;
+  const useTopicFrequency = unitInsights[selectedUnit]?.topicfrequency;
   const useQuestionTypeData = unitInsights[selectedUnit]?.questiontypedata;
 
   return (
@@ -78,7 +78,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
 
             {/* Lower Left */}
             <div className="h-full border p-4 mx-2 md:!mb-40 bg-gray-100 shadow-sm overflow-x-auto">
-              <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit2={selectedUnit2} />
+              <BookDashboardInsightPredictionTable useUnitTitle={useUnitTitle} useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
             </div>
           </div>
 

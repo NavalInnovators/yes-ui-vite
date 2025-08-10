@@ -3,33 +3,14 @@
 import { getAnalyticData } from "../api/api";
 import React, { useEffect, useState } from "react";
 
-function BookDashboardInsightPredictionTable({ subcode, selectedUnit }) {
+function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, selectedUnit }) {
   const [topics, setTopics] = useState([]);
   const [unitTitle, setUnitTitle] = useState("");
 
   useEffect(() => {
-    if (!subcode) {
-      console.warn("No subcode provided");
-      return;
-    }
-
-    getAnalyticData(subcode)
-      .then((response) => {
-        const unit = response.data.find(
-          (unit) => unit.unit === Number(selectedUnit)
-        );
-
-        if (!unit) {
-          console.warn("Selected unit not found");
-          return;
-        }
-        setUnitTitle(unit.unitTitle);
-        setTopics(unit.topicfrequency || []);
-      })
-      .catch((err) => {
-        console.error("Error fetching prediction table data:", err);
-      });
-  }, [subcode, selectedUnit]);
+    setUnitTitle(useUnitTitle);
+    setTopics(useTopicFrequency || []);
+  }, [useUnitTitle, useTopicFrequency]);
 
   return (
     <div className="space-y-3 max-w-4xl">
@@ -53,20 +34,20 @@ function BookDashboardInsightPredictionTable({ subcode, selectedUnit }) {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-900">
             {topics.map((topic, idx) => {
               const theory = topic.questiontypedata?.theory || {};
               return (
                 <tr key={idx} className="hover:bg-blue-50 transition-colors duration-150 group">
-                  <td className="px-5 py-4 text-center border-r border-gray-100 group-hover:border-blue-200">
-                    <div className="font-medium text-gray-900  max-w-xs" title={topic.topic}>
+                  <td className="px-5 py-4 text-left border-r border-gray-900 group-hover:border-blue-200">
+                    <div className="px-3 font-medium text-gray-900  max-w-xs" title={topic.topic}>
                       {topic.topic}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-center border-r border-gray-100 group-hover:border-blue-200 text-base">
+                  <td className="px-5 py-4 text-center border-r border-gray-900 group-hover:border-blue-200 text-base">
                     {theory.descriptive?.toFixed(1) ?? "0.0"}%
                   </td>
-                  <td className="px-5 py-4 text-center border-r border-gray-100 group-hover:border-blue-200 text-base">
+                  <td className="px-5 py-4 text-center border-r border-gray-900 group-hover:border-blue-200 text-base">
                     {theory.classification?.toFixed(1) ?? "0.0"}%
                   </td>
                   <td className="px-5 py-4 text-center text-base">
