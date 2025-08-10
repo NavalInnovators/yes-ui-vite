@@ -3,13 +3,10 @@ import "../Profile-old.css";
 import {
   BackArrow,
   dob,
-  // EmailIcon,
   profileIconNew,
-  // SachinSharma,
   male,
   female,
   nonBinary,
-  // phone,
 } from "../../assets";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,34 +15,35 @@ import { getProfile, updateProfile } from "../../api/api";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format, parseISO } from 'date-fns';
+import { format, parseISO } from "date-fns";
 
 const EditProfile = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    firstName: "First Name",
-    lastName: "Last Name",
-    username: "Username",
-    dob: "",
+    firstName: "",
+    lastName: "",
+    username: "",
+    dob: "", 
     gender: "",
-    email: "Email Address",
-    phone: "Phone number",
-    avatarUrl: null
+    email: "",
+    phone: "",
+    avatarUrl: null,
   });
+
+  const [previewPhoto, setPreviewPhoto] = useState(profileIconNew);
+  const [newPhoto, setNewPhoto] = useState(null);
 
   const [errors, setErrors] = useState({});
 
-  // Fetch profile data
   const { data: profileDetails, isLoading: isLoadingProfile } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ["profile"],
     queryFn: getProfile,
     onError: (error) => {
       toast.error(error.response?.data?.message || "Failed to fetch profile");
-    }
+    },
   });
 
-  // Update profile mutation
   const { mutate, status } = useMutation({
     mutationFn: (data) => updateProfile(data),
     onSuccess: () => {
@@ -59,18 +57,22 @@ const EditProfile = () => {
     },
   });
 
-  // Update form data when profile details are loaded
   useEffect(() => {
     if (profileDetails) {
+          const customPhoto = localStorage.getItem("customPhoto");
+
       setFormData({
-        firstName: profileDetails.profile.firstName || "First Name",
-        lastName: profileDetails.profile.lastName || "Last Name",
-        username: profileDetails.profile.userName || "Username",
+        firstName: profileDetails.profile.firstName || "",
+        lastName: profileDetails.profile.lastName || "",
+        username: profileDetails.profile.userName || "",
         dob: profileDetails.profile.dateOfBirth || "",
         gender: profileDetails.profile.gender || "",
-        email: profileDetails.profile.email || "Email Address",
-        phone: profileDetails.profile.phone || "Phone number",
+        email: profileDetails.profile.email || "",
+        phone: profileDetails.profile.phone || "",
+        avatarUrl: profileDetails.profile.avatarUrl || null,
       });
+
+      setPreviewPhoto(profileDetails.profile.avatarUrl || profileIconNew);
     }
   }, [profileDetails]);
 
@@ -81,21 +83,18 @@ const EditProfile = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.firstName.trim() || formData.firstName === "First Name") {
+    if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required";
     }
-    if (!formData.lastName.trim() || formData.lastName === "Last Name") {
+    if (!formData.lastName.trim()) {
       newErrors.lastName = "Last name is required";
     }
-    if (!formData.email || formData.email === "Email Address") {
+    if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!validateEmail(formData.email)) {
       newErrors.email = "Invalid email format";
     }
-    if (!formData.phone.trim() || formData.phone === "Phone number") {
-      newErrors.phone = "Phone number is required";
-    }
-    if (!formData.dob || formData.dob === "yyyy-mm-dd") {
+    if (!formData.dob) {
       newErrors.dob = "Date of birth is required";
     }
 
@@ -103,10 +102,9 @@ const EditProfile = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle Date change from the date picker
   const handleDateChange = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd"); // Store in yyyy-mm-dd format
-    setFormData(prev => ({
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setFormData((prev) => ({
       ...prev,
       dob: formattedDate,
     }));
@@ -114,16 +112,26 @@ const EditProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-  
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewPhoto(reader.result);
+        setNewPhoto(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const getGenderIcon = (gender) => {
     if (!gender) return profileIconNew;
-    
     switch (gender.toLowerCase()) {
       case "male":
         return male;
@@ -136,18 +144,18 @@ const EditProfile = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
     const updatedProfileDetails = {
       firstName: formData.firstName,
       lastName: formData.lastName,
-      avatarUrl: null,
       gender: formData.gender,
       dateOfBirth: formData.dob,
+      avatarUrl: newPhoto ? newPhoto : formData.avatarUrl,
     };
+
     mutate(updatedProfileDetails);
   };
 
@@ -174,19 +182,35 @@ const EditProfile = () => {
               <div className="profile-info">
                 <div className="profile-image-placeholder">
                   <img
-                    src={(profileDetails && profileDetails.profile.avatarUrl !== null) ? profileDetails.profile.avatarUrl : profileIconNew}
+                    src={previewPhoto}
                     alt="Profile"
                     className="profile-edit-img"
                   />
+
                   <div className="change-profile-img-text">
                     <div className="font-subheading-black change-profile-heading">
                       Change Profile Image
                     </div>
+                    <label
+                      htmlFor="profile-upload"
+                      className="upload-btn"
+                      style={{ cursor: "pointer", marginTop: "8px" }}
+                    >
+                      {newPhoto ? "Change Image" : "Upload Image"}
+                    </label>
+                    <input
+                      id="profile-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      style={{ display: "none" }}
+                    />
                     <div className="font-paragraph-grey change-profile-subheading">
-                      File format should be JPG, PNG under 20 kb
+                      JPG, PNG under 200kb
                     </div>
                   </div>
                 </div>
+
                 <div className="profile-details font-paragraph-black-light">
                   <div className="fname-lname-row">
                     <div className="profile-sec-half-cell">
@@ -195,10 +219,9 @@ const EditProfile = () => {
                         type="text"
                         name="firstName"
                         placeholder="First Name"
-                        value={formData.firstName === "First Name" ? "" : formData.firstName}
+                        value={formData.firstName}
                         onChange={handleInputChange}
                         className="edit-profile-sec-input"
-                        disabled={isLoadingProfile || status === "pending"}
                       />
                       {errors.firstName && (
                         <div className="error-text">{errors.firstName}</div>
@@ -211,10 +234,9 @@ const EditProfile = () => {
                         type="text"
                         name="lastName"
                         placeholder="Last Name"
-                        value={formData.lastName === "Last Name" ? "" : formData.lastName}
+                        value={formData.lastName}
                         onChange={handleInputChange}
                         className="edit-profile-sec-input"
-                        disabled={isLoadingProfile || status === "pending"}
                       />
                       {errors.lastName && (
                         <div className="error-text">{errors.lastName}</div>
@@ -222,29 +244,17 @@ const EditProfile = () => {
                     </div>
                   </div>
 
-                  {/* <div className="profile-sec-full-cell">
-                    <img src={profileIconNew} alt="Profile Icon" />
-                    <input
-                      type="text"
-                      name="username"
-                      placeholder="Username"
-                      value={formData.username === "Username" ? "" : formData.username}
-                      onChange={handleInputChange}
-                      className="edit-profile-sec-input"
-                      disabled= {true}
-                    />
-                  </div> */}
-
                   <div className="profile-sec-full-cell">
                     <label htmlFor="dob" className="editProfileDobLabel">
                       <img src={dob} alt="calendar" />
                     </label>
                     <DatePicker
                       id="dob"
-                      name="dob"
-                      selected={formData.dob ? parseISO(formData.dob, "yyyy-MM-dd", new Date()) : null}
+                      selected={
+                        formData.dob ? parseISO(formData.dob) : null
+                      }
                       onChange={handleDateChange}
-                      dateFormat="dd-MM-yyyy" // Display in dd-MM-yyyy format
+                      dateFormat="dd-MM-yyyy"
                       className="edit-profile-sec-input"
                       placeholderText="dd-mm-yyyy"
                     />
@@ -254,16 +264,12 @@ const EditProfile = () => {
                   </div>
 
                   <div className="profile-sec-full-cell">
-                    <img
-                      src={getGenderIcon(formData.gender)}
-                      alt="Gender Icon"
-                    />
+                    <img src={getGenderIcon(formData.gender)} alt="Gender Icon" />
                     <select
                       name="gender"
                       value={formData.gender}
                       onChange={handleInputChange}
                       className="edit-profile-sec-select"
-                      disabled={isLoadingProfile || status === "pending"}
                     >
                       <option value="">Select your gender</option>
                       <option value="MALE">Male</option>
@@ -271,38 +277,6 @@ const EditProfile = () => {
                       <option value="OTHER">Other</option>
                     </select>
                   </div>
-
-                  {/* <div className="profile-sec-full-cell">
-                    <img src={EmailIcon} alt="Email Icon" />
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email Address"
-                      value={formData.email === "Email Address" ? "" : formData.email}
-                      onChange={handleInputChange}
-                      className="edit-profile-sec-select"
-                      disabled={true}
-                    />
-                    {errors.email && (
-                      <div className="error-text">{errors.email}</div>
-                    )}
-                  </div> */}
-
-                  {/* <div className="profile-sec-full-cell">
-                    <img src={phone} alt="Phone Icon" />
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone number"
-                      value={formData.phone === "Phone number" ? "" : formData.phone}
-                      onChange={handleInputChange}
-                      className="edit-profile-sec-input"
-                      disabled={true}
-                    />
-                    {errors.phone && (
-                      <div className="error-text">{errors.phone}</div>
-                    )}
-                  </div> */}
 
                   <div className="profile-edit-submit">
                     <button

@@ -1,37 +1,55 @@
-// import { BackArrow } from "../../assets";
 import React, { useState, useEffect } from "react";
-import { 
-  // useNavigate, 
-  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 import PasswordSection from "./PasswordSection";
 import EducationSection from "./EducationSection";
 import "./Profile.css";
 import "../gradient-strip.css";
+import { useAuth } from "../AuthProvider";
 
 const Profile = () => {
+  const { userAvatar } = useAuth();
+  const [avatarSrc, setAvatarSrc] = useState(null);
 
   const navbar = document.querySelector(".navbar");
   const navbarOffset = navbar?.offsetHeight || 0;
 
+  useEffect(() => {
+    if (userAvatar) {
+      setAvatarSrc(userAvatar);
+    }
+  }, [userAvatar]);
+
   return (
     <div className="profile-container">
       <div className="gradient-strip">
-        <div className="gradient-strip-heading-left">
-          {/* <div className="back-arrow">
-            <img onClick={() => navigate(-1)} src={BackArrow} alt="BackArrow" />
-          </div> */}
-          Profile
-        </div>
-        {/* <div className="gradient-strip-heading-right">
-          <div className="gradient-strip-normal-text">Profile Completed:</div>
-          52%
-        </div> */}
+        <div className="gradient-strip-heading-left">Profile</div>
       </div>
 
       <div className="profile-page-main-container">
         {/* Sidebar */}
         <div className="profile-page-sidebar">
+          {/* Avatar Display */}
+          {avatarSrc && (
+            <div
+              style={{
+                textAlign: "center",
+                marginBottom: "20px",
+              }}
+            >
+              <img
+                src={avatarSrc}
+                alt="User Avatar"
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+            </div>
+          )}
+
           <ul className="profile-sidebar-ul">
             <li className="profile-sidebar-ul-li">
               <Link

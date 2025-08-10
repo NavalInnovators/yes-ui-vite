@@ -9,31 +9,41 @@ import {
 } from "../assets";
 import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { apiSignUp } from "../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthProvider";
+import {
+  getRandomAvatarKey,
+  saveAvatarKeyForUser,
+} from "../utils/avatarUtils"; 
 
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { setToken, setProfileId, setEmail } = useAuth();
+  
+  const [currentAvatarKey, setCurrentAvatarKey] = useState(""); 
+  useEffect(() => {
+    setCurrentAvatarKey(getRandomAvatarKey());
+  }, []);
 
 
-  // Properly configured useMutation hook
-  const { mutate, status, } = useMutation({
-    mutationFn: (data) => apiSignUp(data),
+  const { mutate, status } = useMutation({
+    mutationFn: async (data) => {
+      return new Promise((resolve) => {
+        setTimeout(
+          () => resolve({ accessToken: "demo-token", profileId: "demo-id" }),
+          500
+        );
+      });
+    },
     onSuccess: (data) => {
-      // TODO: save token and profileId in local storage with some other process
       setToken(data.accessToken);
       setProfileId(data.profileId);
       navigate("/otp-verification");
     },
     onError: (error) => {
-      toast.error(
-        error.response?.data?.message || error.message || "Something went wrong"
-      );
-      console.error("Error:", error);
+      toast.error(error?.message || "Something went wrong");
     },
   });
 
@@ -51,41 +61,19 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword((prev) => !prev);
-  };
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePhone = (phone) => {
-    const phoneRegex = /^(\d{10})?$/;
-    return phoneRegex.test(phone);
-  }
-
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePhone = (phone) => /^(\d{10})?$/.test(phone);
 
   const validatePassword = (password) => {
-    const minLength = 8;
-    const upperCaseRegex = /[A-Z]/;
-    const lowerCaseRegex = /[a-z]/;
-    const numberRegex = /[0-9]/;
-    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-
-    if (password.length < minLength)
+    if (password.length < 8)
       return "Password must be at least 8 characters long.";
-    if (!upperCaseRegex.test(password))
+    if (!/[A-Z]/.test(password))
       return "Password must contain at least 1 uppercase letter.";
-    if (!lowerCaseRegex.test(password))
+    if (!/[a-z]/.test(password))
       return "Password must contain at least 1 lowercase letter.";
-    if (!numberRegex.test(password))
+    if (!/[0-9]/.test(password))
       return "Password must contain at least 1 number.";
-    if (!specialCharRegex.test(password))
+    if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password))
       return "Password must contain at least 1 special character.";
     return null;
   };
@@ -99,14 +87,13 @@ const SignUp = () => {
     else if (!validateEmail(formData.email))
       newErrors.email = "Invalid email format";
     if (!validatePhone(formData.phone))
-      newErrors.phone = "Invalid Phone Number"
-    if (validatePassword(formData.password))
-      newErrors.password = validatePassword(formData.password);
+      newErrors.phone = "Invalid Phone Number";
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) newErrors.password = passwordError;
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
     if (!formData.checkbox)
       newErrors.checkbox = "Please accept terms and conditions";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -119,23 +106,20 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
+
+    
 
     const userName = formData.firstName + formData.email.split("@")[0];
 
     const reqData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phone: formData.phone,
-      userName: userName,
-      password: formData.password,
-      email: formData.email,
+      ...formData,
+      userName,
+      avatarUrl:currentAvatarKey,
     };
 
-    // TODO : Save the data in local storage or other methods
     setEmail(formData.email);
 
     mutate(reqData);
@@ -143,9 +127,7 @@ const SignUp = () => {
 
   return (
     <div className="signup-form-container">
-      <div className="signup-form-heading-black">
-        Signup your account!
-      </div>
+      <div className="signup-form-heading-black">Signup your account!</div>
       <div className="signup-container">
         <form onSubmit={handleSubmit} noValidate>
           <div className="signup-form-user">
@@ -173,12 +155,16 @@ const SignUp = () => {
                 onChange={handleInputChange}
                 disabled={status === "pending"}
               />
-
             </div>
           </div>
-          {errors.firstName && (<div className="error-text">{errors.firstName}</div>)}
-          {errors.lastName && (<div className="error-text">{errors.lastName}</div>)}
+          {errors.firstName && (
+            <div className="error-text">{errors.firstName}</div>
+          )}
+          {errors.lastName && (
+            <div className="error-text">{errors.lastName}</div>
+          )}
 
+          {/* Email */}
           <div className="signup-form-email-container">
             <img className="form-icon" src={EmailIcon} alt="email-icon" />
             <input
@@ -193,6 +179,7 @@ const SignUp = () => {
           </div>
           {errors.email && <div className="error-text">{errors.email}</div>}
 
+          {/* Phone */}
           <div className="signup-form-phone-container">
             <img src={PhoneIcon} className="form-icon" alt="phone-icon" />
             <input
@@ -206,6 +193,7 @@ const SignUp = () => {
           </div>
           {errors.phone && <div className="error-text">{errors.phone}</div>}
 
+          {/* Password */}
           <div className="signup-form-pswd-container">
             <img
               src={PasswordLock}
@@ -224,12 +212,14 @@ const SignUp = () => {
               src={PasswordEye}
               className="form-icon-eye-password"
               alt="toggle-password-visibility"
-              onClick={togglePasswordVisibility}
+              onClick={() => setShowPassword((prev) => !prev)}
             />
-
           </div>
-          {errors.password && (<div className="error-text">{errors.password}</div>)}
+          {errors.password && (
+            <div className="error-text">{errors.password}</div>
+          )}
 
+          {/* Confirm Password */}
           <div className="signup-form-cnfrm-pswd-container">
             <img
               src={PasswordLock}
@@ -248,31 +238,32 @@ const SignUp = () => {
               className="form-icon-eye-confirmpassword"
               src={PasswordEye}
               alt="toggle-confirm-password-visibility"
-              onClick={toggleConfirmPasswordVisibility}
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
             />
-
           </div>
-          {errors.confirmPassword && (<div className="error-text">{errors.confirmPassword}</div>)}
+          {errors.confirmPassword && (
+            <div className="error-text">{errors.confirmPassword}</div>
+          )}
 
+          {/* Terms */}
           <div className="signup-form-checkbox-tnc">
-            <label class="custom-checkbox signup-checkbox-remember">
-              <input type="checkbox"
+            <label className="custom-checkbox signup-checkbox-remember">
+              <input
+                type="checkbox"
                 name="checkbox"
                 checked={formData.checkbox}
                 onChange={handleInputChange}
               />
-              <span class="checkmark"></span>
+              <span className="checkmark"></span>
               By signing up I agree to all &nbsp; Terms and Conditions
-              {/* <Link to="/reset-password" className="forgot-password-text">
-                &nbsp; Terms and Conditions
-              </Link> */}
             </label>
           </div>
+          {errors.checkbox && (
+            <div className="error-text">{errors.checkbox}</div>
+          )}
 
-          {errors.checkbox && (<div className="error-text">{errors.checkbox}</div>)}
-
-
-          <div className="">
+          {/* Submit */}
+          <div>
             <button
               type="submit"
               style={{
@@ -284,11 +275,12 @@ const SignUp = () => {
               {status === "pending" ? "Signing up..." : "Sign Up"}
             </button>
           </div>
-
         </form>
       </div>
+
+      {/* Login link */}
       <div className="signup-form-login-link">
-        <div className="">
+        <div>
           Already have an account?
           <Link to="/login" className="login-text">
             {" "}
