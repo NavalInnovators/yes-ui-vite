@@ -4,85 +4,72 @@ import { Chart, Tooltip, Title, ArcElement, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(Tooltip, Title, ArcElement, Legend, ChartDataLabels);
-function BookDashboardLeftPieChart() {
-  const [chartData, setChartData] = useState({
-    datasets: [
-      {
-        data: [10, 20, 30],
-        backgroundColor: ["#FF6384", "#FFCE56", "#36A2EB"],
-      },
-    ],
-  });
 
+const COLORS = ["#FF6384", "#36A2EB", "#FFCE56"]; // Descriptive, Classification, Comparison
+const LABELS = ["Descriptive", "Classification", "Comparison"];
+
+export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTypeData }) {
+  const [loading, setLoading] = useState(true);
+  const [chartData, setChartData] = useState(null);
+  
   useEffect(() => {
-    const fetchData = () => {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((data) => {
-          return data.json();
-        })
-        .then((res) => {
-          const data = [];
-
-          const colors = [
-            "#FF6384",
-            "#FFCE56",
-            "#36A2EB",
-            "#4BC0C0",
-            "#9966FF",
-            "#FF9F40",
-            "#FFB6C1",
-            "#8A2BE2",
-            "#7FFF00",
-            "#D2691E",
-            "#00BFFF",
-            "#FF1493",
-          ];
-
-          const backgroundColor = colors.slice(0, res.length);
-
-          for (var i of res) {
-            data.push(i.id);
-          }
-
-          setChartData({
-            datasets: [
-              {
-                data: data,
-                backgroundColor: backgroundColor,
-              },
-            ],
-          });
-        })
-        .catch((e) => {
-          console.error("error", e);
-        });
-    };
-    fetchData();
-  }, []);
+    if (!useQuestionTypeData || !useQuestionTypeData.theory) {
+      setLoading(true);
+      return;
+    }
+    const theory = useQuestionTypeData.theory;
+    const data = [
+      theory.descriptive || 0,
+      theory.classification || 0,
+      theory.comparison || 0,
+    ];
+  
+    setChartData({
+      labels: LABELS,
+      datasets: [
+        {
+          data,
+          backgroundColor: COLORS,
+        },
+      ],
+    });
+    setLoading(false);
+  }, [useQuestionTypeData]);
 
   const options = {
     plugins: {
       datalabels: {
         color: "black",
-        formatter: (value, context) => {
-          const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-          const percentage = ((value / total) * 100).toFixed(2);
-          return `${percentage}%`; 
-        },
+        formatter: (value) => `${value.toFixed(1)}%`,
         anchor: "center",
         align: "center",
       },
+      legend: { display: false },
     },
+    maintainAspectRatio: false,
   };
-
+  if (loading || !chartData) {
+    return <div className="text-sm text-gray-500">Loading data...</div>;
+  }
   return (
-    <div
-      className="BookDashboardLeftPieChart"
-      style={{ width: "auto", height: "auto" }}
-    >
-      <Pie data={chartData} options={options} />
+    <div className="flex flex-col items-center gap-4 bg-gray-100">
+      <h3 className="text-center font-medium text-base"> Type of Questions Asked </h3>
+      <div className="relative w-full h-[232px] items-center">
+        {/* Chart */}
+        <Pie key={selectedUnit} data={chartData} options={options} />
+        {/* Legend absolutely positioned to bottom-left */}
+        <div className="absolute bottom-2 left-2 flex flex-col gap-2 text-sm bg-gray-100 px-2 py-1 rounded">
+          {LABELS.map((label, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span
+                className="w-3 h-3 rounded-full inline-block"
+                style={{ backgroundColor: COLORS[i] }}
+              ></span>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
-
-export default BookDashboardLeftPieChart;

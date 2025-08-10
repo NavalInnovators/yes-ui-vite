@@ -312,9 +312,7 @@ export const getUnitNotes = async (subCode) => {
   return response.data.data;
 }
 
-export const getAnalyticData = async () => {
-  try {
-    const subcode = sessionStorage.getItem('courseCode');
+export const getAnalyticData = async (subCode) => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -322,18 +320,10 @@ export const getAnalyticData = async () => {
         Authorization: `Bearer ${token}`,
       },
     };
+    const response = await api.get(`/api/analyticData/${subCode}`, config);
+    return response.data.data;
+};
 
-    const response = await api.post(
-      `/api/analyticData/${subcode}`,
-      {},
-      config
-    );
-    console.log(`Data from Analysis api: =============>`, response.data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
 
 export const enrollCourse = async (course) => {
   try {
