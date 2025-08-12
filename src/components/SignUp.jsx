@@ -25,32 +25,20 @@ const SignUp = () => {
 
   const { mutate, status } = useMutation({
     mutationFn: async (data) => {
-      // This is a mock API call for demonstration.
-      // In a real application, you would replace this with an actual API request.
-      console.log("Mock API call with data:", data);
       return new Promise((resolve) => {
-        setTimeout(() => {
-          // Mock successful response
-          resolve({
-            accessToken: "demo-token",
-            profileId: Math.floor(Math.random() * 1000).toString(),
-          });
-        }, 500);
+        setTimeout(
+          () => resolve({ accessToken: "demo-token", profileId: "demo-id" }),
+          500
+        );
       });
     },
     onSuccess: (data) => {
-      // On successful signup, store the random avatar for the new user
-      if (data.profileId) {
-        saveAvatarKeyForUser(data.profileId, currentAvatarKey);
-        setEmail(formData.email);
-      }
-
-      // No OTP verification, so we redirect to login directly
-      toast.success("Signup successful! Please log in to continue.");
-      navigate("/login");
+      setToken(data.accessToken);
+      setProfileId(data.profileId);
+      navigate("/otp-verification");
     },
     onError: (error) => {
-      toast.error(error?.message || "Something went wrong during signup.");
+      toast.error(error?.message || "Something went wrong");
     },
   });
 
@@ -80,7 +68,7 @@ const SignUp = () => {
       return "Password must contain at least 1 lowercase letter.";
     if (!/[0-9]/.test(password))
       return "Password must contain at least 1 number.";
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
+    if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password))
       return "Password must contain at least 1 special character.";
     return null;
   };
@@ -93,7 +81,7 @@ const SignUp = () => {
     if (!formData.email) newErrors.email = "Email is required";
     else if (!validateEmail(formData.email))
       newErrors.email = "Invalid email format";
-    if (formData.phone && !validatePhone(formData.phone))
+    if (!validatePhone(formData.phone))
       newErrors.phone = "Invalid Phone Number";
     const passwordError = validatePassword(formData.password);
     if (passwordError) newErrors.password = passwordError;
@@ -124,6 +112,8 @@ const SignUp = () => {
       userName,
       avatarUrl: currentAvatarKey,
     };
+
+    setEmail(formData.email);
 
     mutate(reqData);
   };

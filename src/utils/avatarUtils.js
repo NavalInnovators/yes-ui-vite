@@ -13,8 +13,6 @@ export const avatarMap = {
   avatar5,
   avatar8,
 };
-
-
 export function resolveAvatarValue(value) {
   if (!value) return null;
   if (value.startsWith("data:") || value.startsWith("http")) {
