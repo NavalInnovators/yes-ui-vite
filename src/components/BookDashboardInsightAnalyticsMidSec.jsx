@@ -7,6 +7,7 @@ import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
 import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import "./BookDashboardUnitMidSec.css";
+import BookDashboardBarGraph from "./BookDashboardBarGraph";
 
 
 function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChange }) {
@@ -66,7 +67,12 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
 
 
         {/* TWO COLUMN LAYOUT */}
+        <div className="my-4 bg-gray-100 px-3 py-2 ">
+          <BookDashboardBarGraph useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit}/>
+        </div>
         <div className="flex flex-col md:flex-row gap-4 !mt-4 max-w-[1000px] mx-auto">
+
+          
           {/* LEFT COLUMN */}
           <div className="flex flex-col w-full md:w-[60%] gap-4  p-2 ">
             {/* Upper Left */}
