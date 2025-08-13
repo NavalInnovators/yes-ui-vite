@@ -312,35 +312,16 @@ export const getUnitNotes = async (subCode) => {
   return response.data.data;
 }
 
-
-
 export const getAnalyticData = async (subCode) => {
-  try {
     const token = localStorage.getItem("token");
-
-    if (!token) {
-      console.warn("No token found in localStorage");
-      return;
-    }
-
     const config = {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     };
-
     const response = await api.get(`/api/analyticData/${subCode}`, config);
-    console.log("Data from Analysis API: =============>", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error in getAnalyticData:", error.message);
-    if (error.response) {
-      console.error("Status:", error.response.status);
-      console.error("Response data:", error.response.data);
-    }
-    throw error;
-  }
+    return response.data.data;
 };
 
 

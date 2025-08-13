@@ -5,29 +5,33 @@ import BookDashboardInsightPredictionTable from "./BookDashboardInsightPredictio
 import BookDashboardUnitsResponsiveUnitDropdown from "./BookDashboardUnitsResponsiveUnitDropdown";
 import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
 import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
- import { getAnalyticData } from "../api/api";
+import { useBookDashboard } from "../context/book-dashboard-context";
+import "./BookDashboardUnitMidSec.css";
+
 
 function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChange }) {
+  const { selectedUnit, insightsLoading, insightsError, unitInsights } = useBookDashboard();
+
   const [isPrediction, setIsPrediction] = useState(false);
-   const subcode = sessionStorage.getItem('courseCode');
+  const subcode = sessionStorage.getItem('courseCode');
   const handleToggle = (tab) => {
     setIsPrediction(tab === "Prediction");
   };
-
-  const [selectedUnit, setSelectedUnit] = useState(1);
-
- 
+  const [selectedUnit2, setSelectedUnit] = useState(1);
+  const useUnitTitle = unitInsights[selectedUnit]?.unitTitle;
+  const useTopicFrequency = unitInsights[selectedUnit]?.topicfrequency;
+  const useQuestionTypeData = unitInsights[selectedUnit]?.questiontypedata;
 
   return (
     // <div className="book-dashboard-insight-analytics">
-    <div>
+    <div className="parent-book-dashboard-unit">
       {/* For Small Screens Unit Dropdown */}
-      <div className="for-small-screens">
-        <BookDashboardUnitsResponsiveUnitDropdown selectedUnit={selectedUnit}
-  setSelectedUnit={setSelectedUnit} />
-      </div>
+      {/* <div className="for-small-screens"> */}
+        {/* <BookDashboardUnitsResponsiveUnitDropdown selectedUnit2={selectedUnit2}
+          setSelectedUnit={setSelectedUnit} /> */}
+      {/* </div> */}
 
-      <hr />
+      {/* <hr /> */}
 
       {/* Navbar */}
       <BookDashboardNavbar
@@ -56,10 +60,10 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
       {/* MAIN CONTENT */}
       <div className="book-dashboard-analytics">
         {/* TOPIC BOX */}
-        <div className="md:w-[1000px] w-full mx-auto flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
-          Topic: These analytics graphs are based on Unit 1
+        <div className="md: w-full flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
+         Unit {selectedUnit} - { insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
         </div>
-       
+
 
         {/* TWO COLUMN LAYOUT */}
         <div className="flex flex-col md:flex-row gap-4 !mt-4 max-w-[1000px] mx-auto">
@@ -67,22 +71,22 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
           <div className="flex flex-col w-full md:w-[60%] gap-4  p-2 ">
             {/* Upper Left */}
             {/* <div className="h-auto p-4 rounded-md flex  shadow-sm justify-center bg-gray-100"> */}
-  <BookDashboardLeftPieChart subcode="khu702" selectedUnit={selectedUnit} />
-{/* </div> */}
+            <BookDashboardLeftPieChart selectedUnit={selectedUnit} useQuestionTypeData={useQuestionTypeData} />
+            {/* </div> */}
 
 
 
             {/* Lower Left */}
             <div className="h-full border p-4 mx-2 md:!mb-40 bg-gray-100 shadow-sm overflow-x-auto">
-              <BookDashboardInsightPredictionTable subcode="khu702"  selectedUnit={selectedUnit}/>
+              <BookDashboardInsightPredictionTable useUnitTitle={useUnitTitle} useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
             </div>
           </div>
 
           {/* RIGHT COLUMN */}
           <div className="flex-1  h-full p-4 w-full  md:max-w-[40%] overflow-x-auto bg-gray-100 shadow-sm">
 
-            <BookDashboardRightPieChart subcode="khu702" selectedUnit={selectedUnit}/>
-            <div className="text-center mt-4">
+            <BookDashboardRightPieChart useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
+            {/* <div className="text-center mt-4">
               <p className="text-gray-700 mb-3">
                 Click and find the answer on topic page
               </p>
@@ -91,7 +95,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
               >
                 Go To Topic
               </button>
-            </div>
+            </div> */}
 
 
 
@@ -100,11 +104,11 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
         </div>
 
         {/* Render full-width table if in Prediction mode only */}
-        {isPrediction && (
+        {/* {isPrediction && (
           <div className="mt-4">
-            <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit={selectedUnit} />
+            <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit2={selectedUnit2} />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

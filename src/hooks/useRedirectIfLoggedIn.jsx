@@ -5,7 +5,7 @@ import { redirect, useNavigate } from "react-router-dom";
 
 const useRedirectIfLoggedIn = () => {
   const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoggedIn) {

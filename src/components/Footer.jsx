@@ -34,7 +34,7 @@ const Footer = () => {
             <div className="upper-footer">
                 <div className="logo-section">
                     <img src={logo} alt="yes-logo" />
-                    <div className="company-email-btn">info@yourexamsaathi.com</div>
+                    <div className="company-email-btn">info@navalinnovators.com</div>
                 </div>
 
 
