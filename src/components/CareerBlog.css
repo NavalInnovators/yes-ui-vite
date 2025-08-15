@@ -1,23 +1,25 @@
   /* Header Styles */
   .header {
-    /* text-align: center;  */
-    background: radial-gradient(circle at 55% 50%, #ff914d, #9c27b0, #381AB2, #17082c); 
-    background-size: 200% 200%;
-    animation: gradientMove 30s infinite linear;
-    
-    /* position: relative; */
-    height: 42vh;
-    border-radius: 15px;
-    color: white;
+  background: radial-gradient(circle at 50% 50%, #ff914d, #9c27b0, #381AB2, #17082c);
+  background-size: 200% 200%;
+  animation: gradientMove 30s infinite linear;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  margin-top: 14vh;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 
-    margin-top: 14vh;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-  }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 42vh;
+  padding: 2rem 1.5rem;
+  border-radius: 15px;
+  color: white;
+  overflow: hidden;
+  z-index: 1;
+}
+  
   
   @keyframes gradientAnimation {
     0% {
@@ -308,6 +310,28 @@
     text-align: justify;
   }
 
+
+  .header {
+  background: radial-gradient(circle at 50% 50%, #ff914d, #9c27b0, #381AB2, #17082c);
+  background-size: 200% 200%;
+  animation: gradientMove 30s infinite linear;
+
+  margin-top: 14vh;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 42vh;
+  /* padding: 2rem 1.5rem; */
+  border-radius: 15px;
+  color: white;
+  overflow: hidden;
+  z-index: 1;
+}
+
   @media(max-width:1024px){
     .about-section {
       display: flex;
@@ -327,18 +351,18 @@
       align-items: center;
       flex-direction: column;
     }
-    .header {
+    /* .header {
       width:93vw;
-    }
-    @media(max-width:768px){
+    } */
+    /* @media(max-width:768px){
       .header {
         width:90vw;
       }
-    }
+    } */
     @media(max-width: 347px){
-      .header{
+      /* .header{
         width:90vw;
-      }
+      } */
       .header-para{
         text-align: right;
         font-size: 12px;

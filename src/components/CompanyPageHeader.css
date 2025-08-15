@@ -1,4 +1,41 @@
-.company-header {
+.header {
+  background: radial-gradient(circle at 50% 50%, #ff914d, #9c27b0, #381AB2, #17082c);
+  background-size: 200% 200%;
+  animation: gradientMove 30s infinite linear;
+
+  margin-top: 14vh;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 42vh;
+  padding: 2rem 1.5rem;
+  border-radius: 15px;
+  color: white;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Add this keyframes if you want the gradient animation */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+
+
+/* .company-header {
   background: radial-gradient(circle at 50% 50%,
             #feac2f,
             #9b32ad,
@@ -21,7 +58,7 @@
   color: white;
   overflow: hidden;
   z-index: 1;
-}
+} */
 
 /* .company-header::before {
   content: "";

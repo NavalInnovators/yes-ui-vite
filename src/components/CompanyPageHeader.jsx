@@ -3,7 +3,7 @@ import "./CompanyPageHeader.css"
 
 function CompanyPageHeader() {
   return (
-    <div className="company-header">
+    <div className="company-header career-blog-header">
       <div className="header-text">Company</div>
 
       <div className="right-text">
