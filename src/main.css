@@ -73,7 +73,7 @@
 }
 
 .dark .gradient-button {
-  background: linear-gradient(90deg, #381ab2, #9b32ad, #feac2f)
+  background: linear-gradient(90deg, #381ab2, #9b32ad, #feac2f);
 }
 
 /* Custom Scrollbar */
@@ -148,10 +148,6 @@ body,
   width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden;
-}
-
-root {
-  width: 100%;
 }
 
 * {
