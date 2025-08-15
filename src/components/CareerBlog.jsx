@@ -1,8 +1,17 @@
 import { useState, useMemo, useEffect } from "react";
 import "./CareerBlog.css";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { jobData, jobCategories } from "../constants";
-import CTA from "./CTA";
+import { YesLogoNoText } from "../assets";
+import { CircleCheck, CircleDollarSign, Stamp } from "lucide-react";
+
+function CreatorVerificationStep({ children }) {
+  return (
+    <div className="flex flex-col bg-[#fff] text-black h-[260px] justify-between items-center rounded-lg p-[25px] min-w-[200px] max-w-[300px]">
+      {children}
+    </div>
+  );
+}
 
 const CareerBlog = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -56,7 +65,7 @@ const CareerBlog = () => {
   return (
     <div className="career-blog">
       {/* Header Section */}
-      <div className="header">
+      <div className="gradient_box mt-[120px] h-[42vh] py-[20px] px-[30px]">
         <div className="header-heading">Career</div>
         <div className="header-para">
           Welcome to the Career page, your gateway to exciting opportunities
@@ -162,8 +171,10 @@ const CareerBlog = () => {
 
       {/* Creator Verification Section */}
       <div className="my-20 mx-auto">
-        <div className="max-w-[942px] mx-auto py-16 border-t border-light-border">
-          <h1 className="text-5xl text-center">Become a Creator and Earn</h1>
+        <div className="max-w-[942px] mx-auto py-16 border-t border-light-border px-[20px]">
+          <h1 className="text-4xl lg:text-5xl text-center">
+            Become a Creator and Earn
+          </h1>
 
           <p className="mt-[30px]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, et
@@ -178,12 +189,64 @@ const CareerBlog = () => {
         </div>
 
         {/* Verification Process Div */}
-        <div className="">
-          <div className="header"></div>
+        <div className="gradient_box mx-auto relative !py-[70px] px-[20px]">
+          <img
+            src={YesLogoNoText}
+            alt="yes logo"
+            className="absolute z-[0] opacity-[0.1] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 h-[48vh] w-[80vw]"
+          />
+
+          <div className="mx-auto relative z-[2] flex flex-col">
+            <div className="grid md:grid-cols-3 justify-center gap-[20px]">
+              <CreatorVerificationStep>
+                <CircleCheck size={80} />
+
+                <div className="">
+                  <h1 className="text-[17px] text-center font-semibold pb-[10px] whitespace-nowrap">
+                    1. Document Verfication
+                  </h1>
+                  <p className="text-center font-light text-[15px]">
+                    Upload your Marksheet, Degree, Job certificate, or ID
+                  </p>
+                </div>
+              </CreatorVerificationStep>
+
+              <CreatorVerificationStep>
+                <Stamp size={80} />
+
+                <div className="flex flex-col items-center">
+                  <h1 className="text-[17px] text-center font-semibold pb-[10px]">
+                    2. Skill Validation
+                  </h1>
+                  <p className="text-center font-light text-[15px]">
+                    Answer Sample Papers /GFG/Medium
+                  </p>
+                </div>
+              </CreatorVerificationStep>
+
+              <CreatorVerificationStep>
+                <CircleDollarSign size={80} />
+
+                <div className="flex flex-col items-center">
+                  <h1 className="text-[17px] text-center font-semibold pb-[10px]">
+                    3. Start Earning
+                  </h1>
+                  <p className="text-center font-light text-[15px]">
+                    Answer Sample-Papers/GFG/Medium
+                  </p>
+                </div>
+              </CreatorVerificationStep>
+            </div>
+
+            <NavLink
+              to="/creator-verification"
+              className="mt-[30px] self-center cursor-pointer transition font-semibold border-2 border-white hover:bg-transparent hover:text-[#fff] bg-[#fff] py-[10px] px-[25px] text-black rounded-lg"
+            >
+              Start Verification
+            </NavLink>
+          </div>
         </div>
       </div>
-
-      <CTA />
     </div>
   );
 };

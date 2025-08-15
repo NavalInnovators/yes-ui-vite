@@ -1,6 +1,4 @@
-/* Header Styles */
-.header {
-  /* text-align: center;  */
+.gradient_box {
   background: radial-gradient(
     circle at 55% 50%,
     #ff914d,
@@ -10,37 +8,40 @@
   );
   background-size: 200% 200%;
   animation: gradientMove 30s infinite linear;
-
-  /* position: relative; */
-  height: 42vh;
-  width: 100vw; /* full viewport width */
-  margin-left: calc(-10px); /* cancel parent's margin */
-  margin-right: calc(-10px);
+  width: calc(100% - 30px);
   border-radius: 15px;
   color: white;
+  margin-left: auto;
+  margin-right: auto;
 
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: space-between;
+  align-items: center;
 }
 
 @keyframes gradientAnimation {
   0% {
     background-position: 75% 100%;
   }
+
   25% {
     background-position: 75% 25%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   75% {
     background-position: 25% 75%;
   }
+
   100% {
     background-position: 50% 50%;
   }
 }
+
 .header-heading {
   font-family: "Public Sans", "inter";
   font-size: 3rem;
@@ -63,6 +64,7 @@
 .select-menu:focus-visible {
   outline: none;
 }
+
 /* new focus style */
 .career-search-bar:focus-within {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -200,6 +202,7 @@
   margin-top: 4vh;
   margin-right: 2vw;
 }
+
 .career-description {
   margin-left: 2vw;
   margin-top: 3vh;
@@ -246,14 +249,18 @@
 }
 
 .apply-btn:hover {
-  background-color: white; /* Change background color */
+  background-color: white;
+  /* Change background color */
   color: black;
-  border: 2px solid transparent; /* Make border transparent for gradient effect */
+  border: 2px solid transparent;
+  /* Make border transparent for gradient effect */
   background-image: linear-gradient(white, white),
     /* Button background stays white */
-      linear-gradient(-15deg, #feac2f, #9b32ad, #381ab2, #17082c); /* Gradient border */
+      linear-gradient(-15deg, #feac2f, #9b32ad, #381ab2, #17082c);
+  /* Gradient border */
   background-origin: border-box;
-  background-clip: padding-box, border-box; /* Clip background to the border */
+  background-clip: padding-box, border-box;
+  /* Clip background to the border */
 }
 
 .view-btn {
@@ -316,50 +323,61 @@
     /* background-color: #727272; */
     justify-content: center;
   }
+
   .about-section img {
     height: 344px;
     width: 344px;
     margin-left: 5vw;
   }
+
   .about-text {
     display: flex;
     align-items: center;
     flex-direction: column;
   }
+
   @media (max-width: 768px) {
     /* .header {
       width: 90vw;
     } */
   }
+
   @media (max-width: 347px) {
     .header-para {
       text-align: right;
       font-size: 12px;
       width: 280px;
     }
+
     .header-heading {
       font-size: 25px;
     }
+
     .apply-btn {
       width: 104px;
       height: 3vh;
       margin-left: 5vw;
     }
+
     .view-btn {
       margin-right: 5vw;
     }
+
     .about-section img {
       margin-left: 8vw;
       width: 300px;
     }
+
     .input-box {
       width: 40vw;
       height: 8vh;
     }
+
     .select-menu {
       width: 40vw;
       height: 8vh;
     }
+
     .paragraph {
       margin-left: 6vw;
     }
