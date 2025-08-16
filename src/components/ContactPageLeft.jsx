@@ -43,7 +43,7 @@ function ContactPageLeft() {
             src={insta}
             alt="Instagram Icon"
             onClick={() =>
-              window.open("https://www.instagram.com/yourexamsaathi")
+              window.open("https://www.instagram.com/yourexamsaathi/")
             }
           />
           <img
@@ -61,6 +61,21 @@ function ContactPageLeft() {
               window.open("https://www.youtube.com/@yourexamsaathi-yes")
             }
           />
+
+          <img
+            src={twitter}
+            alt="X Icon"
+            onClick={() => 
+              window.open("https://x.com/yourexamsaathi")
+            }
+          />
+          <img
+            src={facebook}
+            alt="Facebook Icon"
+            onClick={() =>
+              window.open("https://www.facebook.com/profile.php?id=61579173974246")  
+            }
+            />
         </div>
 
       </div>
