@@ -6,22 +6,23 @@ import {
   EmailIcon,
   UserIcon,
   PhoneIcon,
+  GoogleIcon,
 } from "../assets";
 import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { apiSignUp } from "../api/api";
+import { apiSignUp, apiGoogleSignUp } from "../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthProvider";
-
+// import OtpAuth from "../Auth/OtpAuth.jsx";
+import GoogleSignIn from "./GoogleSignIn.jsx";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { setToken, setProfileId, setEmail } = useAuth();
 
-
   // Properly configured useMutation hook
-  const { mutate, status, } = useMutation({
+  const { mutate, status } = useMutation({
     mutationFn: (data) => apiSignUp(data),
     onSuccess: (data) => {
       // TODO: save token and profileId in local storage with some other process
@@ -34,6 +35,26 @@ const SignUp = () => {
         error.response?.data?.message || error.message || "Something went wrong"
       );
       console.error("Error:", error);
+    },
+  });
+
+  // Google Sign-Up mutation
+  const { mutate: googleMutate, status: googleStatus } = useMutation({
+    mutationFn: (data) => apiGoogleSignUp(data),
+    onSuccess: (data) => {
+      setToken(data.accessToken);
+      setProfileId(data.profileId);
+      toast.success("Google sign-up successful!");
+      // Google users may not need phone verification - check backend response
+      navigate("/verification-detail");
+    },
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Google sign-up failed"
+      );
+      console.error("Google Sign-Up Error:", error);
     },
   });
 
@@ -67,8 +88,7 @@ const SignUp = () => {
   const validatePhone = (phone) => {
     const phoneRegex = /^(\d{10})?$/;
     return phoneRegex.test(phone);
-  }
-
+  };
 
   const validatePassword = (password) => {
     const minLength = 8;
@@ -99,7 +119,7 @@ const SignUp = () => {
     else if (!validateEmail(formData.email))
       newErrors.email = "Invalid email format";
     if (!validatePhone(formData.phone))
-      newErrors.phone = "Invalid Phone Number"
+      newErrors.phone = "Invalid Phone Number";
     if (validatePassword(formData.password))
       newErrors.password = validatePassword(formData.password);
     if (formData.password !== formData.confirmPassword)
@@ -141,11 +161,37 @@ const SignUp = () => {
     mutate(reqData);
   };
 
+  const handleGoogleSignUp = (googleUserData) => {
+    // Prevent duplicate calls
+    if (googleStatus === "pending") {
+      console.log("Google signup already in progress, ignoring duplicate call");
+      return;
+    }
+
+    const reqData = {
+      firstName: googleUserData.firstName,
+      lastName: googleUserData.lastName,
+      email: googleUserData.email,
+      googleId: googleUserData.googleId,
+      credential: googleUserData.credential,
+      emailVerified: googleUserData.emailVerified,
+      profilePicture: googleUserData.profilePicture,
+      authProvider: "google",
+    };
+
+    console.log("Starting Google SignUp with data:", reqData);
+    setEmail(googleUserData.email);
+    googleMutate(reqData);
+  };
+
+  const handleGoogleSignUpError = (error) => {
+    console.error("Google Sign-Up Error:", error);
+    toast.error("Google sign-up failed. Please try again.");
+  };
+
   return (
     <div className="signup-form-container">
-      <div className="signup-form-heading-black">
-        Signup your account!
-      </div>
+      <div className="signup-form-heading-black">Signup your account!</div>
       <div className="signup-container">
         <form onSubmit={handleSubmit} noValidate>
           <div className="signup-form-user">
@@ -173,11 +219,14 @@ const SignUp = () => {
                 onChange={handleInputChange}
                 disabled={status === "pending"}
               />
-
             </div>
           </div>
-          {errors.firstName && (<div className="error-text">{errors.firstName}</div>)}
-          {errors.lastName && (<div className="error-text">{errors.lastName}</div>)}
+          {errors.firstName && (
+            <div className="error-text">{errors.firstName}</div>
+          )}
+          {errors.lastName && (
+            <div className="error-text">{errors.lastName}</div>
+          )}
 
           <div className="signup-form-email-container">
             <img className="form-icon" src={EmailIcon} alt="email-icon" />
@@ -226,9 +275,10 @@ const SignUp = () => {
               alt="toggle-password-visibility"
               onClick={togglePasswordVisibility}
             />
-
           </div>
-          {errors.password && (<div className="error-text">{errors.password}</div>)}
+          {errors.password && (
+            <div className="error-text">{errors.password}</div>
+          )}
 
           <div className="signup-form-cnfrm-pswd-container">
             <img
@@ -250,13 +300,15 @@ const SignUp = () => {
               alt="toggle-confirm-password-visibility"
               onClick={toggleConfirmPasswordVisibility}
             />
-
           </div>
-          {errors.confirmPassword && (<div className="error-text">{errors.confirmPassword}</div>)}
+          {errors.confirmPassword && (
+            <div className="error-text">{errors.confirmPassword}</div>
+          )}
 
           <div className="signup-form-checkbox-tnc">
             <label class="custom-checkbox signup-checkbox-remember">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 name="checkbox"
                 checked={formData.checkbox}
                 onChange={handleInputChange}
@@ -269,8 +321,9 @@ const SignUp = () => {
             </label>
           </div>
 
-          {errors.checkbox && (<div className="error-text">{errors.checkbox}</div>)}
-
+          {errors.checkbox && (
+            <div className="error-text">{errors.checkbox}</div>
+          )}
 
           <div className="">
             <button
@@ -284,8 +337,48 @@ const SignUp = () => {
               {status === "pending" ? "Signing up..." : "Sign Up"}
             </button>
           </div>
-
         </form>
+
+        {/* Google Sign-In Option */}
+        <div className="google-signup-section" style={{ marginTop: "20px" }}>
+          <div
+            className="or-divider"
+            style={{
+              textAlign: "center",
+              margin: "20px 0",
+              position: "relative",
+            }}
+          >
+            <span
+              style={{
+                backgroundColor: "white",
+                padding: "0 15px",
+                color: "#666",
+                fontSize: "14px",
+              }}
+            >
+              OR
+            </span>
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "0",
+                right: "0",
+                height: "1px",
+                backgroundColor: "#ddd",
+                zIndex: "-1",
+              }}
+            ></div>
+          </div>
+
+          <GoogleSignIn
+            onSuccess={handleGoogleSignUp}
+            onError={handleGoogleSignUpError}
+            disabled={status === "pending" || googleStatus === "pending"}
+            mode="signup"
+          />
+        </div>
       </div>
       <div className="signup-form-login-link">
         <div className="">

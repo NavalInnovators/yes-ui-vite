@@ -1,15 +1,16 @@
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { EmailIcon, PasswordEye, PasswordLock } from "../assets";
+import { EmailIcon, PasswordEye, PasswordLock, GoogleIcon } from "../assets";
 import { React, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
-import { apiLogin } from "../api/api";
+import { apiLogin, apiGoogleLogin } from "../api/api";
+import GoogleSignIn from "./GoogleSignIn.jsx";
 
 const LoginSideSection = () => {
   const navigate = useNavigate();
-  const { setProfileId, setToken, } = useAuth();
+  const { setProfileId, setToken } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,8 +18,6 @@ const LoginSideSection = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
-
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data) => apiLogin(data),
@@ -35,6 +34,24 @@ const LoginSideSection = () => {
         error.response?.data?.message || error.message || "Something went wrong"
       );
       console.error("Error:", error.response.data.message);
+    },
+  });
+
+  // Google Login mutation
+  const { mutate: googleMutate, isPending: googleIsPending } = useMutation({
+    mutationFn: (data) => apiGoogleLogin(data),
+    onSuccess: (data) => {
+      console.log("Google login success:", data);
+      setToken(data.token || data.accessToken);
+      setProfileId(data.profileId);
+      toast.success("Google login successful!");
+      navigate("/all-subjects");
+    },
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message || error.message || "Google login failed"
+      );
+      console.error("Google Login Error:", error);
     },
   });
 
@@ -74,11 +91,27 @@ const LoginSideSection = () => {
     }));
   };
 
+  const handleGoogleLogin = (googleUserData) => {
+    const reqData = {
+      email: googleUserData.email,
+      googleId: googleUserData.googleId,
+      credential: googleUserData.credential,
+      emailVerified: googleUserData.emailVerified,
+      profilePicture: googleUserData.profilePicture,
+      authProvider: "google",
+    };
+
+    googleMutate(reqData);
+  };
+
+  const handleGoogleLoginError = (error) => {
+    console.error("Google Login Error:", error);
+    toast.error("Google login failed. Please try again.");
+  };
+
   return (
     <div className="login-form-container">
-      <div className="login-form-heading-black">
-        Login to your account!
-      </div>
+      <div className="login-form-heading-black">Login to your account!</div>
       <div className="login-container">
         <form onSubmit={handleSubmit} noValidate>
           <div className="login-form-email-container">
@@ -91,7 +124,6 @@ const LoginSideSection = () => {
               value={formData.email}
               onChange={handleInputChange}
             />
-
           </div>
           {errors.email && <div className="error-text">{errors.email}</div>}
 
@@ -110,16 +142,18 @@ const LoginSideSection = () => {
               alt="toggle-password-visibility"
               onClick={() => setShowPassword(!showPassword)}
             />
-
           </div>
-          {errors.password && (<div className="error-text">{errors.password}</div>)}
+          {errors.password && (
+            <div className="error-text">{errors.password}</div>
+          )}
 
           <div className="login-form-checkbox-frgt-pswd">
             <label class="custom-checkbox login-checkbox-remember">
-              <input type="checkbox" 
-              name="checkbox"
-              checked={formData.checkbox}
-              onChange={handleInputChange}
+              <input
+                type="checkbox"
+                name="checkbox"
+                checked={formData.checkbox}
+                onChange={handleInputChange}
               />
               <span class="checkmark"></span>
               Remember Me
@@ -144,6 +178,48 @@ const LoginSideSection = () => {
             {errors.submit && <div className="error-text">{errors.submit}</div>}
           </div>
         </form>
+
+        {/* Google Sign-In Option */}
+        <div className="google-login-section" style={{ marginTop: "20px" }}>
+          <div
+            className="or-divider"
+            style={{
+              textAlign: "center",
+              margin: "20px 0",
+              position: "relative",
+            }}
+          >
+            <span
+              style={{
+                backgroundColor: "white",
+                padding: "0 15px",
+                color: "#666",
+                fontSize: "14px",
+              }}
+            >
+              OR
+            </span>
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "0",
+                right: "0",
+                height: "1px",
+                backgroundColor: "#ddd",
+                zIndex: "-1",
+              }}
+            ></div>
+          </div>
+
+          {/* Use GoogleSignIn component instead of custom button */}
+          <GoogleSignIn
+            onSuccess={handleGoogleLogin}
+            onError={handleGoogleLoginError}
+            disabled={isPending || googleIsPending}
+            mode="login"
+          />
+        </div>
       </div>
 
       <div className="login-form-register-link">
