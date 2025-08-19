@@ -6,7 +6,7 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
     "Syllabus",
     "Q&A",
     "Unit",
-    // "Insights", 
+    "Insights", 
     // "Maps", 
     // "Custom Preparation", 
     // "AiFeatured"

@@ -1,3 +1,42 @@
+.contact-email-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: white;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: fit-content;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-email-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.contact-email-card img {
+  width: 36px;
+  height: 36px;
+}
+
+.email-text-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.email-subtext {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.email-main {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+}
+
 .contact-page-left-container {
   border-radius: 1.5rem;
   background: #f2f2f2;

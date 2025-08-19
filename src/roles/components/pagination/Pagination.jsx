@@ -1,0 +1,89 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useContext } from "react";
+import Page from "./Page";
+import WindowWidthContext from "../../Creator/context/WindowWidthContext";
+
+export default function Pagination({
+  totalQuestions,
+  PAGE_SIZE,
+  currentPage,
+  setCurrentPage,
+  className = ""
+}) {
+  const windowWidth = useContext(WindowWidthContext);
+  const isSmallScreen = windowWidth < 600;
+  
+  const totalPages = Math.ceil(totalQuestions / PAGE_SIZE);
+
+  const paginationArray = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  let buttonStart = currentPage - 3;
+  let buttonEnd = currentPage + 2;
+
+  if (buttonStart < 1) {
+    buttonStart = 0;
+  }
+
+  if (buttonEnd > totalPages) {
+    buttonEnd = totalPages;
+  }
+
+  let limitedButtonsArray = paginationArray.slice(buttonStart, buttonEnd);
+
+  if (limitedButtonsArray[limitedButtonsArray.length - 1] < totalPages) {
+    limitedButtonsArray = [...limitedButtonsArray, "...", totalPages];
+  }
+
+  function handleNextButton() {
+    setCurrentPage((prev) => prev + 1);
+  }
+
+  function handlePreviousButton() {
+    setCurrentPage((prev) => prev - 1);
+  }
+
+  function handlePageClick(page) {
+    setCurrentPage(page);
+  }
+
+  return (
+    <div className={`${className} flex justify-center items-center gap-[20px]`}>
+      {currentPage > 1 && (
+        <button
+          className="flex items-center dark:hover:text-white text-gray-400 dark:text-dark-text-muted transition duration-100 text-[14px] gap-[5px] cursor-pointer hover:text-black"
+          onClick={handlePreviousButton}
+        >
+          <ArrowLeft size={20} />
+          {!isSmallScreen && "Previous"}
+        </button>
+      )}
+
+      <div className="flex items-center gap-[4px]">
+        {limitedButtonsArray.map((page) =>
+          page === "..." ? (
+            <span key={page} className="mx-[5px]">
+              ...
+            </span>
+          ) : (
+            <Page
+              key={page}
+              page={page}
+              onClick={() => handlePageClick(page)}
+              currentPage={currentPage}
+            />
+          )
+        )}
+      </div>
+
+      {currentPage < totalPages && (
+        <button
+          className="flex items-center dark:hover:text-white dark:text-dark-text-muted text-gray-400 text-[14px] transition duration-100 gap-[5px] cursor-pointer hover:text-black"
+          onClick={handleNextButton}
+        >
+          {!isSmallScreen && "Next"}
+          <ArrowRight size={20} />
+        </button>
+      )}
+    </div>
+  );
+}

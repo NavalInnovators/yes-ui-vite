@@ -16,49 +16,68 @@ function ContactPageLeft() {
         Feel free to text us. We are here to help you!
       </div>
       <div className="parent-contact-page-email-section">
-        {/* <div className="contact-page-email-section"> */}
-        {/* <a href="mailto:info@yourexamsaathi.com"> */}
-        <img
+        
+        {/* <img
           src={gmail}
           alt="Gmail Icon"
           onClick={() => window.open("mailto:info@yourexamsaathi.com")}
-        />
-        {/* </a> */}
-        {/* </div> */}
+        /> */}
+
+        {/* Email card */}
+        <div
+          className="contact-email-card"
+          onClick={() =>
+            window.open("mailto:info@navalinnovators.com")
+          }
+        >
+          <img src={gmail} alt="Gmail Icon" />
+          <div className="email-text-section">
+            <span className="email-subtext">Email us here</span>
+            <span className="email-main">info@navalinnovators.com</span>
+          </div>
+        </div>
+        
         <div className="contact-page-app-icons">
-          <img
-            src={facebook}
-            alt="Facebook Icon"
-            onClick={() => window.open("https://www.yourexamsaathi.com/")}
-            aria-label="Open Facebook"
-          />
+    
           <img
             src={insta}
             alt="Instagram Icon"
             onClick={() =>
-              window.open("https://www.instagram.com/navalinnovators")
+              window.open("https://www.instagram.com/yourexamsaathi/")
             }
           />
           <img
             src={linkedin}
             alt="LinkedIn Icon"
             onClick={() =>
-              window.open("https://www.linkedin.com/company/navalinnovators")
+              window.open("https://www.linkedin.com/company/yourexamsaathi")
             }
           />
-          <img
-            src={twitter}
-            alt="Twitter Icon"
-            onClick={() => window.open("https://www.yourexamsaathi.com/")}
-          />
+          
           <img
             src={youtube}
             alt="Youtube Icon"
             onClick={() =>
-              window.open("https://www.youtube.com/@navalinnovators")
+              window.open("https://www.youtube.com/@yourexamsaathi-yes")
             }
           />
+
+          <img
+            src={twitter}
+            alt="X Icon"
+            onClick={() => 
+              window.open("https://x.com/yourexamsaathi")
+            }
+          />
+          <img
+            src={facebook}
+            alt="Facebook Icon"
+            onClick={() =>
+              window.open("https://www.facebook.com/profile.php?id=61579173974246")  
+            }
+            />
         </div>
+
       </div>
     </div>
   );

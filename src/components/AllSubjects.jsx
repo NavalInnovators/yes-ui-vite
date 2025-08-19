@@ -17,11 +17,11 @@ const AllSubjects = ({ searchQuery }) => {
   } = useQuery({
     queryKey: ["allCourses"],
     queryFn: getAllCourses,
-    enabled: !sessionStorage.getItem('allCourses'),
+    enabled: !sessionStorage.getItem("allCourses"),
   });
 
-  if (allCourses.length > 0 && !sessionStorage.getItem('allCourses')) {
-    sessionStorage.setItem('allCourses', JSON.stringify(allCourses));
+  if (allCourses.length > 0 && !sessionStorage.getItem("allCourses")) {
+    sessionStorage.setItem("allCourses", JSON.stringify(allCourses));
   }
 
   // calling myCourses from shared query
@@ -33,16 +33,44 @@ const AllSubjects = ({ searchQuery }) => {
   // }
 
   // Filter the courses based on the search query
-  const filteredCourses = (allCourses.length > 0 ? allCourses : JSON.parse(sessionStorage.getItem('allCourses') || '[]')).filter((course) =>
-    course.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCourses = (
+    allCourses.length > 0
+      ? allCourses
+      : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
+  ).filter((course) => {
+    // Common normalizer
+    const normalize = (str) => str?.trimEnd().toLowerCase(); // removes trailing spaces + lowercases
+
+    // Special case for branch hyphen spacing
+    const normalizeHyphen = (str) => normalize(str).replace(/\s*-\s*/g, "-");
+
+    const query = normalize(searchQuery);
+
+    const nameMatch = normalize(course.name)?.includes(query);
+    const universityMatch = normalize(course.universityName)?.includes(query);
+    const yearMatch = String(course.year).toLowerCase().includes(query);
+    const branchMatch = course.branchNames?.some((branch) =>
+      normalizeHyphen(branch).includes(normalizeHyphen(searchQuery))
+    );
+    const codeMatch = course.courseCodes?.some((code) =>
+      normalize(code)?.includes(query)
+    );
+
+    return (
+      nameMatch || universityMatch || yearMatch || branchMatch || codeMatch
+    );
+  });
 
   const { mutate: mutateEnroll, isPending: isEnrolling } = useMutation({
     mutationFn: enrollCourse,
     onSuccess: (data) => {
       console.log("Successfully enrolled in the course!", data);
-      const coursesToUpdate = JSON.parse(localStorage.getItem('myCourses') || '[]');
-      const courseAlreadyEnrolled = coursesToUpdate.some(obj => obj.id === data[1].id);
+      const coursesToUpdate = JSON.parse(
+        localStorage.getItem("myCourses") || "[]"
+      );
+      const courseAlreadyEnrolled = coursesToUpdate.some(
+        (obj) => obj.id === data[1].id
+      );
 
       if (courseAlreadyEnrolled) {
         navigate(`/book-dashboard?subcode=${data[1].courseCodes[0]}`);
@@ -52,7 +80,10 @@ const AllSubjects = ({ searchQuery }) => {
         coursesToUpdate.push(data[1]);
         console.log("Updating courses: ", coursesToUpdate);
         localStorage.setItem("myCourses", JSON.stringify(coursesToUpdate));
-        localStorage.setItem('bookDetails', JSON.stringify(getBookDetails(coursesToUpdate)));
+        localStorage.setItem(
+          "bookDetails",
+          JSON.stringify(getBookDetails(coursesToUpdate))
+        );
         navigate(`/book-dashboard?subcode=${data[1].courseCodes[0]}`);
         toast.dismiss();
         toast.success("Successfully enrolled in the course!");
@@ -67,7 +98,6 @@ const AllSubjects = ({ searchQuery }) => {
 
   return (
     <div className="userdashboard-content-page">
-
       <div className="all-course-card-container">
         {/* Handle loading and error states */}
         {isLoadingAllCourses ? (
@@ -87,9 +117,7 @@ const AllSubjects = ({ searchQuery }) => {
                   <div className="all-course-card-each-tag">
                     {course.universityName}
                   </div>
-                  <div className="all-course-card-each-tag">
-                    {course.year}
-                  </div>
+                  <div className="all-course-card-each-tag">{course.year}</div>
                   {course.branchNames.map((branch, index) => (
                     <div
                       className="all-course-card-each-tag"
@@ -109,27 +137,41 @@ const AllSubjects = ({ searchQuery }) => {
                 </div>
               </div>
               <div
-                onClick={isEnrolling ? null : () => {
-                  console.log("Clicked on start learning.....");
-                  sessionStorage.setItem("selectedCourseCode", course.courseCodes[0])
+                onClick={
+                  isEnrolling
+                    ? null
+                    : () => {
+                        console.log("Clicked on start learning.....");
+                        sessionStorage.setItem(
+                          "selectedCourseCode",
+                          course.courseCodes[0]
+                        );
 
-                  const courseExists = JSON.parse(localStorage.getItem('myCourses') || '[]').some(tempCourse => tempCourse.id === course.id);
-                  // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
+                        const courseExists = JSON.parse(
+                          localStorage.getItem("myCourses") || "[]"
+                        ).some((tempCourse) => tempCourse.id === course.id);
+                        // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
 
-                  if (courseExists) {
-                    navigate(`/book-dashboard?subcode=${course.courseCodes[0]}`);
-                    return;
-                  } else {
-                    if (!localStorage.getItem('token')) {
-                      navigate('/login');
-                      return;
-                    } else {
-                      console.log("Have token!");
-                      toast.info("Enrolling in the course... Please wait", { autoClose: false });
-                      mutateEnroll(course);
-                    };
-                  };
-                }}
+                        if (courseExists) {
+                          navigate(
+                            `/book-dashboard?subcode=${course.courseCodes[0]}`
+                          );
+                          return;
+                        } else {
+                          if (!localStorage.getItem("token")) {
+                            navigate("/login");
+                            return;
+                          } else {
+                            console.log("Have token!");
+                            toast.info(
+                              "Enrolling in the course... Please wait",
+                              { autoClose: false }
+                            );
+                            mutateEnroll(course);
+                          }
+                        }
+                      }
+                }
                 className="all-course-card-start-learning-btn font-notification pointer-cursor"
               >
                 Start Learning

@@ -14,7 +14,7 @@ const CTA = () => {
             Still have a question?
           </div>
           <div className='cta-p font-paragraph-white-light'>
-            Feel free to write to us at navalinnovators@gmail.com or contact us by clicking on the following button:
+            Feel free to write to us at <b>info@navalinnovators.com / navalinnovators@gmail.com</b> or contact us by clicking on the following button:
           </div>
           <button onClick={() => navigate("/contacts")} className='transparent-bg-btn font-colourful-border-btn'>
             Contact Us
