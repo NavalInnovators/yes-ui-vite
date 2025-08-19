@@ -77,6 +77,7 @@ import changePass from "./changePass.svg";
 import hat from "./hat.svg";
 import star from "./star.svg";
 import dashboardIcon from "./dashboardIcon.svg";
+import GoogleIcon from "./GoogleIcon.svg";
 
 export {
   logo,
@@ -156,4 +157,5 @@ export {
   hat,
   star,
   dashboardIcon,
+  GoogleIcon,
 };
