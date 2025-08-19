@@ -23,6 +23,7 @@
   text-align: center;
   border: 1px solid #ddd;
   border-radius: 0.6rem;
+  color: black;
 }
 
 .otp-inputs input:focus {
