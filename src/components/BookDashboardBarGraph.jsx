@@ -72,8 +72,8 @@ function BookDashboardBarGraph({ useTopicFrequency, selectedUnit }) {
   },
   scales: {
     x: {
-      ticks: { display: false }, // ⬅ removes labels below the bars
-      grid: { drawTicks: false }, // also removes tick marks
+      ticks: { display: false },
+      grid: { drawTicks: false }, 
     },
     y: {
       beginAtZero: true,

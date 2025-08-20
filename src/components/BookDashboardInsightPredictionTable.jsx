@@ -16,7 +16,7 @@ function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, 
     <div className="space-y-3 max-w-4xl">
       {/* <h2 className="text-lg font-semibold text-gray-800 truncate">{unitTitle}</h2> */}
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-black shadow-sm">
         <table className="w-full text-base border-collapse bg-white">
           <thead>
             <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">

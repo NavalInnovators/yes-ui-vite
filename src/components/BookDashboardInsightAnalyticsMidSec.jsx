@@ -10,6 +10,7 @@ import "./BookDashboardUnitMidSec.css";
 import BookDashboardBarGraph from "./BookDashboardBarGraph";
 
 
+
 function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChange }) {
   const { selectedUnit, insightsLoading, insightsError, unitInsights } = useBookDashboard();
 
@@ -28,7 +29,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
     <div className="parent-book-dashboard-unit">
       {/* For Small Screens Unit Dropdown */}
       {/* <div className="for-small-screens"> */}
-        {/* <BookDashboardUnitsResponsiveUnitDropdown selectedUnit2={selectedUnit2}
+      {/* <BookDashboardUnitsResponsiveUnitDropdown selectedUnit2={selectedUnit2}
           setSelectedUnit={setSelectedUnit} /> */}
       {/* </div> */}
 
@@ -62,19 +63,20 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
       <div className="book-dashboard-analytics">
         {/* TOPIC BOX */}
         <div className="md: w-full flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
-         Unit {selectedUnit} - { insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
+          Unit {selectedUnit} - {insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
         </div>
 
 
         {/* TWO COLUMN LAYOUT */}
-        <div className="my-4 bg-gray-100 px-3 py-2 ">
-          <BookDashboardBarGraph useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit}/>
+        <div className="my-4 md:width-full bg-gray-100 px-3 py-2 ">
+          <BookDashboardBarGraph useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
         </div>
+       
         <div className="flex flex-col md:flex-row gap-4 !mt-4 max-w-[1000px] mx-auto">
 
-          
+
           {/* LEFT COLUMN */}
-          <div className="flex flex-col w-full md:w-[60%] gap-4  p-2 ">
+          <div className="flex flex-col w-full md:w-[100%] gap-4  ">
             {/* Upper Left */}
             {/* <div className="h-auto p-4 rounded-md flex  shadow-sm justify-center bg-gray-100"> */}
             <BookDashboardLeftPieChart selectedUnit={selectedUnit} useQuestionTypeData={useQuestionTypeData} />
@@ -83,15 +85,15 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
 
 
             {/* Lower Left */}
-            <div className="h-full border p-4 mx-2 md:!mb-40 bg-gray-100 shadow-sm overflow-x-auto">
+            <div className="h-full  p-4  md:!mb-40 bg-gray-100 shadow-sm overflow-x-auto">
               <BookDashboardInsightPredictionTable useUnitTitle={useUnitTitle} useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
             </div>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="flex-1  h-full p-4 w-full  md:max-w-[40%] overflow-x-auto bg-gray-100 shadow-sm">
+          {/* <div className="flex-1  h-full p-4 w-full  md:max-w-[40%] overflow-x-auto bg-gray-100 shadow-sm">
 
-            <BookDashboardRightPieChart useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
+            {/* <BookDashboardRightPieChart useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} /> */}
             {/* <div className="text-center mt-4">
               <p className="text-gray-700 mb-3">
                 Click and find the answer on topic page
@@ -106,7 +108,7 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
 
 
 
-          </div>
+          {/* </div>  */}
         </div>
 
         {/* Render full-width table if in Prediction mode only */}
