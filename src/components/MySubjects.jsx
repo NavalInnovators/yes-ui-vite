@@ -2,10 +2,43 @@ import "./UserDashboard.css";
 import { useNavigate } from "react-router-dom";
 import UserDashboardRight from "./UserDashboardRight";
 import { useMyCourses } from "./sharedQuery";
-
+import { useState } from "react";
 function MySubjects({ searchQuery }) {
   const navigate = useNavigate();
   const { data: myCourses, isLoading, isError } = useMyCourses();
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const categories = (() => {
+    if (!myCourses) return [];
+
+    const years = new Set();
+    const branches = new Set();
+
+    myCourses.forEach((course) => {
+      if (course.year) years.add(course.year);
+      course.branchNames?.forEach((branch) => branches.add(branch));
+    });
+    // Sort years numerically
+    const sortedYears = Array.from(years).sort((a, b) => {
+      const numA = parseInt(a); // extract number before "Year"
+      const numB = parseInt(b);
+      return numA - numB;
+    });
+
+    return [
+      ...sortedYears.map((y) => `Year ${y}`),
+      ...Array.from(branches).sort(),
+    ];
+  })();
+  const yearCategoryMap = {
+    "Year 1": 1,
+    "Year 2": 2,
+    "Year 3": 3,
+    "Year 4": 4,
+    "1st Year": 1,
+    "2nd Year": 2,
+    "3rd Year": 3,
+    "4th Year": 4,
+  };
 
   // Filter the subjects based on the search query or show all if the query is empty
   const filteredSubjects = myCourses
@@ -13,8 +46,20 @@ function MySubjects({ searchQuery }) {
         const normalize = (str) => str?.toLowerCase().trim();
         const normalizeHyphen = (str) =>
           normalize(str).replace(/\s*-\s*/g, "-");
-        const query = normalizeHyphen(searchQuery);
 
+        // Category filter
+        if (selectedCategory) {
+          if (yearCategoryMap[selectedCategory]) {
+            return subject.year === yearCategoryMap[selectedCategory];
+          }
+          return subject.branchNames?.some(
+            (branch) =>
+              normalizeHyphen(branch) === normalizeHyphen(selectedCategory)
+          );
+        }
+
+        // Normal search
+        const query = normalizeHyphen(searchQuery);
         return (
           normalize(subject.name)?.includes(query) ||
           normalize(subject.universityName)?.includes(query) ||
@@ -122,9 +167,13 @@ function MySubjects({ searchQuery }) {
               </div>
             </div> */}
       </div>
-      <div className="userdashboard-sidesection">
-        <UserDashboardRight />
-      </div>
+      <UserDashboardRight
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategorySelect={(category) =>
+          setSelectedCategory((prev) => (prev === category ? "" : category))
+        }
+      />
     </div>
   );
 }
