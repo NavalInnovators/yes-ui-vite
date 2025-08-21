@@ -63,7 +63,6 @@ const ProfileSection = () => {
 
   useEffect(() => {
     if (profileDetails) {
-      const avatarKey = profileDetails.profile.avatarUrl || null;
       setProfileData({
         firstName: profileDetails.profile.firstName || "First Name",
         lastName: profileDetails.profile.lastName || "Last Name",
@@ -72,14 +71,8 @@ const ProfileSection = () => {
         gender: profileDetails.profile.gender || "Your Gender",
         email: profileDetails.profile.email || "Email Address",
         phone: profileDetails.profile.phone || "Phone number",
-        avatarUrl: avatarKey,
       });
       setEmail(profileDetails.profile.email);
-
-      // ✅ Save avatarUrl to localStorage
-      if (avatarKey) {
-        localStorage.setItem("profileAvatarUrl", avatarKey);
-      }
     }
   }, [profileDetails, setEmail]);
 
@@ -119,6 +112,7 @@ const ProfileSection = () => {
       </div>
       <div className="profile-info">
         <div className="profile-image-placeholder">
+
           <img
             src={
               profileDetails?.profile?.avatarUrl && avatarImages[profileDetails.profile.avatarUrl]

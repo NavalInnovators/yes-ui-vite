@@ -216,6 +216,10 @@ export const getProfile = async () => {
       },
     });
     console.log(`profile`, response.data);
+    // ✅ set avatarUrl into localStorage only the first time
+    if (response.data.profile?.avatarUrl && !localStorage.getItem("profileAvatarUrl")) {
+      localStorage.setItem("profileAvatarUrl", response.data.profile.avatarUrl);
+    }
     return response.data;
   } catch (error) {
     throw error;
@@ -313,15 +317,15 @@ export const getUnitNotes = async (subCode) => {
 }
 
 export const getAnalyticData = async (subCode) => {
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await api.get(`/api/analyticData/${subCode}`, config);
-    return response.data.data;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      accept: "*/*",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await api.get(`/api/analyticData/${subCode}`, config);
+  return response.data.data;
 };
 
 
@@ -373,8 +377,8 @@ export const summarizeAnswer = async (question, answer) => {
     const parsed = JSON.parse(jsonString);
 
     // Step 4: Return the summarized answer
-    
-    console.log("response is "+parsed?.data?.summarized_answer);
+
+    console.log("response is " + parsed?.data?.summarized_answer);
     return parsed?.data?.summarized_answer;
     // return response.data?.data?.summarized_answer;
   } catch (error) {
@@ -386,7 +390,7 @@ export const summarizeAnswer = async (question, answer) => {
 
 export const rephraseAnswer = async (style, summary, answer) => {
   try {
-    console.log("Before making call from API.jsx type of are:"+ typeof(style)+" "+typeof(summary)+typeof(answer));
+    console.log("Before making call from API.jsx type of are:" + typeof (style) + " " + typeof (summary) + typeof (answer));
     const response = await apiAI.post(
       `/rephrase`,
       { style, summary, answer },
@@ -406,14 +410,14 @@ export const resetPasswordLink = async (email) => {
   try {
     const response = await api.post(
       '/api/password/forgot',
-      {email},
+      { email },
     );
-    console.log("Response for forget API: "+ response);
-    console.log("Response.data is: "+ response.data);
-    console.log("Response.data is: "+ response.data.success);
+    console.log("Response for forget API: " + response);
+    console.log("Response.data is: " + response.data);
+    console.log("Response.data is: " + response.data.success);
     return response.data;
 
-  }catch (error) {
+  } catch (error) {
     console.error("Error response:", error.response);
 
     const message =
