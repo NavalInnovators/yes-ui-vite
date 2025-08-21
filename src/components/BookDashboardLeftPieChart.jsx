@@ -40,7 +40,7 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
     plugins: {
       datalabels: {
         color: "black",
-        formatter: (value) => `${value.toFixed(1)}%`,
+        formatter: (value) => (value > 0 ? `${value.toFixed(1)}%` : ""),
         anchor: "center",
         align: "center",
       },
@@ -53,11 +53,11 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
   }
   return (
     <div className="flex flex-col items-center gap-4 bg-gray-100">
-      <h3 className="text-center font-medium text-base"> Type of Questions Asked </h3>
+      <h3 className="text-center font-medium pt-3 text-base"> Type of Questions Asked </h3>
       <div className="relative w-full h-[232px] items-center">
         {/* Chart */}
         <Pie key={selectedUnit} data={chartData} options={options} />
-        {/* Legend absolutely positioned to bottom-left */}
+        
         <div className="absolute bottom-2 left-2 flex flex-col gap-2 text-sm bg-gray-100 px-2 py-1 rounded">
           {LABELS.map((label, i) => (
             <div key={i} className="flex items-center gap-2">
