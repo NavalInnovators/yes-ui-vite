@@ -43,33 +43,33 @@ function MySubjects({ searchQuery }) {
   // Filter the subjects based on the search query or show all if the query is empty
   const filteredSubjects = myCourses
     ? myCourses.filter((subject) => {
-        const normalize = (str) => str?.toLowerCase().trim();
-        const normalizeHyphen = (str) =>
-          normalize(str).replace(/\s*-\s*/g, "-");
+      const normalize = (str) => str?.toLowerCase().trim();
+      const normalizeHyphen = (str) =>
+        normalize(str).replace(/\s*-\s*/g, "-");
 
-        // Category filter
-        if (selectedCategory) {
-          if (yearCategoryMap[selectedCategory]) {
-            return subject.year === yearCategoryMap[selectedCategory];
-          }
-          return subject.branchNames?.some(
-            (branch) =>
-              normalizeHyphen(branch) === normalizeHyphen(selectedCategory)
-          );
+      // Category filter
+      if (selectedCategory) {
+        if (yearCategoryMap[selectedCategory]) {
+          return subject.year === yearCategoryMap[selectedCategory];
         }
-
-        // Normal search
-        const query = normalizeHyphen(searchQuery);
-        return (
-          normalize(subject.name)?.includes(query) ||
-          normalize(subject.universityName)?.includes(query) ||
-          String(subject.year).toLowerCase().includes(query) ||
-          subject.branchNames?.some((branch) =>
-            normalizeHyphen(branch).includes(query)
-          ) ||
-          subject.courseCodes?.some((code) => normalize(code).includes(query))
+        return subject.branchNames?.some(
+          (branch) =>
+            normalizeHyphen(branch) === normalizeHyphen(selectedCategory)
         );
-      })
+      }
+
+      // Normal search
+      const query = normalizeHyphen(searchQuery);
+      return (
+        normalize(subject.name)?.includes(query) ||
+        normalize(subject.universityName)?.includes(query) ||
+        String(subject.year).toLowerCase().includes(query) ||
+        subject.branchNames?.some((branch) =>
+          normalizeHyphen(branch).includes(query)
+        ) ||
+        subject.courseCodes?.some((code) => normalize(code).includes(query))
+      );
+    })
     : [];
   return (
     <div className="userdashboard-content-page">
@@ -167,13 +167,15 @@ function MySubjects({ searchQuery }) {
               </div>
             </div> */}
       </div>
-      <UserDashboardRight
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onCategorySelect={(category) =>
-          setSelectedCategory((prev) => (prev === category ? "" : category))
-        }
-      />
+      <div className="userdashboard-sidesection">
+        <UserDashboardRight
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategorySelect={(category) =>
+            setSelectedCategory((prev) => (prev === category ? "" : category))
+          }
+        />
+      </div>
     </div>
   );
 }
