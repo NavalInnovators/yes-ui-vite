@@ -60,13 +60,15 @@ const Navbar = () => {
   //   const stored = localStorage.getItem("userProfile");
   //   return stored ? JSON.parse(stored).avatarUrl : null;
   // });
-  const [profilePic, setProfilePic] = useState(() => {
-    const storedAvatar = localStorage.getItem("profileAvatarUrl");
-    if (storedAvatar) {
-      return avatarMap[storedAvatar] || profileIconNew;
-    }
-    return profileIconNew;
-  });
+  // const [profilePic, setProfilePic] = useState(() => {
+  //   const storedAvatar = localStorage.getItem("profileAvatarUrl");
+  //   if (storedAvatar) {
+  //     return avatarMap[storedAvatar] || profileIconNew;
+  //   }
+  //   return profileIconNew;
+  // });
+  // 👇 ProfilePic state (default is generic profileIconNew)
+  const [profilePic, setProfilePic] = useState(profileIconNew);
 
   // useEffect(() => {
   //   setProfilePic(`${profilePic || profileIconNew}`);
@@ -138,6 +140,7 @@ const Navbar = () => {
     logout();
     setIsNotificationDropdownOpen(false); // Close notification dropdown when profile is opened
     setIsDropdownOpen(false); // Close profile dropdown when notifications are opened
+    setProfilePic(profileIconNew); // ✅ reset to default
   };
 
   // Close dropdowns when clicking outside of them
@@ -157,14 +160,32 @@ const Navbar = () => {
       }
     };
 
+    // 👇 Helper: read avatar from localStorage
+    const updateProfilePic = () => {
+      const storedAvatar = localStorage.getItem("profileAvatarUrl");
+      if (storedAvatar) {
+        setProfilePic(avatarMap[storedAvatar] || profileIconNew);
+      } else {
+        setProfilePic(profileIconNew);
+      }
+    };
+
+    // ✅ Run immediately whenever login status changes
+    updateProfilePic();
+
+    // ✅ Sync with localStorage events (cross-tab or same-tab updates)
+    window.addEventListener("profileUpdated", updateProfilePic);
+
+
     // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
 
     // Remove event listener on cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("storage", updateProfilePic);
     };
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <nav className="navbar font-public-sans-navbar">

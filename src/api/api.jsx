@@ -219,6 +219,8 @@ export const getProfile = async () => {
     // ✅ set avatarUrl into localStorage only the first time
     if (response.data.profile?.avatarUrl && !localStorage.getItem("profileAvatarUrl")) {
       localStorage.setItem("profileAvatarUrl", response.data.profile.avatarUrl);
+      // 👇 trigger an event so Navbar can listen
+      window.dispatchEvent(new Event("profileUpdated"));
     }
     return response.data;
   } catch (error) {
