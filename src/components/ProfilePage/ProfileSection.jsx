@@ -10,6 +10,15 @@ import {
   nonBinary,
   phone,
   EmailIcon,
+  Avatar01,
+  Avatar02,
+  Avatar03,
+  Avatar04,
+  Avatar05,
+  Avatar06,
+  Avatar07,
+  Avatar08,
+  Avatar09
 } from "../../assets";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -18,29 +27,43 @@ import "./ProfileSection.css";
 import { useAuth } from "../AuthProvider";
 
 const ProfileSection = () => {
-  const { setEmail } = useAuth(); 
+  const { setEmail } = useAuth();
   const [profileData, setProfileData] = useState({
-      firstName: "First Name",
-      lastName: "Last Name",
-      username: "Username",
-      dob: "yyyy-mm-dd",
-      gender: "Your gender",
-      email: "Email Address",
-      phone: "Phone number",
-      avatarUrl: null
-    });
+    firstName: "First Name",
+    lastName: "Last Name",
+    username: "Username",
+    dob: "yyyy-mm-dd",
+    gender: "Your gender",
+    email: "Email Address",
+    phone: "Phone number",
+    avatarUrl: null
+  });
+
+  const avatarImages = {
+    Avatar01,
+    Avatar02,
+    Avatar03,
+    Avatar04,
+    Avatar05,
+    Avatar06,
+    Avatar07,
+    Avatar08,
+    Avatar09,
+  };
+
 
   // Fetch profile data
-    const { data: profileDetails, isLoading: isLoadingProfile } = useQuery({
-      queryKey: ['profile'],
-      queryFn: getProfile,
-      onError: (error) => {
-        toast.error(error.response?.data?.message || "Failed to fetch profile");
-      }
-    });
+  const { data: profileDetails, isLoading: isLoadingProfile } = useQuery({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to fetch profile");
+    }
+  });
 
   useEffect(() => {
     if (profileDetails) {
+      const avatarKey = profileDetails.profile.avatarUrl || null;
       setProfileData({
         firstName: profileDetails.profile.firstName || "First Name",
         lastName: profileDetails.profile.lastName || "Last Name",
@@ -49,8 +72,14 @@ const ProfileSection = () => {
         gender: profileDetails.profile.gender || "Your Gender",
         email: profileDetails.profile.email || "Email Address",
         phone: profileDetails.profile.phone || "Phone number",
+        avatarUrl: avatarKey,
       });
       setEmail(profileDetails.profile.email);
+
+      // ✅ Save avatarUrl to localStorage
+      if (avatarKey) {
+        localStorage.setItem("profileAvatarUrl", avatarKey);
+      }
     }
   }, [profileDetails, setEmail]);
 
@@ -59,7 +88,7 @@ const ProfileSection = () => {
     const [year, month, day] = date.split("-");
     return `${day}-${month}-${year}`;
   };
-  
+
 
   const getGenderIcon = (gender) => {
     if (!gender) {
@@ -92,11 +121,15 @@ const ProfileSection = () => {
         <div className="profile-image-placeholder">
           <img
             src={
-              (profileDetails && profileDetails.profile.avatarUrl !== null) ? profileDetails.profile.avatarUrl : profileIconNew
+              profileDetails?.profile?.avatarUrl && avatarImages[profileDetails.profile.avatarUrl]
+                ? avatarImages[profileDetails.profile.avatarUrl]
+                : profileIconNew
             }
             alt="Profile"
             className="profile-edit-img"
           />
+
+
           <div className="change-profile-img-text">
             <div className="font-subheading-black change-profile-heading">
               Change Profile Image

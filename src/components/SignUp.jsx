@@ -119,6 +119,11 @@ const SignUp = () => {
     });
   };
 
+  const getRandomAvatar = () => {
+    const randomIndex = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    return `Avatar${randomIndex.toString().padStart(2, "0")}`; // Avatar01, Avatar02...
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -133,6 +138,7 @@ const SignUp = () => {
       userName: userName,
       password: formData.password,
       email: formData.email,
+      avatarUrl: getRandomAvatar(),
     };
 
     // TODO : Save the data in local storage or other methods

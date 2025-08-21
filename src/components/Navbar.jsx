@@ -11,6 +11,15 @@ import {
   SubmitYourQueryIcon,
   LogoutIcon,
   SearchIcon,
+  Avatar01,
+  Avatar02,
+  Avatar03,
+  Avatar04,
+  Avatar05,
+  Avatar06,
+  Avatar07,
+  Avatar08,
+  Avatar09,
 } from "../assets";
 import { MenuIcon } from "../assets";
 import { navLinks } from "../constants";
@@ -24,6 +33,18 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const avatarMap = {
+    Avatar01,
+    Avatar02,
+    Avatar03,
+    Avatar04,
+    Avatar05,
+    Avatar06,
+    Avatar07,
+    Avatar08,
+    Avatar09,
+  };
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
   // const [hoveredItem, setHoveredItem] = useState("true");
@@ -35,14 +56,21 @@ const Navbar = () => {
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
     useState(false);
 
+  // const [profilePic, setProfilePic] = useState(() => {
+  //   const stored = localStorage.getItem("userProfile");
+  //   return stored ? JSON.parse(stored).avatarUrl : null;
+  // });
   const [profilePic, setProfilePic] = useState(() => {
-    const stored = localStorage.getItem("userProfile");
-    return stored ? JSON.parse(stored).avatarUrl : null;
+    const storedAvatar = localStorage.getItem("profileAvatarUrl");
+    if (storedAvatar) {
+      return avatarMap[storedAvatar] || profileIconNew;
+    }
+    return profileIconNew;
   });
 
-  useEffect(() => {
-    setProfilePic(`${profilePic || profileIconNew}`);
-  }, [profilePic]);
+  // useEffect(() => {
+  //   setProfilePic(`${profilePic || profileIconNew}`);
+  // }, [profilePic]);
 
   // Notifications state
   const [notifications, setNotifications] = useState([
@@ -224,8 +252,8 @@ const Navbar = () => {
         {navLinks.map((nav) => (
           <li
             key={nav.id}
-            // onMouseEnter={() => setHoveredItem(nav.title)}
-            // onMouseLeave={() => setHoveredItem(null)}
+          // onMouseEnter={() => setHoveredItem(nav.title)}
+          // onMouseLeave={() => setHoveredItem(null)}
           >
             <Link
               className={`${currentPath === nav.id ? "active" : "inactive"}`}
@@ -276,9 +304,8 @@ const Navbar = () => {
                     <div
                       onClick={() => setIsNotificationDropdownOpen(false)}
                       key={notification.id}
-                      className={`notification-item font-notification ${
-                        notification.isRead ? "read" : ""
-                      }`}
+                      className={`notification-item font-notification ${notification.isRead ? "read" : ""
+                        }`}
                     >
                       {notification.message}
                     </div>
@@ -296,6 +323,12 @@ const Navbar = () => {
             )}
 
             {/* Render the user's profile image */}
+            {/* <img
+              src={profilePic}
+              alt="Profile"
+              className="profile-image"
+              onClick={handleProfileClick}
+            /> */}
             <img
               src={profilePic}
               alt="Profile"
