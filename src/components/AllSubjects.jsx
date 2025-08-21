@@ -1,15 +1,23 @@
-import React from "react";
+import { useState } from "react";
 import "./UserDashboard.css";
 import UserDashboardRight from "./UserDashboardRight";
 import { useNavigate } from "react-router-dom";
 import { getAllCourses, enrollCourse } from "../api/api";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useMemo } from "react";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
 
 const AllSubjects = ({ searchQuery }) => {
+  const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
 
+  const yearCategoryMap = {
+    "1st Year": 1,
+    "2nd Year": 2,
+    "3rd Year": 3,
+    "4th Year": 4,
+  };
   const {
     data: allCourses = [],
     isLoading: isLoadingAllCourses,
@@ -33,31 +41,84 @@ const AllSubjects = ({ searchQuery }) => {
   // }
 
   // Filter the courses based on the search query
+  const categories = useMemo(() => {
+    const years = new Set();
+    const branches = new Set();
+    const universities = new Set();
+
+    (allCourses.length > 0
+      ? allCourses
+      : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
+    ).forEach((course) => {
+      if (course.year) years.add(`${course.year} Year`);
+      if (course.branchNames) {
+        course.branchNames.forEach((branch) => branches.add(branch));
+      }
+      if (course.universityName != "Unknown")
+        universities.add(course.universityName);
+    });
+
+    // Sort years numerically
+    const sortedYears = Array.from(years).sort((a, b) => {
+      const numA = parseInt(a); // extract number before "Year"
+      const numB = parseInt(b);
+      return numA - numB;
+    });
+
+    return [
+      ...Array.from(universities),
+      ...sortedYears,
+      ...Array.from(branches).sort(), // optional alphabetical sort
+    ];
+  }, [allCourses]);
+
   const filteredCourses = (
     allCourses.length > 0
       ? allCourses
       : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
   ).filter((course) => {
-    // Common normalizer
-    const normalize = (str) => str?.trimEnd().toLowerCase(); // removes trailing spaces + lowercases
-
-    // Special case for branch hyphen spacing
+    const normalize = (str) => str?.trimEnd().toLowerCase();
     const normalizeHyphen = (str) => normalize(str).replace(/\s*-\s*/g, "-");
+    const yearCategoryMap = {
+      "1 Year": 1,
+      "2 Year": 2,
+      "3 Year": 3,
+      "4 Year": 4,
+      "1st Year": 1,
+      "2nd Year": 2,
+      "3rd Year": 3,
+      "4th Year": 4,
+    };
+    // Year categories
+    if (yearCategoryMap[selectedCategory]) {
+      return course.year === yearCategoryMap[selectedCategory];
+    }
 
-    const query = normalize(searchQuery);
+    // Branch categories
+    if (
+      course.branchNames?.some(
+        (branch) =>
+          normalizeHyphen(branch) === normalizeHyphen(selectedCategory)
+      )
+    ) {
+      return true;
+    }
 
-    const nameMatch = normalize(course.name)?.includes(query);
-    const universityMatch = normalize(course.universityName)?.includes(query);
-    const yearMatch = String(course.year).toLowerCase().includes(query);
-    const branchMatch = course.branchNames?.some((branch) =>
-      normalizeHyphen(branch).includes(normalizeHyphen(searchQuery))
-    );
-    const codeMatch = course.courseCodes?.some((code) =>
-      normalize(code)?.includes(query)
-    );
+    // University
+    if (normalize(course.universityName) === normalize(selectedCategory)) {
+      return true;
+    }
 
+    // Otherwise, normal search
+    const query = normalize(selectedCategory || searchQuery);
     return (
-      nameMatch || universityMatch || yearMatch || branchMatch || codeMatch
+      normalize(course.name)?.includes(query) ||
+      normalize(course.universityName)?.includes(query) ||
+      String(course.year).toLowerCase().includes(query) ||
+      course.branchNames?.some((branch) =>
+        normalizeHyphen(branch).includes(normalizeHyphen(query))
+      ) ||
+      course.courseCodes?.some((code) => normalize(code)?.includes(query))
     );
   });
 
@@ -182,7 +243,17 @@ const AllSubjects = ({ searchQuery }) => {
       </div>
 
       <div className="userdashboard-sidesection">
-        <UserDashboardRight />
+        <UserDashboardRight
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategorySelect={(category) => {
+            if (selectedCategory === category) {
+              setSelectedCategory("");
+            } else {
+              setSelectedCategory(category);
+            }
+          }}
+        />
       </div>
     </div>
   );
