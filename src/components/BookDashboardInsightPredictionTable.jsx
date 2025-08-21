@@ -16,20 +16,20 @@ function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, 
     <div className="space-y-3 max-w-4xl">
       {/* <h2 className="text-lg font-semibold text-gray-800 truncate">{unitTitle}</h2> */}
 
-      <div className="overflow-x-auto rounded-lg border border-black shadow-sm">
-        <table className="w-full text-base border-collapse bg-white">
+      <div className="rounded-lg border border-black shadow-sm">
+        <table className="w-full text-sm border-collapse  table-auto">
           <thead>
             <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-              <th className="px-5 py-4 text-center  text-gray-900 border-r border-gray-200 w-1/3 h-16">
+              <th className=" rounded-lg px-3 py-2 text-center  text-gray-900 border-r border-gray-200">
                 Topic Name
               </th>
-              <th className="px-5 py-4 text-center  font-semibold text-gray-900 border-r border-gray-200 w-1/5">
+              <th className="px-3 py-2 text-center  font-semibold text-gray-900 border-r border-gray-200">
                 Descriptive
               </th>
-              <th className="px-5 py-4 text-center  font-semibold text-gray-900 border-r border-gray-200 w-1/5">
+              <th className="px-3 py-2 text-center  font-semibold text-gray-900 border-r border-gray-200">
                 Classification
               </th>
-              <th className="px-5 py-4 text-center  font-semibold text-gray-900 w-1/5">
+              <th className=" rounded-lg px-3 py-2 text-center  font-semibold text-gray-900">
                 Comparison
               </th>
             </tr>
@@ -39,18 +39,18 @@ function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, 
               const theory = topic.questiontypedata?.theory || {};
               return (
                 <tr key={idx} className="hover:bg-blue-50 transition-colors duration-150 group">
-                  <td className="px-5 py-4 text-left border-r border-gray-900 group-hover:border-blue-200">
+                  <td className="px-3 py-2 text-left border-r border-gray-900 break-words max-w-[150px]">
                     <div className="px-3 font-medium text-gray-900  max-w-xs" title={topic.topic}>
                       {topic.topic}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-center border-r border-gray-900 group-hover:border-blue-200 text-base">
+                  <td className="px-3 py-2 text-center border-r border-gray-200">
                     {theory.descriptive?.toFixed(1) ?? "0.0"}%
                   </td>
-                  <td className="px-5 py-4 text-center border-r border-gray-900 group-hover:border-blue-200 text-base">
+                  <td className="px-3 py-2 text-center border-r border-gray-200">
                     {theory.classification?.toFixed(1) ?? "0.0"}%
                   </td>
-                  <td className="px-5 py-4 text-center text-base">
+                  <td className="px-3 py-2 text-center">
                     {theory.comparison?.toFixed(1) ?? "0.0"}%
                   </td>
                 </tr>
