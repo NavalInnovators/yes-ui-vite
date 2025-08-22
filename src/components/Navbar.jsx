@@ -384,12 +384,12 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li onClick={() => setIsDropdownOpen(false)}>
-                    <Link to="/query">
-                      <img
+                    <Link to="/make-query" state={{ tab: "submit-query" }}>
+                      <div><img
                         src={SubmitYourQueryIcon}
                         alt="SubmitYourQueryIcon"
-                      />{" "}
-                      Submit Your Query
+                      /></div>
+                      <div>Submit Your Query</div>
                     </Link>
                   </li>
                   <li onClick={() => setIsDropdownOpen(false)}>
