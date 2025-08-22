@@ -77,6 +77,15 @@ import changePass from "./changePass.svg";
 import hat from "./hat.svg";
 import star from "./star.svg";
 import dashboardIcon from "./dashboardIcon.svg";
+import Avatar01 from "./Avatar01.png";
+import Avatar02 from "./Avatar02.png";
+import Avatar03 from "./Avatar03.png";
+import Avatar04 from "./Avatar04.png";
+import Avatar05 from "./Avatar05.png";
+import Avatar06 from "./Avatar06.png";
+import Avatar07 from "./Avatar07.png";
+import Avatar08 from "./Avatar08.png";
+import Avatar09 from "./Avatar09.png";
 
 export {
   logo,
@@ -156,4 +165,13 @@ export {
   hat,
   star,
   dashboardIcon,
+  Avatar01,
+  Avatar02,
+  Avatar03,
+  Avatar04,
+  Avatar05,
+  Avatar06,
+  Avatar07,
+  Avatar08,
+  Avatar09,
 };

@@ -133,3 +133,31 @@ select {
 .submit-button:hover {
   background-color: #333;
 }
+
+
+
+/* Default tab style */
+.tabs a {
+  color: #444;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* On hover */
+.tabs a:hover {
+  background-color: #f0f0f0;
+}
+
+/* ✅ Active tab stays highlighted even after clicking outside */
+.active-tab {
+  background-color: #000;   /* or your theme color */
+  color: white !important;
+  /* font-weight: bold; */
+}
+
+/* Prevent browser focus outline from overriding */
+.tabs a:focus {
+  outline: none;
+}
