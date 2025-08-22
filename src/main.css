@@ -22,6 +22,7 @@
 
   /* Light Mode */
   --color-light-card: hsl(0, 0%, 95%);
+  --color-light-200: hsl(0, 0%, 90%);
   --color-light-text: hsl(0, 0%, 30%);
   --color-light-border: hsl(0, 0%, 80%);
   --color-light-hover: hsl(0, 0%, 90%);

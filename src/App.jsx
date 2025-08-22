@@ -60,6 +60,7 @@ import { BookDashboardProvider } from "./context/book-dashboard-context.jsx";
 import Reviewer from "./roles/Reviewer/Reviewer.jsx";
 import "./main.css";
 import Creator from "./roles/Creator/Creator.jsx";
+import CreatorVerification from "./components/CreatorVerification.jsx";
 
 function App() {
   return (
@@ -146,6 +147,7 @@ function AppContent() {
         <Route path="/careerJob-page" element={<CareerJob />} />
         {/* doubt */}
         <Route path="/career" element={<CareerBlog />} />
+        <Route path="/creator-verification" element={<CreatorVerification />} />
         <Route path="/book-dashboard" element={<BookDashboard />} />
         <Route path="/otp-verification" element={<Login />} />
         {/* <Route path="/resolve-query" element={<ResolveQuery />} /> */}

@@ -1,4 +1,4 @@
-export default function NotificationsIcon({ size = 42 }) {
+export default function NotificationsIcon({ size = 42, className = "" }) {
   return (
     <svg
       width={size}
@@ -7,6 +7,7 @@ export default function NotificationsIcon({ size = 42 }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ cursor: "pointer" }}
+      className={className}
     >
       <path
         d="M18.521 32.7143H22.4105C22.9475 32.7143 23.3828 32.279 23.3828 31.7419C23.3828 31.2049 22.9475 30.7695 22.4105 30.7695H18.521C17.9839 30.7695 17.5486 31.2049 17.5486 31.7419C17.5486 32.279 17.9839 32.7143 18.521 32.7143Z"
