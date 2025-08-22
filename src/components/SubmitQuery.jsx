@@ -8,7 +8,12 @@ function SubmitQuery() {
   const [query, setQuery] = useState('');
 
   // Determine active tab from route
-  const activeTab = location.pathname === "/query" ? "your-answers" : "submit-query";
+  // const activeTab = location.pathname === "/query" ? "your-answers" : "submit-query";
+  const activeTab = location.state?.tab
+    ? location.state.tab
+    : location.pathname === "make-query"
+      ? "submit-query"
+      : "your-answers";
 
   return (
     <div className="submit-query-container">

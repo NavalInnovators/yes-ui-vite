@@ -229,3 +229,11 @@
   width: 60px;
   cursor: pointer;
 }
+
+/* ✅ Active tab styles */
+.submit-query-tabs-container a.active-tab {
+  background-color: black;
+  color: white;
+  /* font-weight: regular;   makes it stand out */
+  transform: scale(1.02); /* optional small highlight effect */
+}
