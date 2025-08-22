@@ -7,6 +7,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
+// Import Lottie animation
+import Lottie from "lottie-react";
+import ManHoldingNotes from "../assets/man-holding-note.json";
 
 const AllSubjects = ({ searchQuery }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -162,7 +165,23 @@ const AllSubjects = ({ searchQuery }) => {
       <div className="all-course-card-container">
         {/* Handle loading and error states */}
         {isLoadingAllCourses ? (
-          <div>Loading all your courses...</div>
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
+            width: "100%", // full viewport height, adjust if needed
+          }}>
+            <Lottie
+              animationData={ManHoldingNotes}
+              loop={true}
+              style={{ height: 120, width: 120 }}
+            />
+            <p style={{ marginTop: "10px", fontSize: "20px", color: "#555" }}>
+              Finding All the Subjects...
+            </p>
+          </div>
         ) : isError ? (
           <div>Error loading courses. Please try again later.</div>
         ) : filteredCourses.length === 0 ? (
@@ -202,36 +221,36 @@ const AllSubjects = ({ searchQuery }) => {
                   isEnrolling
                     ? null
                     : () => {
-                        console.log("Clicked on start learning.....");
-                        sessionStorage.setItem(
-                          "selectedCourseCode",
-                          course.courseCodes[0]
+                      console.log("Clicked on start learning.....");
+                      sessionStorage.setItem(
+                        "selectedCourseCode",
+                        course.courseCodes[0]
+                      );
+
+                      const courseExists = JSON.parse(
+                        localStorage.getItem("myCourses") || "[]"
+                      ).some((tempCourse) => tempCourse.id === course.id);
+                      // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
+
+                      if (courseExists) {
+                        navigate(
+                          `/book-dashboard?subcode=${course.courseCodes[0]}`
                         );
-
-                        const courseExists = JSON.parse(
-                          localStorage.getItem("myCourses") || "[]"
-                        ).some((tempCourse) => tempCourse.id === course.id);
-                        // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
-
-                        if (courseExists) {
-                          navigate(
-                            `/book-dashboard?subcode=${course.courseCodes[0]}`
-                          );
+                        return;
+                      } else {
+                        if (!localStorage.getItem("token")) {
+                          navigate("/login");
                           return;
                         } else {
-                          if (!localStorage.getItem("token")) {
-                            navigate("/login");
-                            return;
-                          } else {
-                            console.log("Have token!");
-                            toast.info(
-                              "Enrolling in the course... Please wait",
-                              { autoClose: false }
-                            );
-                            mutateEnroll(course);
-                          }
+                          console.log("Have token!");
+                          toast.info(
+                            "Enrolling in the course... Please wait",
+                            { autoClose: false }
+                          );
+                          mutateEnroll(course);
                         }
                       }
+                    }
                 }
                 className="all-course-card-start-learning-btn font-notification pointer-cursor"
               >
