@@ -6,41 +6,38 @@ import RightPageArrow from "../assets/RightPageArrow.svg";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import "./BookDashboardSyllabus.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
+// Import Lottie animation
+import Lottie from "lottie-react";
+import ManHoldingNotes from "../assets/man-holding-note.json";
 
 export default function BookDashboardSyllabus({ currentSection, handleSectionChange }) {
   const { selectedUnit, syllabusLoading, syllabusError, syllabus } =
     useBookDashboard();
 
-  // Error and loading handling
-  // if (syllabusLoading) {
-  //   return <div>Loading syllabus...</div>;
-  // }
-  // if (syllabusError) {
-  //   return <div>Error loading syllabus. Please contact support team or raise a query!</div>;
-  // }
-
   const syllabusContent = syllabus?.units[selectedUnit - 1]?.topics || [];
 
   return (
     <div className="bookdashboard-syllabus-mid-section">
-      {/* <div className="mobile-syllabus-navigation-buttons">
-        <button className="mobile-syllabus-unit-button">
-          Unit 1
-         
-          <img src={RightPageArrow} alt="Right Page Arrow" />
-        </button>
-        <button className="mobile-syllabus-topics-button">
-          All Questions <img src={RightPageArrow} alt="Right Page Arrow" />
-        </button>
-      </div> */}
-      {/* <div className="mobile-filter-container">
-        <button className="mobile-syllabus-filter-button">Filter</button>
-      </div> */}
       <div className="book-dashboard-syllabus-container">
         <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
         <div className="book-dashboard-syllabus-sec">
           {syllabusLoading
-            ? (<div>Loading syllabus...</div>)
+            ? (<div style={{ 
+              display: "flex", 
+              flexDirection: "column",
+              justifyContent: "center", 
+              alignItems: "center", 
+              height: "50vh" // full viewport height, adjust if needed
+            }}>
+              <Lottie
+                animationData={ManHoldingNotes}
+                loop={true}
+                style={{ height: 120, width: 120 }}
+              />
+              <p style={{ marginTop: "10px", fontSize: "20px", color: "#555" }}>
+                Preparing your Syllabus...
+              </p>
+              </div>)
             : syllabusError
               ? (<div>Error loading syllabus. Please contact support team or raise a query!</div>)
               : (<><div className="syllabus-title">{syllabus.units[selectedUnit - 1].unitTitle}</div>

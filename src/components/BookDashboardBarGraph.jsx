@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart, Tooltip, Title, Legend, CategoryScale, LinearScale, BarElement } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+// Import Lottie animation
+import Lottie from "lottie-react";
+import ManHoldingNotes from "../assets/man-holding-note.json";
 
 Chart.register(Tooltip, Title, Legend, CategoryScale, LinearScale, BarElement, ChartDataLabels);
 
@@ -41,7 +44,24 @@ function BookDashboardBarGraph({ useTopicFrequency, selectedUnit }) {
   if (loading || !chartData) {
     return (
       <div className="w-full md:h-110 flex justify-center items-center">
-        Loading chart...
+        <div style={{ 
+              display: "flex", 
+              flexDirection: "column",
+              justifyContent: "center", 
+              alignItems: "center", 
+              height: "50vh" // full viewport height, adjust if needed
+            }}>
+              <Lottie
+                animationData={ManHoldingNotes}
+                loop={true}
+                style={{ height: 120, width: 120 }}
+              />
+              <p style={{ marginTop: "10px", fontSize: "20px", color: "#555" }}>
+                Preparing your Graphs...
+              </p>
+              
+
+            </div>
       </div>
     );
   }

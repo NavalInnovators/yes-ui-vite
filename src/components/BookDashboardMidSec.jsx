@@ -12,6 +12,9 @@ import { toast } from "react-toastify";
 import parse from "html-react-parser";
 import { summarizeAnswer, rephraseAnswer } from "../api/api";
 import { type } from "@testing-library/user-event/dist/type";
+// Import Lottie animation
+import Lottie from "lottie-react";
+import ManHoldingNotes from "../assets/man-holding-note.json";
 
 
 function BookDashboardMidSec({ currentSection, handleSectionChange }) {
@@ -373,7 +376,26 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
         </div>
         <div className="book-dashboard-question-summary-container">
           {qnaLoading
-            ? (<div>Loading Questions and Answers...</div>)
+            ? (
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column",
+              justifyContent: "center", 
+              alignItems: "center", 
+              height: "50vh" // full viewport height, adjust if needed
+            }}>
+              <Lottie
+                animationData={ManHoldingNotes}
+                loop={true}
+                style={{ height: 120, width: 120 }}
+              />
+              <p style={{ marginTop: "10px", fontSize: "20px", color: "#555" }}>
+                Preparing your Questions and Answers...
+              </p>
+              
+
+            </div>
+            )
             : qnaError
               ? (<div>Error loading Q&A data. Please contact support team or raise a query!</div>)
               : question

@@ -86,6 +86,7 @@ import Avatar06 from "./Avatar06.png";
 import Avatar07 from "./Avatar07.png";
 import Avatar08 from "./Avatar08.png";
 import Avatar09 from "./Avatar09.png";
+import ManHoldingNotes from "./man-holding-note.json";
 
 export {
   logo,
@@ -174,4 +175,5 @@ export {
   Avatar07,
   Avatar08,
   Avatar09,
+  ManHoldingNotes,
 };
