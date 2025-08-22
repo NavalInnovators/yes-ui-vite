@@ -3,20 +3,50 @@
 
 <head>
   <meta charset="utf-8" />
-  <!-- Favicon for light/dark mode -->
-  <link rel="icon" href="/YESLogoBlackWithoutText.svg" media="(prefers-color-scheme: light)">
-  <link rel="icon" href="/YESLogoWhiteWithoutText.svg" media="(prefers-color-scheme: dark)">
+  
+  <!-- ✅ Favicon for light/dark mode -->
+  <link rel="icon" href="./public/YESLogoBlackWithoutText.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="./public/YESLogoWhiteWithoutText.svg" media="(prefers-color-scheme: dark)">
+
+  <!-- ✅ PNG Favicons for compatibility -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./public/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./public/favicon-192x192.png">
+
+  <!-- ✅ Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="./public/apple-touch-icon.png">
+
+  <!-- ✅ Web App Manifest -->
+  <link rel="manifest" href="./public/manifest.json">
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="description"
     content="Your Exam Saathi, a personalized learning platform. Product by Naval Innovators Private Limited" />
+  
   <title>Your Exam Saathi</title>
+
+  <!-- ✅ Structured Data (SEO) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Your Exam Saathi",
+      "url": "https://www.yourexamsaathi.com",
+      "logo": "https://www.yourexamsaathi.com/YESLogoBlackWithoutText.svg",
+      "sameAs": [
+        "https://www.instagram.com/yourexamsaathi",
+        "https://www.linkedin.com/company/yourexamsaathi",
+        "https://www.facebook.com/people/Your-Exam-Saathi/61579173974246/",
+        "https://x.com/yourexamsaathi",
+        "https://www.youtube.com/@yourexamsaathi-yes"
+      ]
+    }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
-
 </body>
 
 </html>
