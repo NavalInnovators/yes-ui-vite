@@ -389,7 +389,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                 loop={true}
                 style={{ height: 120, width: 120 }}
               />
-              <p style={{ marginTop: "10px", fontSize: "20px", color: "#555" }}>
+              <p className="loader-text">
                 Preparing your Questions and Answers...
               </p>
               

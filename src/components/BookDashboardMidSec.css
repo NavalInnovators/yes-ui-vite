@@ -380,6 +380,26 @@
 }
 /* Default behavior (mobile-first approach): both dropdown and list are hidden */
 
+.loader-text {
+  margin-top: 10px;
+  font-size: 20px;
+  color: #555;
+}
+
+/* On smaller screens, shrink text */
+@media (max-width: 768px) {
+  .loader-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loader-text {
+    font-size: 14px;
+  }
+}
+
+
 /* Laptop view (show list, hide dropdown) */
 @media (min-width: 1024px) {
   hr {

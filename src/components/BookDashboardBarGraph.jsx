@@ -44,65 +44,69 @@ function BookDashboardBarGraph({ useTopicFrequency, selectedUnit }) {
   if (loading || !chartData) {
     return (
       <div className="w-full md:h-110 flex justify-center items-center">
-        <div style={{ 
-              display: "flex", 
-              flexDirection: "column",
-              justifyContent: "center", 
-              alignItems: "center", 
-              height: "50vh" // full viewport height, adjust if needed
-            }}>
-              <Lottie
-                animationData={ManHoldingNotes}
-                loop={true}
-                style={{ height: 120, width: 120 }}
-              />
-              <p style={{ marginTop: "10px", fontSize: "20px", color: "#555" }}>
-                Preparing your Graphs...
-              </p>
-              
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh" // full viewport height, adjust if needed
+        }}>
+          <Lottie
+            animationData={ManHoldingNotes}
+            loop={true}
+            style={{ height: 120, width: 120 }}
+          />
+          <p style={{
+            marginTop: "10px",
+            fontSize: "clamp(14px, 2vw, 20px)", // min 14px, scales with screen, max 20px
+            color: "#555"
+          }}>
+            Preparing your Graphs...
+          </p>
 
-            </div>
+
+        </div>
       </div>
     );
   }
 
   return (
     <div className="w-full md:h-110 flex justify-center items-center relative">
-     <div className="w-full min-h-[250px] max-h-[350px] overflow-hidden text-center">
+      <div className="w-full min-h-[250px] max-h-[350px] overflow-hidden text-center">
 
         Topic and their repeat %
         <Bar
           data={chartData}
-         options={{
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: { enabled: true },
-    datalabels: {
-      color: "#000",
-      anchor: "end",
-      align: "top",
-      formatter: (value) => `${value}%`,
-      font: {
-        weight: "bold",
-        size: 10,
-      },
-    },
-  },
-  scales: {
-    x: {
-      ticks: { display: false },
-      grid: { drawTicks: false }, 
-    },
-    y: {
-      beginAtZero: true,
-    //   max: 100,
-    //   title: { display: true, text: "%" },
-    offset: true,
-    },
-  },
-}}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: true },
+              datalabels: {
+                color: "#000",
+                anchor: "end",
+                align: "top",
+                formatter: (value) => `${value}%`,
+                font: {
+                  weight: "bold",
+                  size: 10,
+                },
+              },
+            },
+            scales: {
+              x: {
+                ticks: { display: false },
+                grid: { drawTicks: false },
+              },
+              y: {
+                beginAtZero: true,
+                //   max: 100,
+                //   title: { display: true, text: "%" },
+                offset: true,
+              },
+            },
+          }}
 
         />
       </div>
