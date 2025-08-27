@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { getQnA, getSyllabus, getUnitNotes } from "../api/api";
+import { getQnA, getSyllabus, getUnitNotes, getAnalyticData } from "../api/api";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
@@ -19,6 +19,7 @@ export const BookDashboardProvider = ({ children }) => {
   const [subCode, setSubCode] = useState(sessionStorage.getItem('selectedCourseCode'));
   const [qList, setQList] = useState([[], [], [], [], []]);
   const [notesList, setNotesList] = useState({});
+  const [unitInsights, setUnitInsights] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState("0");
   // const [subSyllabus, setSubSyllabus] = useState([]);
 
@@ -64,6 +65,17 @@ export const BookDashboardProvider = ({ children }) => {
     enabled: !!subCode,
   });
 
+  //Fetch Insights Data 
+  const {
+    data: insights,
+    isLoading: insightsLoading,
+    error: insightsError,
+  } = useQuery({
+    queryKey: ["insights", subCode],
+    queryFn: () => getAnalyticData(subCode),
+    enabled: !!subCode,
+  });
+
 
   useEffect(() => {
     if (qna) {
@@ -86,7 +98,20 @@ export const BookDashboardProvider = ({ children }) => {
       });
       setNotesList(tempNotesObj);
     }
-  }, [qna, unitNotes]);
+
+    if(insights)
+    {
+      const tempUnitInsights = {};
+      insights.forEach((u) => {
+        tempUnitInsights[u.unit] = {
+          unitTitle: u.unitTitle,
+          topicfrequency: u.topicfrequency,
+          questiontypedata: u.questiontypedata
+        };
+      });
+      setUnitInsights(tempUnitInsights);
+    }
+  }, [qna, unitNotes, insights]);
 
   return (
     <DashboardContext.Provider
@@ -111,6 +136,9 @@ export const BookDashboardProvider = ({ children }) => {
         unitNotesError,
         selectedQuestion,
         setSelectedQuestion,
+        unitInsights,
+        insightsLoading,
+        insightsError,
       }}
     >
       {children}

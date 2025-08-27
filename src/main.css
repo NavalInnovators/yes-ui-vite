@@ -1,8 +1,110 @@
 /* index.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 @import "tailwindcss";
+
+/* ------------ For Reviewer Mode ------------ */
+@theme {
+  --color-white: hsl(0, 0%, 95%);
+  --color-purple: hsl(291, 55%, 50%);
+  --color-green: hsl(144, 67%, 38%);
+
+  --color-green-hover: hsl(144, 67%, 30%);
+
+  /* Dark Mode */
+  --color-dark-card: hsl(0, 0%, 5%);
+  --color-dark-highlight: hsl(0, 0%, 10%);
+  --color-dark-more-highlighted: hsl(0, 0%, 17%);
+  --color-dark-hover: hsl(0, 0%, 15%);
+  --color-dark-text-muted: hsl(0, 0%, 70%);
+  --color-dark-border: hsl(0, 0%, 20%);
+
+  /* Light Mode */
+  --color-light-card: hsl(0, 0%, 95%);
+  --color-light-text: hsl(0, 0%, 30%);
+  --color-light-border: hsl(0, 0%, 80%);
+  --color-light-hover: hsl(0, 0%, 90%);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Hover Tooltip */
+.info-tooltip {
+  z-index: 10;
+  background: white;
+  color: black;
+}
+
+.info-tooltip::after {
+  content: "\25B2";
+  position: absolute;
+  top: -25.5px;
+  font-size: 25px;
+  right: 30px;
+  text-shadow: 0px -1px 1px rgb(190, 189, 189);
+  color: rgb(255, 255, 255);
+  z-index: 1;
+}
+
+/* Dark mode tooltip */
+.dark .info-tooltip {
+  background: hsl(0, 0%, 5%);
+  color: white;
+  border: 1px solid hsl(0, 0%, 20%);
+}
+
+.dark .info-tooltip::after {
+  color: hsl(0, 0%, 5%);
+  text-shadow: 0px -1px 1px rgb(50, 50, 50);
+}
+
+/* Gradient Border */
+.gradient-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background: linear-gradient(90deg, #381ab2, #9b32ad, #feac2f);
+  z-index: -1;
+  border-radius: 7px;
+  width: calc(100% + 5px);
+  height: calc(100% + 4px);
+}
+
+.dark .gradient-button {
+  background: linear-gradient(90deg, #381ab2, #9b32ad, #feac2f)
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  margin: 5px 0;
+  background: hsl(0, 0%, 100%);
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 70%);
+  border-radius: 8px;
+  /* border: 2px solid hsl(0, 0%, 95%); */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 80%);
+}
+
+/* ---- CK Editor Styles ----*/
+.cke {
+  border: 2px solid hsl(0, 0%, 90%) !important;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* --------------------------------------------- */
 
 /*
 // <uniquifier>: Use a unique and descriptive class name
@@ -28,52 +130,47 @@
 */
 
 :root {
-  --colour-gradient: linear-gradient(45deg,
-      #FEAC2F 25%,
-      /* Color 1 starts at 10% */
-      #9B32AD 45%,
-      /* Color 2 starts at 25% */
-      #381AB2 65%,
-      /* Color 3 starts at 40% */
-      #17082C 85%
-      /* Color 4 starts at 60% */
-    );
-
+  --colour-gradient: linear-gradient(
+    45deg,
+    #feac2f 25%,
+    /* Color 1 starts at 10% */ #9b32ad 45%,
+    /* Color 2 starts at 25% */ #381ab2 65%,
+    /* Color 3 starts at 40% */ #17082c 85% /* Color 4 starts at 60% */
+  );
 }
-
-
 
 html,
-body {
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
+body,
+#root {
+  margin: 0;
+  padding: 0;
   height: 100%;
+  width: 100vw;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-root{
+root {
   width: 100%;
 }
 
 * {
-  margin: 0px;
-  padding: 0px;
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
 
-body, root {
+body,
+root {
   font-family: "Public Sans", sans-serif;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
 
 .colourful-border-btn {
   position: relative;
   display: inline-block;
   border-radius: 8px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   /* Default background color */
   padding: 20px 40px;
   margin: 2%;
@@ -88,7 +185,7 @@ body, root {
 }
 
 .colourful-border-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -97,18 +194,16 @@ body, root {
   border-radius: 8px;
   padding: 3px;
   /* The size of the border */
-  background: linear-gradient(45deg,
-      #FEAC2F 20%,
-      #9B32AD 45%,
-      #381AB2 75%,
-      #17082C 95%);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+  background: linear-gradient(
+    45deg,
+    #feac2f 20%,
+    #9b32ad 45%,
+    #381ab2 75%,
+    #17082c 95%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   /* Clips the background to the border */
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   /* Ensures the background only appears on the border */
   z-index: -1;
@@ -124,7 +219,7 @@ body, root {
 .colourful-border-btn:hover {
   color: #000000;
   /* Change text color */
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   /* Keep the button's background color unchanged */
   border: none;
   /* Ensure no default border appears */
@@ -150,7 +245,6 @@ body, root {
   background-color: transparent;
   transition: all 0.3s ease-in;
 }
-
 
 .font-inter {
   font-family: "Inter", sans-serif;
@@ -191,7 +285,7 @@ body, root {
   font-size: 16px;
   line-height: 18.8px;
   align-items: center;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .font-paragraph {
@@ -247,7 +341,7 @@ body, root {
   font-size: 60px;
   line-height: 74px;
   align-items: right;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: -3%;
 }
 
@@ -259,7 +353,7 @@ body, root {
   font-size: 16px;
   line-height: 25px;
   align-items: light;
-  color: #F9F9F9;
+  color: #f9f9f9;
   text-align: justify;
 }
 
@@ -271,8 +365,9 @@ body, root {
   font-size: 16px;
   line-height: 25px;
   align-items: light;
-  color: #2F2F2F;
+  color: #2f2f2f;
 }
+
 .font-paragraph-grey {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -282,6 +377,7 @@ body, root {
   line-height: 22px;
   color: #727272;
 }
+
 .font-otp-grey {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -302,6 +398,7 @@ body, root {
   align-items: center;
   color: #ffffff;
 }
+
 .font-paragraph-black {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -312,6 +409,7 @@ body, root {
   align-items: center;
   color: #000000;
 }
+
 .font-profile-dropdown {
   font-family: "Public Sans", sans-serif;
   font-optical-sizing: auto;
@@ -341,9 +439,8 @@ body, root {
   font-style: normal;
   font-size: 16px;
   line-height: 22px;
-  color: #2F2F2F;
+  color: #2f2f2f;
 }
-
 
 .heading-500-30-black {
   font-family: "Public Sans", sans-serif;
@@ -437,7 +534,6 @@ body, root {
   align-items: center;
 }
 
-
 .border-left-both-corner {
   border-radius: 8px 0px 0px 8px;
 }
@@ -446,15 +542,14 @@ body, root {
   border-radius: 0px 8px 8px 0px;
 }
 
-.otp-heading{
+.otp-heading {
   font-family: Public Sans;
   font-size: 24px;
   font-weight: 500;
   line-height: 28.2px;
   text-align: center;
   color: #000000;
-    }
-
+}
 
 @media (max-width: 1024px) {
   .font-heading-black {
@@ -475,7 +570,6 @@ body, root {
     line-height: 47px;
     letter-spacing: -0.03em;
     text-align: center;
-
   }
 }
 
@@ -487,8 +581,8 @@ body, root {
     line-height: 29.38px;
     letter-spacing: -0.03em;
     text-align: left;
-
   }
+
   .font-subheading-black {
     font-family: "Public Sans", sans-serif;
     font-optical-sizing: auto;
@@ -511,43 +605,48 @@ body, root {
     color: #727272;
   }
 }
-.card-black-heading{
-font-family: Public Sans;
-font-size: 20px;
-font-weight: 500;
-line-height: 23.5px;
-text-align: left;
-color: #000;
+
+.card-black-heading {
+  font-family: Public Sans;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 23.5px;
+  text-align: left;
+  color: #000;
 }
-.card-grey-heading{
-font-family: Public Sans;
-font-size: 14px;
-font-weight: 400;
-line-height: 16.45px;
-text-align: left;
-color:#727272;
+
+.card-grey-heading {
+  font-family: Public Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.45px;
+  text-align: left;
+  color: #727272;
 }
-.font-header{
-    font-family: "Public Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 55px;
-    color:#FFFFFF;
-    text-align: left;
+
+.font-header {
+  font-family: "Public Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 55px;
+  color: #ffffff;
+  text-align: left;
 }
-.font-ul{
-font-family: "Public Sans";
-font-size: 16px;
-font-weight: 400;
-line-height: 28px;
-text-align: left;
-color: #2F2F2F;
+
+.font-ul {
+  font-family: "Public Sans";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+  text-align: left;
+  color: #2f2f2f;
 }
-.font-heading{
-font-family: Public Sans;
-font-size: 20px;
-font-weight: 500;
-line-height: 23.5px;
-color: #000000;
+
+.font-heading {
+  font-family: Public Sans;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 23.5px;
+  color: #000000;
 }

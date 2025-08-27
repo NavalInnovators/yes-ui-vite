@@ -5,27 +5,42 @@ import BookDashboardInsightPredictionTable from "./BookDashboardInsightPredictio
 import BookDashboardUnitsResponsiveUnitDropdown from "./BookDashboardUnitsResponsiveUnitDropdown";
 import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
 import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
-// import { PiechartLeft, PiechartRight } from "../assets";
+import { useBookDashboard } from "../context/book-dashboard-context";
+import "./BookDashboardUnitMidSec.css";
+
 
 function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChange }) {
-  // State to track which tab is selected
-  const [isPrediction, setIsPrediction] = useState(false);
+  const { selectedUnit, insightsLoading, insightsError, unitInsights } = useBookDashboard();
 
-  // Toggle function to switch between Analytics and Prediction
+  const [isPrediction, setIsPrediction] = useState(false);
+  const subcode = sessionStorage.getItem('courseCode');
   const handleToggle = (tab) => {
     setIsPrediction(tab === "Prediction");
   };
+  const [selectedUnit2, setSelectedUnit] = useState(1);
+  const useUnitTitle = unitInsights[selectedUnit]?.unitTitle;
+  const useTopicFrequency = unitInsights[selectedUnit]?.topicfrequency;
+  const useQuestionTypeData = unitInsights[selectedUnit]?.questiontypedata;
 
   return (
-    <div className="book-dashboard-insight-analytics">
-      <div className="for-small-screens">
-        <BookDashboardUnitsResponsiveUnitDropdown />
-      </div>
-      <hr />
-      <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+    // <div className="book-dashboard-insight-analytics">
+    <div className="parent-book-dashboard-unit">
+      {/* For Small Screens Unit Dropdown */}
+      {/* <div className="for-small-screens"> */}
+        {/* <BookDashboardUnitsResponsiveUnitDropdown selectedUnit2={selectedUnit2}
+          setSelectedUnit={setSelectedUnit} /> */}
+      {/* </div> */}
+
+      {/* <hr /> */}
+
+      {/* Navbar */}
+      <BookDashboardNavbar
+        currentSection={currentSection}
+        handleSectionChange={handleSectionChange}
+      />
 
       {/* TOGGLE BAR */}
-      <ul className="book-dashboard-toggle-bar">
+      {/* <ul className="book-dashboard-toggle-bar">
         <div
           id="left-toggle-bar"
           onClick={() => handleToggle("Analytics")}
@@ -40,83 +55,60 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
         >
           Prediction
         </div>
-      </ul>
+      </ul> */}
 
-      {/* CONTENT */}
+      {/* MAIN CONTENT */}
       <div className="book-dashboard-analytics">
-        <div className="book-dashboard-analytics-question">
-          Topic: Mind Maps
+        {/* TOPIC BOX */}
+        <div className="md: w-full flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
+         Unit {selectedUnit} - { insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
         </div>
 
-        {/* Conditionally render BookDashboardInsightPredictionTable based on toggle */}
-        {isPrediction && <BookDashboardInsightPredictionTable />}
 
-        <div className="book-dashboard-piecharts">
-          <div className="left-pie common-pie-chart">
-            <BookDashboardLeftPieChart />
-            {/* <img src={PiechartLeft} alt="piechart" /> */}
+        {/* TWO COLUMN LAYOUT */}
+        <div className="flex flex-col md:flex-row gap-4 !mt-4 max-w-[1000px] mx-auto">
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col w-full md:w-[60%] gap-4  p-2 ">
+            {/* Upper Left */}
+            {/* <div className="h-auto p-4 rounded-md flex  shadow-sm justify-center bg-gray-100"> */}
+            <BookDashboardLeftPieChart selectedUnit={selectedUnit} useQuestionTypeData={useQuestionTypeData} />
+            {/* </div> */}
+
+
+
+            {/* Lower Left */}
+            <div className="h-full border p-4 mx-2 md:!mb-40 bg-gray-100 shadow-sm overflow-x-auto">
+              <BookDashboardInsightPredictionTable useUnitTitle={useUnitTitle} useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
+            </div>
           </div>
-          <div className="right-pie common-pie-chart">
-            <BookDashboardRightPieChart />
 
-            {/* <img src={PiechartRight} alt="" /> */}
+          {/* RIGHT COLUMN */}
+          <div className="flex-1  h-full p-4 w-full  md:max-w-[40%] overflow-x-auto bg-gray-100 shadow-sm">
+
+            <BookDashboardRightPieChart useTopicFrequency={useTopicFrequency} selectedUnit={selectedUnit} />
+            {/* <div className="text-center mt-4">
+              <p className="text-gray-700 mb-3">
+                Click and find the answer on topic page
+              </p>
+              <button
+                className="rounded-md border-2 bg-[#792AAF] text-white !px-7 !py-2 !mb-4 text-base cursor-pointer hover:bg-[#5e1f87] transition-all duration-200"
+              >
+                Go To Topic
+              </button>
+            </div> */}
+
+
+
+
           </div>
         </div>
-        <div className="book-dashboard-analytics-answer book-dashboard-analytics-mid-answer">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of
-          the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown
-          printer took a galley of type and scrambled it to make a type specimen
-          book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of
-          the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown
-          printer took a galley of type and scrambled it to make a type specimen
-          book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
-        </div>
-        <div className="book-dashboard-analytics-answer">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of
-          the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown
-          printer took a galley of type and scrambled it to make a type specimen
-          book. It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum p
-        </div>
+
+        {/* Render full-width table if in Prediction mode only */}
+        {/* {isPrediction && (
+          <div className="mt-4">
+            <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit2={selectedUnit2} />
+          </div>
+        )} */}
       </div>
     </div>
   );
