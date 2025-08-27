@@ -6,16 +6,65 @@
 }
 
 .each-card {
-    background-color: #E6E6E6;
+    position: relative;
+    background-color: #e6e6e6;
     margin: 4vh 0.5vw;
     border-radius: 2.5vw;
     width: 20vw;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding:0 2vw;
-    padding-bottom: 2vw;
+    padding: 0 2vw 2vw 2vw;
     cursor: pointer;
+    z-index: 1;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.each-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 4px;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 50% 50%,
+      #feac2f,
+      #9b32ad,
+      #381ab2,
+      #17082c
+    );
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    z-index: -1;
+    opacity: 0;                
+    transition: opacity 0.3s ease;
+}
+
+.each-card:hover::before {
+    opacity: 1; 
+    animation: gradientMove 8s infinite linear;
+}
+
+@keyframes gradientMove {
+    0% {
+      background-position: 0% 0%;
+    }
+    25% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
 }
 
 .card-image {
