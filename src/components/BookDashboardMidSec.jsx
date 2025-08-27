@@ -240,6 +240,11 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
 
   }, [answer]);
 
+  useEffect(()=>{
+    setPageNumber(1);
+    setSelectedQuestion(0);
+  },[selectedUnit]);
+
   // Function to process content dynamically
   const renderContent = (rawContent) => {
     const decodeMermaidCode = (text) => {
