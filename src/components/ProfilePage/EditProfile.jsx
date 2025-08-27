@@ -10,6 +10,15 @@ import {
   female,
   nonBinary,
   // phone,
+  Avatar01,
+  Avatar02,
+  Avatar03,
+  Avatar04,
+  Avatar05,
+  Avatar06,
+  Avatar07,
+  Avatar08,
+  Avatar09,
 } from "../../assets";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +42,17 @@ const EditProfile = () => {
     phone: "Phone number",
     avatarUrl: null
   });
+  const avatarMap = {
+    Avatar01,
+    Avatar02,
+    Avatar03,
+    Avatar04,
+    Avatar05,
+    Avatar06,
+    Avatar07,
+    Avatar08,
+    Avatar09,
+  };
 
   const [errors, setErrors] = useState({});
 
@@ -119,11 +139,11 @@ const EditProfile = () => {
       [name]: value,
     }));
   };
-  
+
 
   const getGenderIcon = (gender) => {
     if (!gender) return profileIconNew;
-    
+
     switch (gender.toLowerCase()) {
       case "male":
         return male;
@@ -138,7 +158,7 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     const updatedProfileDetails = {
@@ -173,11 +193,22 @@ const EditProfile = () => {
             <form onSubmit={handleSubmit} noValidate>
               <div className="profile-info">
                 <div className="profile-image-placeholder">
-                  <img
+                  {/* <img
                     src={(profileDetails && profileDetails.profile.avatarUrl !== null) ? profileDetails.profile.avatarUrl : profileIconNew}
                     alt="Profile"
                     className="profile-edit-img"
+                  /> */}
+
+                  <img
+                    src={
+                      profileDetails?.profile?.avatarUrl
+                        ? avatarMap[profileDetails.profile.avatarUrl] || profileIconNew
+                        : profileIconNew
+                    }
+                    alt="Profile"
+                    className="profile-edit-img"
                   />
+
                   <div className="change-profile-img-text">
                     <div className="font-subheading-black change-profile-heading">
                       Change Profile Image

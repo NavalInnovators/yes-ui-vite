@@ -372,6 +372,7 @@
   text-decoration: none;
 }
 
+
 @media (max-width: 1024px) {
   .navbar>.navbar-links:nth-child(2) {
     flex: 2 1;

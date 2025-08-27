@@ -11,6 +11,15 @@ import {
   SubmitYourQueryIcon,
   LogoutIcon,
   SearchIcon,
+  Avatar01,
+  Avatar02,
+  Avatar03,
+  Avatar04,
+  Avatar05,
+  Avatar06,
+  Avatar07,
+  Avatar08,
+  Avatar09,
 } from "../assets";
 import { MenuIcon } from "../assets";
 import { navLinks } from "../constants";
@@ -24,6 +33,18 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const avatarMap = {
+    Avatar01,
+    Avatar02,
+    Avatar03,
+    Avatar04,
+    Avatar05,
+    Avatar06,
+    Avatar07,
+    Avatar08,
+    Avatar09,
+  };
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
   // const [hoveredItem, setHoveredItem] = useState("true");
@@ -35,14 +56,23 @@ const Navbar = () => {
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
     useState(false);
 
-  const [profilePic, setProfilePic] = useState(() => {
-    const stored = localStorage.getItem("userProfile");
-    return stored ? JSON.parse(stored).avatarUrl : null;
-  });
+  // const [profilePic, setProfilePic] = useState(() => {
+  //   const stored = localStorage.getItem("userProfile");
+  //   return stored ? JSON.parse(stored).avatarUrl : null;
+  // });
+  // const [profilePic, setProfilePic] = useState(() => {
+  //   const storedAvatar = localStorage.getItem("profileAvatarUrl");
+  //   if (storedAvatar) {
+  //     return avatarMap[storedAvatar] || profileIconNew;
+  //   }
+  //   return profileIconNew;
+  // });
+  // 👇 ProfilePic state (default is generic profileIconNew)
+  const [profilePic, setProfilePic] = useState(profileIconNew);
 
-  useEffect(() => {
-    setProfilePic(`${profilePic || profileIconNew}`);
-  }, [profilePic]);
+  // useEffect(() => {
+  //   setProfilePic(`${profilePic || profileIconNew}`);
+  // }, [profilePic]);
 
   // Notifications state
   const [notifications, setNotifications] = useState([
@@ -110,6 +140,7 @@ const Navbar = () => {
     logout();
     setIsNotificationDropdownOpen(false); // Close notification dropdown when profile is opened
     setIsDropdownOpen(false); // Close profile dropdown when notifications are opened
+    setProfilePic(profileIconNew); // ✅ reset to default
   };
 
   // Close dropdowns when clicking outside of them
@@ -129,14 +160,32 @@ const Navbar = () => {
       }
     };
 
+    // 👇 Helper: read avatar from localStorage
+    const updateProfilePic = () => {
+      const storedAvatar = localStorage.getItem("profileAvatarUrl");
+      if (storedAvatar) {
+        setProfilePic(avatarMap[storedAvatar] || profileIconNew);
+      } else {
+        setProfilePic(profileIconNew);
+      }
+    };
+
+    // ✅ Run immediately whenever login status changes
+    updateProfilePic();
+
+    // ✅ Sync with localStorage events (cross-tab or same-tab updates)
+    window.addEventListener("profileUpdated", updateProfilePic);
+
+
     // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
 
     // Remove event listener on cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("storage", updateProfilePic);
     };
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <nav className="navbar font-public-sans-navbar">
@@ -224,8 +273,8 @@ const Navbar = () => {
         {navLinks.map((nav) => (
           <li
             key={nav.id}
-            // onMouseEnter={() => setHoveredItem(nav.title)}
-            // onMouseLeave={() => setHoveredItem(null)}
+          // onMouseEnter={() => setHoveredItem(nav.title)}
+          // onMouseLeave={() => setHoveredItem(null)}
           >
             <Link
               className={`${currentPath === nav.id ? "active" : "inactive"}`}
@@ -276,9 +325,8 @@ const Navbar = () => {
                     <div
                       onClick={() => setIsNotificationDropdownOpen(false)}
                       key={notification.id}
-                      className={`notification-item font-notification ${
-                        notification.isRead ? "read" : ""
-                      }`}
+                      className={`notification-item font-notification ${notification.isRead ? "read" : ""
+                        }`}
                     >
                       {notification.message}
                     </div>
@@ -296,6 +344,12 @@ const Navbar = () => {
             )}
 
             {/* Render the user's profile image */}
+            {/* <img
+              src={profilePic}
+              alt="Profile"
+              className="profile-image"
+              onClick={handleProfileClick}
+            /> */}
             <img
               src={profilePic}
               alt="Profile"
@@ -330,12 +384,12 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li onClick={() => setIsDropdownOpen(false)}>
-                    <Link to="/query">
-                      <img
+                    <Link to="/make-query" state={{ tab: "submit-query" }}>
+                      <div><img
                         src={SubmitYourQueryIcon}
                         alt="SubmitYourQueryIcon"
-                      />{" "}
-                      Submit Your Query
+                      /></div>
+                      <div>Submit Your Query</div>
                     </Link>
                   </li>
                   <li onClick={() => setIsDropdownOpen(false)}>
