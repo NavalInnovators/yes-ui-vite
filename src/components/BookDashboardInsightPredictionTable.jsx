@@ -44,10 +44,10 @@ function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, 
                       {topic.topic}
                     </div>
                   </td>
-                  <td className="px-3 py-2 text-center border-r border-gray-200">
+                  <td className="px-3 py-2 text-center border-r border-black">
                     {theory.descriptive?.toFixed(1) ?? "0.0"}%
                   </td>
-                  <td className="px-3 py-2 text-center border-r border-gray-200">
+                  <td className="px-3 py-2 text-center border-r border-black">
                     {theory.classification?.toFixed(1) ?? "0.0"}%
                   </td>
                   <td className="px-3 py-2 text-center">
