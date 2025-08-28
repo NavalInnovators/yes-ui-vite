@@ -60,7 +60,7 @@ import { BookDashboardProvider } from "./context/book-dashboard-context.jsx";
 import Reviewer from "./roles/Reviewer/Reviewer.jsx";
 import "./main.css";
 import Creator from "./roles/Creator/Creator.jsx";
-import CreatorVerification from "./components/CreatorVerification.jsx";
+import CreatorVerification from "./components/CreatorVerification/CreatorVerification.jsx";
 
 function App() {
   return (
