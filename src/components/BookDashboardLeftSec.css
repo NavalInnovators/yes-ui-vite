@@ -1,11 +1,11 @@
 .book-dashboard-left-sec {
-  width: 15%;
-  /* height: auto; */
-  /* background-color: rgb(70, 65, 239); */
+  position: relative;   
+  z-index: 500;
 }
 
 .book-dashboard-unit-bar ul {
   list-style: none;
+  position:sticky;
   width: 16vh;
   padding: 0;
   margin-top: 1rem;
@@ -40,7 +40,7 @@
   align-items: center;
   text-align: left;
   padding-left: 1.5vw;
-  position: relative;
+  position: sticky;
 }
 
 .book-dashboard-unit-bar li.active-unit {
@@ -59,11 +59,13 @@
 /* Default behavior (mobile-first approach): both dropdown and list are hidden */
 
 .book-dashboard-unit-bar {
-  display: none;
+  position: sticky;     
+  top: 6.2rem;          
 }
 
 .mobile-unit-dropdown{
   display: none;
+
 }
 
 .mobile-unit-dropdown select{
@@ -80,6 +82,7 @@
   outline: none;              /* 🔥 This removes the yellow outline */
   box-shadow: none; 
   padding-left: 1rem;
+  position: relative;
 }
 
 
