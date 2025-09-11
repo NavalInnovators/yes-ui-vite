@@ -4,19 +4,22 @@
     background: radial-gradient(circle at 55% 50%, #ff914d, #9c27b0, #381AB2, #17082c); 
     background-size: 200% 200%;
     animation: gradientMove 30s infinite linear;
-    
-    /* position: relative; */
+/*     
+    position: relative; */
     height: 42vh;
     border-radius: 15px;
     color: white;
 
+   
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+   
 
     margin-top: 14vh;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+    width: 100vw;
+    max-width: 1480px;
   }
   
   @keyframes gradientAnimation {
