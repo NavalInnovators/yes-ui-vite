@@ -1,4 +1,4 @@
-import { CircleCheck, Plus, Stamp } from "lucide-react";
+import { CircleCheck, Stamp } from "lucide-react";
 import GradientDiv from "../../roles/components/GradientDiv";
 import { useState } from "react";
 import DocumentVerificationTab from "./Tabs/DocumentVerificationTab";
@@ -7,13 +7,13 @@ import Header from "./Header";
 import ContentRelevanceTab from "./Tabs/ContentRelevanceTab";
 
 function Tabs({ activeTab, handleTabClick }) {
-  const activeBg = "bg-dark-hover text-white";
+  const activeBg = "bg-white rounded-gradient-border relative";
 
   return (
-    <div className="w-[full] max-w-[700px] rounded-lg mt-[30px] mx-auto">
-      <div className="flex justify-between items-center gap-[5px]">
+    <div className="w-full max-w-[700px] rounded-lg mt-[30px] mx-auto mb-[10px] px-[10px] md:px-0">
+      <div className="grid grid-cols-1 md:grid-cols-3 items-stretch gap-[8px] md:gap-[5px]">
         <div
-          className={`cursor-pointer flex items-center justify-center gap-[10px] flex-1 rounded-lg text-[16px] py-[20px] ${
+          className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
             activeTab === "content-relevance" ? activeBg : "bg-light-card"
           }`}
           onClick={() => handleTabClick("content-relevance")}
@@ -22,7 +22,7 @@ function Tabs({ activeTab, handleTabClick }) {
           Content Relevance
         </div>
         <div
-          className={`cursor-pointer flex items-center justify-center gap-[10px] flex-1 rounded-lg text-[16px] py-[20px] ${
+          className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
             activeTab === "document-verification" ? activeBg : "bg-light-card"
           }`}
           onClick={() => handleTabClick("document-verification")}
@@ -31,7 +31,7 @@ function Tabs({ activeTab, handleTabClick }) {
           Document Verification
         </div>
         <div
-          className={`cursor-pointer flex items-center justify-center gap-[10px] flex-1 rounded-lg text-[16px] py-[20px] ${
+          className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
             activeTab === "skill-validation" ? activeBg : "bg-light-card"
           }`}
           onClick={() => handleTabClick("skill-validation")}
@@ -58,8 +58,8 @@ export default function CreatorVerification() {
       health: false,
       education: false,
     },
-    written_articles_before: false,
-    writing_sample: null,
+    has_written_articles: false,
+    sample_work_link: null,
     reason_for_becoming_creator: "",
     comfortable_with_guidelines: false,
   });
@@ -78,7 +78,7 @@ export default function CreatorVerification() {
   function handleWrittenArticlesClick() {
     setContentRelevance((prev) => ({
       ...prev,
-      written_articles_before: !prev.written_articles_before,
+      has_written_articles: !prev.has_written_articles,
     }));
   }
 
@@ -93,9 +93,9 @@ export default function CreatorVerification() {
     <div className="mb-[30px]">
       <Header />
 
-      <GradientDiv className="px-[5vw]">
-        <h1 className="text-[20px]">Become a Creator!</h1>
-        <p>
+      <GradientDiv className="px-[5vw] py-[12px] md:py-[16px]">
+        <h1 className="text-[18px] md:text-[20px]">Become a Creator!</h1>
+        <p className="text-[14px] md:text-[16px]">
           Step{" "}
           {activeTab === "content-relevance"
             ? 1
@@ -107,19 +107,26 @@ export default function CreatorVerification() {
 
       <Tabs activeTab={activeTab} handleTabClick={handleTabClick} />
 
-      {activeTab === "content-relevance" && (
-        <ContentRelevanceTab
-          contentRelevance={contentRelevance}
-          handleTopicClick={handleTopicClick}
-          handleWrittenArticlesClick={handleWrittenArticlesClick}
-          handleComfortableWithGuidelinesClick={
-            handleComfortableWithGuidelinesClick
-          }
-        />
-      )}
+      <div className="px-[10px]">
+        {activeTab === "content-relevance" && (
+          <ContentRelevanceTab
+            contentRelevance={contentRelevance}
+            handleTopicClick={handleTopicClick}
+            handleWrittenArticlesClick={handleWrittenArticlesClick}
+            handleComfortableWithGuidelinesClick={
+              handleComfortableWithGuidelinesClick
+            }
+          />
+        )}
+      </div>
 
-      {activeTab === "document-verification" && <DocumentVerificationTab />}
-      {activeTab === "skill-validation" && <SkillValidationTab />}
+      <div className="px-[10px]">
+        {activeTab === "document-verification" && <DocumentVerificationTab />}
+      </div>
+
+      <div className="px-[10px]">
+        {activeTab === "skill-validation" && <SkillValidationTab />}
+      </div>
     </div>
   );
 }

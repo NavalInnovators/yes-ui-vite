@@ -1,4 +1,6 @@
 import { Plus } from "lucide-react";
+import { BACKEND_URL } from "../../../constants/api";
+import { useAuth } from "../../AuthProvider";
 
 function TopicButton({
   topic,
@@ -14,7 +16,7 @@ function TopicButton({
     <div
       className={`${
         contentRelevance.areas_of_interest[type] ? selected : unselected
-      } cursor-pointer px-[15px] py-[5px] rounded-full border text-[13px] flex items-center gap-[5px] justify-center`}
+      } cursor-pointer px-[12px] md:px-[15px] py-[6px] md:py-[5px] rounded-full border text-[12px] md:text-[13px] flex items-center gap-[6px] justify-center whitespace-nowrap shrink-0`}
       onClick={() => handleTopicClick(type)}
     >
       {includeIcon && <Plus size={15} />}
@@ -53,12 +55,43 @@ export default function ContentRelevanceTab({
   handleWrittenArticlesClick,
   handleComfortableWithGuidelinesClick,
 }) {
+  const profileId = useAuth().getProfileId();
+  console.log(profileId);
+
+  // TODO : Backend API call to get the creator verification data
+  async function fetchBackend() {
+    const data = {
+      coursesId: [],
+      hasWrittenArticles: contentRelevance.has_written_articles,
+      sampleWorkLink: contentRelevance.sample_work_link,
+      whyBecomeCreator: contentRelevance.reason_for_becoming_creator,
+    };
+
+    try {
+      const response = await fetch(BACKEND_URL + "/api/creator-onboarding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          profileId: profileId,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch (error) {
+      console.error("Error fetching backend:", error);
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-[30px] w-[full] bg-light-card p-[30px] max-w-[700px] rounded-lg mt-[5px] mx-auto">
+    <div className="flex rounded-gradient-border relative flex-col gap-[30px] w-full bg-light-card p-[20px] md:p-[30px] max-w-[700px] rounded-lg mt-[5px] mx-auto">
       {/* Topic areas of interest */}
       <div>
         <h1 className="text-[17px] font-semibold">Topic areas of interest</h1>
-        <div className="flex items-center gap-[10px] mt-[15px]">
+        <div className="flex flex-wrap items-center gap-[8px] md:gap-[10px] mt-[15px]">
           <TopicButton
             topic="Technology"
             type="technology"
@@ -154,7 +187,10 @@ export default function ContentRelevanceTab({
       </div>
 
       <div className="flex justify-center">
-        <button className="bg-dark-hover border-2 border-black hover:bg-white hover:text-black transition cursor-pointer text-white px-[20px] py-[10px] rounded-lg">
+        <button
+          onClick={fetchBackend}
+          className="bg-dark-hover border-2 border-black hover:bg-white hover:text-black transition cursor-pointer text-white px-[20px] py-[10px] rounded-lg"
+        >
           Submit and Next
         </button>
       </div>
