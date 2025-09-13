@@ -6,9 +6,9 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
     "Syllabus",
     "Q&A",
     "Unit",
-    "Insights", 
-    // "Maps", 
-    // "Custom Preparation", 
+    "Insights",
+    // "Maps",
+    // "Custom Preparation",
     // "AiFeatured"
   ];
   return (
@@ -16,6 +16,7 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
       <ul>
         {tabs.map((tab) => (
           <div
+            id={tab === "Q&A" ? "qa" : tab}
             key={tab}
             onClick={() => handleSectionChange(tab)}
             className={tab === currentSection ? "bookdashboard-active-tab" : ""}

@@ -15,11 +15,13 @@
 }
 
 .bg-animation {
-  background: radial-gradient(circle at 50% 50%,
-      #feac2f,
-      #9b32ad,
-      #381ab2,
-      #17082c);
+  background: radial-gradient(
+    circle at 50% 50%,
+    #feac2f,
+    #9b32ad,
+    #381ab2,
+    #17082c
+  );
   background-size: 200% 200%;
   animation: gradientMove 20s infinite linear;
 }
@@ -54,7 +56,7 @@
   width: 50%;
   max-width: calc(90vw - 8vh);
   height: auto;
-  opacity: 0.10;
+  opacity: 0.1;
   z-index: 0;
 }
 
@@ -66,7 +68,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2vh;
-  padding:8vw 0;
+  padding: 8vw 0;
 }
 
 .cta-heading {
@@ -77,14 +79,15 @@
   /* todo */
 }
 
-@media (max-width: 768px) {}
+@media (max-width: 768px) {
+}
 
 @media (max-width: 480px) {
   .cta-bg-img {
     width: 70vw;
     height: auto;
   }
-  
+
   .cta-content {
     width: 80vw;
     padding: 2vh 0;

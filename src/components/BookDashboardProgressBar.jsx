@@ -36,7 +36,10 @@ function BookDashboardProgressBar({
   const bookDetails = getBookDetails();
 
   // Safely access properties with fallbacks
-  const universityName = bookDetails?.universityName || defaultUniversityName;
+  const universityName =
+    bookDetails?.universityName != "Unknown"
+      ? bookDetails?.universityName
+      : "" || defaultUniversityName;
   const branchNames = bookDetails?.branchNames || defaultCourseCodes;
   const year = bookDetails?.year ? `Year ${bookDetails.year}` : defaultYear;
   const name = bookDetails?.name || defaultBookName;
@@ -49,7 +52,9 @@ function BookDashboardProgressBar({
         </div>
         <div className="book-details">
           {universityName && <div title={universityName}>{universityName}</div>}
-          {branchNames.length > 0 && <div title={branchNames.join(" | ")}>{branchNames.join(" | ")}</div>}
+          {branchNames.length > 0 && (
+            <div title={branchNames.join(" | ")}>{branchNames.join(" | ")}</div>
+          )}
           {year && <div title={year}>{year}</div>}
         </div>
       </div>

@@ -1,9 +1,11 @@
-
-
 import { getAnalyticData } from "../api/api";
 import React, { useEffect, useState } from "react";
 
-function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, selectedUnit }) {
+function BookDashboardInsightPredictionTable({
+  useUnitTitle,
+  useTopicFrequency,
+  selectedUnit,
+}) {
   const [topics, setTopics] = useState([]);
   const [unitTitle, setUnitTitle] = useState("");
 
@@ -17,7 +19,10 @@ function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, 
       {/* <h2 className="text-lg font-semibold text-gray-800 truncate">{unitTitle}</h2> */}
 
       <div className="rounded-lg border border-black shadow-sm">
-        <table className="w-full text-sm border-collapse  table-auto">
+        <table
+          className="w-full text-sm border-collapse  table-auto"
+          id="insightable"
+        >
           <thead>
             <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
               <th className=" rounded-lg px-3 py-2 text-center  text-gray-900 border-r border-gray-200">
@@ -38,9 +43,15 @@ function BookDashboardInsightPredictionTable({ useUnitTitle, useTopicFrequency, 
             {topics.map((topic, idx) => {
               const theory = topic.questiontypedata?.theory || {};
               return (
-                <tr key={idx} className="hover:bg-blue-50 transition-colors duration-150 group">
+                <tr
+                  key={idx}
+                  className="hover:bg-blue-50 transition-colors duration-150 group"
+                >
                   <td className="px-3 py-2 text-left border-r border-gray-900 break-words max-w-[150px]">
-                    <div className="px-3 font-medium text-gray-900  max-w-xs" title={topic.topic}>
+                    <div
+                      className="px-3 font-medium text-gray-900  max-w-xs"
+                      title={topic.topic}
+                    >
                       {topic.topic}
                     </div>
                   </td>

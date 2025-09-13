@@ -8,10 +8,13 @@ Chart.register(Tooltip, Title, ArcElement, Legend, ChartDataLabels);
 const COLORS = ["#FF6384", "#36A2EB", "#FFCE56"]; // Descriptive, Classification, Comparison
 const LABELS = ["Descriptive", "Classification", "Comparison"];
 
-export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTypeData }) {
+export default function BookDashboardLeftPieChart({
+  selectedUnit,
+  useQuestionTypeData,
+}) {
   const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState(null);
-  
+
   useEffect(() => {
     if (!useQuestionTypeData || !useQuestionTypeData.theory) {
       setLoading(true);
@@ -23,7 +26,7 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
       theory.classification || 0,
       theory.comparison || 0,
     ];
-  
+
     setChartData({
       labels: LABELS,
       datasets: [
@@ -53,11 +56,14 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
   }
   return (
     <div className="flex flex-col items-center gap-4 bg-gray-100">
-      <h3 className="text-center font-medium pt-3 text-base"> Type of Questions Asked </h3>
-      <div className="relative w-full h-[232px] items-center">
+      <h3 className="text-center font-medium pt-3 text-base">
+        {" "}
+        Type of Questions Asked{" "}
+      </h3>
+      <div className="relative w-full h-[232px] items-center" id="pie">
         {/* Chart */}
         <Pie key={selectedUnit} data={chartData} options={options} />
-        
+
         <div className="absolute bottom-2 left-2 flex flex-col gap-2 text-sm bg-gray-100 px-2 py-1 rounded">
           {LABELS.map((label, i) => (
             <div key={i} className="flex items-center gap-2">

@@ -50,7 +50,6 @@
   color: black;
 }
 
-
 /* Show percentage on hover */
 .book-dashboard-unit-bar div:hover::after {
   display: block;
@@ -62,11 +61,11 @@
   display: none;
 }
 
-.mobile-unit-dropdown{
+.mobile-unit-dropdown {
   display: none;
 }
 
-.mobile-unit-dropdown select{
+.mobile-unit-dropdown select {
   background-color: #e4e4e4;
   width: 5rem;
   height: 2rem;
@@ -76,12 +75,16 @@
   color: black;
   text-decoration: none;
   align-items: center;
-  border: none;               /* Optional: remove border */
-  outline: none;              /* 🔥 This removes the yellow outline */
-  box-shadow: none; 
+  border: none; /* Optional: remove border */
+  outline: none; /* 🔥 This removes the yellow outline */
+  box-shadow: none;
   padding-left: 1rem;
 }
-
+#mobile-unit-select {
+  width: 15rem;
+  height: 20rem;
+  display: inline-block; /* ensure it occupies space */
+}
 
 /* Laptop view (show list, hide dropdown) */
 @media (min-width: 1024px) {
@@ -99,11 +102,16 @@
     display: block;
   }
 } */
-@media (max-width: 1023px){
-  .book-dashboard-unit-bar{
-    display: none;
-  }
+@media (max-width: 1023px) {
   .mobile-unit-dropdown {
     display: block;
+    min-width: 8rem; /* ensure non-zero width */
+    min-height: 2.5rem; /* ensure non-zero height */
   }
+}
+
+#mobile-unit-select {
+  width: 100%; /* take full width of parent */
+  height: 2.5rem; /* consistent height */
+  display: block; /* avoids inline quirks */
 }

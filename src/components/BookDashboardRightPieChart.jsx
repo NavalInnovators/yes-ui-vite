@@ -26,8 +26,8 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -44,9 +44,21 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
     );
 
     const colors = [
-      "#FF6384", "#FFCE56", "#36A2EB", "#4BC0C0", "#9966FF",
-      "#FF9F40", "#FFB6C1", "#8A2BE2", "#7FFF00", "#D2691E",
-      "#00BFFF", "#FF1493", "#20B2AA", "#FF6347", "#90EE90",
+      "#FF6384",
+      "#FFCE56",
+      "#36A2EB",
+      "#4BC0C0",
+      "#9966FF",
+      "#FF9F40",
+      "#FFB6C1",
+      "#8A2BE2",
+      "#7FFF00",
+      "#D2691E",
+      "#00BFFF",
+      "#FF1493",
+      "#20B2AA",
+      "#FF6347",
+      "#90EE90",
     ];
 
     setChartData({
@@ -56,7 +68,7 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
           data,
           backgroundColor: colors.slice(0, data.length),
           borderWidth: 1,
-          borderColor: '#fff',
+          borderColor: "#fff",
         },
       ],
     });
@@ -70,7 +82,6 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
       </div>
     );
   }
-
 
   return (
     <div className="w-full md:h-110 flex justify-center items-center relative">
@@ -96,15 +107,13 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
 
               tooltip: {
                 displayColors: true,
-                callbacks: {
-
-                },
+                callbacks: {},
               },
 
               datalabels: {
                 display: true, // Show labels on all slices
-                color: '#000',
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                color: "#000",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
                 borderRadius: 3,
                 padding: 2,
                 formatter: (value, ctx) => {
@@ -115,13 +124,13 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
                   const percentage = ((value / sum) * 100).toFixed(1);
                   // Only show percentage if slice is large enough to be readable
                   const percentageNum = parseFloat(percentage);
-                  return percentageNum >= 3 ? `${percentage}%` : '';
+                  return percentageNum >= 3 ? `${percentage}%` : "";
                 },
-                anchor: 'center',
-                align: 'center',
+                anchor: "center",
+                align: "center",
                 font: {
                   size: windowWidth < 768 ? 10 : 11,
-                  weight: 'bold',
+                  weight: "bold",
                 },
                 // Position labels better for small slices
                 offset: function (context) {
@@ -135,10 +144,11 @@ function BookDashboardRightPieChart({ useTopicFrequency, selectedUnit }) {
             elements: {
               arc: {
                 borderWidth: 2,
-                borderColor: '#fff',
+                borderColor: "#fff",
               },
             },
           }}
+          id="idao"
         />
       </div>
     </div>

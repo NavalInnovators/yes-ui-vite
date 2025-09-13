@@ -8,7 +8,13 @@ function removeHtmlTags(text) {
 }
 
 function BookDashboardRightSec() {
-  const { qnaLoading, qList, selectedUnit, selectedQuestion, setSelectedQuestion } = useBookDashboard(); // Adjust to match your context keys.
+  const {
+    qnaLoading,
+    qList,
+    selectedUnit,
+    selectedQuestion,
+    setSelectedQuestion,
+  } = useBookDashboard(); // Adjust to match your context keys.
 
   // Safely parse selectedUnit to ensure valid indexing.
   const unitIndex = parseInt(selectedUnit, 10) - 1;
@@ -24,21 +30,23 @@ function BookDashboardRightSec() {
     <div className="book-dashboard-right-sec">
       {/** Desktop View */}
       <div className="topics-not-dropdown">
-        <div className="book-dashboard-topics">
+        <div className="book-dashboard-topics" id="questions">
           {!qnaLoading && (
             <>
-            <div className="all-topics">All Questions</div>
-            <ol>
-              {questions.map((topic, index) => (
-                <li 
-                className={selectedQuestion === index ? "selected-question" : ""}
-                key={index}
-                onClick={() => setSelectedQuestion(index)}
-                >
-                  {removeHtmlTags(topic.question)}
-                </li>
-              ))}
-            </ol>
+              <div className="all-topics">All Questions</div>
+              <ol>
+                {questions.map((topic, index) => (
+                  <li
+                    className={
+                      selectedQuestion === index ? "selected-question" : ""
+                    }
+                    key={index}
+                    onClick={() => setSelectedQuestion(index)}
+                  >
+                    {removeHtmlTags(topic.question)}
+                  </li>
+                ))}
+              </ol>
             </>
           )}
         </div>
@@ -71,8 +79,8 @@ function BookDashboardRightSec() {
       <div className="mobile-question-dropdown">
         {!qnaLoading && questions.length > 0 && (
           <select
-          value={selectedQuestion}
-          onChange={(e) => setSelectedQuestion(Number(e.target.value))}
+            value={selectedQuestion}
+            onChange={(e) => setSelectedQuestion(Number(e.target.value))}
           >
             {questions.map((topic, index) => (
               <option key={index} value={index}>

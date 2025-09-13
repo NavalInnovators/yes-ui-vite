@@ -54,9 +54,10 @@ function BookDashboardLeftSec() {
 
       {/* Mobile Dropdown */}
       <div className="mobile-unit-dropdown">
-        <select 
-        value={selectedUnit}
-        onChange={(e) => setSelectedUnit(e.target.value)}
+        <select
+          value={selectedUnit}
+          onChange={(e) => setSelectedUnit(e.target.value)}
+          id="mobile-unit-select"
         >
           {units.map((u) => (
             <option key={u.num} value={u.num}>
