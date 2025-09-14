@@ -89,6 +89,20 @@ export default function CreatorVerification() {
     }));
   }
 
+  function handleSampleWorkLinkChange(e) {
+    setContentRelevance((prev) => ({
+      ...prev,
+      sample_work_link: e.target.value,
+    }));
+  }
+
+  function handleReasonForBecomingCreatorChange(e) {
+    setContentRelevance((prev) => ({
+      ...prev,
+      reason_for_becoming_creator: e.target.value,
+    }));
+  }
+
   return (
     <div className="mb-[30px]">
       <Header />
@@ -115,6 +129,10 @@ export default function CreatorVerification() {
             handleWrittenArticlesClick={handleWrittenArticlesClick}
             handleComfortableWithGuidelinesClick={
               handleComfortableWithGuidelinesClick
+            }
+            handleSampleWorkLinkChange={handleSampleWorkLinkChange}
+            handleReasonForBecomingCreatorChange={
+              handleReasonForBecomingCreatorChange
             }
           />
         )}

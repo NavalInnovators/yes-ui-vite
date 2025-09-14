@@ -36,9 +36,8 @@ function WrittenArticlesButton({
   return (
     <div
       className={`${
-        hasWrittenArticles && text === "Yes"
-          ? selected
-          : !hasWrittenArticles && text === "No"
+        (hasWrittenArticles && text === "Yes") ||
+        (!hasWrittenArticles && text === "No")
           ? selected
           : unselected
       } cursor-pointer px-[15px] py-[5px] rounded-full border text-[13px] flex items-center gap-[5px] justify-center`}
@@ -54,6 +53,8 @@ export default function ContentRelevanceTab({
   handleTopicClick,
   handleWrittenArticlesClick,
   handleComfortableWithGuidelinesClick,
+  handleSampleWorkLinkChange,
+  handleReasonForBecomingCreatorChange,
 }) {
   const profileId = useAuth().getProfileId();
   console.log(profileId);
@@ -61,25 +62,28 @@ export default function ContentRelevanceTab({
   // TODO : Backend API call to get the creator verification data
   async function fetchBackend() {
     const data = {
-      coursesId: [],
+      coursesId: [5],
       hasWrittenArticles: contentRelevance.has_written_articles,
       sampleWorkLink: contentRelevance.sample_work_link,
       whyBecomeCreator: contentRelevance.reason_for_becoming_creator,
     };
 
     try {
-      const response = await fetch(BACKEND_URL + "/api/creator-onboarding", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          profileId: profileId,
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        BACKEND_URL + "/api/creator-onboarding/content-relevance",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            profileId: profileId,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log("Content Relevance Data: ", data);
       }
     } catch (error) {
       console.error("Error fetching backend:", error);
@@ -127,12 +131,12 @@ export default function ContentRelevanceTab({
 
         <div className="flex items-center gap-[10px] mt-[15px]">
           <WrittenArticlesButton
-            hasWrittenArticles={contentRelevance.written_articles_before}
+            hasWrittenArticles={contentRelevance.has_written_articles}
             handleWrittenArticlesClick={handleWrittenArticlesClick}
             text="Yes"
           />
           <WrittenArticlesButton
-            hasWrittenArticles={contentRelevance.written_articles_before}
+            hasWrittenArticles={contentRelevance.has_written_articles}
             handleWrittenArticlesClick={handleWrittenArticlesClick}
             text="No"
           />
@@ -151,6 +155,10 @@ export default function ContentRelevanceTab({
         <textarea
           className="w-full mt-[15px] !text-[16px] outline-none p-[20px]"
           placeholder="Write here..."
+          value={contentRelevance.sample_work_link || ""}
+          onChange={(e) => {
+            handleSampleWorkLinkChange(e);
+          }}
         ></textarea>
       </div>
 
@@ -166,6 +174,10 @@ export default function ContentRelevanceTab({
         <textarea
           className="w-full mt-[15px] !text-[16px] outline-none p-[20px]"
           placeholder="Write here..."
+          value={contentRelevance.reason_for_becoming_creator || ""}
+          onChange={(e) => {
+            handleReasonForBecomingCreatorChange(e);
+          }}
         ></textarea>
       </div>
 
