@@ -6,7 +6,12 @@ import SkillValidationTab from "./Tabs/SkillValidationTab";
 import Header from "./Header";
 import ContentRelevanceTab from "./Tabs/ContentRelevanceTab";
 
-function Tabs({ activeTab, handleTabClick, contentRelevanceSubmitted }) {
+function Tabs({
+  activeTab,
+  handleTabClick,
+  contentRelevanceSubmitted,
+  documentVerificationSubmitted,
+}) {
   const activeBg = "bg-white rounded-gradient-border relative";
 
   return (
@@ -29,13 +34,22 @@ function Tabs({ activeTab, handleTabClick, contentRelevanceSubmitted }) {
           )}
         </div>
         <div
-          className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
+          className={`flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
             activeTab === "document-verification" ? activeBg : "bg-light-card"
+          } ${
+            documentVerificationSubmitted &&
+            activeTab !== "document-verification"
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer"
           }`}
           onClick={() => handleTabClick("document-verification")}
         >
           <CircleCheck />
           Document Verification
+          {documentVerificationSubmitted &&
+            activeTab !== "document-verification" && (
+              <span className="ml-2 text-xs">✓</span>
+            )}
         </div>
         <div
           className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
@@ -55,11 +69,17 @@ export default function CreatorVerification() {
   const [activeTab, setActiveTab] = useState("content-relevance");
   const [contentRelevanceSubmitted, setContentRelevanceSubmitted] =
     useState(false);
+  const [documentVerificationSubmitted, setDocumentVerificationSubmitted] =
+    useState(false);
   const [requestId, setRequestId] = useState(null);
 
   const handleTabClick = (tab) => {
     // Prevent switching back to content relevance if it has been submitted
     if (tab === "content-relevance" && contentRelevanceSubmitted) {
+      return;
+    }
+    // Prevent switching back to document verification if it has been submitted
+    if (tab === "document-verification" && documentVerificationSubmitted) {
       return;
     }
     setActiveTab(tab);
@@ -70,6 +90,12 @@ export default function CreatorVerification() {
     setRequestId(requestId);
     // Automatically move to next tab after successful submission
     setActiveTab("document-verification");
+  };
+
+  const handleDocumentVerificationSuccess = () => {
+    setDocumentVerificationSubmitted(true);
+    // Automatically move to next tab after successful submission
+    setActiveTab("skill-validation");
   };
 
   const [contentRelevance, setContentRelevance] = useState({
@@ -144,6 +170,7 @@ export default function CreatorVerification() {
         activeTab={activeTab}
         handleTabClick={handleTabClick}
         contentRelevanceSubmitted={contentRelevanceSubmitted}
+        documentVerificationSubmitted={documentVerificationSubmitted}
       />
 
       <div className="px-[10px]">
@@ -166,7 +193,10 @@ export default function CreatorVerification() {
 
       <div className="px-[10px]">
         {activeTab === "document-verification" && (
-          <DocumentVerificationTab requestId={requestId} />
+          <DocumentVerificationTab
+            requestId={requestId}
+            onSuccess={handleDocumentVerificationSuccess}
+          />
         )}
       </div>
 

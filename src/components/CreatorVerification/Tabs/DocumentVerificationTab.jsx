@@ -5,9 +5,11 @@ import Student from "../icons/Student";
 import Professional from "../icons/Professional";
 import Others from "../icons/Others";
 
-function UploadDocument({ text }) {
+function UploadDocument({ text, requestId, onSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
+  const profileId = useAuth().getProfileId();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -21,6 +23,48 @@ function UploadDocument({ text }) {
     // Reset the file input using ref
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  const uploadFile = async () => {
+    if (!selectedFile || !requestId) {
+      console.error("No file selected or requestId missing");
+      return;
+    }
+
+    setIsUploading(true);
+    const token = localStorage.getItem("token");
+
+    try {
+      const formData = new FormData();
+      formData.append("document", selectedFile);
+
+      const response = await fetch(
+        `https://your-exam-saathi-backend.onrender.com/api/creator-onboarding/document-verification/${requestId}/upload`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            profileId: profileId,
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Document uploaded successfully: ", data);
+        // Call the success callback to notify parent component
+        if (onSuccess) {
+          onSuccess();
+        }
+      } else {
+        console.error("Failed to upload document");
+      }
+    } catch (error) {
+      console.error("Error uploading document:", error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -80,15 +124,24 @@ function UploadDocument({ text }) {
       </div>
 
       <div className="flex justify-center mt-[30px]">
-        <button className="px-[20px] py-[10px] text-[14px] cursor-pointer bg-black text-white rounded-lg">
-          Submit and Next
+        <button
+          onClick={uploadFile}
+          disabled={!selectedFile || isUploading}
+          className={`px-[20px] py-[10px] text-[14px] rounded-lg flex items-center gap-[8px] ${
+            !selectedFile || isUploading
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-black text-white cursor-pointer hover:bg-gray-800"
+          }`}
+        >
+          {isUploading && <Loader2 size={16} className="animate-spin" />}
+          {isUploading ? "Uploading..." : "Submit and Next"}
         </button>
       </div>
     </div>
   );
 }
 
-export default function DocumentVerification({ requestId }) {
+export default function DocumentVerification({ requestId, onSuccess }) {
   const [creatorType, setCreatorType] = useState("student");
   const [isLoading, setIsLoading] = useState(false);
   const profileId = useAuth().getProfileId();
@@ -131,10 +184,6 @@ export default function DocumentVerification({ requestId }) {
     } finally {
       setIsLoading(false);
     }
-  }
-
-  async function uploadDocument() {
-    if (!requestId) return;
   }
 
   return (
@@ -201,6 +250,8 @@ export default function DocumentVerification({ requestId }) {
             ? "Upload Your LOR 'Letter of Recommendation'"
             : "Upload Any Of Your Government ID"
         }
+        requestId={requestId}
+        onSuccess={onSuccess}
       />
     </div>
   );
