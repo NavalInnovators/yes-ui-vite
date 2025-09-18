@@ -46,7 +46,7 @@ export const apiLogin = async (data) => {
   try {
     const response = await api.post("/api/auth/login", data);
     if (response.status == 200) {
-      track('login_success');
+      track("login_success");
     }
     return response.data;
   } catch (error) {
@@ -284,9 +284,9 @@ export const getSyllabus = async (subCode) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await api.get(`/api/getSyllabus?subcode=${subCode}`, config)
+  const response = await api.get(`/api/getSyllabus?subcode=${subCode}`, config);
   return response.data.data;
-}
+};
 
 export const getQnA = async (subCode) => {
   const token = localStorage.getItem("token");
@@ -296,9 +296,9 @@ export const getQnA = async (subCode) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await api.get(`/api/getQA?subcode=${subCode}`, config)
+  const response = await api.get(`/api/getQA?subcode=${subCode}`, config);
   return response.data.data;
-}
+};
 
 export const getUnitNotes = async (subCode) => {
   const token = localStorage.getItem("token");
@@ -308,22 +308,21 @@ export const getUnitNotes = async (subCode) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await api.get(`/api/getUnitNotes/${subCode}`, config)
+  const response = await api.get(`/api/getUnitNotes/${subCode}`, config);
   return response.data.data;
-}
-
-export const getAnalyticData = async (subCode) => {
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await api.get(`/api/analyticData/${subCode}`, config);
-    return response.data.data;
 };
 
+export const getAnalyticData = async (subCode) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      accept: "*/*",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await api.get(`/api/analyticData/${subCode}`, config);
+  return response.data.data;
+};
 
 export const enrollCourse = async (course) => {
   try {
@@ -340,12 +339,15 @@ export const enrollCourse = async (course) => {
       {},
       config
     );
-    console.log(`Response from course enroll api: =============>`, response.data);
+    console.log(
+      `Response from course enroll api: =============>`,
+      response.data
+    );
     return [response.data, course];
   } catch (error) {
     throw error;
   }
-}
+};
 
 // APIs of Summrizer and Rephraser
 export const summarizeAnswer = async (question, answer) => {
@@ -373,8 +375,8 @@ export const summarizeAnswer = async (question, answer) => {
     const parsed = JSON.parse(jsonString);
 
     // Step 4: Return the summarized answer
-    
-    console.log("response is "+parsed?.data?.summarized_answer);
+
+    console.log("response is " + parsed?.data?.summarized_answer);
     return parsed?.data?.summarized_answer;
     // return response.data?.data?.summarized_answer;
   } catch (error) {
@@ -386,11 +388,14 @@ export const summarizeAnswer = async (question, answer) => {
 
 export const rephraseAnswer = async (style, summary, answer) => {
   try {
-    console.log("Before making call from API.jsx type of are:"+ typeof(style)+" "+typeof(summary)+typeof(answer));
-    const response = await apiAI.post(
-      `/rephrase`,
-      { style, summary, answer },
+    console.log(
+      "Before making call from API.jsx type of are:" +
+        typeof style +
+        " " +
+        typeof summary +
+        typeof answer
     );
+    const response = await apiAI.post(`/rephrase`, { style, summary, answer });
 
     const rephrasedText = response?.data?.data?.rephrased_text;
     console.log("Rephrased Text:", rephrasedText); // For debug
@@ -404,20 +409,17 @@ export const rephraseAnswer = async (style, summary, answer) => {
 
 export const resetPasswordLink = async (email) => {
   try {
-    const response = await api.post(
-      '/api/password/forgot',
-      {email},
-    );
-    console.log("Response for forget API: "+ response);
-    console.log("Response.data is: "+ response.data);
-    console.log("Response.data is: "+ response.data.success);
+    const response = await api.post("/api/password/forgot", { email });
+    console.log("Response for forget API: " + response);
+    console.log("Response.data is: " + response.data);
+    console.log("Response.data is: " + response.data.success);
     return response.data;
-
-  }catch (error) {
+  } catch (error) {
     console.error("Error response:", error.response);
 
     const message =
-      error.response?.data?.message || "Failed to send reset link. Please try again.";
+      error.response?.data?.message ||
+      "Failed to send reset link. Please try again.";
 
     // Optional: throw if needed by caller
     throw new Error(message);

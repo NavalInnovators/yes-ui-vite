@@ -6,20 +6,27 @@ import SkillValidationTab from "./Tabs/SkillValidationTab";
 import Header from "./Header";
 import ContentRelevanceTab from "./Tabs/ContentRelevanceTab";
 
-function Tabs({ activeTab, handleTabClick }) {
+function Tabs({ activeTab, handleTabClick, contentRelevanceSubmitted }) {
   const activeBg = "bg-white rounded-gradient-border relative";
 
   return (
     <div className="w-full max-w-[700px] rounded-lg mt-[30px] mx-auto mb-[10px] px-[10px] md:px-0">
       <div className="grid grid-cols-1 md:grid-cols-3 items-stretch gap-[8px] md:gap-[5px]">
         <div
-          className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
+          className={`flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
             activeTab === "content-relevance" ? activeBg : "bg-light-card"
+          } ${
+            contentRelevanceSubmitted && activeTab !== "content-relevance"
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer"
           }`}
           onClick={() => handleTabClick("content-relevance")}
         >
           <CircleCheck />
           Content Relevance
+          {contentRelevanceSubmitted && activeTab !== "content-relevance" && (
+            <span className="ml-2 text-xs">✓</span>
+          )}
         </div>
         <div
           className={`cursor-pointer flex items-center justify-center gap-[8px] md:gap-[10px] rounded-lg text-[14px] md:text-[16px] py-[14px] md:py-[20px] ${
@@ -46,9 +53,23 @@ function Tabs({ activeTab, handleTabClick }) {
 
 export default function CreatorVerification() {
   const [activeTab, setActiveTab] = useState("content-relevance");
+  const [contentRelevanceSubmitted, setContentRelevanceSubmitted] =
+    useState(false);
+  const [requestId, setRequestId] = useState(null);
 
   const handleTabClick = (tab) => {
+    // Prevent switching back to content relevance if it has been submitted
+    if (tab === "content-relevance" && contentRelevanceSubmitted) {
+      return;
+    }
     setActiveTab(tab);
+  };
+
+  const handleContentRelevanceSuccess = (requestId) => {
+    setContentRelevanceSubmitted(true);
+    setRequestId(requestId);
+    // Automatically move to next tab after successful submission
+    setActiveTab("document-verification");
   };
 
   const [contentRelevance, setContentRelevance] = useState({
@@ -119,7 +140,11 @@ export default function CreatorVerification() {
         </p>
       </GradientDiv>
 
-      <Tabs activeTab={activeTab} handleTabClick={handleTabClick} />
+      <Tabs
+        activeTab={activeTab}
+        handleTabClick={handleTabClick}
+        contentRelevanceSubmitted={contentRelevanceSubmitted}
+      />
 
       <div className="px-[10px]">
         {activeTab === "content-relevance" && (
@@ -134,12 +159,15 @@ export default function CreatorVerification() {
             handleReasonForBecomingCreatorChange={
               handleReasonForBecomingCreatorChange
             }
+            onSuccess={handleContentRelevanceSuccess}
           />
         )}
       </div>
 
       <div className="px-[10px]">
-        {activeTab === "document-verification" && <DocumentVerificationTab />}
+        {activeTab === "document-verification" && (
+          <DocumentVerificationTab requestId={requestId} />
+        )}
       </div>
 
       <div className="px-[10px]">
