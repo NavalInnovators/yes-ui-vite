@@ -3,12 +3,14 @@ import "./UserDashboard.css";
 import UserDashboardRight from "./UserDashboardRight";
 import { useNavigate } from "react-router-dom";
 import { getAllCourses, enrollCourse } from "../api/api";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
 
 const AllSubjects = ({ searchQuery }) => {
+  const queryClient = useQueryClient();
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
 
@@ -122,33 +124,36 @@ const AllSubjects = ({ searchQuery }) => {
     );
   });
 
+  const { data: myCourses = [] } = useMyCourses();
+
   const { mutate: mutateEnroll, isPending: isEnrolling } = useMutation({
-    mutationFn: enrollCourse,
+    mutationFn: (course) => enrollCourse(course),
     onSuccess: (data) => {
-      console.log("Successfully enrolled in the course!", data);
-      const coursesToUpdate = JSON.parse(
-        localStorage.getItem("myCourses") || "[]"
-      );
-      const courseAlreadyEnrolled = coursesToUpdate.some(
-        (obj) => obj.id === data[1].id
+      const enrolledCourse = data[1];
+
+      const alreadyExists = myCourses.some(
+        (obj) => obj.id === enrolledCourse.id
       );
 
-      if (courseAlreadyEnrolled) {
-        navigate(`/book-dashboard?subcode=${data[1].courseCodes[0]}`);
+      if (alreadyExists) {
         toast.dismiss();
         toast.info("Course Already Enrolled!");
-      } else {
-        coursesToUpdate.push(data[1]);
-        console.log("Updating courses: ", coursesToUpdate);
-        localStorage.setItem("myCourses", JSON.stringify(coursesToUpdate));
-        localStorage.setItem(
-          "bookDetails",
-          JSON.stringify(getBookDetails(coursesToUpdate))
-        );
-        navigate(`/book-dashboard?subcode=${data[1].courseCodes[0]}`);
-        toast.dismiss();
-        toast.success("Successfully enrolled in the course!");
+        navigate(`/book-dashboard?subcode=${enrolledCourse.courseCodes[0]}`);
+        return;
       }
+
+      const updatedCourses = [...myCourses, enrolledCourse];
+      localStorage.setItem("myCourses", JSON.stringify(updatedCourses));
+      localStorage.setItem(
+        "bookDetails",
+        JSON.stringify(getBookDetails(updatedCourses))
+      );
+
+      toast.dismiss();
+      toast.success("Successfully enrolled in the course!");
+      navigate(`/book-dashboard?subcode=${enrolledCourse.courseCodes[0]}`);
+
+      queryClient.invalidateQueries(["myCourses"]);
     },
     onError: (error) => {
       console.log("Error in enrolling for the subject: ", error);
@@ -208,9 +213,10 @@ const AllSubjects = ({ searchQuery }) => {
                           course.courseCodes[0]
                         );
 
-                        const courseExists = JSON.parse(
-                          localStorage.getItem("myCourses") || "[]"
-                        ).some((tempCourse) => tempCourse.id === course.id);
+                        // Check if the course is already enrolled (from server)
+                        const courseExists = myCourses.some(
+                          (tempCourse) => tempCourse.id === course.id
+                        );
                         // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
 
                         if (courseExists) {
