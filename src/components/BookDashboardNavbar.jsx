@@ -5,9 +5,9 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
   const tabs = [
     "Syllabus",
     "Q&A",
-    "Unit",
+    "Notes",
     "Insights", 
-    // "Maps", 
+    "Road-Map", 
     // "Custom Preparation", 
     // "AiFeatured"
   ];

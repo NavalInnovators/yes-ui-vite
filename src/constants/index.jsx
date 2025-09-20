@@ -749,4 +749,3 @@ export const faqs = [
       answer: "If you need assistance with the platform, you can reach out to our support team through the 'Contact Us' page on our website. Additionally, you can email us at info@navalinnovators.com for any questions or concerns regarding the platform.",
     },
   ];
-

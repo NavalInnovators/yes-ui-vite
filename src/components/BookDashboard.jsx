@@ -8,7 +8,7 @@ import BookDashboardLeftSec from "./BookDashboardLeftSec";
 import BookDashboardRightSec from "./BookDashboardRightSec";
 import BookDashboardSyllabus from "./BookDashboardSyllabus";
 // import BookDashboardAiFeature from "./BookDashboardAiFeature";
-// import BookDashboardMap from "./BookDashboardMap";
+import BookDashboardMap from "./BookDashboardMap";
 import BookDashboardMidSec from "./BookDashboardMidSec";
 import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
 
@@ -24,7 +24,7 @@ const BookDashboardSections = [
     rightComponent: true,
   },
   {
-    title: "Unit",
+    title: "Notes",
     component: BookDashboardUnitMidSec,
     rightComponent: false,
   },
@@ -33,11 +33,11 @@ const BookDashboardSections = [
     component: BookDashboardInsightAnalyticsMidSec,
     rightComponent: false,
   },
-  // {
-  //   title: "Maps",
-  //   component: BookDashboardMap,
-  //   rightComponent: false,
-  // },
+  {
+    title: "Road-Map",
+    component: BookDashboardMap,
+    rightComponent: false,
+  },
   // {
   //   title: "Custom Preparation",
   //   component: BookDashboardMap,
