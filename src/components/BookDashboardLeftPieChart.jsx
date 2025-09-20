@@ -54,7 +54,7 @@ export default function BookDashboardLeftPieChart({ selectedUnit, useQuestionTyp
   return (
     <div className="flex flex-col items-center gap-4 bg-gray-100">
       <h3 className="text-center font-medium pt-3 text-base"> Type of Questions Asked </h3>
-      <div className="relative w-full h-[232px] items-center">
+      <div className="relative w-full h-[232px] items-center mb-6">
         {/* Chart */}
         <Pie key={selectedUnit} data={chartData} options={options} />
         
