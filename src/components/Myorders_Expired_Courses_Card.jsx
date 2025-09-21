@@ -19,8 +19,8 @@ export default function Expired_Courses_Card({
       {/* Dates + Grey pill */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-xs md:text-sm">Purchase Date: {purchaseDate}</p>
-          <p className="text-xs md:text-sm">Expired on: {expiryDate}</p>
+          <p className="text-xs md:text-sm"> <b>Purchase Date:</b> {purchaseDate}</p>
+          <p className="text-xs md:text-sm"> <b>Expired on:</b> {expiryDate}</p>
         </div>
         {/* Grey status pill */}
         <span className="mt-auto px-3 py-1 rounded-full text-sm font-semibold bg-gray-400 text-white">

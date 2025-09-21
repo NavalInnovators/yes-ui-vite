@@ -40,8 +40,8 @@ export default function Active_Courses_Card({
       {/* Dates + Button */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs md:text-sm">Purchase Date: {purchaseDate}</p>
-          <p className="text-xs md:text-sm">Expires: {expiryDate}</p>
+          <p className="text-xs md:text-sm"> <b>Purchase Date: </b>{purchaseDate}</p>
+          <p className="text-xs md:text-sm"><b>Expires On: </b>{expiryDate}</p>
         </div>
 
         {/* Plan Button */}
@@ -51,7 +51,7 @@ export default function Active_Courses_Card({
             transition-all duration-200 ${buttonStyle}
           `}
         >
-          {planType === "Pro Plan" ? "Upgrade to Pro" : "Enjoy Pro Features"}
+          {planType === "Pro Plan" ? "Upgrade to Pro" : "Enjoy Premium"}
         </button>
       </div>
     </div>

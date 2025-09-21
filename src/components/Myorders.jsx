@@ -7,42 +7,42 @@ export default function Myorders() {
   const courses = [
     {
       courseName: "Data Management and Entrepreneurship",
-      credits: "4 Credits",
+      credits: "KHU702",
       planType: "Pro Plan",
       purchaseDate: "Jan 15, 2024",
       expiryDate: "Jan 15, 2025",
     },
     {
       courseName: "Data Warehouse and Data Mining",
-      credits: "4 Credits",
+      credits: "KCS023",
       planType: "Pro Plan",
       purchaseDate: "Jan 15, 2024",
       expiryDate: "Jan 15, 2025",
     },
     {
       courseName: "Data Warehouse and Data Mining",
-      credits: "4 Credits",
+      credits: "KOE829",
       planType: "Upgrade to Pro",
       purchaseDate: "Jan 15, 2024",
       expiryDate: "Jan 15, 2025",
     },
     {
       courseName: "Data Warehouse and Data Mining",
-      credits: "4 Credits",
+      credits: "KAC012",
       planType: "Upgrade to Pro",
       purchaseDate: "Jan 16, 2024",
       expiryDate: "Jan 15, 2025",
     },
     {
       courseName: "Machine Learning Basics",
-      credits: "3 Credits",
+      credits: "KOE123",
       planType: "Pro Plan",
       purchaseDate: "Feb 01, 2024",
       expiryDate: "Feb 01, 2025",
     },
     {
       courseName: "Advanced Algorithms",
-      credits: "4 Credits",
+      credits: "KCS567",
       planType: "Upgrade to Pro",
       purchaseDate: "Mar 01, 2024",
       expiryDate: "Mar 01, 2025",
@@ -53,8 +53,8 @@ export default function Myorders() {
     <div className="w-full min-h-screen pt-24 md:pt-28">
       {" "}
       {/* pushes below navbar */}
-      <div className="text-2xl font-semibold mb-6">
-        <GradientDiv>My Orders</GradientDiv>
+      <div className="text-xl font-regular mb-6">
+        <GradientDiv> <div className="mx-12">My Orders</div></GradientDiv>
       </div>
       <div className="w-[90%] mx-auto">
         <h1 className="text-2xl font-semibold mb-6">Active Courses</h1>
