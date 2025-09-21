@@ -176,7 +176,6 @@ const Navbar = () => {
     // ✅ Sync with localStorage events (cross-tab or same-tab updates)
     window.addEventListener("profileUpdated", updateProfilePic);
 
-
     // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -241,8 +240,8 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/membership" onClick={toggleMenu}>
-                Membership
+              <Link to="/myorders" onClick={toggleMenu}>
+                My Orders
               </Link>
             </li>
             <li>
@@ -273,8 +272,8 @@ const Navbar = () => {
         {navLinks.map((nav) => (
           <li
             key={nav.id}
-          // onMouseEnter={() => setHoveredItem(nav.title)}
-          // onMouseLeave={() => setHoveredItem(null)}
+            // onMouseEnter={() => setHoveredItem(nav.title)}
+            // onMouseLeave={() => setHoveredItem(null)}
           >
             <Link
               className={`${currentPath === nav.id ? "active" : "inactive"}`}
@@ -325,8 +324,9 @@ const Navbar = () => {
                     <div
                       onClick={() => setIsNotificationDropdownOpen(false)}
                       key={notification.id}
-                      className={`notification-item font-notification ${notification.isRead ? "read" : ""
-                        }`}
+                      className={`notification-item font-notification ${
+                        notification.isRead ? "read" : ""
+                      }`}
                     >
                       {notification.message}
                     </div>
@@ -378,17 +378,19 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li onClick={() => setIsDropdownOpen(false)}>
-                    <Link to="/membership">
-                      <img src={MembershipIcon} alt="MembershipIcon" />{" "}
-                      Membership
+                    <Link to="/myorders">
+                      <img src={MembershipIcon} alt="MembershipIcon" /> My
+                      Orders
                     </Link>
                   </li>
                   <li onClick={() => setIsDropdownOpen(false)}>
                     <Link to="/make-query" state={{ tab: "submit-query" }}>
-                      <div><img
-                        src={SubmitYourQueryIcon}
-                        alt="SubmitYourQueryIcon"
-                      /></div>
+                      <div>
+                        <img
+                          src={SubmitYourQueryIcon}
+                          alt="SubmitYourQueryIcon"
+                        />
+                      </div>
                       <div>Submit Your Query</div>
                     </Link>
                   </li>
