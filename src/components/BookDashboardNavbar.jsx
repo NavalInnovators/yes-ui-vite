@@ -1,12 +1,13 @@
 import React from "react";
 import "./BookDashboardNavbar.css";
+import { PaidIcon } from "../assets"
 
 function BookDashboardNavbar({ currentSection, handleSectionChange }) {
   const tabs = [
     "Syllabus",
     "Q&A",
     "Unit",
-    "Insights", 
+    "Insights",
     // "Maps", 
     // "Custom Preparation", 
     // "AiFeatured"
@@ -18,9 +19,14 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
           <div
             key={tab}
             onClick={() => handleSectionChange(tab)}
-            className={tab === currentSection ? "bookdashboard-active-tab" : ""}
+            className={tab === currentSection ? "bookdashboard-active-tab tab-item" : "tab-item"}
           >
             {tab}
+            {(tab === "Unit" || tab === "Insights") && (
+              <span className="paid-icon">
+                <img src={PaidIcon} alt="Paid Icon" />
+              </span>
+            )}
           </div>
         ))}
       </ul>

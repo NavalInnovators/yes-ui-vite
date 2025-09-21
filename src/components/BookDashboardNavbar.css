@@ -44,6 +44,23 @@
   border-radius: 1vh;
 }
 
+.tab-item {
+  position: relative; /* allow absolute positioning inside */
+}
+
+.paid-icon {
+  position: absolute;
+  top: -0.4rem;
+  right: 0px;
+  font-size: 1rem; /* adjust if PaidIcon is text/svg */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 2rem;
+}
+
+
 /* Laptop view (show list, hide dropdown) */
 @media (min-width: 1024px) {
   .book-dashboard-nav-bar {
