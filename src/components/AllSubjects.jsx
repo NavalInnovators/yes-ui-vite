@@ -183,8 +183,8 @@ const AllSubjects = ({ searchQuery }) => {
   };
 
   const pricing = useMemo(() => {
-    const basicPrice = 50;
-    const proPrice = 100;
+    const basicPrice = 110;
+    const proPrice = 150;
 
     let subtotal = 0;
     let allPro = true;
@@ -204,12 +204,12 @@ const AllSubjects = ({ searchQuery }) => {
 
     // If more than 5 courses → 30% discount
     if (cart.length >= 5) {
-      discount = subtotal * 0.3;
+      discount = subtotal * 0.25;
     }
 
     // If upgrade-to-pro → 10% discount
     if (allPro && cart.length > 0) {
-      discount += subtotal * 0.1;
+      discount = subtotal * 0.30;
     }
 
     const total = subtotal - discount;
@@ -359,7 +359,7 @@ const AllSubjects = ({ searchQuery }) => {
             </div>
 
             <div className="pricing-sidebar-body">
-            {cart.length <= 4 ? (<p className="muted">Select 4+ courses to unlock 30% discount!</p>):(<p>Upgrade to Pro, get 10% extra discount!</p>)}
+            {cart.length <= 4 ? (<p className="muted green">Select 5+ courses to unlock 25% discount!</p>):(<p className="muted green">Upgrade to Pro, get 30% discount!</p>)}
 
               <div className="sidebar-card sidebar-card-content">
                 
@@ -367,7 +367,7 @@ const AllSubjects = ({ searchQuery }) => {
                   <div key={c.id} className="summary-row">
                     <div>{c.name} ({c.plan})</div>
                     <div className="price-delete">
-                      ₹{c.plan === "Basic" ? 50 : 100}
+                      ₹{c.plan === "Basic" ? 110 : 150}
                       <button onClick={() => removeFromCart(c.id)}>🗑️</button>
                     </div>
                   </div>

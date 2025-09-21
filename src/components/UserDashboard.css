@@ -123,10 +123,19 @@
 .userdashboard-sidesection {
     width: 35vw;
     position: sticky;
-    top: 6.5rem; 
-    align-self: flex-start; 
-    height: fit-content;
+    top: 6.5rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
 }
+/* Hide scrollbar (cross-browser) */
+.userdashboard-sidesection::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  .userdashboard-sidesection {
+    -ms-overflow-style: none;  /* IE, Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
 
 .userdasboard-heading {
     margin-left: 5vw;
@@ -210,11 +219,12 @@
 
 .order-summary-container {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 12px;
     padding: 0.3rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  }
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
 /* Make sure sizing matches Start Learning on smaller devices */
 @media (max-width: 768px) {
     .buy-split-btn {
@@ -238,7 +248,7 @@
     background: #fff;
     border-left: 1px solid rgba(0, 0, 0, 0.04);
     box-shadow: -8px 8px 30px rgba(0, 0, 0, 0.08);
-    transition: right 320ms cubic-bezier(.2,.9,.2,1);
+    transition: right 320ms cubic-bezier(.2, .9, .2, 1);
     z-index: 1200;
     /* above page but below modal-level if any */
     display: flex;
@@ -250,6 +260,7 @@
 .pricing-sidebar.non-blocking.open {
     right: 0;
 }
+
 /* Header pill (rounded grey box with X on right) */
 .pricing-sidebar-title {
     margin: 16px;
@@ -259,15 +270,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-  }
-  
-  /* Title text (left in pill) */
-  .pricing-sidebar-title .title-text {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+/* Title text (left in pill) */
+.pricing-sidebar-title .title-text {
     font-size: 1.1rem;
     font-weight: 700;
     color: #222;
-  }
+}
 
 /* header */
 .pricing-sidebar-header {
@@ -303,66 +314,71 @@
 /* Generic card (white) inside sidebar */
 .sidebar-card {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     border-radius: 8px;
     padding: 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  }
-  
-  /* smaller variant */
-  .sidebar-card.small {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+/* smaller variant */
+.sidebar-card.small {
     padding: 10px;
     background-color: rgb(245, 166, 18);
-  }
-  
-  /* muted text helper */
-  .sidebar-card .muted {
+}
+
+/* muted text helper */
+.sidebar-card .muted {
     color: #6b7280;
     font-size: 0.95rem;
-  }
-  
-  /* strike-through price */
-  .sidebar-card .strike {
+}
+
+/* strike-through price */
+.sidebar-card .strike {
     text-decoration: line-through;
     color: #9ca3af;
-  }
-  
-  /* summary rows */
-  .sidebar-card .summary-row {
+}
+
+/* summary rows */
+.sidebar-card .summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
-  }
-  
-  /* green savings */
-  .sidebar-card .summary-row.green {
+}
+
+.muted.green {
+    color: #047857;
+    font-weight: 600;
+}
+/* green savings */
+.sidebar-card .summary-row.green {
     color: #047857;
     font-weight: 700;
-  }
-  
-  /* bundle layout inside card */
-  .bundle-row {
+}
+
+/* bundle layout inside card */
+.bundle-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  /* bundle title & description */
-  .bundle-title {
+}
+
+/* bundle title & description */
+.bundle-title {
     font-weight: 700;
     margin-bottom: 1rem;
     color: rgb(51, 50, 50);
-  }
-  .bundle-desc {
+}
+
+.bundle-desc {
     color: #374151;
     font-size: 0.95rem;
-  }
-  
-  /* small Pro pill button (inside bundle card) */
-  .bundle-pro-btn {
+}
+
+/* small Pro pill button (inside bundle card) */
+.bundle-pro-btn {
     background: #fff;
     border: 1px solid rgba(164, 166, 169, 0.5);
     color: #000000;
@@ -370,33 +386,35 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: 700;
-  }
-  
-  /* total block */
-  .sidebar-total {
+}
+
+/* total block */
+.sidebar-total {
     margin-top: 6px;
     padding: 12px 4px;
-    border-top: 1px solid rgba(0,0,0,0.04);
-  }
-  .sidebar-total .total-label {
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-total .total-label {
     font-size: 0.95rem;
     color: #374151;
-  }
-  .sidebar-total .total-value {
+}
+
+.sidebar-total .total-value {
     font-size: 1.1rem;
     font-weight: 800;
     margin-top: 8px;
-  }
-  
-  /* footer checkout area */
-  .pricing-sidebar-footer {
+}
+
+/* footer checkout area */
+.pricing-sidebar-footer {
     padding: 16px;
-    border-top: 1px solid rgba(0,0,0,0.04);
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  }
-  
-  /* gradient Secure Checkout button like your image */
-  .secure-checkout-btn {
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+}
+
+/* gradient Secure Checkout button like your image */
+.secure-checkout-btn {
     width: 100%;
     padding: 14px 18px;
     border-radius: 10px;
@@ -407,8 +425,8 @@
     color: #fff;
     /* purple -> orange gradient */
     background: linear-gradient(90deg, #4b05d4 0%, #7c3aed 28%, #f59e0b 100%);
-    box-shadow: 0 8px 20px rgba(79,35,142,0.18);
-  }
+    box-shadow: 0 8px 20px rgba(79, 35, 142, 0.18);
+}
 
 /* plan features */
 .pricing-sidebar .plan-features ul {
