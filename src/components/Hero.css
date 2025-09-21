@@ -49,9 +49,61 @@
     text-align: center;
     z-index: 1;
     width: 100%;
+    /* width: min(90%, 900px); */
 }
 
+/* ---------- New / updated hero-text styles ---------- */
+.hero-text .line1 {
+    /* font-size: clamp(1.6rem, 2.6vw, 2.6rem); */
+    font-size: clamp(1rem, 3.5vw, 4.2rem);
+    line-height: 0.8;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.08rem;
+}
 
+.hero-text .line2 {
+    /* font-size: clamp(1.5rem, 1.8vw, 1.9rem); */
+    font-size: clamp(1.08rem, 3.5vw, 4.2rem);
+    font-weight: 400;
+    display: inline-block;
+    letter-spacing: -0.08rem;
+}
+
+/* emphasis for the rotating feature word */
+.hero-text .feature {
+    letter-spacing: -2px;
+    font-weight: 500;
+    margin-left: 6px;
+    display: inline-block;
+    min-width: 3ch; /* prevents layout jump for very short words */
+    /* gradient text */
+    background: linear-gradient(90deg, #0110ac, #b201d1, #fad70e); /* blue → purple → yellow */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* blinking cursor next to the feature (hidden for reduced motion) */
+.typing-cursor {
+    display: inline-block;
+    margin-left: 6px;
+    animation: blink 700ms steps(1) infinite;
+    font-weight: 200;
+    vertical-align: bottom;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* hide cursor for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .typing-cursor {
+        display: none;
+        animation: none;
+    }
+}
 
 .hero-about {
     display: flex;
