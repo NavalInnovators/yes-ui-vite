@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import Myorders from "./components/Myorders.jsx";
 import {
   BrowserRouter as Router,
   Routes,
@@ -153,6 +154,7 @@ function AppContent() {
         <Route path="/verification-detail" element={<Login />} />
         <Route path="/submit-query" element={<SubmitQuery />} />/
         <Route path="/review" element={<Review />} />
+        <Route path="/myorders" element={<Myorders />}></Route>
         <Route path="/membership" element={<MembershipPage />} />
         <Route path="/payment-completion" element={<PaymentCompletion />} />
         <Route path="/page-not-found" element={<PageNotFound />} />
