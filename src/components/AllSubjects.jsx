@@ -14,6 +14,7 @@ const AllSubjects = ({ searchQuery }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
 
+  const [cart, setCart] = useState([]);
   const yearCategoryMap = {
     "1st Year": 1,
     "2nd Year": 2,
@@ -162,6 +163,66 @@ const AllSubjects = ({ searchQuery }) => {
     },
   });
 
+  // Handler for Buy button
+  const handleBuyClick = (course, plan) => {
+    setCart((prev) => {
+      const exists = prev.find((c) => c.id === course.id);
+      if (exists) {
+        // if same course clicked again, replace plan
+        return prev.map((c) =>
+          c.id === course.id ? { ...c, plan } : c
+        );
+      }
+      return [...prev, { ...course, plan }];
+    });
+
+  };
+
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const pricing = useMemo(() => {
+    const basicPrice = 50;
+    const proPrice = 100;
+
+    let subtotal = 0;
+    let allPro = true;
+    let hasBasic = false;
+
+    cart.forEach((c) => {
+      if (c.plan === "Basic") {
+        subtotal += basicPrice;
+        allPro = false;
+        hasBasic = true;
+      } else {
+        subtotal += proPrice;
+      }
+    });
+
+    let discount = 0;
+
+    // If more than 5 courses → 30% discount
+    if (cart.length >= 5) {
+      discount = subtotal * 0.3;
+    }
+
+    // If upgrade-to-pro → 10% discount
+    if (allPro && cart.length > 0) {
+      discount += subtotal * 0.1;
+    }
+
+    const total = subtotal - discount;
+
+    return { subtotal, discount, total, allPro, hasBasic };
+  }, [cart]);
+
+  const upgradeAllToPro = () => {
+    setCart((prev) =>
+      prev.map((c) => ({ ...c, plan: "Pro" }))
+    );
+  };
+
   return (
     <div className="userdashboard-content-page">
       <div className="all-course-card-container">
@@ -202,11 +263,39 @@ const AllSubjects = ({ searchQuery }) => {
                   ))}
                 </div>
               </div>
-              <div
-                onClick={
-                  isEnrolling
-                    ? null
-                    : () => {
+
+              <div className="all-course-card-footer">
+                {/* ===== NEW: Buy split button =====
+                  - Split into two halves: Buy Basic | Buy Pro
+                  - Buttons have same width/shape as Start Learning
+                  - Clicking opens the global sidebar with the selected plan
+              */}
+                <div className="buy-split-btn" role="group" aria-label="Buy plans">
+                  <button
+                    className="buy-btn buy-left"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBuyClick(course, "Basic");
+                    }}
+                  >
+                    Buy Basic
+                  </button>
+                  <button
+                    className="buy-btn buy-right"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBuyClick(course, "Pro");
+                    }}
+                  >
+                    Buy Pro
+                  </button>
+                </div>
+
+                <div
+                  onClick={
+                    isEnrolling
+                      ? null
+                      : () => {
                         console.log("Clicked on start learning.....");
                         sessionStorage.setItem(
                           "selectedCourseCode",
@@ -238,10 +327,11 @@ const AllSubjects = ({ searchQuery }) => {
                           }
                         }
                       }
-                }
-                className="all-course-card-start-learning-btn font-notification pointer-cursor"
-              >
-                Start Learning
+                  }
+                  className="all-course-card-start-learning-btn font-notification pointer-cursor"
+                >
+                  Start Learning
+                </div>
               </div>
             </div>
           ))
@@ -249,17 +339,216 @@ const AllSubjects = ({ searchQuery }) => {
       </div>
 
       <div className="userdashboard-sidesection">
-        <UserDashboardRight
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategorySelect={(category) => {
-            if (selectedCategory === category) {
-              setSelectedCategory("");
-            } else {
-              setSelectedCategory(category);
-            }
-          }}
-        />
+        {/* Show Categories if no course is selected, else show Order Summary */}
+        {cart.length === 0 ? (
+          <UserDashboardRight
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategorySelect={(category) => {
+              if (selectedCategory === category) {
+                setSelectedCategory("");
+              } else {
+                setSelectedCategory(category);
+              }
+            }}
+          />
+        ) : (
+          <div className="order-summary-container">
+            <div className="pricing-sidebar-title">
+              <div className="title-text">Order Summary</div>
+            </div>
+
+            <div className="pricing-sidebar-body">
+            {cart.length <= 4 ? (<p className="muted">Select 4+ courses to unlock 30% discount!</p>):(<p>Upgrade to Pro, get 10% extra discount!</p>)}
+
+              <div className="sidebar-card sidebar-card-content">
+                
+                {cart.map((c) => (
+                  <div key={c.id} className="summary-row">
+                    <div>{c.name} ({c.plan})</div>
+                    <div className="price-delete">
+                      ₹{c.plan === "Basic" ? 50 : 100}
+                      <button onClick={() => removeFromCart(c.id)}>🗑️</button>
+                    </div>
+                  </div>
+                ))}
+
+                <hr />
+                <div className="summary-row">
+                  <div>Subtotal</div>
+                  <div>₹{pricing.subtotal}</div>
+                </div>
+
+                <div className="summary-row green">
+                  <div>Discount</div>
+                  <div>-₹{pricing.discount}</div>
+                </div>
+              </div>
+
+              {pricing.hasBasic && (
+                <div className="sidebar-card small">
+                  <div className="bundle-row">
+                    <div>
+                      <div className="bundle-title">Bundle Savings</div>
+                      <div className="bundle-desc">Upgrade all to Pro & Save 10%</div>
+                    </div>
+                    <button className="bundle-pro-btn" onClick={upgradeAllToPro}>
+                      Pro
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="sidebar-total">
+                <div className="total-label">Total Amount Payable:</div>
+                <div className="total-value">₹{pricing.total}</div>
+              </div>
+            </div>
+
+            <div className="pricing-sidebar-footer">
+              <button className="secure-checkout-btn">
+                Secure Checkout
+              </button>
+            </div>
+
+
+            {/* <div className="pricing-sidebar-body">
+          
+          <div className="sidebar-card">
+            <div className="sidebar-card-content">
+              <p className="muted">Select 3+ courses to unlock bundle discounts!</p>
+
+              <div className="summary-row">
+                <div>Subtotal</div>
+                <div className="muted strike">$3,000</div>
+              </div>
+
+              <hr />
+
+              <div className="summary-row">
+                <div>Subtotal (3 items)</div>
+                <div>$9,000</div>
+              </div>
+
+              <div className="summary-row green">
+                <div>-$45</div>
+                <div className="muted">(Save 15%)</div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div className="sidebar-card small">
+            <div className="bundle-row">
+              <div>
+                <div className="bundle-title">Bundle Savings</div>
+                <div className="bundle-desc">Maximize Savings! Upgrade All to Pro</div>
+              </div>
+
+              <div>
+              
+                <button
+                  className="bundle-pro-btn"
+                  onClick={() => {
+                    toast.info("Upgrade all to Pro clicked (implement logic)");
+                    // Here you might set a state to mark 'upgrade all' or open checkout
+                  }}
+                >
+                  Pro
+                </button>
+              </div>
+            </div>
+          </div>
+
+          
+          <div className="sidebar-total">
+            <div className="total-label">Total Amount Payable:</div>
+            <div className="total-value">$8,955</div>
+          </div>
+        </div>
+
+        
+        <div className="pricing-sidebar-footer">
+          <button
+            className="secure-checkout-btn"
+            onClick={() => {
+              // TODO: wire to your payment flow
+              toast.info("Proceeding to checkout (implement flow)");
+            }}
+          >
+            Secure Checkout
+          </button>
+        </div> */}
+
+            {/* ###########################
+        ###########################
+        ########################### */}
+
+            {/* <div className="pricing-sidebar-header">
+          <div>
+            <strong>{sidebarPlan ? `${sidebarPlan} Plan` : "Plan"}</strong>
+            <div className="small-muted">
+              {sidebarCourse ? sidebarCourse.name : ""}
+            </div>
+          </div>
+          <button
+            className="pricing-sidebar-close"
+            onClick={closeSidebar}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="pricing-sidebar-body">
+          {/* Example content — replace with your payment / purchase UI */}
+            {/* {sidebarCourse ? (
+            <>
+              <p>
+                You chose <strong>{sidebarPlan}</strong> for{" "}
+                <em>{sidebarCourse.name}</em>.
+              </p>
+
+              <div className="plan-features">
+                <p>
+                  <strong>What's included</strong>
+                </p>
+                <ul>
+                  <li>Access to course notes</li>
+                  <li>AI summaries & rephraser</li>
+                  <li>Previous year insights</li>
+                </ul>
+              </div>
+
+              <div className="purchase-actions">
+                <button
+                  className="confirm-purchase-btn"
+                  onClick={() => {
+                    // TODO: replace this with actual purchase flow
+                    toast.info(
+                      `Proceeding to buy ${sidebarPlan} for ${sidebarCourse.name}`
+                    );
+                    // close sidebar for now
+                    closeSidebar();
+                  }}
+                >
+                  Proceed to Pay
+                </button>
+
+                <button
+                  className="cancel-purchase-btn"
+                  onClick={closeSidebar}
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          ) : (
+            <div>Select a plan to continue.</div>
+          )} 
+        </div> */}
+          </div>
+        )}
       </div>
     </div>
   );
