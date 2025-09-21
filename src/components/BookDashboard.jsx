@@ -56,14 +56,6 @@ function BookDashboard() {
   const handleSectionChange = (section) => {
     setCurrentSection(section);
   };
-  // useEffect(() => {
-  //   const queryParams = new URLSearchParams(location.search);
-  //   const sCode = queryParams.get("subcode");
-
-  //   if (sCode) {
-  //     setSubCode(sCode);
-  //   }
-  // }, [location]);
 
   return (
     <div className="parent-book-dashboard">
