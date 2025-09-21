@@ -1,0 +1,223 @@
+ /* Blur background overlay */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 1rem; /* keep some breathing room on small screens */
+}
+
+/* Popup box
+   - column flex so header/footer remain fixed and content scrolls
+   - max-height ensures it never grows beyond viewport (prevents close being off-screen)
+*/
+.popup-box {
+  background: white;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 750px;
+  /* ensure popup never exceeds viewport height */
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* content area handles its own scroll */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  position: relative;
+  /* safe area for devices with notches */
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+}
+
+/* Header: title + close button aligned horizontally */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem 0.5rem 1.25rem;
+  gap: 1rem;
+}
+
+/* Title styling */
+.popup-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+/* Close button (kept in header so it remains visible) */
+.popup-close {
+  font-size: 1.2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  border-radius: 8px;
+  /* touch-friendly hit area */
+  min-width: 40px;
+  min-height: 40px;
+}
+
+/* Hover/focus states for accessibility */
+.popup-close:hover,
+.popup-close:focus {
+  background: rgba(0,0,0,0.06);
+  outline: none;
+}
+
+/* Scrollable content area - this will scroll if content exceeds the box height */
+.popup-content {
+  padding: 0 1.25rem 1rem 1.25rem;
+  overflow-y: auto;
+  /* allow content to shrink/grow inside the flexbox */
+  flex: 1 1 auto;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin: 0.25rem 0 1rem 0;
+}
+
+/* Plans layout */
+.plans-wrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Plan cards */
+.plan-card {
+  flex: 1 1 280px;
+  min-width: 220px;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  border: 2px solid #ddd;
+  background: #f9f9f9;
+  box-sizing: border-box;
+}
+
+/* Basic / Pro variations */
+.plan-card.basic {
+  border-color: #42b4b9;
+}
+.plan-card.pro {
+  border-color: #eae8e4;
+  background: linear-gradient(135deg, #ff9c12, #aa14f0, #1d0295);
+  color: white;
+}
+
+/* Plan headings inside card */
+.plan-card h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.05rem;
+}
+
+/* Badge */
+.badge {
+  background: #ff6b00;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+/* Price */
+.price {
+  font-weight: bold;
+  margin: 0.6rem 0;
+}
+
+/* Features list */
+.plan-card ul {
+  text-align: left;
+  margin: 0.6rem 0;
+  padding-left: 1rem;
+}
+.plan-card ul li {
+  margin: 0.4rem 0;
+}
+
+/* Buttons */
+.btn-basic, .btn-pro {
+  width: 100%;
+  padding: 0.9rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+/* Colors for buttons */
+.btn-basic {
+  background: #42b4b9;
+  color: white;
+}
+.btn-pro {
+  background: #ff9c12;
+  color: white;
+  margin-top: 0.6rem;
+}
+
+/* Alert inside pro card */
+.alert {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  background: rgba(255,255,255,0.12);
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+/* Footer kept fixed inside the popup box (below scrollable content) */
+.popup-footer {
+  padding: 0.6rem 1.25rem 1rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+
+/* Free link */
+.free-link {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+}
+
+/* Make sure focus/keyboard users can see the free-link */
+.free-link:focus {
+  outline: 2px solid rgba(0,123,255,0.25);
+  outline-offset: 2px;
+}
+
+/* Responsive tweaks: on narrow screens stack cards vertically */
+@media (max-width: 520px) {
+  .plans-wrapper {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .popup-box {
+    border-radius: 0.75rem;
+    padding: 0; /* header/content/footer handle padding individually */
+  }
+
+  .popup-header, .popup-content, .popup-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .plan-card {
+    padding: 1rem;
+  }
+}

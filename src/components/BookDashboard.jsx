@@ -11,6 +11,7 @@ import BookDashboardSyllabus from "./BookDashboardSyllabus";
 // import BookDashboardMap from "./BookDashboardMap";
 import BookDashboardMidSec from "./BookDashboardMidSec";
 import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
+import PlanPopup from "./PlanPopup";
 
 const BookDashboardSections = [
   {
@@ -52,18 +53,19 @@ const BookDashboardSections = [
 
 function BookDashboard() {
   const [currentSection, setCurrentSection] = useState("Syllabus");
-
+  const [showPlanPopup, setShowPlanPopup] = useState(false);
+  
   const handleSectionChange = (section) => {
-    setCurrentSection(section);
+    if (section === "Unit" || section === "Insights") {
+      setShowPlanPopup(true);
+    } else {
+      setCurrentSection(section);
+    }
   };
-  // useEffect(() => {
-  //   const queryParams = new URLSearchParams(location.search);
-  //   const sCode = queryParams.get("subcode");
-
-  //   if (sCode) {
-  //     setSubCode(sCode);
-  //   }
-  // }, [location]);
+  
+  // const handleSectionChange = (section) => {
+  //   setCurrentSection(section);
+  // };
 
   return (
     <div className="parent-book-dashboard">
@@ -149,6 +151,10 @@ function BookDashboard() {
           );
         })}
       </div> */}
+      {/* ✅ Popup rendered conditionally */}
+      {showPlanPopup && (
+        <PlanPopup onClose={() => setShowPlanPopup(false)} />
+      )}
     </div>
   );
 }
