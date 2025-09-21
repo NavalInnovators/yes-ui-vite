@@ -60,6 +60,7 @@ import { BookDashboardProvider } from "./context/book-dashboard-context.jsx";
 import Reviewer from "./roles/Reviewer/Reviewer.jsx";
 import "./main.css";
 import Creator from "./roles/Creator/Creator.jsx";
+import Myorders from "./components/Myorders.jsx";
 
 function App() {
   return (
@@ -154,6 +155,7 @@ function AppContent() {
         <Route path="/submit-query" element={<SubmitQuery />} />/
         <Route path="/review" element={<Review />} />
         <Route path="/membership" element={<MembershipPage />} />
+        <Route path="/myorders" element={<Myorders />}></Route>
         <Route path="/payment-completion" element={<PaymentCompletion />} />
         <Route path="/page-not-found" element={<PageNotFound />} />
         <Route path="/services" element={<ServicesPage />} />

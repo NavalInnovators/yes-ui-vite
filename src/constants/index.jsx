@@ -11,7 +11,7 @@ import {
 
 export const navLinks = [
   {
-    id: localStorage.getItem('token') ? '/my-subjects' : "/all-subjects",
+    id: localStorage.getItem("token") ? "/my-subjects" : "/all-subjects",
     title: "Dashboard",
   },
   {
@@ -561,192 +561,207 @@ export const branches = [
   "Chemical Engineering",
 ];
 
-
 export const jobData = [
   {
-    "title": "Frontend Intern",
-    "description": "Work on real-life projects using HTML, CSS, JS, and React.",
-    "category": "Frontend",
-    "role_and_responsibilities": [
+    title: "Frontend Intern",
+    description: "Work on real-life projects using HTML, CSS, JS, and React.",
+    category: "Frontend",
+    role_and_responsibilities: [
       "Collaborate with the team to develop and maintain the frontend of the application.",
       "Work with HTML, CSS, JavaScript, and React to create responsive web interfaces.",
       "Integrate and work with APIs to fetch data and display it dynamically.",
       "Participate in code reviews and contribute to improving frontend development practices.",
       "Learn and implement modern frontend frameworks and tools to enhance development speed and quality.",
-      "Assist in testing and debugging frontend components to ensure smooth user experience."
+      "Assist in testing and debugging frontend components to ensure smooth user experience.",
     ],
-    "qualifications_and_experience": [
+    qualifications_and_experience: [
       "Knowledge of HTML, CSS, JavaScript, and React.",
       "Basic understanding of API integrations and handling data flow.",
       "Ability to collaborate in a team and communicate effectively.",
       "Willingness to learn and adapt to new technologies and frameworks.",
       "Basic understanding of version control systems like Git.",
-      "Problem-solving skills and a keen eye for detail."
+      "Problem-solving skills and a keen eye for detail.",
     ],
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform"
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform",
   },
   {
-    "title": "Backend Intern",
-    "description": "Develop backend services using Java, Spring Boot, and APIs.",
-    "category": "Backend",
-    "role_and_responsibilities": [
+    title: "Backend Intern",
+    description: "Develop backend services using Java, Spring Boot, and APIs.",
+    category: "Backend",
+    role_and_responsibilities: [
       "Assist in developing and maintaining backend services using Java and Java Spring Boot.",
       "Work on solving data structures and algorithms-based problems to optimize backend performance.",
       "Integrate APIs for data exchange between frontend and backend.",
       "Support the creation and management of databases for storing and retrieving data efficiently.",
       "Collaborate with the frontend team to ensure seamless integration of the backend services.",
-      "Participate in testing and debugging backend code to ensure functionality and performance."
+      "Participate in testing and debugging backend code to ensure functionality and performance.",
     ],
-    "qualifications_and_experience": [
+    qualifications_and_experience: [
       "Strong understanding of Java programming language and Java Spring Boot.",
       "Solid grasp of data structures, algorithms, and problem-solving skills.",
       "Ability to work with APIs and integrate them into backend services.",
       "Knowledge of databases and SQL for data management.",
       "Basic understanding of cloud computing concepts and deployment.",
-      "Ability to collaborate effectively in a team environment."
+      "Ability to collaborate effectively in a team environment.",
     ],
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform"
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform",
   },
   {
-    "title": "AI/ML Intern",
-    "description": "Work with AI models and algorithms, including generative AI and neural networks.",
-    "category": "AI/ML",
-    "role_and_responsibilities": [
+    title: "AI/ML Intern",
+    description:
+      "Work with AI models and algorithms, including generative AI and neural networks.",
+    category: "AI/ML",
+    role_and_responsibilities: [
       "Work on developing and testing machine learning models for various applications.",
       "Implement generative AI models, classification, regression, and neural networks.",
       "Collaborate with the team to analyze and clean datasets for model training.",
       "Research and implement algorithms for optimizing AI models.",
       "Assist in evaluating model performance and suggest improvements.",
-      "Stay updated with the latest trends in AI/ML and incorporate them into projects."
+      "Stay updated with the latest trends in AI/ML and incorporate them into projects.",
     ],
-    "qualifications_and_experience": [
+    qualifications_and_experience: [
       "Strong foundation in machine learning algorithms such as classification, regression, and neural networks.",
       "Basic understanding of generative AI concepts and applications.",
       "Experience with programming languages like Python and frameworks like TensorFlow or PyTorch.",
       "Knowledge of statistical analysis and data preprocessing techniques.",
       "Ability to work with large datasets and perform data analysis.",
-      "Passion for learning and exploring the field of AI/ML."
+      "Passion for learning and exploring the field of AI/ML.",
     ],
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform"
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform",
   },
   {
-    "title": "Marketing Intern",
-    "description": "Assist in both digital and physical marketing strategies and campaigns.",
-    "category": "Marketing",
-    "role_and_responsibilities": [
+    title: "Marketing Intern",
+    description:
+      "Assist in both digital and physical marketing strategies and campaigns.",
+    category: "Marketing",
+    role_and_responsibilities: [
       "Assist in planning and executing digital marketing campaigns.",
       "Manage social media accounts and create engaging content for audiences.",
       "Conduct market research to identify trends and customer needs.",
       "Assist in physical marketing efforts, including event planning and promotions.",
       "Collaborate with the marketing team to design and optimize marketing strategies.",
-      "Monitor and report on the effectiveness of marketing campaigns."
+      "Monitor and report on the effectiveness of marketing campaigns.",
     ],
-    "qualifications_and_experience": [
+    qualifications_and_experience: [
       "Strong communication and creative writing skills.",
       "Basic knowledge of digital marketing platforms like Google Ads, Facebook Ads, and SEO.",
       "Ability to analyze market trends and customer behavior.",
       "Familiarity with social media platforms and their tools for engagement.",
       "Interest in both digital and physical marketing strategies.",
-      "Team player with a strong desire to learn and grow in the marketing field."
+      "Team player with a strong desire to learn and grow in the marketing field.",
     ],
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform"
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform",
   },
   {
-    "title": "Management Intern",
-    "description": "Support the management team in team coordination and project handling.",
-    "category": "Management",
-    "role_and_responsibilities": [
+    title: "Management Intern",
+    description:
+      "Support the management team in team coordination and project handling.",
+    category: "Management",
+    role_and_responsibilities: [
       "Assist in coordinating and overseeing day-to-day team activities.",
       "Participate in project management, ensuring timely completion of tasks.",
       "Help manage workflows and resources to improve team productivity.",
       "Support in organizing meetings, events, and team discussions.",
       "Assist in team performance tracking and reporting.",
-      "Work closely with the management team to execute business strategies and goals."
+      "Work closely with the management team to execute business strategies and goals.",
     ],
-    "qualifications_and_experience": [
+    qualifications_and_experience: [
       "Excellent communication, leadership, and organizational skills.",
       "Ability to collaborate with different teams and manage tasks efficiently.",
       "Strong problem-solving skills and ability to handle multiple tasks.",
       "Interest in learning about project management tools and techniques.",
       "Ability to adapt quickly to changing team dynamics and project requirements.",
-      "Willingness to take initiative and manage responsibilities effectively."
+      "Willingness to take initiative and manage responsibilities effectively.",
     ],
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform"
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform",
   },
   {
-    "title": "Content Creator Intern",
-    "description": "Create educational content as a subject expert for our platform.",
-    "category": "Content",
-    "role_and_responsibilities": [
+    title: "Content Creator Intern",
+    description:
+      "Create educational content as a subject expert for our platform.",
+    category: "Content",
+    role_and_responsibilities: [
       "Assist in content creation for the website, including writing articles, blog posts, and tutorials.",
       "Help create subject-specific content for engineering students.",
       "Contribute to resolving user queries and doubts in specific subjects.",
       "Collaborate with the content team to enhance content quality and relevance.",
       "Ensure that all content is aligned with the educational objectives of the platform.",
-      "Stay updated with the latest trends and educational tools to incorporate in content."
+      "Stay updated with the latest trends and educational tools to incorporate in content.",
     ],
-    "qualifications_and_experience": [
+    qualifications_and_experience: [
       "Strong knowledge and good score in a particular engineering subject.",
       "Good writing skills and ability to communicate complex topics clearly.",
       "Interest in content creation, including tutorials and instructional content.",
       "Ability to collaborate and work with the content team effectively.",
       "Strong research skills and attention to detail.",
-      "Willingness to learn and contribute as a subject matter expert."
+      "Willingness to learn and contribute as a subject matter expert.",
     ],
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform"
-  }
-]
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScKxUFp17ZA_70bWZkKh3UDk8FrKnb7x_mGavICt1V7Gd-ieA/viewform",
+  },
+];
 
 export const jobCategories = [
-  "Frontend", 
-  "Backend", 
-  "Management", 
+  "Frontend",
+  "Backend",
+  "Management",
   "Marketing",
-  "UI/UX", 
-  "Content", 
-  "AI/ML"
+  "UI/UX",
+  "Content",
+  "AI/ML",
 ];
 
 export const faqs = [
-    {
-      question: "What is Your Exam Saathi and how does it help me in my exam preparation?",
-      answer: "Your Exam Saathi is an AI-powered platform that personalizes exam preparation for undergraduate engineering students. By analyzing exam trends, previous question papers, and learning patterns, we provide targeted study material, predictive questions, and customized learning paths to help you prepare efficiently for your exams.",
-    },
-    {
-      question: "How does the AI-driven analytics help me in my preparation?",
-      answer: "Our AI analyzes your performance in practice tests and assignments to provide personalized insights. It tracks your strengths, weaknesses, and progress over time, offering data-driven recommendations to improve your performance and helping you focus on high-priority areas for exam success.",
-    },
-    {
-      question: "What kind of content will I get through Your Exam Saathi?",
-      answer: "You’ll receive AI-generated summaries of past exam questions, unit-specific notes, mind maps, and tricks that simplify complex topics. The platform also provides personalized question banks and exam tips, focusing on the most frequently tested concepts to ensure maximum exam readiness.",
-    },
-    {
-      question: "How accurate are the AI predictions for upcoming exams?",
-      answer: "Our AI predictions are based on in-depth analysis of past exams and question paper patterns. While predictions aren't 100% guaranteed, they are highly accurate in identifying key topics that are more likely to appear, helping you concentrate on the most important areas.",
-    },
-    {
-      question: "Can I customize my study schedule or preferences on Your Exam Saathi?",
-      answer: "Yes! Your Exam Saathi allows you to customize your study schedule based on your available time and specific preparation goals. The platform automatically adjusts your plan as you progress, ensuring that you cover all necessary topics at the right pace for your exams.",
-    },
-    {
-      question: "How does the AI-powered question bank help with practice?",
-      answer: "The AI-generated question bank tailors practice questions to your skill level and learning pace. It adapts based on your performance, gradually increasing the difficulty to challenge you and reinforce learning. This helps you stay prepared for all types of questions that may appear in exams.",
-    },
-    {
-      question: "How do mind maps and tricks help me in my preparation?",
-      answer: "Mind maps and study tricks simplify complex topics, making them easier to understand and remember. These visual aids help organize information in a structured way, enhancing your retention. The AI generates personalized mind maps that are specifically tailored to the subject and exam you're preparing for.",
-    },
-    {
-      question: "Can Your Exam Saathi help me prepare for multiple engineering subjects?",
-      answer: "Yes, Your Exam Saathi supports multiple engineering disciplines. We provide personalized study content, practice tests, and AI-driven recommendations for each subject, whether it’s Maths, Physics, Computer Science, or other engineering subjects, ensuring a comprehensive preparation plan across all subjects.",
-    },
-    {
-      question: "How can I track my progress on Your Exam Saathi?",
-      answer: "With our AI-powered progress tracking, you can easily monitor your improvement in real-time. The platform tracks your performance in practice tests, assignments, and subject-wise assessments, giving you insights into your strengths and areas that need improvement, allowing you to adjust your study plan accordingly.",
-    },
-    {
-      question: "How can I contact support if I need help with the platform?",
-      answer: "If you need assistance with the platform, you can reach out to our support team through the 'Contact Us' page on our website. Additionally, you can email us at info@navalinnovators.com for any questions or concerns regarding the platform.",
-    },
-  ];
-
+  {
+    question:
+      "What is Your Exam Saathi and how does it help me in my exam preparation?",
+    answer:
+      "Your Exam Saathi is an AI-powered platform that personalizes exam preparation for undergraduate engineering students. By analyzing exam trends, previous question papers, and learning patterns, we provide targeted study material, predictive questions, and customized learning paths to help you prepare efficiently for your exams.",
+  },
+  {
+    question: "How does the AI-driven analytics help me in my preparation?",
+    answer:
+      "Our AI analyzes your performance in practice tests and assignments to provide personalized insights. It tracks your strengths, weaknesses, and progress over time, offering data-driven recommendations to improve your performance and helping you focus on high-priority areas for exam success.",
+  },
+  {
+    question: "What kind of content will I get through Your Exam Saathi?",
+    answer:
+      "You’ll receive AI-generated summaries of past exam questions, unit-specific notes, mind maps, and tricks that simplify complex topics. The platform also provides personalized question banks and exam tips, focusing on the most frequently tested concepts to ensure maximum exam readiness.",
+  },
+  {
+    question: "How accurate are the AI predictions for upcoming exams?",
+    answer:
+      "Our AI predictions are based on in-depth analysis of past exams and question paper patterns. While predictions aren't 100% guaranteed, they are highly accurate in identifying key topics that are more likely to appear, helping you concentrate on the most important areas.",
+  },
+  {
+    question:
+      "Can I customize my study schedule or preferences on Your Exam Saathi?",
+    answer:
+      "Yes! Your Exam Saathi allows you to customize your study schedule based on your available time and specific preparation goals. The platform automatically adjusts your plan as you progress, ensuring that you cover all necessary topics at the right pace for your exams.",
+  },
+  {
+    question: "How does the AI-powered question bank help with practice?",
+    answer:
+      "The AI-generated question bank tailors practice questions to your skill level and learning pace. It adapts based on your performance, gradually increasing the difficulty to challenge you and reinforce learning. This helps you stay prepared for all types of questions that may appear in exams.",
+  },
+  {
+    question: "How do mind maps and tricks help me in my preparation?",
+    answer:
+      "Mind maps and study tricks simplify complex topics, making them easier to understand and remember. These visual aids help organize information in a structured way, enhancing your retention. The AI generates personalized mind maps that are specifically tailored to the subject and exam you're preparing for.",
+  },
+  {
+    question:
+      "Can Your Exam Saathi help me prepare for multiple engineering subjects?",
+    answer:
+      "Yes, Your Exam Saathi supports multiple engineering disciplines. We provide personalized study content, practice tests, and AI-driven recommendations for each subject, whether it’s Maths, Physics, Computer Science, or other engineering subjects, ensuring a comprehensive preparation plan across all subjects.",
+  },
+  {
+    question: "How can I track my progress on Your Exam Saathi?",
+    answer:
+      "With our AI-powered progress tracking, you can easily monitor your improvement in real-time. The platform tracks your performance in practice tests, assignments, and subject-wise assessments, giving you insights into your strengths and areas that need improvement, allowing you to adjust your study plan accordingly.",
+  },
+  {
+    question: "How can I contact support if I need help with the platform?",
+    answer:
+      "If you need assistance with the platform, you can reach out to our support team through the 'Contact Us' page on our website. Additionally, you can email us at info@navalinnovators.com for any questions or concerns regarding the platform.",
+  },
+];
