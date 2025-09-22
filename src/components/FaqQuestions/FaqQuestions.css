@@ -1,10 +1,14 @@
 .faq-outer {
-  margin: 0 14rem;
+  margin-left: 16rem;
+  margin-right: 16rem;
+  margin-top: -30rem;
+  margin-bottom: 6rem;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
-  margin-bottom: 6rem;
   padding: 3rem;
   background-color: #ffffff;
+  position: relative;         /* create stacking context for z-index */
+  z-index: 5; 
 }
 
 .faq-search {
@@ -115,7 +119,9 @@
 
 @media (max-width: 1024px) {
   .faq-outer {
-    margin: 0 8rem;
+    margin-left: 8rem;
+    margin-right: 8rem;
+    margin-top: -27rem;
     padding: 3rem;
   }
 
@@ -124,7 +130,9 @@
 
 @media (max-width: 768px) {
   .faq-outer {
-    margin: 0 4rem;
+    margin-left: 4rem;
+    margin-right: 4rem;
+    margin-top: -25rem;
     padding: 1.5rem;
   }
 
@@ -142,7 +150,9 @@
 
 @media (max-width: 480px) {
   .faq-outer {
-    margin: 0 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: -25rem;
     padding: 0.5rem;
   }
 

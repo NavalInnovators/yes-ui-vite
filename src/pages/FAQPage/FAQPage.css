@@ -7,6 +7,6 @@
 
 .top-animation{
     width:100%;
-    position:absolute;
+    position:static;
     z-index:-1;
 }
