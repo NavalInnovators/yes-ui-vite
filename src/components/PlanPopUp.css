@@ -9,7 +9,7 @@
   align-items: center;
   z-index: 2000;
   padding: 1rem; /* keep some breathing room on small screens */
-}
+} 
 
 /* Popup box
    - column flex so header/footer remain fixed and content scrolls
