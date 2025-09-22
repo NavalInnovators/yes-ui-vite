@@ -21,16 +21,16 @@ export default function SidebarButtons() {
 
         <SidebarLink to="query_management">
           <PageIcon size={21} />
-          <p>Query Management</p>
+          <p>Query </p>
         </SidebarLink>
 
         <SidebarLink to="forms_management">
           <PageIcon size={21} />
-          <p>Forms Management</p>
+          <p>Forms </p>
         </SidebarLink>
         <SidebarLink to="user_management">
           <PageIcon size={21} />
-          <p>User Management</p>
+          <p>User </p>
         </SidebarLink>
       </div>
     </div>
