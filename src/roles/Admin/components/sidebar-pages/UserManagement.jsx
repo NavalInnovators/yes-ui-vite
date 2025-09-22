@@ -217,7 +217,7 @@ export default function UserManagement() {
                   <div className="flex gap-[8px]">
                     <button
                       className="px-[8px] py-[4px] rounded-[6px] border border-light-border dark:border-dark-border text-[12px]"
-                      onClick={() => navigate(`/admin/user_management/${u.id}`, { state: { user: u } })}
+                      onClick={() => navigate(`/admin/user_management/:${u.id}`, { state: { user: u } })}
                     >
                       View
                     </button>
