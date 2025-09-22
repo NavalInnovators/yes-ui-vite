@@ -46,6 +46,20 @@ function formatDate(dt) {
   }
 }
 
+//color-coded-badge
+function StatusBadge({ status, urgent}) {
+  const base = "text-[12px] px-[8px] py-[2px] rounded-[6px] border border-light-border dark:border-dark-border";
+  const map = {
+    Active: `${base} border-blue-300 text-blue-700 bg-blue-50 dark:bg-blue-950/30`,
+    Closed: `${base} border-gray-300 text-gray-700 bg-gray-50 dark:bg-gray-950/30`,
+    Resolved: `${base} border-green-300 text-green-700 bg-green-50 dark:bg-green-950/30`,
+    Urgent: `${base} border-red-300 text-red-700 bg-red-50 dark:bg-red-950/30`,
+  };
+
+  const key = urgent ? "Urgent" : (map[status] ? status : "Active");
+  return <span className={map[key]}>{urgent ? "Urgent" : status}</span>;
+}
+
 export default function QueryManagement() {
   const navigate = useNavigate();
 
@@ -130,9 +144,7 @@ export default function QueryManagement() {
                 <td className="px-4 py-3 border-b border-light-border dark:border-dark-border">{q.subject}</td>
                 <td className="px-4 py-3 border-b border-light-border dark:border-dark-border max-w-[360px] truncate">{q.query}</td>
                 <td className="px-4 py-3 border-b border-light-border dark:border-dark-border">
-                  <span className="text-[12px] px-[8px] py-[2px] rounded-[6px] border border-light-border dark:border-dark-border">
-                    {q.status}
-                  </span>
+                  <StatusBadge status={q.status} urgent={q.urgent} />
                 </td>
                 <td className="px-4 py-3 border-b border-light-border dark:border-dark-border">{formatDate(q.updatedAt)}</td>
                 <td className="px-4 py-3 border-b border-light-border dark:border-dark-border">
