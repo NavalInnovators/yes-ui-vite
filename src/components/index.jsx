@@ -56,7 +56,7 @@ import PageNotFound from "./PageNotFound/PageNotFound.jsx";
 import ResetPasswordLeft from "./ResetPasswordLeft.jsx";
 import ResetPasswordForm from "./ResetLink.jsx";
 import ResetPasswordRight from "./ResetPasswordRight.jsx";
-import PlanPopup from "./PlanPopUp.jsx";
+import PlanPopup from "./PlanPopup.jsx";
 export {
   Navbar,
   Hero,
