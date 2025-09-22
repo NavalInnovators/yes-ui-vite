@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./PlanPopup.css";
+import "./PlanPopUp.css";
 
-function PlanPopup({ onClose }) {
+function PlanPopUp({ onClose }) {
     const navigate = useNavigate();
 
     return (
@@ -22,6 +22,7 @@ function PlanPopup({ onClose }) {
                         title="Close"
                     >
                         ✕
+
                     </button>
                 </div>
 
@@ -85,4 +86,4 @@ function PlanPopup({ onClose }) {
     );
 }
 
-export default PlanPopup;
+export default PlanPopUp;
