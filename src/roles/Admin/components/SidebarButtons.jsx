@@ -23,6 +23,11 @@ export default function SidebarButtons() {
           <PageIcon size={21} />
           <p>Query Management</p>
         </SidebarLink>
+
+        <SidebarLink to="forms_management">
+          <PageIcon size={21} />
+          <p>Forms Management</p>
+        </SidebarLink>
       </div>
     </div>
   );
