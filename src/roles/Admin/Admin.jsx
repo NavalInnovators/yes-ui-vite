@@ -7,6 +7,9 @@ import { AnimatePresence } from "motion/react";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import QueryManagement from "./components/sidebar-pages/QueryManagement";
 import QueryThread from "./components/sidebar-pages/QueryThread";
+import FormsManagement from "./components/sidebar-pages/FormsManagement";
+import UserManagement from "./components/sidebar-pages/UserManagement";
+import UserProfile from "./components/sidebar-pages/UserProfile";
 
 function Admin() {
   const location = useLocation();
@@ -31,6 +34,9 @@ function Admin() {
             <Route path="dashboard" element={<DashBoard />} />
             <Route path="query_management" element={<QueryManagement />} />
             <Route path="query_management/:id" element={<QueryThread />} />
+            <Route path="forms_management" element={<FormsManagement />} />
+            <Route path="user_management" element={<UserManagement />} />
+            <Route path="user_management/:id" element={<UserProfile />} />
 
             <Route path="notification" element={<Notification />} />
           </Route>
