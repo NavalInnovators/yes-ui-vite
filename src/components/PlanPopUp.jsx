@@ -7,13 +7,13 @@ function PlanPopup({ onClose }) {
 
     return (
         <div className="popup-overlay" role="dialog" aria-modal="true" aria-label="Choose plan">
+
             <div className="popup-box">
-                {/* Header: title + close button (kept outside the scroll area so it's always visible) */}
-                <div className="popup-header">
-                    {/* Accessible close button */}
-                    
-                    <div className="popup-title-center">
-                        <h2 className="popup-title">Unlock Your Full Potential</h2>
+                <div className="popup-header-and-close">
+                    <div className="popup-header">
+                        <div >
+                            <h2 className="popup-title">Unlock Your Full Potential</h2>
+                        </div>
                     </div>
                     <button
                         className="popup-close"
@@ -23,17 +23,16 @@ function PlanPopup({ onClose }) {
                     >
                         ✕
                     </button>
-
                 </div>
 
                 {/* Scrollable content area */}
                 <div className="popup-content">
-                    <p className="subtitle">Choose the Perfect Plan for Success</p>
+                    <div className="subtitle"> <p>Choose the Perfect Plan for Success</p></div>
 
                     <div className="plans-wrapper">
                         {/* Basic Plan */}
                         <div className="plan-card basic" role="group" aria-labelledby="basic-title">
-                            <h3 id="basic-title"> <b>Basic Plan </b></h3>
+                            <h3 id="basic-title" className="card-plan-title"> <b>Basic Plan </b></h3>
                             <p className="price">₹110/year</p>
 
                             <b>Buy 5+ Courses get 25% off</b>
@@ -54,8 +53,8 @@ function PlanPopup({ onClose }) {
 
                         {/* Pro Plan */}
                         <div className="plan-card pro" role="group" aria-labelledby="pro-title">
-                            <h3 id="pro-title">
-                                Pro Plan <span className="badge">Best Value!</span>
+                            <h3 id="pro-title" className="card-plan-title">
+                                <b>Pro Plan</b> <span className="badge">Best Value!</span>
                             </h3>
                             <p className="price">₹150/year</p>
                             <b>Buy 5+ Courses get 30% off</b>
@@ -78,7 +77,7 @@ function PlanPopup({ onClose }) {
                 {/* Footer: kept outside scroll area so it's always reachable on mobile */}
                 <div className="popup-footer">
                     <p className="free-link" onClick={onClose} role="button" tabIndex={0}>
-                        Start with Free Plan
+                        Skip for now
                     </p>
                 </div>
             </div>

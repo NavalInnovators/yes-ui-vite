@@ -31,21 +31,27 @@
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
 
+.popup-header-and-close {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 /* Header: title + close button aligned horizontally */
 .popup-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 1rem 1.25rem 0.5rem 1.25rem;
   gap: 1rem;
+  width: 92%;
 }
 
 /* Title styling */
 .popup-title {
   margin: 0;
   font-size: 1.25rem;
-  font-weight: 700;
-  text-align: left;
+  font-weight: 600;
+  text-align: center;
 }
 
 /* Close button (kept in header so it remains visible) */
@@ -82,6 +88,10 @@
   font-size: 1rem;
   color: #555;
   margin: 0.25rem 0 1rem 0;
+  display: flex;
+  flex-direction: row;
+  width: 92%;
+  justify-content: center;
 }
 
 /* Plans layout */
@@ -101,6 +111,12 @@
   border: 2px solid #ddd;
   background: #f9f9f9;
   box-sizing: border-box;
+}
+
+.card-plan-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 /* Basic / Pro variations */
@@ -133,6 +149,8 @@
 .price {
   font-weight: bold;
   margin: 0.6rem 0;
+  display: flex;
+  justify-content: center;
 }
 
 /* Features list */
