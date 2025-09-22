@@ -11,7 +11,7 @@ import BookDashboardSyllabus from "./BookDashboardSyllabus";
 // import BookDashboardMap from "./BookDashboardMap";
 import BookDashboardMidSec from "./BookDashboardMidSec";
 import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
-import PlanPopup from "../components/PlanPopUp";
+import PlanPopup from "../components/PlanPopUp.jsx";
 
 const BookDashboardSections = [
   {
