@@ -1,11 +1,266 @@
-body {
-  font-family: Public Sans;
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  /* background-color: aqua; */
+/* --- GLOBAL STYLES & VARIABLES --- */
+:root {
+  --gradient-gold: #feac2f;
+  --gradient-purple-1: #9b32ad;
+  --gradient-purple-2: #381ab2;
+  --gradient-dark: #17082c;
+  --primary-font: "Public Sans", sans-serif;
+  --text-dark: #333;
+  --text-light: #666;
+  --border-color: #e0e0e0;
+  --background-light: #f9f9f9;
+  --color-green: #28a745;
+  --color-red: #dc3545;
 }
 
-.membership-page-parent {
-  max-width: 100%;
+body {
+  font-family: var(--primary-font);
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: var(--text-dark);
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.membership-page {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* --- SECTION 1: HEADER & PRICING CARDS --- */
+.membership-header {
+  background: radial-gradient(134.61% 193.04% at 97.06% 13.13%, var(--gradient-gold) 0%, var(--gradient-purple-1) 32.77%, var(--gradient-purple-2) 69.93%, var(--gradient-dark) 100%);
+  padding: 2rem 0 18rem 0; /* Padding to make space for cards */
+  color: white;
+  position: relative;
+  /* CHANGE 1: Added margin top for navbar and side margins */
+  margin: 12vh 1.5rem 0 1.5rem;
+  border-radius: 1rem;
+}
+
+.header-title {
+  font-size: 3rem;
+  font-weight: 300;
+  text-align: left;
+}
+
+.pricing-cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: -15rem; /* Position cards to overlap bottom of header */
+}
+
+.pricing-card {
+  background-color: white;
+  width: 280px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* CHANGE 2: Updated popular card highlight to gold */
+.pricing-card.popular {
+    border: 2px solid var(--gradient-gold);
+    transform: scale(1.05);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient-gold);
+    color: var(--gradient-dark); /* Dark text for contrast */
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.card-icon { height: 50px; margin-bottom: 1rem; }
+.card-title { font-size: 1.5rem; font-weight: 500; margin: 0; }
+.card-price { font-size: 2.5rem; font-weight: 600; margin: 0.5rem 0; color: var(--text-dark); }
+.card-period { font-size: 1rem; font-weight: 400; color: var(--text-light); }
+.card-button {
+  width: 100%; padding: 0.8rem 0; margin: 1.5rem 0; font-size: 1rem; font-weight: 500; color: var(--text-dark); text-decoration: none; border: 1px solid transparent; border-radius: 0.4rem; background: radial-gradient(white, white) padding-box, radial-gradient(circle at top right, var(--gradient-gold), var(--gradient-purple-1), var(--gradient-purple-2)) border-box; cursor: pointer; transition: all 0.3s ease;
+}
+.card-button:hover { background: radial-gradient(circle at top right, var(--gradient-gold), var(--gradient-purple-1), var(--gradient-purple-2)); color: white; }
+.card-divider { border: none; height: 1px; background-color: var(--border-color); margin: 0 0 1.5rem 0; }
+.features-list { list-style: none; padding: 0; margin: 0; text-align: left; }
+.features-list li { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--text-light); }
+.features-list li img { width: 14px; height: 14px; }
+
+/* --- MAIN PAGE CONTENT --- */
+.page-content {
+    padding-top: 18rem; /* Space to clear the overlapping cards */
+}
+
+/* --- SECTION 2: INTRO --- */
+/* CHANGE 4: Added gradient background to intro section */
+.intro-section {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  padding: 4rem;
+  background: radial-gradient(134.61% 193.04% at 97.06% 13.13%, var(--gradient-gold) 0%, var(--gradient-purple-1) 32.77%, var(--gradient-purple-2) 69.93%, var(--gradient-dark) 100%);
+  color: white;
+  border-radius: 1rem;
+  margin-top: 4rem;
+}
+.intro-text { flex: 1; }
+.intro-text h2 { font-size: 2.8rem; font-weight: 400; line-height: 1.2; }
+.intro-description { flex: 1; position: relative; }
+.intro-description p { font-size: 1rem; line-height: 1.6; text-align: justify; color: #f0f0f0; } /* Lighter text for contrast */
+.intro-bg-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; opacity: 0.03; z-index: -1; }
+
+
+/* --- SECTION 3: FEATURE COMPARISON TABLE --- */
+.feature-comparison-section { text-align: center; padding: 4rem 0; }
+.feature-comparison-section h2 { font-size: 2.5rem; font-weight: 400; margin-bottom: 2rem; }
+.feature-table-wrapper { overflow-x: auto; }
+.feature-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+.feature-table th, .feature-table td { padding: 1rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+.feature-table th { font-size: 1.1rem; font-weight: 500; }
+.feature-table td { font-size: 1rem; color: var(--text-light); }
+.feature-table td:first-child { text-align: left; font-weight: 500; color: var(--text-dark); }
+.feature-table tbody tr:nth-child(even) { background-color: var(--background-light); }
+
+/* CHANGE 6: Added styles for green tick and red cross */
+.tick { color: var(--color-green); font-weight: bold; font-size: 1.2rem; }
+.cross { color: var(--color-red); font-weight: bold; font-size: 1.1rem; }
+
+/* --- SECTION 4: WHO IS THIS FOR --- */
+/* CHANGE 7: Added gradient background */
+.who-is-this-for-section {
+    padding: 4rem 1rem;
+    text-align: center;
+    background: radial-gradient(134.61% 193.04% at 97.06% 13.13%, var(--gradient-gold) 0%, var(--gradient-purple-1) 32.77%, var(--gradient-purple-2) 69.93%, var(--gradient-dark) 100%);
+    border-radius: 1rem;
+}
+.who-is-this-for-section h2 { font-size: 2.5rem; font-weight: 400; margin-bottom: 2rem; color: white; }
+.audience-cards-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; }
+.audience-card { background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 280px; }
+.audience-card h4 { font-size: 1.25rem; margin: 0 0 1rem 0; }
+.audience-card p { margin: 0; line-height: 1.6; color: var(--text-light); }
+
+/* --- SECTION 6: FAQ --- */
+.faq-section { padding: 4rem 0; }
+.faq-section h2 { font-size: 2.5rem; font-weight: 400; text-align: center; margin-bottom: 2rem; }
+.accordion { max-width: 800px; margin: 0 auto; padding: 0; list-style: none; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
+.accordion li { border-bottom: 1px solid var(--border-color); }
+.accordion li:last-child { border-bottom: none; }
+.accordion input[type="radio"] { display: none; }
+.accordion label { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; font-size: 1.1rem; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease; }
+.accordion label:hover { background-color: var(--background-light); }
+.accordion .dropdown-icon { transition: transform 0.3s ease; }
+.accordion .content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, padding 0.5s ease; padding: 0 1.5rem; }
+.accordion .content p { line-height: 1.6; text-align: justify; color: var(--text-light); }
+.accordion input[type="radio"]:checked + label { background-color: var(--background-light); }
+.accordion input[type="radio"]:checked + label .dropdown-icon { transform: rotate(180deg); }
+.accordion input[type="radio"]:checked ~ .content { max-height: 400px; padding: 0 1.5rem 1.5rem 1.5rem; }
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* CHANGE 3: Added a new breakpoint to handle card wrapping gracefully */
+@media (max-width: 992px) {
+  .membership-header {
+    padding-bottom: 4rem; /* Reduce padding since cards are not overlapping anymore */
+  }
+  .pricing-cards-container {
+    position: static; /* Switch to static flow */
+    margin-top: 3rem; /* Add margin to create space */
+  }
+  .page-content {
+    padding-top: 2rem; /* Reduce top padding */
+  }
+  .intro-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .header-title, .intro-text h2, .feature-comparison-section h2, .who-is-this-for-section h2, .faq-section h2 {
+    font-size: 2rem;
+  }
+  .pricing-cards-container {
+      flex-direction: column;
+      align-items: center;
+  }
+  .pricing-card {
+      width: 80%;
+      max-width: 350px;
+  }
+  .pricing-card.popular {
+    transform: scale(1);
+  }
+  
+  /* Responsive Table */
+  .feature-table thead { display: none; }
+
+  .feature-table tr { 
+    display: block; 
+    margin-bottom: 2rem; 
+    border: 1px solid var(--border-color); 
+    border-radius: 5px; 
+  }
+
+  .feature-table td {
+    display: block; 
+    text-align: right; 
+    position: relative;
+  
+    padding-left: 20%; 
+    word-wrap: break-word;
+  }
+
+  .feature-table td:before {
+    content: attr(data-label); 
+    position: absolute;
+    left: 1rem; 
+    text-align: left; 
+    font-weight: bold; 
+    color: var(--text-dark);
+    /* CHANGE 5: Adjusted width */
+    width: calc(20% - 1.5rem);
+  }
+  .feature-table td:first-child { 
+    text-align: center; 
+    padding: 1rem; 
+    background-color: var(--background-light); 
+    font-weight: bold; 
+  }
+  .feature-table td:first-child:before { display: none; }
+}
+
+/* Mobile Phones */
+@media (max-width: 480px) {
+  .container { width: 95%; }
+  .membership-header { margin: 14vh 0.5rem 0 0.5rem; }
+  .header-title { font-size: 1.8rem; }
+  .pricing-card { width: 90%; }
+  .intro-text h2 { font-size: 1.8rem; }
+  .accordion label { font-size: 1rem; padding: 1rem; }
 }

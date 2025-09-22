@@ -21,7 +21,7 @@ import {
   Footer,
   Login,
   // Profile,
-  MembershipProfile,
+  // MembershipProfile,
   SubmitQueryProfile,
   // ReviewProfile,
   Notifications,
@@ -114,7 +114,7 @@ function AppContent() {
           path="/membership-auth"
           element={
             <ProtectedRoutes>
-              <MembershipProfile />
+              {/* <MembershipProfile /> */}
             </ProtectedRoutes>
           }
         />
