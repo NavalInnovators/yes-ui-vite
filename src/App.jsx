@@ -9,32 +9,18 @@ import {
   useLocation,
 } from "react-router-dom";
 import {
-  // Hero,
   Navbar,
-  // FeatureCards,
-  // DescriptionCard,
-  // Courses,
-  // MembershipPlans,
   Testimonials,
-  // FAQs,
-  // CTA,
   Footer,
   Login,
-  // Profile,
-  // MembershipProfile,
   SubmitQueryProfile,
-  // ReviewProfile,
   Notifications,
   EducationDetailsEdit,
   UserDashboard,
-  // OtpVerification,
-  // VerificationDetailsForm,
   CareerJob,
   CareerBlog,
-  // BookDashboardUnit,
   ContactPage,
   BookDashboard,
-  // ResolveQuery,
   AllQuery,
   SubmitQuery,
   Review,
@@ -45,10 +31,8 @@ import PageNotFound from "./components/PageNotFound/PageNotFound.jsx";
 // separate import because the component is in a folder of the same name
 import ServicesPage from "./components/ServicesPage/ServicesPage.jsx";
 import { ToastContainer } from "react-toastify";
-// import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
-// import CareerHeader from './components/CareerHeader1';
 import { AuthProvider } from "./components/AuthProvider.jsx";
 
 import FAQPage from "./pages/FAQPage/FAQPage.jsx";
@@ -61,6 +45,7 @@ import { BookDashboardProvider } from "./context/book-dashboard-context.jsx";
 import Reviewer from "./roles/Reviewer/Reviewer.jsx";
 import "./main.css";
 import Creator from "./roles/Creator/Creator.jsx";
+import Admin from "./roles/Admin/Admin.jsx";
 
 function App() {
   return (
@@ -92,6 +77,7 @@ function AppContent() {
         <Route path="/" element={<HomePage />} />
         <Route path="/reviewer/*" element={<Reviewer />} />
         <Route path="/creator/*" element={<Creator />} />
+        <Route path="/admin/*" element={<Admin />} />
         <Route
           path="/login"
           element={
