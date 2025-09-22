@@ -10,7 +10,7 @@ import CTA from "./CTA.jsx";
 import Footer from "./Footer.jsx";
 import Login from "./Login.jsx";
 import SignUp from "./SignUp.jsx";
-import MembershipProfile from "./MembershipProfile.jsx";
+// import MembershipProfile from "./MembershipProfile.jsx";
 import SubmitQueryProfile from "./SubmitQueryProfile.jsx";
 // import ReviewProfile from "./ReviewProfile";
 import Notifications from "./Notifications.jsx";
@@ -70,7 +70,7 @@ export {
   Footer,
   Login,
   SignUp,
-  MembershipProfile,
+  // MembershipProfile,
   SubmitQueryProfile,
   // ReviewProfile,
   Notifications,
