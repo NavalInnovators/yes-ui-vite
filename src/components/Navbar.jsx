@@ -240,8 +240,8 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/myorders" onClick={toggleMenu}>
-                My Orders
+              <Link to="/membership" onClick={toggleMenu}>
+                Pricing
               </Link>
             </li>
             <li>

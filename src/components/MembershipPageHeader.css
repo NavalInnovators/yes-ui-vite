@@ -147,15 +147,22 @@ body {
 .membership-page-ul-li {
   /* background-color: green; */
   padding-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 1rem;
 }
 
-.membership-page-ul-li img {
-  margin-right: 10px;
-  height: 8px;
+.membership-page-ul-li span img {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ margin-top: 2px;
 }
 
 .membership-page-ul-li span {
-  text-align: end;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
 }
 
