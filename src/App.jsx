@@ -66,7 +66,8 @@ function AppContent() {
 
   const shouldRenderNavbar =
     !location.pathname.startsWith("/reviewer") &&
-    !location.pathname.startsWith("/creator");
+    !location.pathname.startsWith("/creator") &&
+    !location.pathname.startsWith("/admin");
 
   return (
     <div>

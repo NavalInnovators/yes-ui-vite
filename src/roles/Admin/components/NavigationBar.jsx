@@ -1,6 +1,6 @@
 import YESIcon from "../../components/icons/YESIcon";
 import FilterIcon from "../../components/icons/FilterIcon";
-import DarkModeIcon from "../../components/icons/DarkModeIcon";
+import DarkModeIcon from "../components/icons/DarkModeIcon";
 import NotificationsIcon from "../../components/icons/NotificationsIcon";
 import ProfileIcon from "../../components/icons/ProfileIcon";
 

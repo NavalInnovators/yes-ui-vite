@@ -18,19 +18,10 @@ export default function SidebarButtons() {
           <SidebarNotificationIcon size={21} />
           <p>Notification</p>
         </SidebarLink>
-      </div>
 
-      <p className="text-[12px]">Review Answers</p>
-
-      <div className="flex flex-col gap-[5px]">
-        <SidebarLink to="new_qna">
+        <SidebarLink to="query_management">
           <PageIcon size={21} />
-          <p>New Q&A</p>
-        </SidebarLink>
-
-        <SidebarLink to="reviewed_qna">
-          <PageIcon size={21} />
-          <p>Reviewed Q&A</p>
+          <p>Query Management</p>
         </SidebarLink>
       </div>
     </div>
