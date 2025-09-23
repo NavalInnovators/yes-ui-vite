@@ -57,6 +57,7 @@ import ResetPasswordLeft from "./ResetPasswordLeft.jsx";
 import ResetPasswordForm from "./ResetLink.jsx";
 import ResetPasswordRight from "./ResetPasswordRight.jsx";
 import PlanPopUp from "./PlanPopUp.jsx";
+import BookDashboardRoadmapRight from "./BookDashboardRoadmapRight.jsx";
 export {
   Navbar,
   Hero,
@@ -115,4 +116,5 @@ export {
   ResetPasswordForm,
   ResetPasswordRight,
   PlanPopUp,
+  BookDashboardRoadmapRight,
 };

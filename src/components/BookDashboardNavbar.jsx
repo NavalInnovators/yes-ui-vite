@@ -6,11 +6,9 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
   const tabs = [
     "Syllabus",
     "Q&A",
-    "Unit",
+    "Notes",
     "Insights",
-    // "Maps", 
-    // "Custom Preparation", 
-    // "AiFeatured"
+    "Roadmap",
   ];
   return (
     <nav className="book-dashboard-nav-bar">
@@ -22,7 +20,7 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
             className={tab === currentSection ? "bookdashboard-active-tab tab-item" : "tab-item"}
           >
             {tab}
-            {(tab === "Unit" || tab === "Insights") && (
+            {(tab === "Notes" || tab === "Insights") && (
               <span className="paid-icon">
                 <img src={PaidIcon} alt="Paid Icon" />
               </span>

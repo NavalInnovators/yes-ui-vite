@@ -1,63 +1,230 @@
-import React from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "./BookDashboardMap.css";
+import { useNavigate } from "react-router-dom";
 import BookDashboardNavbar from "./BookDashboardNavbar";
-// import BookDashboardInsightPredictionTable from "./BookDashboardInsightPredictionTable";
-import BookDashboardUnitsResponsiveUnitDropdown from "./BookDashboardUnitsResponsiveUnitDropdown";
-import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
-import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
+import { Book } from "lucide-react";
+// import "./BookDashboardSyllabus.css";
+// import "./BookDashboardMidSec.css";
 
-const content = [
-  {
-    title: "Lorem Ipsum is simply dummy text of the printing and typesetting",
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-  },
-  {
-    title: "Lorem Ipsum is simply dummy text of the printing and typesetting",
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-  },
-];
-function BookDashboardMap({ currentSection, handleSectionChange }) {
-  
+
+/**
+ * This component renders ONLY the Roadmap body for the current tab.
+ * It assumes the parent already renders the gradient header and the feature tabs.
+ *
+ * Optional props to wire into your existing state/router:
+ * - selectedUnitId
+ * - onSelectUnit(unitId)
+ * - onOpenQnA(topic)
+ * - onOpenNotes(topic)
+ * - data: { units: [{ id, name, topics: [...] }] }
+ */
+
+const DEMO = {
+  units: [
+    {
+      id: 1,
+      name: "Unit 1",
+      topics: [
+        { id: "u1-t3", unitId: 1, name: "Topic 3", priority: "high", avgTime: "30 mins", priorityType: "Comparison Type QnA", focus: ["who", "we", "we"], advice: "Add a little bit of body text. Add a little bit of body text. Add a little bit of body text." },
+        { id: "u1-t4", unitId: 1, name: "Topic 4", priority: "high", avgTime: "45 mins", priorityType: "Numerical Type", focus: ["formulas", "speed-accuracy"], advice: "Focus on error types; do 10 timed problems." },
+        { id: "u1-t1", unitId: 1, name: "Topic 1", priority: "medium", avgTime: "25 mins", priorityType: "Theory Type", focus: ["definitions"], advice: "Skim once, then active recall." },
+        { id: "u1-t2", unitId: 1, name: "Topic 2", priority: "medium", avgTime: "20 mins", priorityType: "Theory Type", focus: ["key concepts"], advice: "Make brief notes." },
+        { id: "u1-t5", unitId: 1, name: "Topic 5", priority: "low", avgTime: "15 mins", priorityType: "Quick Read", focus: ["summary"], advice: "Low priority; optional." },
+      ],
+    },
+    {
+      id: 2,
+      name: "Unit 2",
+      topics: [
+        { id: "u2-t4", unitId: 2, name: "Topic 4", priority: "high", avgTime: "40 mins", priorityType: "Mixed", focus: ["important derivations"], advice: "Likely in exams." },
+        { id: "u2-t1", unitId: 2, name: "Topic 1", priority: "low", avgTime: "20 mins", priorityType: "Quick Read", focus: ["overview"], advice: "Revisit if time remains." },
+      ],
+    },
+    {
+      id: 3,
+      name: "Unit 3",
+      topics: [
+        { id: "u3-t3", unitId: 3, name: "Topic 3", priority: "medium", avgTime: "30 mins", priorityType: "Conceptual", focus: ["intuition"], advice: "Link with Unit 1 topics." },
+        { id: "u3-t4", unitId: 3, name: "Topic 4", priority: "medium", avgTime: "30 mins", priorityType: "Conceptual", focus: ["applications"], advice: "Practice with examples." },
+      ],
+    },
+    {
+      id: 4,
+      name: "Unit 4",
+      topics: [
+        { id: "u4-t1", unitId: 4, name: "Topic 1", priority: "low", avgTime: "15 mins", priorityType: "Quick Read", focus: ["glossary"], advice: "Skippable if short on time." },
+        { id: "u4-t5", unitId: 4, name: "Topic 5", priority: "low", avgTime: "15 mins", priorityType: "Quick Read", focus: ["summary"], advice: "Optional refresh." },
+      ],
+    },
+  ],
+};
+
+const PRIORITY_ORDER = { high: 1, medium: 2, low: 3 };
+const PRIORITY_META = {
+  high: { label: "Highest", className: "roadmap-priority-high" },
+  medium: { label: "Medium", className: "roadmap-priority-medium" },
+  low: { label: "Lowest", className: "roadmap-priority-low" },
+};
+
+function TopicBar({ topic, expanded, onToggle, onOpenQnA, onOpenNotes }) {
+  const meta = PRIORITY_META[topic.priority] || PRIORITY_META.low;
 
   return (
-    <div className="book-dashboard-insight-analytics">
-      <div className="for-small-screens">
-        <BookDashboardUnitsResponsiveUnitDropdown />
+    <div className={`topic-bar ${meta.className}`}>
+      <div className="topic-bar-head" onClick={onToggle}>
+        <div className="topic-bar-title">
+          <span className="topic-dot" />
+          <span className="topic-name">{topic.name}</span>
+        </div>
+
+        <div className="topic-bar-actions" onClick={(e) => e.stopPropagation()}>
+          <button className="pill-btn outline" onClick={onOpenQnA}>QnA</button>
+          <button className="pill-btn outline" onClick={onOpenNotes}>Notes</button>
+          <span className={`expand-icon ${expanded ? "open" : ""}`} aria-hidden>▾</span>
+        </div>
       </div>
-      <hr />
-      <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
 
-
-      {/* CONTENT */}
-      <div className="book-dashboard-analytics">
-        <div className="book-dashboard-analytics-question">
-          Topic: Mind Maps
-        </div>
-
-
-        <div className="book-dashboard-piecharts">
-          <div className="left-pie common-pie-chart">
-            <BookDashboardLeftPieChart />
-          </div>
-          <div className="right-pie common-pie-chart">
-            <BookDashboardRightPieChart />
-          </div>
-        </div>
-        {
-          content.map((item, index) => (
-            <div className="book-dashboard-analytics-answer book-dashboard-analytics-mid-answer">
-              <div className="book-dashboard-analytics-answer-title">
-                {item.title}
-              </div>
-              {item.content}
+      {expanded && (
+        <div className="topic-bar-body">
+          <div className="topic-info">
+            <div className="info-row">
+              <span className="info-label">Average time to study:</span>
+              <span className="info-value">{topic.avgTime}</span>
             </div>
-          ))
-        }
-      </div>
+            <div className="info-row">
+              <span className="info-label">Highest priority type:</span>
+              <span className="info-value">{topic.priorityType}</span>
+            </div>
+            {topic.focus?.length ? (
+              <div className="info-row">
+                <span className="info-label">Focus on following:</span>
+                <ul className="focus-list">
+                  {topic.focus.map((f, i) => (<li key={i}>• {f}</li>))}
+                </ul>
+              </div>
+            ) : null}
+            {topic.advice ? (
+              <div className="info-row">
+                <span className="info-label">Advice:</span>
+                <p className="advice-text">{topic.advice}</p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default BookDashboardMap;
+export default function BookDashboardMap({
+  data = DEMO,
+  selectedUnitId,
+  onSelectUnit,
+  onOpenQnA,
+  onOpenNotes,
+  currentSection,
+  handleSectionChange,
+}) {
+  const navigate = useNavigate();
+
+  // default nav handlers if not provided
+  const handleOpenQnA = (topic) => {
+    if (onOpenQnA) return onOpenQnA(topic);
+    navigate("/book-dashboard?qna=1", { state: { topicId: topic.id, topicName: topic.name } });
+  };
+  const handleOpenNotes = (topic) => {
+    if (onOpenNotes) return onOpenNotes(topic);
+    navigate("/book-dashboard?notes=1", { state: { topicId: topic.id, topicName: topic.name } });
+  };
+
+  // selected unit (kept in sync with parent if provided)
+  const unitIds = data.units.map((u) => u.id);
+  const defaultUnitId = unitIds[0];
+  const [internalUnitId, setInternalUnitId] = useState(selectedUnitId || defaultUnitId);
+  const [expandedTopicId, setExpandedTopicId] = useState(null);
+
+  useEffect(() => {
+    // expose the same roadmap data for the right panel
+    window.__YES_ROADMAP__ = data;
+  }, [data]);
+
+  useEffect(() => {
+    if (selectedUnitId != null) setInternalUnitId(selectedUnitId);
+  }, [selectedUnitId]);
+
+
+  useEffect(() => {
+    const handler = (e) => {
+      const t = e.detail;
+      if (!t) return;
+      if (onSelectUnit) onSelectUnit(t.unitId);
+      setInternalUnitId(t.unitId);
+      setExpandedTopicId(t.id);
+      const el = document.querySelector(".book-dashboard-map");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    window.addEventListener("roadmap:jump", handler);
+    return () => window.removeEventListener("roadmap:jump", handler);
+  }, [onSelectUnit]);
+
+  const currentUnit = useMemo(
+    () => data.units.find((u) => u.id === internalUnitId) || data.units[0],
+    [data.units, internalUnitId]
+  );
+
+  const sortedTopics = useMemo(() => {
+    const topics = currentUnit?.topics || [];
+    return [...topics].sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
+  }, [currentUnit]);
+
+
+  // const summaryList = useMemo(() => {
+  //   const all = data.units.flatMap((u) => (u.topics || []).map((t) => ({ ...t, unitName: u.name })));
+  //   return all.sort((a, b) => {
+  //     const byPr = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+  //     if (byPr !== 0) return byPr;
+  //     if (a.unitId !== b.unitId) return (a.unitId || 0) - (b.unitId || 0);
+  //     return (a.name || "").localeCompare(b.name || "");
+  //   });
+  // }, [data.units]);
+
+  // const jumpToTopic = (t) => {
+  //   if (onSelectUnit) onSelectUnit(t.unitId);
+  //   setInternalUnitId(t.unitId);
+  //   setExpandedTopicId(t.id);
+  //   const center = document.querySelector(".roadmap-center");
+  //   if (center) center.scrollIntoView({ behavior: "smooth", block: "start" });
+  // };
+
+  return (
+    <div className="book-dashboard-roadmap-mid-sec">
+    <div className="book-dashboard-roadmap-container">
+      <BookDashboardNavbar
+        currentSection={currentSection}
+        handleSectionChange={handleSectionChange}
+      />
+      <div className="not-for-small-screens">
+      <div className="roadmap-center only-center">
+        <div className="roadmap-center-header">
+          <p className="rc-title">{currentUnit?.name || "Unit"}</p>
+          <p className="rc-sub">Study roadmap by priority</p>
+        </div>
+        <div className="topics-stack">
+          {sortedTopics.map((topic) => (
+            <TopicBar
+              key={topic.id}
+              topic={topic}
+              expanded={expandedTopicId === topic.id}
+              onToggle={() => setExpandedTopicId((prev) => (prev === topic.id ? null : topic.id))}
+              onOpenQnA={() => handleOpenQnA(topic)}
+              onOpenNotes={() => handleOpenNotes(topic)}
+            />
+          ))}
+          {!sortedTopics.length && <div className="empty-state"> No topics in this unit. </div>}
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  );
+}

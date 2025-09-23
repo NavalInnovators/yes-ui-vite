@@ -8,11 +8,11 @@ import BookDashboardLeftSec from "./BookDashboardLeftSec";
 import BookDashboardRightSec from "./BookDashboardRightSec";
 import BookDashboardSyllabus from "./BookDashboardSyllabus";
 // import BookDashboardAiFeature from "./BookDashboardAiFeature";
-// import BookDashboardMap from "./BookDashboardMap";
+import BookDashboardMap from "./BookDashboardMap";
 import BookDashboardMidSec from "./BookDashboardMidSec";
 import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
 import PlanPopUp from "./PlanPopUp";
-
+import BookDashboardRoadmapRight from "./BookDashboardRoadmapRight";
 const BookDashboardSections = [
   {
     title: "Syllabus",
@@ -25,7 +25,7 @@ const BookDashboardSections = [
     rightComponent: true,
   },
   {
-    title: "Unit",
+    title: "Notes",
     component: BookDashboardUnitMidSec,
     rightComponent: false,
   },
@@ -34,11 +34,11 @@ const BookDashboardSections = [
     component: BookDashboardInsightAnalyticsMidSec,
     rightComponent: false,
   },
-  // {
-  //   title: "Maps",
-  //   component: BookDashboardMap,
-  //   rightComponent: false,
-  // },
+  {
+    title: "Roadmap",
+    component: BookDashboardMap,
+    rightComponent: BookDashboardRoadmapRight,
+  },
   // {
   //   title: "Custom Preparation",
   //   component: BookDashboardMap,
@@ -56,7 +56,7 @@ function BookDashboard() {
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
   
   const handleSectionChange = (section) => {
-    if (section === "Unit" || section === "Insights") {
+    if (section === "Notes" || section === "Insights") {
       setShowPlanPopUp(true);
     } else {
       setCurrentSection(section);
@@ -80,9 +80,13 @@ function BookDashboard() {
             (section) => section.title === currentSection
           ).map((section, index) => {
             const Component = section.component;
-            const RightComponent = section.rightComponent
+            const RightComponent = 
+            typeof section.rightComponent === "boolean"
+              ? section.rightComponent
               ? BookDashboardRightSec
-              : BookDashboardUnitEmptyRightSec;
+              : BookDashboardUnitEmptyRightSec
+            : section.rightComponent;
+
             return (
               <React.Fragment key={index}>
                 <Component
