@@ -23,19 +23,6 @@ export default function BookDashboardSyllabus({ currentSection, handleSectionCha
 
   return (
     <div className="bookdashboard-syllabus-mid-section">
-      {/* <div className="mobile-syllabus-navigation-buttons">
-        <button className="mobile-syllabus-unit-button">
-          Unit 1
-         
-          <img src={RightPageArrow} alt="Right Page Arrow" />
-        </button>
-        <button className="mobile-syllabus-topics-button">
-          All Questions <img src={RightPageArrow} alt="Right Page Arrow" />
-        </button>
-      </div> */}
-      {/* <div className="mobile-filter-container">
-        <button className="mobile-syllabus-filter-button">Filter</button>
-      </div> */}
       <div className="book-dashboard-syllabus-container">
         <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
         <div className="book-dashboard-syllabus-sec">
