@@ -39,16 +39,6 @@ const BookDashboardSections = [
     component: BookDashboardMap,
     rightComponent: BookDashboardRoadmapRight,
   },
-  // {
-  //   title: "Custom Preparation",
-  //   component: BookDashboardMap,
-  //   rightComponent: false,
-  // },
-  // {
-  //   title: "AiFeatured",
-  //   component: BookDashboardAiFeature,
-  //   rightComponent: false,
-  // },
 ];
 
 function BookDashboard() {

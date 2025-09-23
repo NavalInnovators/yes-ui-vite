@@ -198,33 +198,33 @@ export default function BookDashboardMap({
 
   return (
     <div className="book-dashboard-roadmap-mid-sec">
-    <div className="book-dashboard-roadmap-container">
-      <BookDashboardNavbar
-        currentSection={currentSection}
-        handleSectionChange={handleSectionChange}
-      />
-      <div className="not-for-small-screens">
-      <div className="roadmap-center only-center">
-        <div className="roadmap-center-header">
-          <p className="rc-title">{currentUnit?.name || "Unit"}</p>
-          <p className="rc-sub">Study roadmap by priority</p>
-        </div>
-        <div className="topics-stack">
-          {sortedTopics.map((topic) => (
-            <TopicBar
-              key={topic.id}
-              topic={topic}
-              expanded={expandedTopicId === topic.id}
-              onToggle={() => setExpandedTopicId((prev) => (prev === topic.id ? null : topic.id))}
-              onOpenQnA={() => handleOpenQnA(topic)}
-              onOpenNotes={() => handleOpenNotes(topic)}
-            />
-          ))}
-          {!sortedTopics.length && <div className="empty-state"> No topics in this unit. </div>}
+      <div className="book-dashboard-roadmap-container">
+        <BookDashboardNavbar
+          currentSection={currentSection}
+          handleSectionChange={handleSectionChange}
+        />
+        <div className="not-for-small-screens book-dashboard-roadmap-sec">
+          <div className="roadmap-center only-center">
+            <div className="roadmap-center-header">
+              <p className="rc-title">{currentUnit?.name || "Unit"}</p>
+              <p className="rc-sub">Study roadmap by priority</p>
+            </div>
+            <div className="topics-stack">
+              {sortedTopics.map((topic) => (
+                <TopicBar
+                  key={topic.id}
+                  topic={topic}
+                  expanded={expandedTopicId === topic.id}
+                  onToggle={() => setExpandedTopicId((prev) => (prev === topic.id ? null : topic.id))}
+                  onOpenQnA={() => handleOpenQnA(topic)}
+                  onOpenNotes={() => handleOpenNotes(topic)}
+                />
+              ))}
+              {!sortedTopics.length && <div className="empty-state"> No topics in this unit. </div>}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 }

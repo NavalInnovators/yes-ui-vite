@@ -1,11 +1,5 @@
-/* Use the same mid/right layout proportions as your QnA page:
-   - center: flexible
-   - right summary: fixed width and pinned to right
-*/
-/* When used as center-only inside the mid column */
 .book-dashboard-roadmap-mid-sec {
   width: 67%;
-    /* background-color: cyan; */
     padding-left: 3rem;
     padding-right: 3rem;
 }
@@ -17,11 +11,19 @@
     gap: 1rem;
 }
 
+.book-dashboard-roadmap-sec {
+  width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    /* background-color: red; */
+}
+
 .only-center {
   flex: 1 1 auto;
   min-width: 0;
   border: 1px solid var(--light-border, #e5e7eb);
-  background: #fff;
+  background: #f7f4f4;
   border-radius: 10px;
   padding: 16px;
 }
@@ -38,45 +40,38 @@
 .roadmap-center {
   flex: 1 1 auto;
   min-width: 0;
-  border: 1px solid var(--light-border, #e5e7eb);
-  background: #fff;
+  /* border: 1px solid var(--light-border, #e5e7eb); */
+  background: #f5f5f5;
   border-radius: 10px;
   padding: 16px;
 }
 
 /* Right summary is fixed-width and attached to the right edge */
+.book-dashboard-roadmap-right-sec {
+  margin-top: 1rem;
+  width: 18%;
+}
+
 .roadmap-summary {
-  flex: 0 0 220px;         /* match your right panel width */
-  margin-left: auto;       /* pin to the right edge */
+          
+        
   border: 1px solid var(--light-border, #e5e7eb);
-  background: #fff;
+  background: #8f2525; 
+  display: flex;
+  flex-direction: column;
   border-radius: 10px;
   padding: 12px;
   position: sticky;        /* behaves like your right panel */
-  top: 110px;              /* adjust if your header height differs */
+  top: 110px;    
+  background-color: #f5f5f5;          /* adjust if your header height differs */
 }
 
-/* Tweak widths on slightly smaller viewports to match your right panel breakpoints */
-@media (max-width: 1200px) {
-  .roadmap-summary { flex-basis: 300px; }
-}
-@media (max-width: 1050px) {
-  .roadmap-summary { flex-basis: 280px; }
-}
 
-/* Stack on mobile like your other tabs */
-@media (max-width: 900px) {
+ @media (max-width: 900px) {
   .roadmap-wrap {
     flex-direction: column;
   }
-  .roadmap-summary {
-    position: static;
-    width: 100%;
-    flex-basis: auto;
-    margin-left: 0;
-    order: 2; /* keep below the center block */
-  }
-}
+} 
 
 /* Center header */
 .roadmap-center-header {
@@ -144,15 +139,15 @@
 
 /* Priority indicators */
 .roadmap-priority-high .topic-dot,
-.rs-dot.roadmap-priority-high { background: #ef4444; }
+.rs-dot.roadmap-priority-high { background: #ea3535; }
 .roadmap-priority-medium .topic-dot,
-.rs-dot.roadmap-priority-medium { background: #f59e0b; }
+.rs-dot.roadmap-priority-medium { background: #f5a00c; }
 .roadmap-priority-low .topic-dot,
-.rs-dot.roadmap-priority-low { background: #22c55e; }
+.rs-dot.roadmap-priority-low { background: #1fd963; }
 
-.roadmap-priority-high .topic-bar-head { background: #fee2e2; }
-.roadmap-priority-medium .topic-bar-head { background: #fffbeb; }
-.roadmap-priority-low .topic-bar-head { background: #ecfdf5; }
+.roadmap-priority-high .topic-bar-head { background: #fa7272; }
+.roadmap-priority-medium .topic-bar-head { background: #ffe57c; }
+.roadmap-priority-low .topic-bar-head { background: #9af7cc; }
 
 .topic-bar-actions {
   display: flex;
@@ -216,9 +211,9 @@
   font-weight: 600;
   border: 1px solid var(--light-border, #e5e7eb);
 }
-.rs-group-title.roadmap-priority-high { background: #fee2e2; }
-.rs-group-title.roadmap-priority-medium { background: #fffbeb; }
-.rs-group-title.roadmap-priority-low { background: #ecfdf5; }
+.rs-group-title.roadmap-priority-high { background: #fb9191; }
+.rs-group-title.roadmap-priority-medium { background: #fae38b; }
+.rs-group-title.roadmap-priority-low { background: #91fac9; }
 
 .rs-list { display: grid; gap: 6px; }
 .rs-item {
