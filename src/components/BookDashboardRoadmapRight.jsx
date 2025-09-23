@@ -28,7 +28,7 @@ export default function BookDashboardRoadmapRight({ data }) {
     };
 
     return (
-        <div className="book-dashboard-right-sec roadmap-summary right-column">
+        <div className="book-dashboard-roadmap-right-sec roadmap-summary right-column">
             <div className="rs-header">Summarised Roadmap</div>
 
             <div className="rs-groups">
