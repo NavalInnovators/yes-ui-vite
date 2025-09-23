@@ -7,7 +7,6 @@ import BookDashboardUnitMidSec from "./BookDashboardUnitMidSec";
 import BookDashboardLeftSec from "./BookDashboardLeftSec";
 import BookDashboardRightSec from "./BookDashboardRightSec";
 import BookDashboardSyllabus from "./BookDashboardSyllabus";
-// import BookDashboardAiFeature from "./BookDashboardAiFeature";
 import BookDashboardMap from "./BookDashboardMap";
 import BookDashboardMidSec from "./BookDashboardMidSec";
 import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
@@ -45,6 +44,7 @@ function BookDashboard() {
   const [currentSection, setCurrentSection] = useState("Syllabus");
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
   
+
   const handleSectionChange = (section) => {
     if (section === "Insights") {
       setShowPlanPopUp(true);
@@ -52,7 +52,7 @@ function BookDashboard() {
       setCurrentSection(section);
     }
   };
-  
+
   // const handleSectionChange = (section) => {
   //   setCurrentSection(section);
   // };
@@ -70,12 +70,12 @@ function BookDashboard() {
             (section) => section.title === currentSection
           ).map((section, index) => {
             const Component = section.component;
-            const RightComponent = 
-            typeof section.rightComponent === "boolean"
-              ? section.rightComponent
-              ? BookDashboardRightSec
-              : BookDashboardUnitEmptyRightSec
-            : section.rightComponent;
+            const RightComponent =
+              typeof section.rightComponent === "boolean"
+                ? section.rightComponent
+                  ? BookDashboardRightSec
+                  : BookDashboardUnitEmptyRightSec
+                : section.rightComponent;
 
             return (
               <React.Fragment key={index}>
@@ -96,9 +96,13 @@ function BookDashboard() {
             {BookDashboardSections.filter(
               (section) => section.title === currentSection
             ).map((section, index) => {
-              const RightComponent = section.rightComponent
-                ? BookDashboardRightSec
-                : BookDashboardUnitEmptyRightSec;
+              const RightComponent =
+                typeof section.rightComponent === "boolean"
+                  ? section.rightComponent
+                    ? BookDashboardRightSec
+                    : BookDashboardUnitEmptyRightSec
+                  : section.rightComponent;
+
               return <RightComponent key={"right-" + index} />;
             })}
           </div>

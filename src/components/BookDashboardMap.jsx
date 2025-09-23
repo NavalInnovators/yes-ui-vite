@@ -3,21 +3,6 @@ import "./BookDashboardMap.css";
 import { useNavigate } from "react-router-dom";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import { Book } from "lucide-react";
-// import "./BookDashboardSyllabus.css";
-// import "./BookDashboardMidSec.css";
-
-
-/**
- * This component renders ONLY the Roadmap body for the current tab.
- * It assumes the parent already renders the gradient header and the feature tabs.
- *
- * Optional props to wire into your existing state/router:
- * - selectedUnitId
- * - onSelectUnit(unitId)
- * - onOpenQnA(topic)
- * - onOpenNotes(topic)
- * - data: { units: [{ id, name, topics: [...] }] }
- */
 
 const DEMO = {
   units: [
@@ -177,24 +162,6 @@ export default function BookDashboardMap({
     return [...topics].sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
   }, [currentUnit]);
 
-
-  // const summaryList = useMemo(() => {
-  //   const all = data.units.flatMap((u) => (u.topics || []).map((t) => ({ ...t, unitName: u.name })));
-  //   return all.sort((a, b) => {
-  //     const byPr = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
-  //     if (byPr !== 0) return byPr;
-  //     if (a.unitId !== b.unitId) return (a.unitId || 0) - (b.unitId || 0);
-  //     return (a.name || "").localeCompare(b.name || "");
-  //   });
-  // }, [data.units]);
-
-  // const jumpToTopic = (t) => {
-  //   if (onSelectUnit) onSelectUnit(t.unitId);
-  //   setInternalUnitId(t.unitId);
-  //   setExpandedTopicId(t.id);
-  //   const center = document.querySelector(".roadmap-center");
-  //   if (center) center.scrollIntoView({ behavior: "smooth", block: "start" });
-  // };
 
   return (
     <div className="book-dashboard-roadmap-mid-sec">

@@ -50,6 +50,8 @@
 .book-dashboard-roadmap-right-sec {
   margin-top: 1rem;
   width: 18%;
+  min-width: 180px;      /* floor width so items don't collapse */
+  max-width: 340px;
 }
 
 .roadmap-summary {
@@ -66,6 +68,15 @@
   background-color: #f5f5f5;          /* adjust if your header height differs */
 }
 
+@media (max-width: 1023px) {
+  .book-dashboard-roadmap-right-sec {
+    width: auto;
+    min-width: 0;
+    max-width: 420px;
+    position: sticky;   /* keep sticky if you want */
+    top: 110px;
+  }
+}
 
  @media (max-width: 900px) {
   .roadmap-wrap {
