@@ -20,7 +20,7 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
             className={tab === currentSection ? "bookdashboard-active-tab tab-item" : "tab-item"}
           >
             {tab}
-            {(tab === "Notes" || tab === "Insights") && (
+            {(tab === "Notes" || tab === "Insights" || tab === "Roadmap") && (
               <span className="paid-icon">
                 <img src={PaidIcon} alt="Paid Icon" />
               </span>

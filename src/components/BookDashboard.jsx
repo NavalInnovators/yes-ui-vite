@@ -56,7 +56,7 @@ function BookDashboard() {
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
   
   const handleSectionChange = (section) => {
-    if (section === "Notes" || section === "Insights") {
+    if (section === "Insights") {
       setShowPlanPopUp(true);
     } else {
       setCurrentSection(section);
