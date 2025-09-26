@@ -1,7 +1,6 @@
 import {
   logo,
   DayNightModeBtn,
-  // homeImg,
   profileIconNew,
   NotificationIcon,
   dashboardIcon,
@@ -27,6 +26,7 @@ import "./Navbar.css";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { ShoppingCart } from "lucide-react"; // ← Added cart icon
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,34 +47,13 @@ const Navbar = () => {
   };
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
-  // const [hoveredItem, setHoveredItem] = useState("true");
   const currentPath = window.location.pathname;
-
-  // Initial state for user (set null if not logged in)
-  // const [user, setUser] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
     useState(false);
 
-  // const [profilePic, setProfilePic] = useState(() => {
-  //   const stored = localStorage.getItem("userProfile");
-  //   return stored ? JSON.parse(stored).avatarUrl : null;
-  // });
-  // const [profilePic, setProfilePic] = useState(() => {
-  //   const storedAvatar = localStorage.getItem("profileAvatarUrl");
-  //   if (storedAvatar) {
-  //     return avatarMap[storedAvatar] || profileIconNew;
-  //   }
-  //   return profileIconNew;
-  // });
-  // 👇 ProfilePic state (default is generic profileIconNew)
   const [profilePic, setProfilePic] = useState(profileIconNew);
 
-  // useEffect(() => {
-  //   setProfilePic(`${profilePic || profileIconNew}`);
-  // }, [profilePic]);
-
-  // Notifications state
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -113,37 +92,27 @@ const Navbar = () => {
 
   const handleProfileClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
-    setIsNotificationDropdownOpen(false); // Close notification dropdown when profile is opened
+    setIsNotificationDropdownOpen(false);
   };
 
   const handleNotificationClick = () => {
     setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
-    setIsDropdownOpen(false); // Close profile dropdown when notifications are opened
+    setIsDropdownOpen(false);
   };
 
-  // Mark all notifications as read
   const markAllAsRead = () => {
-    const updatedNotifications = notifications.map((notification) => ({
-      ...notification,
-      isRead: true,
-    }));
-    setNotifications(updatedNotifications);
+    setNotifications(
+      notifications.map((notification) => ({ ...notification, isRead: true }))
+    );
   };
-
-  // Simulating login and logout for demonstration purposes
-  // const handleLogin = () => {
-  //   // TODO WE WILL SEND THE ACTUAL USER DETAILS FETCHED FROM THE API
-  //   // login(exampleUser);
-  // };
 
   const handleLogout = () => {
     logout();
-    setIsNotificationDropdownOpen(false); // Close notification dropdown when profile is opened
-    setIsDropdownOpen(false); // Close profile dropdown when notifications are opened
-    setProfilePic(profileIconNew); // ✅ reset to default
+    setIsNotificationDropdownOpen(false);
+    setIsDropdownOpen(false);
+    setProfilePic(profileIconNew);
   };
 
-  // Close dropdowns when clicking outside of them
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -160,7 +129,6 @@ const Navbar = () => {
       }
     };
 
-    // 👇 Helper: read avatar from localStorage
     const updateProfilePic = () => {
       const storedAvatar = localStorage.getItem("profileAvatarUrl");
       if (storedAvatar) {
@@ -170,16 +138,10 @@ const Navbar = () => {
       }
     };
 
-    // ✅ Run immediately whenever login status changes
     updateProfilePic();
-
-    // ✅ Sync with localStorage events (cross-tab or same-tab updates)
     window.addEventListener("profileUpdated", updateProfilePic);
-
-    // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Remove event listener on cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("storage", updateProfilePic);
@@ -206,20 +168,16 @@ const Navbar = () => {
 
       {/* Mobile Navigation Menu */}
       <div className={`mobile-nav ${isMenuOpen ? "active" : ""}`}>
-        {/* Header Section */}
         <div className="mobile-nav-header">
           <div className="navbar-logo">
             <Link to="/" onClick={toggleMenu}>
               <img src={logo} alt="YES" />
             </Link>
-          </div>{" "}
-          {/* Logo */}
+          </div>
           <button className="cancel-btn" onClick={toggleMenu}>
-            &times; {/* Close button */}
+            &times;
           </button>
         </div>
-
-        {/* Body Section */}
         <div className="mobile-nav-body">
           <ul>
             <li>
@@ -270,11 +228,7 @@ const Navbar = () => {
 
       <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
         {navLinks.map((nav) => (
-          <li
-            key={nav.id}
-            // onMouseEnter={() => setHoveredItem(nav.title)}
-            // onMouseLeave={() => setHoveredItem(null)}
-          >
+          <li key={nav.id}>
             <Link
               className={`${currentPath === nav.id ? "active" : "inactive"}`}
               to={`${nav.id}`}
@@ -284,6 +238,7 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
+
       <div className="navbar-icons">
         <div className="search-btn-bg">
           <img src={SearchIcon} alt="Search" className="search-btn" />
@@ -296,7 +251,6 @@ const Navbar = () => {
           />
         </div>
 
-        {/* Conditionally render login/signup or user image */}
         {isLoggedIn ? (
           <div className="user-profile">
             <div
@@ -343,13 +297,6 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Render the user's profile image */}
-            {/* <img
-              src={profilePic}
-              alt="Profile"
-              className="profile-image"
-              onClick={handleProfileClick}
-            /> */}
             <img
               src={profilePic}
               alt="Profile"
@@ -357,7 +304,6 @@ const Navbar = () => {
               onClick={handleProfileClick}
             />
 
-            {/* Profile Dropdown */}
             {isDropdownOpen && (
               <div className="profile-dropdown" ref={profileDropdownRef}>
                 <ul className="font-profile-dropdown">
@@ -401,13 +347,12 @@ const Navbar = () => {
                     </Link>
                   </li>
                 </ul>
-                {/* Logout button stays at the bottom */}
                 <div
                   className="logout-section font-profile-dropdown"
                   onClick={handleLogout}
                 >
                   <img src={LogoutIcon} alt="logoutIcon" />{" "}
-                  <Link to="/">Logout </Link>
+                  <Link to="/">Logout</Link>
                 </div>
               </div>
             )}
@@ -432,6 +377,11 @@ const Navbar = () => {
             </div>
           </div>
         )}
+
+        {/* Cart Icon added here */}
+        <Link to="/mycart" className="cart-icon">
+          <ShoppingCart size={40} color="#333" />
+        </Link>
       </div>
     </nav>
   );
