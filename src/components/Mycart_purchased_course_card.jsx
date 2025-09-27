@@ -40,7 +40,7 @@ export default function Mycart_purchased_course_card({
             {title}
           </h2>
           <p className={`text-xs ${isPro ? 'text-gray-200' : 'text-gray-600'}`}>
-            AKTU · {credits} Credits · {dept}
+            AKTU · {credits} · {dept}
           </p>
           <p className={`text-xs font-medium ${isPro ? 'text-gray-100' : 'text-gray-700'} mt-1`}>
             {plan} Plan - ₹{price}

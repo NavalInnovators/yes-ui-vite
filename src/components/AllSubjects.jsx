@@ -7,14 +7,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
+import { useCart } from "../context/CartContext";
 
 const AllSubjects = ({ searchQuery }) => {
   const queryClient = useQueryClient();
+  const { cart, addToCart, removeFromCart, updateCartItem } = useCart();
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
-
-  const [cart, setCart] = useState([]);
   const yearCategoryMap = {
     "1st Year": 1,
     "2nd Year": 2,
@@ -165,21 +165,18 @@ const AllSubjects = ({ searchQuery }) => {
 
   // Handler for Buy button
   const handleBuyClick = (course, plan) => {
-    setCart((prev) => {
-      const exists = prev.find((c) => c.id === course.id);
-      if (exists) {
-        // if same course clicked again, replace plan
-        return prev.map((c) =>
-          c.id === course.id ? { ...c, plan } : c
-        );
-      }
-      return [...prev, { ...course, plan }];
-    });
-
-  };
-
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((c) => c.id !== id));
+    // Check if course already exists in cart
+    const existingItem = cart.find(item => item.courseId === course.id);
+    
+    if (existingItem) {
+      // Update existing item with new plan
+      updateCartItem(existingItem.id, { plan, price: plan === 'Basic' ? 110 : 150 });
+      toast.success(`${course.name} updated to ${plan} plan!`);
+    } else {
+      // Add new item to cart
+      addToCart(course, plan);
+      toast.success(`${course.name} (${plan}) added to cart!`);
+    }
   };
 
   const pricing = useMemo(() => {
@@ -218,9 +215,21 @@ const AllSubjects = ({ searchQuery }) => {
   }, [cart]);
 
   const upgradeAllToPro = () => {
-    setCart((prev) =>
-      prev.map((c) => ({ ...c, plan: "Pro" }))
-    );
+    cart.forEach(item => {
+      if (item.plan === "Basic") {
+        addToCart(
+          {
+            id: item.courseId,
+            name: item.name,
+            courseCodes: item.courseCodes,
+            universityName: item.universityName,
+            year: item.year,
+            branchNames: item.branchNames
+          }, 
+          "Pro"
+        );
+      }
+    });
   };
 
   return (
@@ -406,7 +415,10 @@ const AllSubjects = ({ searchQuery }) => {
             </div>
 
             <div className="pricing-sidebar-footer">
-              <button className="secure-checkout-btn">
+              <button 
+                className="secure-checkout-btn"
+                onClick={() => navigate('/mycart')}
+              >
                 Secure Checkout
               </button>
             </div>

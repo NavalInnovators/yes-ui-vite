@@ -12,6 +12,7 @@ import BookDashboardMidSec from "./BookDashboardMidSec";
 import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
 import PlanPopUp from "./PlanPopUp";
 import BookDashboardRoadmapRight from "./BookDashboardRoadmapRight";
+import { useBookDashboard } from "../context/book-dashboard-context";
 const BookDashboardSections = [
   {
     title: "Syllabus",
@@ -43,7 +44,13 @@ const BookDashboardSections = [
 function BookDashboard() {
   const [currentSection, setCurrentSection] = useState("Syllabus");
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
-  
+  const { subCode } = useBookDashboard();
+
+  // Get course data from sessionStorage
+  const getCurrentCourse = () => {
+    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+    return allCourses.find(course => course.courseCodes.includes(subCode));
+  };
 
   const handleSectionChange = (section) => {
     if (section === "Insights") {
@@ -151,7 +158,10 @@ function BookDashboard() {
       </div> */}
       {/* ✅ Popup rendered conditionally */}
       {showPlanPopUp && (
-        <PlanPopUp onClose={() => setShowPlanPopUp(false)} />
+        <PlanPopUp 
+          onClose={() => setShowPlanPopUp(false)} 
+          course={getCurrentCourse()}
+        />
       )}
     </div>
   );

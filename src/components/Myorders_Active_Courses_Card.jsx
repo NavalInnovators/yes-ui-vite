@@ -2,15 +2,14 @@ import React from "react";
 
 // Dynamic color mapping for the card background
 const planColors = {
-  "Pro Plan": "bg-green-600 text-white",
-  "Upgrade to Pro":
-    "bg-[linear-gradient(90deg,rgba(56,26,178,1)_12%,rgba(155,50,173,1)_44%,rgba(254,172,47,1)_86%)] text-white",
+  "Basic Plan": "bg-gradient-to-r from-cyan-200 to-blue-200 text-black",
+  "Pro Plan": "bg-[linear-gradient(90deg,rgba(56,26,178,1)_12%,rgba(155,50,173,1)_44%,rgba(254,172,47,1)_86%)] text-white",
 };
 
 // Dynamic button style based on plan type
 const buttonColors = {
-  "Pro Plan": "bg-white text-green-700 hover:bg-green-50 hover:shadow-lg",
-  "Upgrade to Pro": "bg-white text-black hover:opacity-90",
+  "Basic Plan": "bg-white text-purple-900 hover:opacity-90",
+  "Pro Plan": "bg-white text-black hover:opacity-90",
 };
 
 export default function Active_Courses_Card({
@@ -19,6 +18,7 @@ export default function Active_Courses_Card({
   planType,
   purchaseDate,
   expiryDate,
+  onUpgrade,
 }) {
   const cardColor = planColors[planType] || "bg-gray-200 text-black";
   const buttonStyle =
@@ -45,14 +45,21 @@ export default function Active_Courses_Card({
         </div>
 
         {/* Plan Button */}
-        <button
-          className={`
-            mt-auto px-4 py-2 rounded-full text-sm font-semibold shadow-md 
-            transition-all duration-200 ${buttonStyle}
-          `}
-        >
-          {planType === "Pro Plan" ? "Upgrade to Pro" : "Enjoy Premium"}
-        </button>
+        {onUpgrade ? (
+          <button
+            onClick={onUpgrade}
+            className={`
+              mt-auto px-4 py-2 rounded-full text-sm font-semibold shadow-md 
+              transition-all duration-200 ${buttonStyle}
+            `}
+          >
+            Upgrade to Pro
+          </button>
+        ) : (
+          <div className="mt-auto px-4 py-2 rounded-full text-sm font-semibold bg-white text-black text-center shadow-md">
+            Pro Plan Active
+          </div>
+        )}
       </div>
     </div>
   );

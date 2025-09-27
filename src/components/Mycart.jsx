@@ -3,118 +3,56 @@ import GradientDiv from "../roles/components/GradientDiv";
 import Mycart_purchased_course_card from "./Mycart_purchased_course_card";
 import OrderSummary from "./Mycart_ordersummary";
 import Mycart_suggested_courses_card from "./Mycart_suggested_courses_card";
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Mycart() {
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      title: "Project Management and",
-      credits: 4,
-      dept: "CSE",
-      plan: "Basic",
-      price: 110,
-    },
-    {
-      id: 2,
-      title: "Data Warehouse and Data Mining",
-      credits: 4,
-      dept: "CEE",
-      plan: "Pro",
-      price: 150,
-    },
-    {
-      id: 3,
-      title: "Digital Innovation & Entrepreneurship",
-      credits: 4,
-      dept: "CSE",
-      plan: "Basic",
-      price: 110,
-    },
-  ]);
+  const { cart, removeFromCart, updateCartItem, addToCart, checkout, getSuggestedCourses } = useCart();
+  const navigate = useNavigate();
 
-  const allSuggestedCourses = [
-    {
-      id: 4,
-      title: "Machine Learning",
-      credits: 4,
-      dept: "CSE",
-      hasBasic: true,
-    },
-    {
-      id: 5,
-      title: "Database Systems",
-      credits: 4,
-      dept: "CSE",
-      hasBasic: false,
-    },
-    {
-      id: 6,
-      title: "Software Engineering",
-      credits: 4,
-      dept: "CSE",
-      hasBasic: false,
-    },
-    {
-      id: 7,
-      title: "Computer Networks",
-      credits: 4,
-      dept: "CSE",
-      hasBasic: true,
-    },
-    {
-      id: 8,
-      title: "Operating Systems",
-      credits: 4,
-      dept: "CSE",
-      hasBasic: false,
-    },
-    {
-      id: 9,
-      title: "Computer Graphics",
-      credits: 4,
-      dept: "CSE",
-      hasBasic: true,
-    },
-  ];
+  // Get suggested courses based on cart items
+  const allSuggestedCourses = getSuggestedCourses(cart);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showCouponPopup, setShowCouponPopup] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponCode, setCouponCode] = useState("");
 
-  // Filter suggested courses to exclude those already in cart
-  // We need to match by title since cart items have unique IDs
-  const suggestedCourses = allSuggestedCourses.filter(course => 
-    !cart.some(cartItem => cartItem.title === course.title)
-  );
-
-  const filteredSuggestedCourses = suggestedCourses.filter(course =>
-    course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    course.dept.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const removeFromCart = (id) => {
-    setCart(prev => prev.filter(item => item.id !== id));
-  };
+  // Filter suggested courses based on search query
+  const filteredSuggestedCourses = allSuggestedCourses.filter(course => {
+    const title = (course.title || "").toLowerCase();
+    const dept = (course.dept || "").toLowerCase();
+    const subjectCode = (course.subjectCode || "").toLowerCase();
+    const q = searchQuery.toLowerCase();
+    return title.includes(q) || dept.includes(q) || subjectCode.includes(q);
+  });
+  
 
   const upgradeToPro = (id) => {
-    setCart(prev => prev.map(item => 
-      item.id === id ? { ...item, plan: "Pro", price: 150 } : item
-    ));
+    const item = cart.find(item => item.id === id);
+    if (item && item.plan === "Basic") {
+      updateCartItem(id, { plan: "Pro", price: 150 });
+    }
   };
 
-  const addToCart = (course, plan) => {
-    // Generate unique ID to avoid conflicts
-    const uniqueId = Date.now() + Math.random();
-    const newItem = {
-      id: uniqueId,
-      title: course.title,
-      credits: course.credits,
-      dept: course.dept,
-      plan: plan,
-      price: plan === "Basic" ? 110 : 150,
+  const handleAddToCart = (course, plan) => {
+    const courseData = {
+      id: course.id,
+      name: course.title??"Untitled",
+      courseCodes: course.courseCodes??[],
+      universityName: course.universityName??"",
+      year: course.year??"",
+      branchNames: course.branchNames??[]
     };
-    setCart(prev => [...prev, newItem]);
+    addToCart(courseData, plan);
+    toast.success(`${course.title??"Course"} (${plan}) added to cart!`);
+  };
+
+  const handleCheckout = () => {
+    checkout();
+    toast.success("Order placed successfully!");
+    navigate('/myorders');
   };
 
   // Available coupons
@@ -224,9 +162,11 @@ export default function Mycart() {
   }, [cart, appliedCoupon]);
 
   const upgradeAllToPro = () => {
-    setCart((prev) =>
-      prev.map((c) => ({ ...c, plan: "Pro", price: 150 }))
-    );
+    cart.forEach(item => {
+      if (item.plan === "Basic") {
+        updateCartItem(item.id, { plan: "Pro", price: 150 });
+      }
+    });
   };
 
   return (
@@ -255,7 +195,11 @@ export default function Mycart() {
               {cart.map((course) => (
                 <Mycart_purchased_course_card 
                   key={course.id} 
-                  {...course} 
+                  title={course.name}
+                  credits={course.courseCodes??[]}
+                  dept={(Array.isArray(course.branchNames) && course.branchNames.length > 0) ? course.branchNames[0] : 'Unknown'}
+                  plan={course.plan}
+                  price={course.price}
                   onRemove={() => removeFromCart(course.id)}
                   onUpgrade={() => upgradeToPro(course.id)}
                 />
@@ -305,8 +249,11 @@ export default function Mycart() {
                 {filteredSuggestedCourses.map((course) => (
                   <Mycart_suggested_courses_card 
                     key={course.id} 
-                    {...course} 
-                    onAddToCart={addToCart}
+                    title={course.title}
+                    credits={course.subjectCode}
+                    dept={course.dept}
+                    hasBasic={course.hasBasic}
+                    onAddToCart={handleAddToCart}
                   />
                 ))}
               </div>
@@ -327,6 +274,7 @@ export default function Mycart() {
               onRemoveCoupon={removeCoupon}
               couponCode={couponCode}
               onCouponCodeChange={setCouponCode}
+              onCheckout={handleCheckout}
             />
           </div>
         </div>
