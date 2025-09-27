@@ -1,9 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./PlanPopUp.css";
+import { useCart } from "../context/CartContext";
+import { toast } from "react-toastify";
 
-function PlanPopUp({ onClose }) {
+function PlanPopUp({ onClose, course }) {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
+
+    const handlePlanSelect = (plan) => {
+        if (course) {
+            addToCart(course, plan);
+            toast.success(`${course.name} (${plan}) added to cart!`);
+        }
+        navigate('/mycart');
+        onClose();
+    };
 
     return (
         <div className="popup-overlay" role="dialog" aria-modal="true" aria-label="Choose plan">
@@ -46,7 +58,7 @@ function PlanPopUp({ onClose }) {
                             </ul>
                             <button
                                 className="btn-basic"
-                                onClick={() => navigate("/cart?plan=basic")}
+                                onClick={() => handlePlanSelect("Basic")}
                             >
                                 Proceed with Basic
                             </button>
@@ -67,7 +79,7 @@ function PlanPopUp({ onClose }) {
                             <div className="alert">🚀 Don’t Miss Out! Upgrade now for exclusive tools!</div>
                             <button
                                 className="btn-pro"
-                                onClick={() => navigate("/cart?plan=pro")}
+                                onClick={() => handlePlanSelect("Pro")}
                             >
                                 Go Pro & Maximize Savings!
                             </button>

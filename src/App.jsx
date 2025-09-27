@@ -35,6 +35,7 @@ import { ToastContainer } from "react-toastify";
 import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import { AuthProvider } from "./components/AuthProvider.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
 
 import FAQPage from "./pages/FAQPage/FAQPage.jsx";
 import MembershipPage from "./components/MembershipPage.jsx";
@@ -55,7 +56,9 @@ function App() {
       <Analytics />
       <Router>
         <AuthProvider>
-          <AppContent />
+          <CartProvider>
+            <AppContent />
+          </CartProvider>
         </AuthProvider>
       </Router>
     </div>

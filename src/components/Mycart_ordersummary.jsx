@@ -7,7 +7,8 @@ export default function OrderSummary({
   appliedCoupon,
   onRemoveCoupon,
   couponCode,
-  onCouponCodeChange
+  onCouponCodeChange,
+  onCheckout
 }) {
   return (
     <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-8 flex flex-col border border-gray-100" style={{minHeight: 'fit-content', maxHeight: '90vh'}}>
@@ -57,7 +58,7 @@ export default function OrderSummary({
         {cart.map((item) => (
           <div key={item.id} className="flex justify-between items-center text-sm bg-gray-50 rounded-lg p-3">
             <div className="flex-1">
-              <div className="font-medium truncate">{item.title}</div>
+              <div className="font-medium truncate">{item.name}</div>
               <div className="text-gray-500 text-xs">{item.plan} Plan</div>
             </div>
             <div className="flex items-center gap-2">
@@ -130,7 +131,10 @@ export default function OrderSummary({
       </div>
 
       {/* Checkout Button */}
-      <button className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 text-white font-semibold rounded-full py-3 text-sm shadow-md hover:scale-[1.03] hover:shadow-lg transition transform mb-4">
+      <button 
+        onClick={onCheckout}
+        className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 text-white font-semibold rounded-full py-3 text-sm shadow-md hover:scale-[1.03] hover:shadow-lg transition transform mb-4"
+      >
         🔒 Secure Checkout
       </button>
 

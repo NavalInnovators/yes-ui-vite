@@ -30,7 +30,7 @@ export default function Mycart_suggested_courses_card({
           AKTU
         </span>
         <span className="bg-white text-xs font-medium px-2 py-1 rounded-full">
-          {credits} Credits
+          {credits}
         </span>
         <span className="bg-white text-xs font-medium px-2 py-1 rounded-full">
           {dept}
