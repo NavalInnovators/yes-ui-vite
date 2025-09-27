@@ -20,11 +20,14 @@ export default function Mycart() {
   const [couponCode, setCouponCode] = useState("");
 
   // Filter suggested courses based on search query
-  const filteredSuggestedCourses = allSuggestedCourses.filter(course =>
-    course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    course.dept.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    course.subjectCode.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSuggestedCourses = allSuggestedCourses.filter(course => {
+    const title = (course.title || "").toLowerCase();
+    const dept = (course.dept || "").toLowerCase();
+    const subjectCode = (course.subjectCode || "").toLowerCase();
+    const q = searchQuery.toLowerCase();
+    return title.includes(q) || dept.includes(q) || subjectCode.includes(q);
+  });
+  
 
   const upgradeToPro = (id) => {
     const item = cart.find(item => item.id === id);
@@ -36,14 +39,14 @@ export default function Mycart() {
   const handleAddToCart = (course, plan) => {
     const courseData = {
       id: course.id,
-      name: course.title,
-      courseCodes: course.courseCodes,
-      universityName: course.universityName,
-      year: course.year,
-      branchNames: course.branchNames
+      name: course.title??"Untitled",
+      courseCodes: course.courseCodes??[],
+      universityName: course.universityName??"",
+      year: course.year??"",
+      branchNames: course.branchNames??[]
     };
     addToCart(courseData, plan);
-    toast.success(`${course.title} (${plan}) added to cart!`);
+    toast.success(`${course.title??"Course"} (${plan}) added to cart!`);
   };
 
   const handleCheckout = () => {
@@ -193,8 +196,8 @@ export default function Mycart() {
                 <Mycart_purchased_course_card 
                   key={course.id} 
                   title={course.name}
-                  credits={course.courseCodes[0]}
-                  dept={course.branchNames[0]}
+                  credits={course.courseCodes??[]}
+                  dept={(Array.isArray(course.branchNames) && course.branchNames.length > 0) ? course.branchNames[0] : 'Unknown'}
                   plan={course.plan}
                   price={course.price}
                   onRemove={() => removeFromCart(course.id)}
