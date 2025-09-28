@@ -53,13 +53,17 @@ export const CartProvider = ({ children }) => {
     };
 
     setCart(prev => {
-      const exists = prev.find(item => item.id === cartItem.id);
-      if (exists) {
-        // Update existing item
-        return prev.map(item => 
-          item.id === cartItem.id ? cartItem : item
-        );
+      // Check if course already exists in cart (regardless of plan)
+      const existingCourseIndex = prev.findIndex(item => item.courseId === course.id);
+      
+      if (existingCourseIndex !== -1) {
+        // Update existing course with new plan
+        const updatedCart = [...prev];
+        updatedCart[existingCourseIndex] = cartItem;
+        return updatedCart;
       }
+      
+      // Add new course to cart
       return [...prev, cartItem];
     });
   };

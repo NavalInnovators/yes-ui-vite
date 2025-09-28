@@ -217,17 +217,7 @@ const AllSubjects = ({ searchQuery }) => {
   const upgradeAllToPro = () => {
     cart.forEach(item => {
       if (item.plan === "Basic") {
-        addToCart(
-          {
-            id: item.courseId,
-            name: item.name,
-            courseCodes: item.courseCodes,
-            universityName: item.universityName,
-            year: item.year,
-            branchNames: item.branchNames
-          }, 
-          "Pro"
-        );
+        updateCartItem(item.id, { plan: "Pro", price: 150 });
       }
     });
   };
