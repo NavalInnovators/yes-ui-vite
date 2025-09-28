@@ -46,6 +46,7 @@ function BookDashboard() {
   const [currentSection, setCurrentSection] = useState("Syllabus");
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
   const [requiredPlan, setRequiredPlan] = useState(null);
+  const [targetUnit, setTargetUnit] = useState(null);
   const { subCode, selectedUnit } = useBookDashboard();
   const { checkFeatureAccess, getRequiredPlanForFeature, getUserPlanForCourse, checkLifetimeLimit } = useCart();
 
@@ -93,6 +94,13 @@ function BookDashboard() {
     }
   };
 
+  // Handle unit access denied from left sidebar
+  const handleUnitAccessDenied = (requiredPlan, unitNumber) => {
+    setRequiredPlan(requiredPlan);
+    setTargetUnit(unitNumber);
+    setShowPlanPopUp(true);
+  };
+
   // const handleSectionChange = (section) => {
   //   setCurrentSection(section);
   // };
@@ -104,7 +112,7 @@ function BookDashboard() {
       <div className="book-dashboard-content-sec">
         {/* === DESKTOP LAYOUT === */}
         <div className="desktop-layout">
-          <BookDashboardLeftSec currentSection={currentSection} />
+          <BookDashboardLeftSec currentSection={currentSection} onUnitAccessDenied={handleUnitAccessDenied} />
 
           {BookDashboardSections.filter(
             (section) => section.title === currentSection
@@ -132,7 +140,7 @@ function BookDashboard() {
         {/* === MOBILE LAYOUT === */}
         <div className="mobile-layout">
           <div className="left-right-wrapper">
-            <BookDashboardLeftSec currentSection={currentSection} />
+            <BookDashboardLeftSec currentSection={currentSection} onUnitAccessDenied={handleUnitAccessDenied} />
             {BookDashboardSections.filter(
               (section) => section.title === currentSection
             ).map((section, index) => {
@@ -196,6 +204,7 @@ function BookDashboard() {
           course={getCurrentCourse()}
           requiredPlan={requiredPlan}
           currentPlan={getCurrentCourse() ? getUserPlanForCourse(getCurrentCourse().id) : 'Free'}
+          targetUnit={targetUnit}
         />
       )}
     </div>

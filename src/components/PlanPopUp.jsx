@@ -4,7 +4,7 @@ import "./PlanPopUp.css";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 
-function PlanPopUp({ onClose, course, requiredPlan, currentPlan }) {
+function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
     const navigate = useNavigate();
     const { addToCart } = useCart();
 

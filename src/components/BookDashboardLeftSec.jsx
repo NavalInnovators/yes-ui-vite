@@ -27,19 +27,18 @@ const units = [
   },
 ];
 
-function BookDashboardLeftSec({ currentSection }) {
-  const { selectedUnit, setSelectedUnit } = useBookDashboard(); // Adjust to match your context keys.
+function BookDashboardLeftSec({ currentSection, onUnitAccessDenied }) {
+  const { selectedUnit, setSelectedUnit, subCode } = useBookDashboard(); // Adjust to match your context keys.
   const { checkFeatureAccess, getRequiredPlanForFeature, getUserPlanForCourse } = useCart();
   
-  // State for popup
-  const [showPlanPopUp, setShowPlanPopUp] = useState(false);
-  const [requiredPlan, setRequiredPlan] = useState(null);
-  const [targetUnit, setTargetUnit] = useState(null);
+  // State for popup - moved to parent component
+  // const [showPlanPopUp, setShowPlanPopUp] = useState(false);
+  // const [requiredPlan, setRequiredPlan] = useState(null);
+  // const [targetUnit, setTargetUnit] = useState(null);
 
   // Get current course to check plan
   const getCurrentCourse = () => {
     const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-    const subCode = sessionStorage.getItem('courseCode');
     return allCourses.find(course => course.courseCodes.includes(subCode));
   };
 
@@ -59,11 +58,9 @@ function BookDashboardLeftSec({ currentSection }) {
       const hasAccess = checkFeatureAccess(courseId, currentSection, unitNumber);
       
       if (hasAccess === false) {
-        // User doesn't have access to this unit - show popup
+        // User doesn't have access to this unit - trigger popup in parent
         const requiredPlan = getRequiredPlanForFeature(currentSection);
-        setRequiredPlan(requiredPlan);
-        setTargetUnit(unitNumber);
-        setShowPlanPopUp(true);
+        onUnitAccessDenied(requiredPlan, unitNumber);
         return;
       }
     }
@@ -79,12 +76,11 @@ function BookDashboardLeftSec({ currentSection }) {
     }
   }, [selectedUnit, setSelectedUnit]);
 
-  // Get current course for popup
-  const getCurrentCourseForPopup = () => {
-    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-    const subCode = sessionStorage.getItem('courseCode');
-    return allCourses.find(course => course.courseCodes.includes(subCode));
-  };
+  // Get current course for popup - moved to parent component
+  // const getCurrentCourseForPopup = () => {
+  //   const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+  //   return allCourses.find(course => course.courseCodes.includes(subCode));
+  // };
 
   return (
     <div className="book-dashboard-left-sec">
@@ -116,16 +112,6 @@ function BookDashboardLeftSec({ currentSection }) {
           ))}
         </select>
       </div>
-      
-      {/* Plan Popup for unit restrictions */}
-      {showPlanPopUp && (
-        <PlanPopUp
-          onClose={() => setShowPlanPopUp(false)}
-          course={getCurrentCourseForPopup()}
-          requiredPlan={requiredPlan}
-          currentPlan={getCurrentCourseForPopup() ? getUserPlanForCourse(getCurrentCourseForPopup().id) : 'Free'}
-        />
-      )}
     </div>
   );
 }
