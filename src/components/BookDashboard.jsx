@@ -13,6 +13,7 @@ import BookDashboardUnitEmptyRightSec from "./BookDashboardUnitEmptyRightSec";
 import PlanPopUp from "./PlanPopUp";
 import BookDashboardRoadmapRight from "./BookDashboardRoadmapRight";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { useCart } from "../context/CartContext";
 const BookDashboardSections = [
   {
     title: "Syllabus",
@@ -44,7 +45,10 @@ const BookDashboardSections = [
 function BookDashboard() {
   const [currentSection, setCurrentSection] = useState("Syllabus");
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
-  const { subCode } = useBookDashboard();
+  const [requiredPlan, setRequiredPlan] = useState(null);
+  const [targetUnit, setTargetUnit] = useState(null);
+  const { subCode, selectedUnit } = useBookDashboard();
+  const { checkFeatureAccess, getRequiredPlanForFeature, getUserPlanForCourse, checkLifetimeLimit } = useCart();
 
   // Get course data from sessionStorage
   const getCurrentCourse = () => {
@@ -53,11 +57,48 @@ function BookDashboard() {
   };
 
   const handleSectionChange = (section) => {
-    if (section === "Insights") {
+    const currentCourse = getCurrentCourse();
+    if (!currentCourse) {
+      setCurrentSection(section);
+      return;
+    }
+
+    const courseId = currentCourse.id;
+    const unitNumber = parseInt(selectedUnit);
+    
+    // Check unit-wise access for Notes and Insights
+    const hasAccess = checkFeatureAccess(courseId, section, unitNumber);
+    
+    // Check lifetime limits for Summariser and Rephraser
+    if (section === 'Summariser' || section === 'Rephraser') {
+      const withinLifetimeLimit = checkLifetimeLimit(section);
+      if (!withinLifetimeLimit) {
+        const requiredPlan = getRequiredPlanForFeature(section);
+        setRequiredPlan(requiredPlan);
+        setShowPlanPopUp(true);
+        return;
+      }
+    }
+    
+    if (hasAccess === false) {
+      // User doesn't have access
+      const requiredPlan = getRequiredPlanForFeature(section);
+      setRequiredPlan(requiredPlan);
       setShowPlanPopUp(true);
+    } else if (hasAccess === 'limited') {
+      // User has limited access (e.g., Free user accessing Unit 1 Notes/Insights)
+      setCurrentSection(section);
     } else {
+      // User has full access
       setCurrentSection(section);
     }
+  };
+
+  // Handle unit access denied from left sidebar
+  const handleUnitAccessDenied = (requiredPlan, unitNumber) => {
+    setRequiredPlan(requiredPlan);
+    setTargetUnit(unitNumber);
+    setShowPlanPopUp(true);
   };
 
   // const handleSectionChange = (section) => {
@@ -71,7 +112,7 @@ function BookDashboard() {
       <div className="book-dashboard-content-sec">
         {/* === DESKTOP LAYOUT === */}
         <div className="desktop-layout">
-          <BookDashboardLeftSec />
+          <BookDashboardLeftSec currentSection={currentSection} onUnitAccessDenied={handleUnitAccessDenied} />
 
           {BookDashboardSections.filter(
             (section) => section.title === currentSection
@@ -99,7 +140,7 @@ function BookDashboard() {
         {/* === MOBILE LAYOUT === */}
         <div className="mobile-layout">
           <div className="left-right-wrapper">
-            <BookDashboardLeftSec />
+            <BookDashboardLeftSec currentSection={currentSection} onUnitAccessDenied={handleUnitAccessDenied} />
             {BookDashboardSections.filter(
               (section) => section.title === currentSection
             ).map((section, index) => {
@@ -161,6 +202,9 @@ function BookDashboard() {
         <PlanPopUp 
           onClose={() => setShowPlanPopUp(false)} 
           course={getCurrentCourse()}
+          requiredPlan={requiredPlan}
+          currentPlan={getCurrentCourse() ? getUserPlanForCourse(getCurrentCourse().id) : 'Free'}
+          targetUnit={targetUnit}
         />
       )}
     </div>

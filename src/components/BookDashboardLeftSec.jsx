@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./BookDashboardLeftSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { useCart } from "../context/CartContext";
+import PlanPopUp from "./PlanPopUp";
 
 const units = [
   {
@@ -25,8 +27,47 @@ const units = [
   },
 ];
 
-function BookDashboardLeftSec() {
-  const { selectedUnit, setSelectedUnit } = useBookDashboard(); // Adjust to match your context keys.
+function BookDashboardLeftSec({ currentSection, onUnitAccessDenied }) {
+  const { selectedUnit, setSelectedUnit, subCode } = useBookDashboard(); // Adjust to match your context keys.
+  const { checkFeatureAccess, getRequiredPlanForFeature, getUserPlanForCourse } = useCart();
+  
+  // State for popup - moved to parent component
+  // const [showPlanPopUp, setShowPlanPopUp] = useState(false);
+  // const [requiredPlan, setRequiredPlan] = useState(null);
+  // const [targetUnit, setTargetUnit] = useState(null);
+
+  // Get current course to check plan
+  const getCurrentCourse = () => {
+    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+    return allCourses.find(course => course.courseCodes.includes(subCode));
+  };
+
+  // Handle unit change with access check
+  const handleUnitChange = (unitNum) => {
+    const currentCourse = getCurrentCourse();
+    if (!currentCourse) {
+      setSelectedUnit(unitNum);
+      return;
+    }
+
+    // Check if current section requires access control
+    const restrictedSections = ['Notes', 'Insights'];
+    if (restrictedSections.includes(currentSection)) {
+      const courseId = currentCourse.id;
+      const unitNumber = parseInt(unitNum);
+      const hasAccess = checkFeatureAccess(courseId, currentSection, unitNumber);
+      
+      if (hasAccess === false) {
+        // User doesn't have access to this unit - trigger popup in parent
+        const requiredPlan = getRequiredPlanForFeature(currentSection);
+        onUnitAccessDenied(requiredPlan, unitNumber);
+        return;
+      }
+    }
+    
+    // If access is allowed or section doesn't require restrictions, change unit
+    setSelectedUnit(unitNum);
+  };
 
   //Ensure Unit 1 is selected by default
   React.useEffect(() => {
@@ -34,6 +75,12 @@ function BookDashboardLeftSec() {
       setSelectedUnit("1");
     }
   }, [selectedUnit, setSelectedUnit]);
+
+  // Get current course for popup - moved to parent component
+  // const getCurrentCourseForPopup = () => {
+  //   const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+  //   return allCourses.find(course => course.courseCodes.includes(subCode));
+  // };
 
   return (
     <div className="book-dashboard-left-sec">
@@ -43,7 +90,7 @@ function BookDashboardLeftSec() {
           {units.map((u) => (
             <li
               key={u.name}
-              onClick={() => setSelectedUnit(u.num)}
+              onClick={() => handleUnitChange(u.num)}
               className={u.num === selectedUnit ? "active-unit" : ""}
             >
               {u.name}
@@ -56,7 +103,7 @@ function BookDashboardLeftSec() {
       <div className="mobile-unit-dropdown">
         <select 
         value={selectedUnit}
-        onChange={(e) => setSelectedUnit(e.target.value)}
+        onChange={(e) => handleUnitChange(e.target.value)}
         >
           {units.map((u) => (
             <option key={u.num} value={u.num}>

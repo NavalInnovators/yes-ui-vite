@@ -3,9 +3,11 @@ import GradientDiv from "../roles/components/GradientDiv";
 import Active_Courses_Card from "./Myorders_Active_Courses_Card";
 import Expired_Courses_Card from "./Myorders_Expired_Courses_Card";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Myorders() {
   const { orders, addUpgradeToCart } = useCart();
+  const navigate = useNavigate();
 
   // Create some dummy expired courses
   const expiredCourses = [
@@ -34,6 +36,7 @@ export default function Myorders() {
 
   const handleUpgradeToPro = (order) => {
     addUpgradeToCart(order);
+    navigate('/mycart');
   };
 
   return (
@@ -54,6 +57,8 @@ export default function Myorders() {
               planType={course.plan === "Pro" ? "Pro Plan" : "Basic Plan"}
               purchaseDate={course.purchaseDate}
               expiryDate={course.expiryDate}
+              branchName={course.branchNames?.[0] || 'CSE'}
+              universityName={course.universityName}
               onUpgrade={course.plan === "Basic" ? () => handleUpgradeToPro(course) : null}
             />
           ))}

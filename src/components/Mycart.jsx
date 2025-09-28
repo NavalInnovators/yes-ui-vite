@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Mycart() {
-  const { cart, removeFromCart, updateCartItem, addToCart, checkout, getSuggestedCourses } = useCart();
+  const { cart, removeFromCart, updateCartItem, addToCart, checkout, getSuggestedCourses, setCart } = useCart();
   const navigate = useNavigate();
 
   // Get suggested courses based on cart items
   const allSuggestedCourses = getSuggestedCourses(cart);
+  
+  console.log('Debug - allSuggestedCourses in Mycart:', allSuggestedCourses.length);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showCouponPopup, setShowCouponPopup] = useState(false);
@@ -28,6 +30,8 @@ export default function Mycart() {
     return title.includes(q) || dept.includes(q) || subjectCode.includes(q);
   });
   
+  console.log('Debug - filteredSuggestedCourses in Mycart:', filteredSuggestedCourses.length);
+  
 
   const upgradeToPro = (id) => {
     const item = cart.find(item => item.id === id);
@@ -37,6 +41,30 @@ export default function Mycart() {
   };
 
   const handleAddToCart = (course, plan) => {
+    // Handle upgrade scenario
+    if (course.isUpgrade) {
+      // This is an upgrade from Basic to Pro
+      const upgradeItem = {
+        id: `upgrade-${course.originalOrderId}`,
+        courseId: course.id,
+        name: course.title,
+        courseCodes: course.courseCodes,
+        universityName: course.universityName,
+        year: course.year,
+        branchNames: course.branchNames,
+        plan: 'Pro',
+        price: course.upgradePrice,
+        originalOrderId: course.originalOrderId,
+        isUpgrade: true,
+        addedAt: new Date().toISOString()
+      };
+      
+      setCart(prev => [...prev, upgradeItem]);
+      toast.success(`${course.title} upgrade added to cart!`);
+      return;
+    }
+    
+    // Handle regular course purchase
     const courseData = {
       id: course.id,
       name: course.title??"Untitled",
@@ -120,6 +148,12 @@ export default function Mycart() {
     let hasBasic = false;
 
     cart.forEach((c) => {
+      // Skip upgrade items from discount calculations
+      if (c.isUpgrade) {
+        subtotal += c.price; // Use the upgrade price directly
+        return;
+      }
+      
       if (c.plan === "Basic") {
         subtotal += basicPrice;
         allPro = false;
@@ -133,12 +167,15 @@ export default function Mycart() {
     let discountType = 'none';
 
     // Auto-apply appropriate discount based on cart conditions
+    // Only consider non-upgrade items for discount calculations
+    const nonUpgradeItems = cart.filter(item => !item.isUpgrade);
+    
     if (appliedCoupon) {
       // Apply coupon discount
-      if (appliedCoupon.type === 'bundle' && cart.length >= appliedCoupon.minItems) {
+      if (appliedCoupon.type === 'bundle' && nonUpgradeItems.length >= appliedCoupon.minItems) {
         discount = subtotal * appliedCoupon.discount;
         discountType = 'coupon';
-      } else if (appliedCoupon.type === 'pro' && allPro && cart.length > 0) {
+      } else if (appliedCoupon.type === 'pro' && allPro && nonUpgradeItems.length > 0) {
         discount = subtotal * appliedCoupon.discount;
         discountType = 'coupon';
       } else if (appliedCoupon.type === 'general') {
@@ -147,10 +184,10 @@ export default function Mycart() {
       }
     } else {
       // Auto-apply system discounts
-      if (cart.length >= 5) {
+      if (nonUpgradeItems.length >= 5) {
         discount = subtotal * 0.25;
         discountType = 'bundle';
-      } else if (allPro && cart.length > 0) {
+      } else if (allPro && nonUpgradeItems.length > 0) {
         discount = subtotal * 0.30;
         discountType = 'pro';
       }
@@ -249,10 +286,13 @@ export default function Mycart() {
                 {filteredSuggestedCourses.map((course) => (
                   <Mycart_suggested_courses_card 
                     key={course.id} 
+                    course={course}
                     title={course.title}
                     credits={course.subjectCode}
                     dept={course.dept}
                     hasBasic={course.hasBasic}
+                    isUpgrade={course.isUpgrade}
+                    upgradePrice={course.upgradePrice}
                     onAddToCart={handleAddToCart}
                   />
                 ))}

@@ -8,6 +8,7 @@ import BookDashboardNavbar from "./BookDashboardNavbar";
 import BookDashboardResponsiveUnitDropdown from "./BookDashboardResponsiveUnitDropdown";
 import BookDashboardResponsiveTopicsDropdown from "./BookDashboardResponsiveTopicsDropdown";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 import parse from "html-react-parser";
 import { summarizeAnswer, rephraseAnswer } from "../api/api";
@@ -23,9 +24,91 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     qnaLoading,
     qnaError,
   } = useBookDashboard();
+  
+  const { 
+    getLifetimeUsage, 
+    incrementLifetimeUsage, 
+    checkLifetimeLimit, 
+    getRemainingUsage,
+    getUserPlanForCourse 
+  } = useCart();
 
   const summaryRef = useRef(null);
   const rephraserRef = useRef(null);
+  
+  // Usage counter component
+  const UsageCounter = ({ feature }) => {
+    // Get current course to check plan
+    const getCurrentCourse = () => {
+      const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+      const subCode = sessionStorage.getItem('courseCode');
+      console.log('Debug - allCourses:', allCourses.length, 'subCode:', subCode);
+      return allCourses.find(course => course.courseCodes.includes(subCode));
+    };
+    
+    const currentCourse = getCurrentCourse();
+    const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
+    
+    // Debug logging
+    console.log('UsageCounter Debug:', {
+      feature,
+      currentCourse: currentCourse?.name,
+      courseId: currentCourse?.id,
+      userPlan,
+      shouldShow: userPlan === 'Free'
+    });
+    
+    // Check all orders to see if user has any paid plans
+    const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const hasPaidPlan = allOrders.some(order => 
+      order.status === 'active' && 
+      (order.plan === 'Basic' || order.plan === 'Pro')
+    );
+    
+    console.log('UsageCounter - hasPaidPlan:', hasPaidPlan, 'allOrders:', allOrders.length);
+    
+    // If user has any paid plan, don't show counters
+    if (hasPaidPlan) {
+      console.log('UsageCounter: User has paid plan, hiding counters');
+      return null;
+    }
+    
+    // Only show for Free plan users
+    if (userPlan !== 'Free') {
+      console.log('UsageCounter: Not showing for plan:', userPlan);
+      return null;
+    }
+    
+    // Final safety check - if we can't determine the plan, don't show counters
+    if (!userPlan || userPlan === 'undefined' || userPlan === 'null') {
+      console.log('UsageCounter: Cannot determine plan, hiding counters');
+      return null;
+    }
+    
+    const currentUsage = getLifetimeUsage(feature);
+    const remaining = getRemainingUsage(feature);
+    const isLimitExceeded = !checkLifetimeLimit(feature);
+    
+    console.log('UsageCounter: Showing for Free user:', {
+      currentUsage,
+      remaining,
+      isLimitExceeded
+    });
+    
+    if (isLimitExceeded) {
+      return (
+        <span className="usage-counter-crown">
+          👑
+        </span>
+      );
+    }
+    
+    return (
+      <span className="usage-counter">
+        {currentUsage}/50
+      </span>
+    );
+  };
 
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -37,6 +120,22 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
   const getSummaryKey = (unit, index) => `summaryList_u${unit}_q${index}`;
 
   const handleSummarize = async () => {
+    // Get current course to check plan
+    const getCurrentCourse = () => {
+      const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+      const subCode = sessionStorage.getItem('courseCode');
+      return allCourses.find(course => course.courseCodes.includes(subCode));
+    };
+    
+    const currentCourse = getCurrentCourse();
+    const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
+    
+    // Check lifetime usage limit for free users
+    if (userPlan === 'Free' && !checkLifetimeLimit('Summariser')) {
+      toast.error("You have reached your lifetime limit of 50 summaries. Please upgrade to Basic plan for unlimited usage.");
+      return;
+    }
+
     if (summaryRef.current) {
       const navbarOffset = 140; // Change this to match your navbar's height
       const summaryPosition = summaryRef.current.getBoundingClientRect().top + window.scrollY;
@@ -69,6 +168,11 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       setSummaryList(updatedSummaries);
       setSummaryIndex(updatedSummaries.length - 1);
       localStorage.setItem(currentKey, JSON.stringify(updatedSummaries));
+      
+      // Increment lifetime usage for free users
+      if (userPlan === 'Free') {
+        incrementLifetimeUsage('Summariser');
+      }
     } catch (err) {
       toast.error("Failed to summarize the answer");
       console.error(err);
@@ -100,6 +204,24 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     const style = parseInt(e.target.value);
     setSelectedStyle(style);
     if (style === "0") return;
+    
+    // Get current course to check plan
+    const getCurrentCourse = () => {
+      const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+      const subCode = sessionStorage.getItem('courseCode');
+      return allCourses.find(course => course.courseCodes.includes(subCode));
+    };
+    
+    const currentCourse = getCurrentCourse();
+    const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
+    
+    // Check lifetime usage limit for free users
+    if (userPlan === 'Free' && !checkLifetimeLimit('Rephraser')) {
+      toast.error("You have reached your lifetime limit of 50 rephrases. Please upgrade to Basic plan for unlimited usage.");
+      setSelectedStyle("0");
+      return;
+    }
+    
     // Scroll to rephraser section
     if (rephraserRef.current) {
       const navbarOffset = 140;
@@ -133,6 +255,11 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       setRephraseIndex(updatedList.length - 1);
       localStorage.setItem(getRephrasedKey(selectedUnit, selectedQuestion), JSON.stringify(updatedList));
       toast.success("Rephrased successfully.");
+      
+      // Increment lifetime usage for free users
+      if (userPlan === 'Free') {
+        incrementLifetimeUsage('Rephraser');
+      }
     } catch (err) {
       toast.error(err.message || "Failed to rephrase.");
     } finally {
@@ -350,6 +477,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
               onClick={handleSummarize}
             >
               {summaryLoading ? "Summarizing..." : "Summarizer"}
+              <UsageCounter feature="Summariser" />
             </button>
             <div className="rephraser-container">
               <select
@@ -364,6 +492,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                 <option value="2">Include Analogy</option>
                 <option value="3">Include Examples</option>
               </select>
+              <UsageCounter feature="Rephraser" />
             </div>
           </div>
 

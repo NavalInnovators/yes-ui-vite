@@ -6,13 +6,15 @@ import BookDashboardUnitsResponsiveUnitDropdown from "./BookDashboardUnitsRespon
 import BookDashboardLeftPieChart from "./BookDashboardLeftPieChart";
 import BookDashboardRightPieChart from "./BookDashboardRightPieChart";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { useCart } from "../context/CartContext";
 import "./BookDashboardUnitMidSec.css";
 import BookDashboardBarGraph from "./BookDashboardBarGraph";
 
 
 
 function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChange }) {
-  const { selectedUnit, insightsLoading, insightsError, unitInsights } = useBookDashboard();
+  const { selectedUnit, insightsLoading, insightsError, unitInsights, subCode } = useBookDashboard();
+  const { checkFeatureAccess } = useCart();
 
   const [isPrediction, setIsPrediction] = useState(false);
   const subcode = sessionStorage.getItem('courseCode');
@@ -20,6 +22,18 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
     setIsPrediction(tab === "Prediction");
   };
   const [selectedUnit2, setSelectedUnit] = useState(1);
+  
+  // Get current course for access control
+  const getCurrentCourse = () => {
+    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+    return allCourses.find(course => course.courseCodes.includes(subCode));
+  };
+  
+  // Check access before displaying content
+  const currentCourse = getCurrentCourse();
+  const unitNumber = parseInt(selectedUnit);
+  const hasAccess = currentCourse ? checkFeatureAccess(currentCourse.id, 'Insights', unitNumber) : false;
+  
   const useUnitTitle = unitInsights[selectedUnit]?.unitTitle;
   const useTopicFrequency = unitInsights[selectedUnit]?.topicfrequency;
   const useQuestionTypeData = unitInsights[selectedUnit]?.questiontypedata;
@@ -60,11 +74,27 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
       </ul> */}
 
       {/* MAIN CONTENT */}
-      <div className="book-dashboard-analytics">
-        {/* TOPIC BOX */}
-        <div className="md: w-full flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
-          Unit {selectedUnit} - {insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
+      {hasAccess === false ? (
+        <div className="access-denied-message" style={{ 
+          padding: '2rem', 
+          textAlign: 'center', 
+          backgroundColor: '#f8f9fa', 
+          border: '1px solid #dee2e6', 
+          borderRadius: '8px',
+          margin: '1rem'
+        }}>
+          <h3 style={{ color: '#6c757d', marginBottom: '1rem' }}>🔒 Premium Content</h3>
+          <p style={{ color: '#6c757d' }}>
+            You need a Basic or Pro plan to access Unit {selectedUnit} insights. 
+            Free users can only access Unit 1 insights.
+          </p>
         </div>
+      ) : (
+        <div className="book-dashboard-analytics">
+          {/* TOPIC BOX */}
+          <div className="md: w-full flex justify-center items-center rounded-t-lg h-16  bg-gray-100 ">
+            Unit {selectedUnit} - {insightsLoading ? <div> Loading...</div> : insightsError ? <div> Error Loading !</div> : useUnitTitle ? <div> {useUnitTitle}</div> : <div> Data will be available soon</div>}
+          </div>
 
 
         {/* TWO COLUMN LAYOUT */}
@@ -111,13 +141,14 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
           {/* </div>  */}
         </div>
 
-        {/* Render full-width table if in Prediction mode only */}
-        {/* {isPrediction && (
-          <div className="mt-4">
-            <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit2={selectedUnit2} />
-          </div>
-        )} */}
-      </div>
+          {/* Render full-width table if in Prediction mode only */}
+          {/* {isPrediction && (
+            <div className="mt-4">
+              <BookDashboardInsightPredictionTable subcode="khu702" selectedUnit2={selectedUnit2} />
+            </div>
+          )} */}
+        </div>
+      )}
     </div>
   );
 }

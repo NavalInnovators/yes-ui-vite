@@ -19,6 +19,8 @@ export default function Active_Courses_Card({
   purchaseDate,
   expiryDate,
   onUpgrade,
+  branchName,
+  universityName,
 }) {
   const cardColor = planColors[planType] || "bg-gray-200 text-black";
   const buttonStyle =
@@ -35,7 +37,7 @@ export default function Active_Courses_Card({
       </h2>
 
       {/* Course Info */}
-      <p className="text-sm md:text-base pb-8">{credits} | AKTU | CEE</p>
+      <p className="text-sm md:text-base pb-8">{credits} | {universityName || 'AKTU'} | {branchName || 'CSE'}</p>
 
       {/* Dates + Button */}
       <div className="flex items-center justify-between">
