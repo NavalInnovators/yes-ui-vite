@@ -13,6 +13,8 @@ export default function Mycart() {
 
   // Get suggested courses based on cart items
   const allSuggestedCourses = getSuggestedCourses(cart);
+  
+  console.log('Debug - allSuggestedCourses in Mycart:', allSuggestedCourses.length);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showCouponPopup, setShowCouponPopup] = useState(false);
@@ -27,6 +29,8 @@ export default function Mycart() {
     const q = searchQuery.toLowerCase();
     return title.includes(q) || dept.includes(q) || subjectCode.includes(q);
   });
+  
+  console.log('Debug - filteredSuggestedCourses in Mycart:', filteredSuggestedCourses.length);
   
 
   const upgradeToPro = (id) => {
@@ -120,6 +124,12 @@ export default function Mycart() {
     let hasBasic = false;
 
     cart.forEach((c) => {
+      // Skip upgrade items from discount calculations
+      if (c.isUpgrade) {
+        subtotal += c.price; // Use the upgrade price directly
+        return;
+      }
+      
       if (c.plan === "Basic") {
         subtotal += basicPrice;
         allPro = false;
@@ -133,12 +143,15 @@ export default function Mycart() {
     let discountType = 'none';
 
     // Auto-apply appropriate discount based on cart conditions
+    // Only consider non-upgrade items for discount calculations
+    const nonUpgradeItems = cart.filter(item => !item.isUpgrade);
+    
     if (appliedCoupon) {
       // Apply coupon discount
-      if (appliedCoupon.type === 'bundle' && cart.length >= appliedCoupon.minItems) {
+      if (appliedCoupon.type === 'bundle' && nonUpgradeItems.length >= appliedCoupon.minItems) {
         discount = subtotal * appliedCoupon.discount;
         discountType = 'coupon';
-      } else if (appliedCoupon.type === 'pro' && allPro && cart.length > 0) {
+      } else if (appliedCoupon.type === 'pro' && allPro && nonUpgradeItems.length > 0) {
         discount = subtotal * appliedCoupon.discount;
         discountType = 'coupon';
       } else if (appliedCoupon.type === 'general') {
@@ -147,10 +160,10 @@ export default function Mycart() {
       }
     } else {
       // Auto-apply system discounts
-      if (cart.length >= 5) {
+      if (nonUpgradeItems.length >= 5) {
         discount = subtotal * 0.25;
         discountType = 'bundle';
-      } else if (allPro && cart.length > 0) {
+      } else if (allPro && nonUpgradeItems.length > 0) {
         discount = subtotal * 0.30;
         discountType = 'pro';
       }

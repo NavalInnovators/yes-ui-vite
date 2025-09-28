@@ -121,6 +121,7 @@ export const CartProvider = ({ children }) => {
       plan: 'Pro', // This should be Pro plan, not "Upgrade to Pro"
       price: upgradePrice,
       originalOrderId: order.id,
+      isUpgrade: true, // Mark this as an upgrade item
       addedAt: new Date().toISOString()
     };
 
@@ -128,17 +129,41 @@ export const CartProvider = ({ children }) => {
   };
 
   const getSuggestedCourses = (cartItems) => {
-    // Get all courses from sessionStorage
-    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+    // Get all courses from sessionStorage first, then try localStorage as fallback
+    let allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
+    
+    // If no courses in sessionStorage, try localStorage
+    if (!allCourses || allCourses.length === 0) {
+      console.log('Debug - No courses in sessionStorage, trying localStorage');
+      allCourses = JSON.parse(localStorage.getItem('allCourses') || '[]');
+    }
+    
+    console.log('Debug - allCourses from storage:', allCourses.length);
+    console.log('Debug - cartItems:', cartItems);
+    
+    // If still no courses, return empty array
+    if (!allCourses || allCourses.length === 0) {
+      console.log('Debug - No courses found in any storage');
+      return [];
+    }
     
     // Get years from cart items
     const cartYears = [...new Set(cartItems.map(item => item.year))];
+    console.log('Debug - cartYears:', cartYears);
+    
+    // If no cart items, return empty array
+    if (cartYears.length === 0) {
+      console.log('Debug - No cart years found');
+      return [];
+    }
     
     // Filter courses by year and exclude already in cart
     const suggested = allCourses.filter(course => 
       cartYears.includes(course.year) && 
       !cartItems.some(cartItem => cartItem.courseId === course.id)
     );
+    
+    console.log('Debug - suggested courses before mapping:', suggested.length);
 
     return suggested.map(course => ({
       id: course.id,
