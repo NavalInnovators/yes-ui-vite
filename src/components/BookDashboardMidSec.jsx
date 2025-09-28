@@ -42,18 +42,58 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     const getCurrentCourse = () => {
       const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
       const subCode = sessionStorage.getItem('courseCode');
+      console.log('Debug - allCourses:', allCourses.length, 'subCode:', subCode);
       return allCourses.find(course => course.courseCodes.includes(subCode));
     };
     
     const currentCourse = getCurrentCourse();
     const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
     
+    // Debug logging
+    console.log('UsageCounter Debug:', {
+      feature,
+      currentCourse: currentCourse?.name,
+      courseId: currentCourse?.id,
+      userPlan,
+      shouldShow: userPlan === 'Free'
+    });
+    
+    // Check all orders to see if user has any paid plans
+    const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const hasPaidPlan = allOrders.some(order => 
+      order.status === 'active' && 
+      (order.plan === 'Basic' || order.plan === 'Pro')
+    );
+    
+    console.log('UsageCounter - hasPaidPlan:', hasPaidPlan, 'allOrders:', allOrders.length);
+    
+    // If user has any paid plan, don't show counters
+    if (hasPaidPlan) {
+      console.log('UsageCounter: User has paid plan, hiding counters');
+      return null;
+    }
+    
     // Only show for Free plan users
-    if (userPlan !== 'Free') return null;
+    if (userPlan !== 'Free') {
+      console.log('UsageCounter: Not showing for plan:', userPlan);
+      return null;
+    }
+    
+    // Final safety check - if we can't determine the plan, don't show counters
+    if (!userPlan || userPlan === 'undefined' || userPlan === 'null') {
+      console.log('UsageCounter: Cannot determine plan, hiding counters');
+      return null;
+    }
     
     const currentUsage = getLifetimeUsage(feature);
     const remaining = getRemainingUsage(feature);
     const isLimitExceeded = !checkLifetimeLimit(feature);
+    
+    console.log('UsageCounter: Showing for Free user:', {
+      currentUsage,
+      remaining,
+      isLimitExceeded
+    });
     
     if (isLimitExceeded) {
       return (
