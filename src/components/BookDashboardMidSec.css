@@ -427,3 +427,38 @@
   }
 
 }
+
+/* Usage Counter Styles */
+.usage-counter {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.usage-counter-crown {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 16px;
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Make buttons relative for positioning */
+.ai-btn {
+  position: relative;
+}
+
+.rephraser-container {
+  position: relative;
+}

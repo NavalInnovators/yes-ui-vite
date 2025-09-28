@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 
 export default function Mycart_suggested_courses_card({
+  course,
   title,
   credits,
   dept,
   hasBasic,
+  isUpgrade,
+  upgradePrice,
   onAddToCart,
 }) {
   const [showSparkle, setShowSparkle] = useState(false);
@@ -12,7 +15,7 @@ export default function Mycart_suggested_courses_card({
   const handleAddToCart = (plan) => {
     setShowSparkle(true);
     setTimeout(() => setShowSparkle(false), 1000);
-    onAddToCart({ title, credits, dept }, plan);
+    onAddToCart(course, plan);
   };
 
   const bgClass = hasBasic 

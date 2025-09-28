@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Mycart() {
-  const { cart, removeFromCart, updateCartItem, addToCart, checkout, getSuggestedCourses } = useCart();
+  const { cart, removeFromCart, updateCartItem, addToCart, checkout, getSuggestedCourses, setCart } = useCart();
   const navigate = useNavigate();
 
   // Get suggested courses based on cart items
@@ -41,6 +41,30 @@ export default function Mycart() {
   };
 
   const handleAddToCart = (course, plan) => {
+    // Handle upgrade scenario
+    if (course.isUpgrade) {
+      // This is an upgrade from Basic to Pro
+      const upgradeItem = {
+        id: `upgrade-${course.originalOrderId}`,
+        courseId: course.id,
+        name: course.title,
+        courseCodes: course.courseCodes,
+        universityName: course.universityName,
+        year: course.year,
+        branchNames: course.branchNames,
+        plan: 'Pro',
+        price: course.upgradePrice,
+        originalOrderId: course.originalOrderId,
+        isUpgrade: true,
+        addedAt: new Date().toISOString()
+      };
+      
+      setCart(prev => [...prev, upgradeItem]);
+      toast.success(`${course.title} upgrade added to cart!`);
+      return;
+    }
+    
+    // Handle regular course purchase
     const courseData = {
       id: course.id,
       name: course.title??"Untitled",
@@ -262,10 +286,13 @@ export default function Mycart() {
                 {filteredSuggestedCourses.map((course) => (
                   <Mycart_suggested_courses_card 
                     key={course.id} 
+                    course={course}
                     title={course.title}
                     credits={course.subjectCode}
                     dept={course.dept}
                     hasBasic={course.hasBasic}
+                    isUpgrade={course.isUpgrade}
+                    upgradePrice={course.upgradePrice}
                     onAddToCart={handleAddToCart}
                   />
                 ))}
