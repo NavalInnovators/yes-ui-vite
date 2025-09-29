@@ -63,22 +63,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       shouldShow: userPlan === 'Free'
     });
     
-    // Check all orders to see if user has any paid plans
-    const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    const hasPaidPlan = allOrders.some(order => 
-      order.status === 'active' && 
-      (order.plan === 'Basic' || order.plan === 'Pro')
-    );
-    
-    console.log('UsageCounter - hasPaidPlan:', hasPaidPlan, 'allOrders:', allOrders.length);
-    
-    // If user has any paid plan, don't show counters
-    if (hasPaidPlan) {
-      console.log('UsageCounter: User has paid plan, hiding counters');
-      return null;
-    }
-    
-    // Only show for Free plan users
+    // Only show counter for Free plan users for this specific subject
     if (userPlan !== 'Free') {
       console.log('UsageCounter: Not showing for plan:', userPlan);
       return null;
@@ -91,8 +76,8 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     }
     
     const currentUsage = getLifetimeUsage(feature);
-    const remaining = getRemainingUsage(feature);
-    const isLimitExceeded = !checkLifetimeLimit(feature);
+    const remaining = getRemainingUsage(feature, currentCourse?.id);
+    const isLimitExceeded = !checkLifetimeLimit(feature, currentCourse?.id);
     
     console.log('UsageCounter: Showing for Free user:', {
       currentUsage,
@@ -169,7 +154,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
     
     // Check lifetime usage limit for free users
-    if (userPlan === 'Free' && !checkLifetimeLimit('Summariser')) {
+    if (userPlan === 'Free' && !checkLifetimeLimit('Summariser', currentCourse?.id)) {
       toast.error("You have reached your lifetime limit of 50 summaries. Please upgrade to Basic plan for unlimited usage.");
       return;
     }
@@ -254,7 +239,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
     
     // Check lifetime usage limit for free users
-    if (userPlan === 'Free' && !checkLifetimeLimit('Rephraser')) {
+    if (userPlan === 'Free' && !checkLifetimeLimit('Rephraser', currentCourse?.id)) {
       toast.error("You have reached your lifetime limit of 50 rephrases. Please upgrade to Basic plan for unlimited usage.");
       setSelectedStyle("0");
       return;

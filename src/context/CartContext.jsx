@@ -220,8 +220,10 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem(usageKey, (currentUsage + 1).toString());
   };
 
-  const checkLifetimeLimit = (feature) => {
-    const userPlan = getUserPlanForCourse('global'); // Check global plan
+  const checkLifetimeLimit = (feature, courseId = null) => {
+    // If courseId is provided, check plan for that specific course
+    // Otherwise, check global plan (for backward compatibility)
+    const userPlan = courseId ? getUserPlanForCourse(courseId) : getUserPlanForCourse('global');
     const currentUsage = getLifetimeUsage(feature);
     const limit = 50; // Free plan limit
     
@@ -231,8 +233,10 @@ export const CartProvider = ({ children }) => {
     return true; // Within limit or has paid plan
   };
 
-  const getRemainingUsage = (feature) => {
-    const userPlan = getUserPlanForCourse('global');
+  const getRemainingUsage = (feature, courseId = null) => {
+    // If courseId is provided, check plan for that specific course
+    // Otherwise, check global plan (for backward compatibility)
+    const userPlan = courseId ? getUserPlanForCourse(courseId) : getUserPlanForCourse('global');
     const currentUsage = getLifetimeUsage(feature);
     const limit = 50;
     
