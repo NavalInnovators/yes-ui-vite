@@ -6,6 +6,7 @@ import BookDashboardInsightAnalyticsMidSec from "./BookDashboardInsightAnalytics
 import BookDashboardUnitMidSec from "./BookDashboardUnitMidSec";
 import BookDashboardLeftSec from "./BookDashboardLeftSec";
 import BookDashboardRightSec from "./BookDashboardRightSec";
+import BookDashboardNotesRightSec from "./BookDashboardNotesRightSec";
 import BookDashboardSyllabus from "./BookDashboardSyllabus";
 import BookDashboardMap from "./BookDashboardMap";
 import BookDashboardMidSec from "./BookDashboardMidSec";
@@ -28,7 +29,7 @@ const BookDashboardSections = [
   {
     title: "Notes",
     component: BookDashboardUnitMidSec,
-    rightComponent: false,
+    rightComponent: BookDashboardNotesRightSec,
   },
   {
     title: "Insights",

@@ -21,6 +21,8 @@ export const BookDashboardProvider = ({ children }) => {
   const [notesList, setNotesList] = useState({});
   const [unitInsights, setUnitInsights] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState("0");
+  const [selectedTopic, setSelectedTopic] = useState(0);
+  const [notesTopics, setNotesTopics] = useState([]);
   // const [subSyllabus, setSubSyllabus] = useState([]);
 
   // Fetch subcode from URL
@@ -93,10 +95,19 @@ export const BookDashboardProvider = ({ children }) => {
     // }
     if (unitNotes) {
       const tempNotesObj = {};
-      unitNotes.forEach((note) => {
-        tempNotesObj[note.unitnumber] = note.notes;
+      const tempTopicsObj = {};
+      
+      unitNotes.forEach((unit) => {
+        tempNotesObj[unit.unit] = unit.notes;
+        tempTopicsObj[unit.unit] = unit.notes.map((note, index) => ({
+          id: index,
+          name: note.topic_name,
+          content: note.notes
+        }));
       });
+      
       setNotesList(tempNotesObj);
+      setNotesTopics(tempTopicsObj);
     }
 
     if(insights)
@@ -139,6 +150,9 @@ export const BookDashboardProvider = ({ children }) => {
         unitInsights,
         insightsLoading,
         insightsError,
+        selectedTopic,
+        setSelectedTopic,
+        notesTopics,
       }}
     >
       {children}
