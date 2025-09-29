@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import parse from "html-react-parser";
 
 function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
-  const { selectedUnit, notesList, unitNotesLoading, unitNotesError, subCode } = useBookDashboard();
+  const { selectedUnit, notesList, unitNotesLoading, unitNotesError, subCode, selectedTopic, notesTopics } = useBookDashboard();
   const { checkFeatureAccess } = useCart();
   // if (unitNotesLoading) {
   //   return <div>Loading unit notes...</div>;
@@ -30,7 +30,10 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
   const unitNumber = parseInt(selectedUnit);
   const hasAccess = currentCourse ? checkFeatureAccess(currentCourse.id, 'Notes', unitNumber) : false;
   
-  const unitNotesContent = notesList?.[selectedUnit];
+  // Get current unit topics and selected topic content
+  const currentUnitTopics = notesTopics[selectedUnit] || [];
+  const selectedTopicContent = currentUnitTopics[selectedTopic];
+  const unitNotesContent = selectedTopicContent?.content;
   return (
     <div className="parent-book-dashboard-unit">
       <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
@@ -71,7 +74,7 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
           : unitNotesContent
             ? (<div className="book-dashboard-question-summary-container">
               <div className="book-dashboard-question">
-                Chapter Topic: Summary
+                {selectedTopicContent?.name || "Chapter Topic: Summary"}
               </div>
               {/* </div> */}
               <div className="book-dashboard-answer">
