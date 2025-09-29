@@ -1,6 +1,6 @@
 import React from "react";
 import "./BookDashboard.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookDashboardProgressBar from "./BookDashboardProgressBar";
 import BookDashboardInsightAnalyticsMidSec from "./BookDashboardInsightAnalyticsMidSec";
 import BookDashboardUnitMidSec from "./BookDashboardUnitMidSec";
@@ -15,6 +15,7 @@ import PlanPopUp from "./PlanPopUp";
 import BookDashboardRoadmapRight from "./BookDashboardRoadmapRight";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
+import { useSearchParams, useLocation } from "react-router-dom";
 const BookDashboardSections = [
   {
     title: "Syllabus",
@@ -48,14 +49,41 @@ function BookDashboard() {
   const [showPlanPopUp, setShowPlanPopUp] = useState(false);
   const [requiredPlan, setRequiredPlan] = useState(null);
   const [targetUnit, setTargetUnit] = useState(null);
-  const { subCode, selectedUnit } = useBookDashboard();
+  const { subCode, selectedUnit, setSelectedQnATopic, setSelectedTopic } = useBookDashboard();
   const { checkFeatureAccess, getRequiredPlanForFeature, getUserPlanForCourse, checkLifetimeLimit } = useCart();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
 
   // Get course data from sessionStorage
   const getCurrentCourse = () => {
     const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
     return allCourses.find(course => course.courseCodes.includes(subCode));
   };
+
+  // Handle URL parameters for section and topic filtering
+  useEffect(() => {
+    const qna = searchParams.get('qna');
+    const notes = searchParams.get('notes');
+    
+    if (qna === '1') {
+      setCurrentSection('Q&A');
+    } else if (notes === '1') {
+      setCurrentSection('Notes');
+    }
+    
+    // Handle topic filtering from roadmap navigation
+    if (location.state?.filterByTopic && location.state?.topicName) {
+      if (qna === '1') {
+        setSelectedQnATopic(location.state.topicName);
+      } else if (notes === '1') {
+        // For Notes, we need to find the topic index in the current unit
+        // This will be handled in the Notes component
+        const topicName = location.state.topicName;
+        // We'll set this in the context for the Notes component to use
+        sessionStorage.setItem('filterByTopic', topicName);
+      }
+    }
+  }, [searchParams, location.state, setSelectedQnATopic]);
 
   const handleSectionChange = (section) => {
     const currentCourse = getCurrentCourse();
@@ -131,6 +159,7 @@ function BookDashboard() {
                 <Component
                   currentSection={currentSection}
                   handleSectionChange={handleSectionChange}
+                  selectedUnitId={parseInt(selectedUnit)}
                 />
                 <RightComponent />
               </React.Fragment>
@@ -166,6 +195,7 @@ function BookDashboard() {
                   key={"mid-" + index}
                   currentSection={currentSection}
                   handleSectionChange={handleSectionChange}
+                  selectedUnitId={parseInt(selectedUnit)}
                 />
               );
             })}

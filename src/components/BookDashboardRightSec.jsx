@@ -7,12 +7,16 @@ function removeHtmlTags(text) {
   return text.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-function BookDashboardRightSec() {
-  const { qnaLoading, qList, selectedUnit, selectedQuestion, setSelectedQuestion } = useBookDashboard(); // Adjust to match your context keys.
+function truncateText(text, maxLength = 20) {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + "...";
+}
 
-  // Safely parse selectedUnit to ensure valid indexing.
-  const unitIndex = parseInt(selectedUnit, 10) - 1;
-  const questions = qList[unitIndex] || [];
+function BookDashboardRightSec() {
+  const { qnaLoading, selectedQuestion, setSelectedQuestion, filteredQnAQuestions, selectedQnATopic } = useBookDashboard();
+
+  // Use filtered questions from context
+  const questions = filteredQnAQuestions || [];
 
   useEffect(() => {
     if (!qnaLoading && questions.length > 0 && selectedQuestion == null) {

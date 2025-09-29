@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import parse from "html-react-parser";
 import { summarizeAnswer, rephraseAnswer } from "../api/api";
 import { type } from "@testing-library/user-event/dist/type";
+import FilterIcon from "../roles/components/icons/FilterIcon";
 
 
 function BookDashboardMidSec({ currentSection, handleSectionChange }) {
@@ -23,6 +24,10 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     setSelectedQuestion,
     qnaLoading,
     qnaError,
+    selectedQnATopic,
+    setSelectedQnATopic,
+    qnaTopics,
+    setFilteredQnAQuestions,
   } = useBookDashboard();
   
   const { 
@@ -112,7 +117,40 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
 
 
   const [pageNumber, setPageNumber] = useState(1);
-  const totalPages = qList[selectedUnit - 1]?.length;
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+  
+  // Get topics for current unit only
+  const getCurrentUnitTopics = () => {
+    const unitQuestions = qList[selectedUnit - 1] || [];
+    const uniqueTopics = new Set();
+    unitQuestions.forEach(q => {
+      // Try multiple possible topic field names
+      const topic = q.topic || q.topic_name || q.topicName;
+      if (topic) {
+        uniqueTopics.add(topic);
+      }
+    });
+    return Array.from(uniqueTopics).sort();
+  };
+  
+  const currentUnitTopics = getCurrentUnitTopics();
+  
+  // Get filtered questions based on selected topic
+  const getFilteredQuestions = () => {
+    const unitQuestions = qList[selectedUnit - 1] || [];
+    if (selectedQnATopic === "All Topics") {
+      return unitQuestions;
+    }
+    // Try multiple possible topic field names
+    return unitQuestions.filter(q => 
+      q.topic === selectedQnATopic || 
+      q.topic_name === selectedQnATopic ||
+      q.topicName === selectedQnATopic
+    );
+  };
+  
+  const filteredQuestions = getFilteredQuestions();
+  const totalPages = filteredQuestions.length;
 
   const [summaryList, setSummaryList] = useState([]);
   const [summaryIndex, setSummaryIndex] = useState(0);
@@ -291,8 +329,8 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     if (rephraseIndex < rephrasedList.length - 1) setRephraseIndex(rephraseIndex + 1);
   };
 
-  const question = qList[selectedUnit - 1]?.[selectedQuestion]?.question;
-  const answer = qList[selectedUnit - 1]?.[selectedQuestion]?.solution;
+  const question = filteredQuestions[selectedQuestion]?.question;
+  const answer = filteredQuestions[selectedQuestion]?.solution;
 
   useEffect(() => {
     const saved = localStorage.getItem(getSummaryKey(selectedUnit, selectedQuestion));
@@ -370,7 +408,19 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
   useEffect(()=>{
     setPageNumber(1);
     setSelectedQuestion(0);
+    setSelectedQnATopic("All Topics"); // Reset topic filter when unit changes
   },[selectedUnit]);
+
+  // Reset selected question when topic filter changes
+  useEffect(() => {
+    setPageNumber(1);
+    setSelectedQuestion(0);
+  }, [selectedQnATopic]);
+
+  // Update filtered questions in context for right sidebar
+  useEffect(() => {
+    setFilteredQnAQuestions(filteredQuestions);
+  }, [filteredQuestions, setFilteredQnAQuestions]);
 
   // Function to process content dynamically
   const renderContent = (rawContent) => {
@@ -470,7 +520,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           </div>
 
 
-          {/* AI Utility Buttons */}
+          {/* AI Utility Buttons and Topic Filter */}
           <div className="ai-buttons">
             <button
               className="ai-btn summarizer-btn"
@@ -494,16 +544,32 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
               </select>
               <UsageCounter feature="Rephraser" />
             </div>
+            <div className="topic-filter-container">
+              <select 
+                className="book-dashboard-dropdown common-css-dropdown"
+                value={selectedQnATopic}
+                onChange={(e) => setSelectedQnATopic(e.target.value)}
+              >
+                <option value="All Topics">All Topics</option>
+                {currentUnitTopics.map((topic, index) => (
+                  <option key={index} value={topic}>
+                    {topic}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-
-
-          {/* to be applied when filtering logic ready */}
-          {/* <select name="" class="book-dashboard-dropdown common-css-dropdown">
-            <option value="none">None</option>
-            <option value="option1">Most Repeated</option>
-            <option value="option2">Least Repeated</option>
-          </select> */}
+          {/* Mobile Filter Button */}
+          <div className="mobile-filter-button-container">
+            <button 
+              className="mobile-filter-button"
+              onClick={() => setShowMobileFilter(true)}
+            >
+              <FilterIcon size={20} />
+              <span>Filter</span>
+            </button>
+          </div>
         </div>
         <div className="book-dashboard-question-summary-container">
           {qnaLoading
@@ -631,6 +697,46 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           </button>
         </div>
       </div>
+
+      {/* Mobile Filter Modal */}
+      {showMobileFilter && (
+        <div className="mobile-filter-modal">
+          <div className="mobile-filter-content">
+            <div className="mobile-filter-header">
+              <h3>Filter by Topic</h3>
+              <button 
+                className="close-filter-btn"
+                onClick={() => setShowMobileFilter(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="mobile-filter-options">
+              <button
+                className={`mobile-filter-option ${selectedQnATopic === "All Topics" ? "active" : ""}`}
+                onClick={() => {
+                  setSelectedQnATopic("All Topics");
+                  setShowMobileFilter(false);
+                }}
+              >
+                All Topics
+              </button>
+              {currentUnitTopics.map((topic, index) => (
+                <button
+                  key={index}
+                  className={`mobile-filter-option ${selectedQnATopic === topic ? "active" : ""}`}
+                  onClick={() => {
+                    setSelectedQnATopic(topic);
+                    setShowMobileFilter(false);
+                  }}
+                >
+                  {topic}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

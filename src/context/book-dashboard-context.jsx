@@ -23,6 +23,9 @@ export const BookDashboardProvider = ({ children }) => {
   const [selectedQuestion, setSelectedQuestion] = useState("0");
   const [selectedTopic, setSelectedTopic] = useState(0);
   const [notesTopics, setNotesTopics] = useState([]);
+  const [selectedQnATopic, setSelectedQnATopic] = useState("All Topics");
+  const [qnaTopics, setQnaTopics] = useState([]);
+  const [filteredQnAQuestions, setFilteredQnAQuestions] = useState([]);
   // const [subSyllabus, setSubSyllabus] = useState([]);
 
   // Fetch subcode from URL
@@ -82,12 +85,14 @@ export const BookDashboardProvider = ({ children }) => {
   useEffect(() => {
     if (qna) {
       const newQList = [[], [], [], [], []];
+      
       qna.forEach((qItem) => {
         const unitIndex = parseInt(qItem.unit[0], 10) - 1;
         if (unitIndex >= 0 && unitIndex < 5) {
           newQList[unitIndex].push(qItem);
         }
       });
+      
       setQList(newQList);
     }
     // if (syllabus) {
@@ -153,6 +158,11 @@ export const BookDashboardProvider = ({ children }) => {
         selectedTopic,
         setSelectedTopic,
         notesTopics,
+        selectedQnATopic,
+        setSelectedQnATopic,
+        qnaTopics,
+        filteredQnAQuestions,
+        setFilteredQnAQuestions,
       }}
     >
       {children}

@@ -1,7 +1,22 @@
 .book-dashboard-roadmap-mid-sec {
   width: 67%;
-    padding-left: 3rem;
-    padding-right: 3rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+/* Mobile responsive adjustments for Roadmap */
+@media (max-width: 1023px) {
+  .book-dashboard-roadmap-mid-sec {
+    width: 100%;
+  }
+  
+  .book-dashboard-roadmap-container {
+    width: 100%;
+  }
+  
+  .book-dashboard-roadmap-sec {
+    width: 100%;
+  }
 }
 
 .book-dashboard-roadmap-container {
@@ -9,6 +24,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
 }
 
 .book-dashboard-roadmap-sec {
@@ -52,20 +68,34 @@
   width: 18%;
   min-width: 180px;      /* floor width so items don't collapse */
   max-width: 340px;
+  height: calc(100vh - 8rem); /* Account for sticky navbar */
+  position: sticky;
+  top: 8rem; /* Distance from top to account for sticky navbar */
+  overflow-y: auto;
+}
+
+/* Scrollbar styles for Roadmap right section */
+.book-dashboard-roadmap-right-sec::-webkit-scrollbar {
+  width: 0.55vw;
+}
+
+.book-dashboard-roadmap-right-sec::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 4px;
+}
+
+.book-dashboard-roadmap-right-sec::-webkit-scrollbar-track {
+  background: #e6e6e6;
 }
 
 .roadmap-summary {
-          
-        
   border: 1px solid var(--light-border, #e5e7eb);
-  background: #8f2525; 
+  background: #f5f5f5; 
   display: flex;
   flex-direction: column;
   border-radius: 10px;
   padding: 12px;
-  position: sticky;        /* behaves like your right panel */
-  top: 110px;    
-  background-color: #f5f5f5;          /* adjust if your header height differs */
+  height: 100%;
 }
 
 @media (max-width: 1023px) {
@@ -73,12 +103,14 @@
     width: auto;
     min-width: 0;
     max-width: 420px;
-    position: sticky;   /* keep sticky if you want */
-    top: 110px;
+    height: auto;
+    position: static;
+    top: auto;
+    overflow-y: visible;
   }
 }
 
- @media (max-width: 900px) {
+@media (max-width: 900px) {
   .roadmap-wrap {
     flex-direction: column;
   }
@@ -135,17 +167,20 @@
 .topic-bar-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex: 1;
 }
 .topic-name { font-weight: 600; }
 
 .topic-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 999px;
   display: inline-block;
   border: 2px solid #fff;
   box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 /* Priority indicators */
@@ -212,7 +247,13 @@
   font-size: 14px;
   margin-bottom: 8px;
 }
-.rs-groups { display: flex; flex-direction: column; gap: 10px; }
+.rs-groups { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  max-height: 70vh;
+  overflow-y: auto;
+}
 .rs-group { display: grid; gap: 8px; }
 
 .rs-group-title {
@@ -240,7 +281,68 @@
   cursor: pointer;
 }
 .rs-item:hover { background: #f9fafb; }
-.rs-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+.rs-dot { 
+  width: 12px; 
+  height: 12px; 
+  border-radius: 999px; 
+  display: inline-block; 
+  margin-right: 8px;
+  flex-shrink: 0;
+}
 .rs-text { font-size: 13px; }
 .rs-unit { color: #6b7280; margin-right: 4px; }
 .rs-empty { font-size: 12px; color: #6b7280; padding: 6px 2px; text-align: center; }
+
+/* Mobile dropdown specific styles for Roadmap */
+.mobile-question-dropdown select {
+  padding-left: 1rem;
+  width: 100%;
+  max-width: 100vw;
+  height: 2rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  appearance: none;
+  background-color: #e4e4e4;
+  border: none;
+  border-radius: 0.3rem 0rem 0rem 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  outline: none;
+}
+
+/* Ensure proper spacing for mobile dropdown */
+@media (max-width: 1023px) {
+  .book-dashboard-right-sec {
+    margin-top: 0rem;
+    width: 60%;
+  }
+  
+  /* Hide desktop view on mobile */
+  .topics-not-dropdown {
+    display: none;
+  }
+  
+  /* Show mobile dropdown on mobile */
+  .mobile-question-dropdown {
+    display: flex;
+  }
+}
+
+/* Show desktop view on larger screens */
+@media (min-width: 1024px) {
+  .topics-not-dropdown {
+    display: block;
+  }
+  
+  .mobile-question-dropdown {
+    display: none;
+  }
+}
+
+@media (max-width: 425px) {
+  .book-dashboard-roadmap-mid-sec {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

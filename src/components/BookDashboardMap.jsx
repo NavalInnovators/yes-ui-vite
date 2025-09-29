@@ -3,6 +3,8 @@ import "./BookDashboardMap.css";
 import { useNavigate } from "react-router-dom";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import { Book } from "lucide-react";
+import { useBookDashboard } from "../context/book-dashboard-context";
+import { generateRoadmapFromSyllabus } from "../utils/roadmapUtils";
 
 const DEMO = {
   units: [
@@ -102,7 +104,7 @@ function TopicBar({ topic, expanded, onToggle, onOpenQnA, onOpenNotes }) {
 }
 
 export default function BookDashboardMap({
-  data = DEMO,
+  data,
   selectedUnitId,
   onSelectUnit,
   onOpenQnA,
@@ -111,31 +113,63 @@ export default function BookDashboardMap({
   handleSectionChange,
 }) {
   const navigate = useNavigate();
+  const { syllabus, syllabusLoading, syllabusError, selectedUnit, setSelectedUnit } = useBookDashboard();
+
+  // Generate roadmap data from syllabus
+  const roadmapData = useMemo(() => {
+    if (syllabus && !syllabusLoading && !syllabusError) {
+      return generateRoadmapFromSyllabus(syllabus);
+    }
+    return data || DEMO; // fallback to provided data or demo
+  }, [syllabus, syllabusLoading, syllabusError, data]);
 
   // default nav handlers if not provided
   const handleOpenQnA = (topic) => {
     if (onOpenQnA) return onOpenQnA(topic);
-    navigate("/book-dashboard?qna=1", { state: { topicId: topic.id, topicName: topic.name } });
+    // Navigate to Q&A section with topic filter applied
+    navigate("/book-dashboard?qna=1", { 
+      state: { 
+        topicId: topic.id, 
+        topicName: topic.name,
+        unitId: topic.unitId,
+        filterByTopic: true
+      } 
+    });
   };
   const handleOpenNotes = (topic) => {
     if (onOpenNotes) return onOpenNotes(topic);
-    navigate("/book-dashboard?notes=1", { state: { topicId: topic.id, topicName: topic.name } });
+    // Navigate to Notes section with topic filter applied
+    navigate("/book-dashboard?notes=1", { 
+      state: { 
+        topicId: topic.id, 
+        topicName: topic.name,
+        unitId: topic.unitId,
+        filterByTopic: true
+      } 
+    });
   };
 
   // selected unit (kept in sync with parent if provided)
-  const unitIds = data.units.map((u) => u.id);
+  const unitIds = roadmapData.units.map((u) => u.id);
   const defaultUnitId = unitIds[0];
-  const [internalUnitId, setInternalUnitId] = useState(selectedUnitId || defaultUnitId);
+  const [internalUnitId, setInternalUnitId] = useState(parseInt(selectedUnit) || selectedUnitId || defaultUnitId);
   const [expandedTopicId, setExpandedTopicId] = useState(null);
 
   useEffect(() => {
     // expose the same roadmap data for the right panel
-    window.__YES_ROADMAP__ = data;
-  }, [data]);
+    window.__YES_ROADMAP__ = roadmapData;
+  }, [roadmapData]);
 
   useEffect(() => {
     if (selectedUnitId != null) setInternalUnitId(selectedUnitId);
   }, [selectedUnitId]);
+
+  // Sync with selectedUnit from context
+  useEffect(() => {
+    if (selectedUnit) {
+      setInternalUnitId(parseInt(selectedUnit));
+    }
+  }, [selectedUnit]);
 
 
   useEffect(() => {
@@ -145,21 +179,32 @@ export default function BookDashboardMap({
       if (onSelectUnit) onSelectUnit(t.unitId);
       setInternalUnitId(t.unitId);
       setExpandedTopicId(t.id);
+      
+      // Sync with left sidebar unit selection
+      if (setSelectedUnit) {
+        setSelectedUnit(t.unitId.toString());
+      }
+      
       const el = document.querySelector(".book-dashboard-map");
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     };
     window.addEventListener("roadmap:jump", handler);
     return () => window.removeEventListener("roadmap:jump", handler);
-  }, [onSelectUnit]);
+  }, [onSelectUnit, setSelectedUnit]);
 
   const currentUnit = useMemo(
-    () => data.units.find((u) => u.id === internalUnitId) || data.units[0],
-    [data.units, internalUnitId]
+    () => roadmapData.units.find((u) => u.id === internalUnitId) || roadmapData.units[0],
+    [roadmapData.units, internalUnitId]
   );
 
   const sortedTopics = useMemo(() => {
     const topics = currentUnit?.topics || [];
-    return [...topics].sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
+    return [...topics].sort((a, b) => {
+      const byPr = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+      if (byPr !== 0) return byPr;
+      if (a.unitId !== b.unitId) return (a.unitId || 0) - (b.unitId || 0);
+      return (a.name || "").localeCompare(b.name || "");
+    });
   }, [currentUnit]);
 
 
@@ -177,17 +222,25 @@ export default function BookDashboardMap({
               <p className="rc-sub">Study roadmap by priority</p>
             </div>
             <div className="topics-stack">
-              {sortedTopics.map((topic) => (
-                <TopicBar
-                  key={topic.id}
-                  topic={topic}
-                  expanded={expandedTopicId === topic.id}
-                  onToggle={() => setExpandedTopicId((prev) => (prev === topic.id ? null : topic.id))}
-                  onOpenQnA={() => handleOpenQnA(topic)}
-                  onOpenNotes={() => handleOpenNotes(topic)}
-                />
-              ))}
-              {!sortedTopics.length && <div className="empty-state"> No topics in this unit. </div>}
+              {syllabusLoading ? (
+                <div className="loading-state">Loading roadmap data...</div>
+              ) : syllabusError ? (
+                <div className="error-state">Error loading roadmap data. Please contact support team or raise a query!</div>
+              ) : (
+                <>
+                  {sortedTopics.map((topic) => (
+                    <TopicBar
+                      key={topic.id}
+                      topic={topic}
+                      expanded={expandedTopicId === topic.id}
+                      onToggle={() => setExpandedTopicId((prev) => (prev === topic.id ? null : topic.id))}
+                      onOpenQnA={() => handleOpenQnA(topic)}
+                      onOpenNotes={() => handleOpenNotes(topic)}
+                    />
+                  ))}
+                  {!sortedTopics.length && <div className="empty-state"> No topics in this unit. </div>}
+                </>
+              )}
             </div>
           </div>
         </div>
