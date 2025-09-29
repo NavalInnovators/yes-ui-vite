@@ -41,6 +41,132 @@
   margin-top: 1.5rem;
 }
 
+.topic-filter-container {
+  display: flex;
+  align-items: center;
+}
+
+.topic-filter-container .common-css-dropdown {
+  width: 16vw;
+  min-width: 180px;
+  height: 5vh;
+}
+
+/* Mobile Filter Button */
+.mobile-filter-button-container {
+  display: none;
+}
+
+.mobile-filter-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(0deg, #f2f2f2, #f2f2f2),
+    linear-gradient(0deg, #e6e6e6, #e6e6e6);
+  border: none;
+  border-radius: 8px;
+  color: black;
+  font-family: Public Sans;
+  font-size: 1.4vh;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-filter-button:hover {
+  background: linear-gradient(0deg, #e6e6e6, #e6e6e6),
+    linear-gradient(0deg, #d9d9d9, #d9d9d9);
+}
+
+/* Mobile Filter Modal */
+.mobile-filter-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.mobile-filter-content {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.mobile-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.mobile-filter-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.close-filter-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0.25rem;
+}
+
+.mobile-filter-options {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-filter-option {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.mobile-filter-option:hover {
+  background: #f8f9fa;
+  border-color: #007bff;
+}
+
+.mobile-filter-option.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Show mobile filter button on mobile */
+@media (max-width: 1023px) {
+  .mobile-filter-button-container {
+    display: flex;
+  }
+  
+  .topic-filter-container {
+    display: none;
+  }
+}
+
 /* ===== pagination ===== */
 .pagination-container {
   display: flex;
