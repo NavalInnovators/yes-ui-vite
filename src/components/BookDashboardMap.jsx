@@ -199,7 +199,12 @@ export default function BookDashboardMap({
 
   const sortedTopics = useMemo(() => {
     const topics = currentUnit?.topics || [];
-    return [...topics].sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
+    return [...topics].sort((a, b) => {
+      const byPr = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+      if (byPr !== 0) return byPr;
+      if (a.unitId !== b.unitId) return (a.unitId || 0) - (b.unitId || 0);
+      return (a.name || "").localeCompare(b.name || "");
+    });
   }, [currentUnit]);
 
 

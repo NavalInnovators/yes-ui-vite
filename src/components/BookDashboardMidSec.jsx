@@ -124,8 +124,10 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     const unitQuestions = qList[selectedUnit - 1] || [];
     const uniqueTopics = new Set();
     unitQuestions.forEach(q => {
-      if (q.topic) {
-        uniqueTopics.add(q.topic);
+      // Try multiple possible topic field names
+      const topic = q.topic || q.topic_name || q.topicName;
+      if (topic) {
+        uniqueTopics.add(topic);
       }
     });
     return Array.from(uniqueTopics).sort();
@@ -139,7 +141,12 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     if (selectedQnATopic === "All Topics") {
       return unitQuestions;
     }
-    return unitQuestions.filter(q => q.topic === selectedQnATopic);
+    // Try multiple possible topic field names
+    return unitQuestions.filter(q => 
+      q.topic === selectedQnATopic || 
+      q.topic_name === selectedQnATopic ||
+      q.topicName === selectedQnATopic
+    );
   };
   
   const filteredQuestions = getFilteredQuestions();
