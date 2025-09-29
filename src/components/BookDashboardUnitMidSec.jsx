@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import "./BookDashboardUnitMidSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import parse from "html-react-parser";
 
 function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
-  const { selectedUnit, notesList, unitNotesLoading, unitNotesError, subCode, selectedTopic, notesTopics } = useBookDashboard();
+  const { selectedUnit, notesList, unitNotesLoading, unitNotesError, subCode, selectedTopic, notesTopics, setSelectedTopic } = useBookDashboard();
   const { checkFeatureAccess } = useCart();
   // if (unitNotesLoading) {
   //   return <div>Loading unit notes...</div>;
@@ -30,6 +30,20 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
   const unitNumber = parseInt(selectedUnit);
   const hasAccess = currentCourse ? checkFeatureAccess(currentCourse.id, 'Notes', unitNumber) : false;
   
+  // Handle topic filtering from roadmap navigation
+  useEffect(() => {
+    const filterByTopic = sessionStorage.getItem('filterByTopic');
+    if (filterByTopic && notesTopics[selectedUnit]) {
+      const currentUnitTopics = notesTopics[selectedUnit];
+      const topicIndex = currentUnitTopics.findIndex(topic => topic.name === filterByTopic);
+      if (topicIndex !== -1) {
+        setSelectedTopic(topicIndex);
+        // Clear the filter after applying
+        sessionStorage.removeItem('filterByTopic');
+      }
+    }
+  }, [selectedUnit, notesTopics, setSelectedTopic]);
+
   // Get current unit topics and selected topic content
   const currentUnitTopics = notesTopics[selectedUnit] || [];
   const selectedTopicContent = currentUnitTopics[selectedTopic];

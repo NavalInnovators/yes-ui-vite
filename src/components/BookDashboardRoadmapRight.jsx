@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import "./BookDashboardMap.css";
 import "./BookDashboardRightSec.css";
-import { classicNameResolver } from "typescript";
+import { useBookDashboard } from "../context/book-dashboard-context";
+import { generateRoadmapFromSyllabus } from "../utils/roadmapUtils";
 
 const PRIORITY_ORDER = { high: 1, medium: 2, low: 3};
 const PRIORITY_META = {
@@ -11,8 +12,18 @@ const PRIORITY_META = {
 }
 
 export default function BookDashboardRoadmapRight({ data }) {
-    const units = data?.units || window.__YES_ROADMAP__?.units || [];
+    const { syllabus, syllabusLoading, syllabusError } = useBookDashboard();
     const [selectedTopicIndex, setSelectedTopicIndex] = useState(0);
+
+    // Generate roadmap data from syllabus
+    const roadmapData = useMemo(() => {
+        if (syllabus && !syllabusLoading && !syllabusError) {
+            return generateRoadmapFromSyllabus(syllabus);
+        }
+        return data || window.__YES_ROADMAP__ || { units: [] };
+    }, [syllabus, syllabusLoading, syllabusError, data]);
+
+    const units = roadmapData?.units || [];
 
     const summaryList = useMemo(() => {
         const all = units.flatMap((u) => (u.topics || []).map((t) => ({ ...t, unitName: u.name })));

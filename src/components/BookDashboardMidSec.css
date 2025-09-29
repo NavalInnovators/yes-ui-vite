@@ -61,7 +61,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.3rem;
   background: linear-gradient(0deg, #f2f2f2, #f2f2f2),
     linear-gradient(0deg, #e6e6e6, #e6e6e6);
   border: none;
