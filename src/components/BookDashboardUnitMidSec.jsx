@@ -4,20 +4,34 @@ import "./BookDashboardUnitMidSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
 import parse from "html-react-parser";
+import { LoadingState, ErrorState, DataUnavailableState } from "./LoadingStates";
 
 function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
   const { selectedUnit, notesList, unitNotesLoading, unitNotesError, subCode, selectedTopic, notesTopics, setSelectedTopic } = useBookDashboard();
   const { checkFeatureAccess } = useCart();
-  // if (unitNotesLoading) {
-  //   return <div>Loading unit notes...</div>;
-  // }
-  // if (unitNotesError) {
-  //   return (
-  //     <div>
-  //       Error loading unit notes: Please log in or check if the subject code in URL is valid. {unitNotesError.message}
-  //     </div>
-  //   );
-  // }
+  // Show loading state while notes are being fetched
+  if (unitNotesLoading) {
+    return (
+      <div className="parent-book-dashboard-unit">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-unit-mid-sec">
+          <LoadingState message="Loading unit notes..." size="medium" />
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if notes failed to load
+  if (unitNotesError) {
+    return (
+      <div className="parent-book-dashboard-unit">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-unit-mid-sec">
+          <ErrorState message="Failed to load unit notes. Please check your login or subject code." size="medium" />
+        </div>
+      </div>
+    );
+  }
   
   // Get current course for access control
   const getCurrentCourse = () => {

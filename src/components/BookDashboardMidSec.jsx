@@ -14,6 +14,7 @@ import parse from "html-react-parser";
 import { summarizeAnswer, rephraseAnswer } from "../api/api";
 import { type } from "@testing-library/user-event/dist/type";
 import FilterIcon from "../roles/components/icons/FilterIcon";
+import { LoadingState, ErrorState, DataUnavailableState, FetchingDataState, UploadingDataState, LoadingState404, Error404State } from "./LoadingStates";
 
 
 function BookDashboardMidSec({ currentSection, handleSectionChange }) {
@@ -472,6 +473,30 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
   };
 
 
+  // Show loading state while Q&A data is being fetched
+  if (qnaLoading) {
+    return (
+      <div className="book-dashboard-mid-sec">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="not-for-small-screens">
+          <LoadingState404 message="Loading Q&A content..." size="large" />
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if Q&A failed to load
+  if (qnaError) {
+    return (
+      <div className="book-dashboard-mid-sec">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="not-for-small-screens">
+          <Error404State message="Failed to load Q&A content. Please try again later." size="large" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="book-dashboard-mid-sec">
       <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
@@ -585,7 +610,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           <div className="book-dashboard-summary-answer">
             <div className="book-dashboard-inner-summary">
               {summaryLoading ? (
-                <div>Loading summary...</div>
+                <UploadingDataState message="Generating summary..." size="small" />
               ) : summaryList.length > 0 ? (
                 <>
                   {parse(summaryList[summaryIndex])}
@@ -608,7 +633,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                   </div>
                 </>
               ) : (
-                <div>Click the summarizer button to generate summary.</div>
+                <DataUnavailableState message="Click the summarizer button to generate summary." size="small" />
               )}
             </div>
 
@@ -626,7 +651,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           <div className="book-dashboard-summary-answer">
             <div className="book-dashboard-inner-summary">
               {rephraseLoading ? (
-                "Rephrasing..."
+                <UploadingDataState message="Rephrasing content..." size="small" />
               ) : rephrasedList.length > 0 ? (
                 <>
                   {parse(rephrasedList[rephraseIndex].answer)}
@@ -649,7 +674,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                   </div>
                 </>
               ) : (
-                "Select a rephrasing style to rephrase the summarized answer."
+                <DataUnavailableState message="Select a rephrasing style to rephrase the summarized answer." size="small" />
               )}
             </div>
           </div>

@@ -5,6 +5,7 @@ import "./EducationSection.css";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { getEduData, getAllUniversities, getAllColleges, getBranches } from "../../api/api";
+import { LoadingState, ErrorState, DataUnavailableState } from "../LoadingStates";
 
 const EducationSection = () => {
   const [eduData, setEduData] = useState({
@@ -79,6 +80,38 @@ const EducationSection = () => {
       default: return "";
     }
   };
+
+  // Show loading state while education data is being fetched
+  if (!eduDetails && !universities) {
+    return (
+      <section id="education" className="profile-sections">
+        <div className="section-header">
+          <div className="heading-500-30-black profile-section-heading">
+            Education Details
+          </div>
+        </div>
+        <div className="education-details">
+          <LoadingState message="Loading your education details..." size="medium" />
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state if education data failed to load
+  if (!eduDetails) {
+    return (
+      <section id="education" className="profile-sections">
+        <div className="section-header">
+          <div className="heading-500-30-black profile-section-heading">
+            Education Details
+          </div>
+        </div>
+        <div className="education-details">
+          <ErrorState message="Failed to load your education details. Please try again." size="medium" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="education" className="profile-sections">

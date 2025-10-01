@@ -6,18 +6,35 @@ import RightPageArrow from "../assets/RightPageArrow.svg";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import "./BookDashboardSyllabus.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { LoadingState, ErrorState, DataUnavailableState, LoadingState404, Error404State } from "./LoadingStates";
 
 export default function BookDashboardSyllabus({ currentSection, handleSectionChange }) {
   const { selectedUnit, syllabusLoading, syllabusError, syllabus } =
     useBookDashboard();
 
-  // Error and loading handling
-  // if (syllabusLoading) {
-  //   return <div>Loading syllabus...</div>;
-  // }
-  // if (syllabusError) {
-  //   return <div>Error loading syllabus. Please contact support team or raise a query!</div>;
-  // }
+  // Show loading state while syllabus is being fetched
+  if (syllabusLoading) {
+    return (
+      <div className="bookdashboard-syllabus-mid-section">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-syllabus-sec">
+          <LoadingState404 message="Loading syllabus content..." size="large" />
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if syllabus failed to load
+  if (syllabusError) {
+    return (
+      <div className="bookdashboard-syllabus-mid-section">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-syllabus-sec">
+          <Error404State message="Failed to load syllabus. Please try again later." size="large" />
+        </div>
+      </div>
+    );
+  }
 
   const syllabusContent = syllabus?.units[selectedUnit - 1]?.topics || [];
 
@@ -26,32 +43,28 @@ export default function BookDashboardSyllabus({ currentSection, handleSectionCha
       <div className="book-dashboard-syllabus-container">
         <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
         <div className="book-dashboard-syllabus-sec">
-          {syllabusLoading
-            ? (<div>Loading syllabus...</div>)
-            : syllabusError
-              ? (<div>Error loading syllabus. Please contact support team or raise a query!</div>)
-              : (<><div className="syllabus-title">{syllabus.units[selectedUnit - 1].unitTitle}</div>
-                <div className="book-dashboard-syllabus-sec-container">
-                  <div className="syllabus-content">
-                    {syllabusContent.length === 0 ? (
-                      <div>No topics available for this unit.</div>
-                    ) : (
-                      syllabusContent.map((content, index) => (
-                        <div
-                          className="syllabus"
-                          style={{
-                            borderBottom:
-                              index === syllabusContent.length - 1 && "none",
-                          }}
-                          key={index}
-                        >
-                          {content}
-                        </div>
-                      ))
-                    )}
+          <div className="syllabus-title">{syllabus.units[selectedUnit - 1].unitTitle}</div>
+          <div className="book-dashboard-syllabus-sec-container">
+            <div className="syllabus-content">
+              {syllabusContent.length === 0 ? (
+                <DataUnavailableState message="No topics available for this unit yet." size="small" />
+              ) : (
+                syllabusContent.map((content, index) => (
+                  <div
+                    className="syllabus"
+                    style={{
+                      borderBottom:
+                        index === syllabusContent.length - 1 && "none",
+                    }}
+                    key={index}
+                  >
+                    {content}
                   </div>
-                  {/* The below commented section could be used to display syllabus in table format */}
-                  {/* <div className="syllabus-table-container">
+                ))
+              )}
+            </div>
+            {/* The below commented section could be used to display syllabus in table format */}
+            {/* <div className="syllabus-table-container">
               {syllabus.map((row, i) => (
                 <div className="syllabus-table-row" key={i}>
                   {row.map((cell, j) => (
@@ -60,9 +73,11 @@ export default function BookDashboardSyllabus({ currentSection, handleSectionCha
                 </div>
               ))}
             </div> */}
-                </div></>)}
+          </div>
+
+
         </div>
       </div>
-    </div>
+    </div >
   );
 }

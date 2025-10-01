@@ -9,6 +9,7 @@ import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
 import "./BookDashboardUnitMidSec.css";
 import BookDashboardBarGraph from "./BookDashboardBarGraph";
+import { LoadingState, ErrorState, DataUnavailableState } from "./LoadingStates";
 
 
 
@@ -37,6 +38,42 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
   const useUnitTitle = unitInsights[selectedUnit]?.unitTitle;
   const useTopicFrequency = unitInsights[selectedUnit]?.topicfrequency;
   const useQuestionTypeData = unitInsights[selectedUnit]?.questiontypedata;
+
+  // Show loading state while insights are being fetched
+  if (insightsLoading) {
+    return (
+      <div className="parent-book-dashboard-unit">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-insight-analytics">
+          <LoadingState message="Loading insights and analytics..." size="medium" />
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if insights failed to load
+  if (insightsError) {
+    return (
+      <div className="parent-book-dashboard-unit">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-insight-analytics">
+          <ErrorState message="Failed to load insights. Please try again later." size="medium" />
+        </div>
+      </div>
+    );
+  }
+
+  // Show data unavailable state if no insights data
+  if (!unitInsights || Object.keys(unitInsights).length === 0) {
+    return (
+      <div className="parent-book-dashboard-unit">
+        <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+        <div className="book-dashboard-insight-analytics">
+          <DataUnavailableState message="Insights data will be available soon for this unit." size="medium" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     // <div className="book-dashboard-insight-analytics">

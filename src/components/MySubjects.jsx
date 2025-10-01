@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import UserDashboardRight from "./UserDashboardRight";
 import { useMyCourses } from "./sharedQuery";
 import { useState } from "react";
+import { StateWrapper, InlineLoadingState, InlineErrorState, InlineDataUnavailableState, LoadingState404, Error404State } from "./LoadingStates";
 function MySubjects({ searchQuery }) {
   const navigate = useNavigate();
   const { data: myCourses, isLoading, isError } = useMyCourses();
@@ -75,11 +76,11 @@ function MySubjects({ searchQuery }) {
     <div className="userdashboard-content-page">
       <div className="all-course-card-container">
         {isLoading ? (
-          <div>Please wait while we load your courses....</div>
+          <LoadingState404 message="Loading your enrolled courses..." size="large" />
         ) : isError ? (
-          <div>Error loading your courses. Please try again!</div>
+          <Error404State message="Failed to load your courses. Please try again!" size="large" />
         ) : filteredSubjects.length === 0 ? (
-          <div>No courses found.</div>
+          <InlineDataUnavailableState message="You haven't enrolled in any courses yet." size="large" />
         ) : (
           filteredSubjects.map((subject, index) => {
             return (

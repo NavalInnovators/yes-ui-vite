@@ -1,0 +1,338 @@
+/* Loading States Styles */
+.loading-state,
+.error-state,
+.unavailable-state,
+.fetching-state,
+.uploading-state {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.loading-backdrop,
+.error-backdrop,
+.unavailable-backdrop,
+.fetching-backdrop,
+.uploading-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+  border-radius: 8px;
+}
+
+.loading-content,
+.error-content,
+.unavailable-content,
+.fetching-content,
+.uploading-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+}
+
+/* GIF Sizes */
+.loading-gif,
+.error-gif,
+.unavailable-gif,
+.fetching-gif,
+.uploading-gif {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.loading-small .loading-gif,
+.error-small .error-gif,
+.unavailable-small .unavailable-gif,
+.fetching-small .fetching-gif,
+.uploading-small .uploading-gif {
+  width: 80px;
+  height: 80px;
+}
+
+.loading-medium .loading-gif,
+.error-medium .error-gif,
+.unavailable-medium .unavailable-gif,
+.fetching-medium .fetching-gif,
+.uploading-medium .uploading-gif {
+  width: 120px;
+  height: 120px;
+}
+
+.loading-large .loading-gif,
+.error-large .error-gif,
+.unavailable-large .unavailable-gif,
+.fetching-large .fetching-gif,
+.uploading-large .uploading-gif {
+  width: 160px;
+  height: 160px;
+}
+
+/* Text Styles */
+.loading-text,
+.error-text,
+.unavailable-text,
+.fetching-text,
+.uploading-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.loading-small .loading-text,
+.error-small .error-text,
+.unavailable-small .unavailable-text,
+.fetching-small .fetching-text,
+.uploading-small .uploading-text {
+  font-size: 14px;
+}
+
+.loading-large .loading-text,
+.error-large .error-text,
+.unavailable-large .unavailable-text,
+.fetching-large .fetching-text,
+.uploading-large .uploading-text {
+  font-size: 18px;
+}
+
+/* Specific State Colors */
+.error-text {
+  color: #dc3545;
+}
+
+.unavailable-text {
+  color: #6c757d;
+}
+
+.fetching-text {
+  color: #007bff;
+}
+
+.uploading-text {
+  color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loading-content,
+  .error-content,
+  .unavailable-content,
+  .fetching-content,
+  .uploading-content {
+    padding: 16px;
+    max-width: 300px;
+  }
+  
+  .loading-text,
+  .error-text,
+  .unavailable-text,
+  .fetching-text,
+  .uploading-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-content,
+  .error-content,
+  .unavailable-content,
+  .fetching-content,
+  .uploading-content {
+    padding: 12px;
+    max-width: 250px;
+  }
+  
+  .loading-text,
+  .error-text,
+  .unavailable-text,
+  .fetching-text,
+  .uploading-text {
+    font-size: 12px;
+  }
+}
+
+/* Inline Loading States (no backdrop) */
+.inline-loading-state,
+.inline-error-state,
+.inline-unavailable-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.inline-loading-content,
+.inline-error-content,
+.inline-unavailable-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  max-width: 600px;
+  width: 100%;
+  gap: 30px;
+}
+
+/* Inline GIF Sizes */
+.inline-loading-small .loading-gif,
+.inline-error-small .error-gif,
+.inline-unavailable-small .unavailable-gif {
+  width: 120px;
+  height: 120px;
+}
+
+.inline-loading-medium .loading-gif,
+.inline-error-medium .error-gif,
+.inline-unavailable-medium .unavailable-gif {
+  width: 150px;
+  height: 150px;
+}
+
+.inline-loading-large .loading-gif,
+.inline-error-large .error-gif,
+.inline-unavailable-large .unavailable-gif {
+  width: 180px;
+  height: 180px;
+}
+
+/* Inline Text Styles */
+.inline-loading-content .loading-text,
+.inline-error-content .error-text,
+.inline-unavailable-content .unavailable-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inline-loading-small .loading-text,
+.inline-error-small .error-text,
+.inline-unavailable-small .unavailable-text {
+  font-size: 16px;
+}
+
+.inline-loading-large .loading-text,
+.inline-error-large .error-text,
+.inline-unavailable-large .unavailable-text {
+  font-size: 20px;
+}
+
+/* 404-style Error Number and Message */
+.error-number,
+.loading-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  line-height: 1;
+}
+
+.error-message,
+.loading-message {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  margin: 8px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Inline State Colors */
+.inline-error-content .error-text {
+  color: #333;
+}
+
+.inline-unavailable-content .unavailable-text {
+  color: #6c757d;
+}
+
+/* Responsive adjustments for 404-style components */
+@media (max-width: 768px) {
+  .inline-loading-content,
+  .inline-error-content,
+  .inline-unavailable-content {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .error-number,
+  .loading-number {
+    font-size: 36px;
+  }
+  
+  .error-message,
+  .loading-message {
+    font-size: 16px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .loading-backdrop,
+  .error-backdrop,
+  .unavailable-backdrop,
+  .fetching-backdrop,
+  .uploading-backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .loading-content,
+  .error-content,
+  .unavailable-content,
+  .fetching-content,
+  .uploading-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #fff;
+  }
+  
+  .loading-text,
+  .unavailable-text,
+  .fetching-text,
+  .uploading-text {
+    color: #fff;
+  }
+
+  .inline-loading-content,
+  .inline-error-content,
+  .inline-unavailable-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #fff;
+  }
+  
+  .inline-loading-content .loading-text,
+  .inline-unavailable-content .unavailable-text {
+    color: #fff;
+  }
+}

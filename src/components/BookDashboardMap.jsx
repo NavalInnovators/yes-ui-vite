@@ -5,6 +5,7 @@ import BookDashboardNavbar from "./BookDashboardNavbar";
 import { Book } from "lucide-react";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { generateRoadmapFromSyllabus } from "../utils/roadmapUtils";
+import { LoadingState, ErrorState, DataUnavailableState } from "./LoadingStates";
 
 const DEMO = {
   units: [
@@ -207,6 +208,57 @@ export default function BookDashboardMap({
     });
   }, [currentUnit]);
 
+
+  // Show loading state while roadmap data is being fetched
+  if (syllabusLoading) {
+    return (
+      <div className="book-dashboard-roadmap-mid-sec">
+        <div className="book-dashboard-roadmap-container">
+          <BookDashboardNavbar
+            currentSection={currentSection}
+            handleSectionChange={handleSectionChange}
+          />
+          <div className="not-for-small-screens book-dashboard-roadmap-sec">
+            <LoadingState message="Loading roadmap..." size="medium" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if roadmap failed to load
+  if (syllabusError) {
+    return (
+      <div className="book-dashboard-roadmap-mid-sec">
+        <div className="book-dashboard-roadmap-container">
+          <BookDashboardNavbar
+            currentSection={currentSection}
+            handleSectionChange={handleSectionChange}
+          />
+          <div className="not-for-small-screens book-dashboard-roadmap-sec">
+            <ErrorState message="Failed to load roadmap. Please try again later." size="medium" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show data unavailable state if no roadmap data
+  if (!roadmapData || !roadmapData.units || roadmapData.units.length === 0) {
+    return (
+      <div className="book-dashboard-roadmap-mid-sec">
+        <div className="book-dashboard-roadmap-container">
+          <BookDashboardNavbar
+            currentSection={currentSection}
+            handleSectionChange={handleSectionChange}
+          />
+          <div className="not-for-small-screens book-dashboard-roadmap-sec">
+            <DataUnavailableState message="Roadmap data will be available soon." size="medium" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="book-dashboard-roadmap-mid-sec">

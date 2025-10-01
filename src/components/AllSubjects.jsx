@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
 import { useCart } from "../context/CartContext";
+import { StateWrapper, LoadingState, ErrorState, DataUnavailableState, InlineLoadingState, InlineErrorState, InlineDataUnavailableState, LoadingState404, Error404State } from "./LoadingStates";
 
 const AllSubjects = ({ searchQuery }) => {
   const queryClient = useQueryClient();
@@ -225,13 +226,12 @@ const AllSubjects = ({ searchQuery }) => {
   return (
     <div className="userdashboard-content-page">
       <div className="all-course-card-container">
-        {/* Handle loading and error states */}
         {isLoadingAllCourses ? (
-          <div>Loading all your courses...</div>
+          <LoadingState404 message="Fetching all available courses..." size="large" />
         ) : isError ? (
-          <div>Error loading courses. Please try again later.</div>
+          <Error404State message="Failed to load courses. Please try again later." size="large" />
         ) : filteredCourses.length === 0 ? (
-          <div>No courses found.</div>
+          <InlineDataUnavailableState message="No courses found matching your search." size="large" />
         ) : (
           filteredCourses.map((course) => (
             <div className="all-course-card" key={course.id}>

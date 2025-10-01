@@ -7,6 +7,7 @@ import { getProfile } from "../api/api";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "./AuthProvider";
 import { toast } from "react-toastify";
+import { LoadingState, ErrorState } from "./LoadingStates";
 
 const UserDashboard = () => {
   const { isLoggedIn } = useAuth();

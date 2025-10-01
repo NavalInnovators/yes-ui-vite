@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import { getProfile } from "../../api/api";
 import "./ProfileSection.css";
 import { useAuth } from "../AuthProvider";
+import { LoadingState, ErrorState } from "../LoadingStates";
 
 const ProfileSection = () => {
   const { setEmail } = useAuth();
@@ -99,6 +100,38 @@ const ProfileSection = () => {
         return profileIconNew;
     }
   };
+
+  // Show loading state while profile is being fetched
+  if (isLoadingProfile) {
+    return (
+      <section id="profile" className="profile-sections">
+        <div className="section-header">
+          <div className="heading-500-30-black profile-section-heading">
+            Your Profile
+          </div>
+        </div>
+        <div className="profile-info">
+          <LoadingState message="Loading your profile..." size="medium" />
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state if profile failed to load
+  if (!profileDetails) {
+    return (
+      <section id="profile" className="profile-sections">
+        <div className="section-header">
+          <div className="heading-500-30-black profile-section-heading">
+            Your Profile
+          </div>
+        </div>
+        <div className="profile-info">
+          <ErrorState message="Failed to load your profile. Please try again." size="medium" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="profile" className="profile-sections">
