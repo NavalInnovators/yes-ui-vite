@@ -109,7 +109,7 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
                 {parse(unitNotesContent)}
               </div>
             </div>)
-            : (<div>Data will be available soon!</div>)}
+            : (<DataUnavailableState message="Data will be available soon!" size="medium" />)}
     </div>
   );
 }

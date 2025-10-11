@@ -66,7 +66,7 @@
 .fetching-small .fetching-gif,
 .uploading-small .uploading-gif {
   width: 80px;
-  height: 80px;
+  /* height: 80px; */
 }
 
 .loading-medium .loading-gif,
@@ -75,7 +75,7 @@
 .fetching-medium .fetching-gif,
 .uploading-medium .uploading-gif {
   width: 120px;
-  height: 120px;
+  /* height: 120px; */
 }
 
 .loading-large .loading-gif,
@@ -84,7 +84,7 @@
 .fetching-large .fetching-gif,
 .uploading-large .uploading-gif {
   width: 160px;
-  height: 160px;
+  /* height: 160px; */
 }
 
 /* Text Styles */
@@ -206,21 +206,21 @@
 .inline-error-small .error-gif,
 .inline-unavailable-small .unavailable-gif {
   width: 120px;
-  height: 120px;
+  /* height: 120px; */
 }
 
 .inline-loading-medium .loading-gif,
 .inline-error-medium .error-gif,
 .inline-unavailable-medium .unavailable-gif {
   width: 150px;
-  height: 150px;
+  /* height: 150px; */
 }
 
 .inline-loading-large .loading-gif,
 .inline-error-large .error-gif,
 .inline-unavailable-large .unavailable-gif {
   width: 180px;
-  height: 180px;
+  /* height: 180px; */
 }
 
 /* Inline Text Styles */
