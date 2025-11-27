@@ -4,9 +4,24 @@ import "./BookDashboardUnitMidSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
 import parse from "html-react-parser";
+import { findCourseByCode } from "../utils/courseUtils";
 
-function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
-  const { selectedUnit, notesList, unitNotesLoading, unitNotesError, subCode, selectedTopic, notesTopics, setSelectedTopic } = useBookDashboard();
+function BookDashboardUnitMidSec({
+  currentSection,
+  handleSectionChange,
+  trackNotesEngagement,
+  endNotesEngagement,
+}) {
+  const {
+    selectedUnit,
+    notesList,
+    unitNotesLoading,
+    unitNotesError,
+    subCode,
+    selectedTopic,
+    notesTopics,
+    setSelectedTopic,
+  } = useBookDashboard();
   const { checkFeatureAccess } = useCart();
   // if (unitNotesLoading) {
   //   return <div>Loading unit notes...</div>;
@@ -18,28 +33,29 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
   //     </div>
   //   );
   // }
-  
+
   // Get current course for access control
-  const getCurrentCourse = () => {
-    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-    return allCourses.find(course => course.courseCodes.includes(subCode));
-  };
-  
+  const getCurrentCourse = () => findCourseByCode(subCode);
+
   // Check access before displaying content
   const currentCourse = getCurrentCourse();
   const unitNumber = parseInt(selectedUnit);
-  const hasAccess = currentCourse ? checkFeatureAccess(currentCourse.id, 'Notes', unitNumber) : false;
-  
+  const hasAccess = currentCourse
+    ? checkFeatureAccess(currentCourse.id, "Notes", unitNumber)
+    : false;
+
   // Handle topic filtering from roadmap navigation
   useEffect(() => {
-    const filterByTopic = sessionStorage.getItem('filterByTopic');
+    const filterByTopic = sessionStorage.getItem("filterByTopic");
     if (filterByTopic && notesTopics[selectedUnit]) {
       const currentUnitTopics = notesTopics[selectedUnit];
-      const topicIndex = currentUnitTopics.findIndex(topic => topic.name === filterByTopic);
+      const topicIndex = currentUnitTopics.findIndex(
+        (topic) => topic.name === filterByTopic,
+      );
       if (topicIndex !== -1) {
         setSelectedTopic(topicIndex);
         // Clear the filter after applying
-        sessionStorage.removeItem('filterByTopic');
+        sessionStorage.removeItem("filterByTopic");
       }
     }
   }, [selectedUnit, notesTopics, setSelectedTopic]);
@@ -48,9 +64,27 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
   const currentUnitTopics = notesTopics[selectedUnit] || [];
   const selectedTopicContent = currentUnitTopics[selectedTopic];
   const unitNotesContent = selectedTopicContent?.content;
+
+  // Always use selectedTopic index + 1 for consistent tracking (1-based)
+  const topicId = selectedTopic + 1;
+
+  // Track Notes engagement
+  useEffect(() => {
+    if (topicId != null && trackNotesEngagement && endNotesEngagement) {
+      trackNotesEngagement(selectedUnit, topicId);
+
+      return () => {
+        endNotesEngagement(selectedUnit, topicId);
+      };
+    }
+  }, [topicId, selectedUnit, trackNotesEngagement, endNotesEngagement]);
+
   return (
     <div className="parent-book-dashboard-unit">
-      <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+      <BookDashboardNavbar
+        currentSection={currentSection}
+        handleSectionChange={handleSectionChange}
+      />
 
       <div className="dropdown-cont">
         {/* to be commented out until filtering logic applied */}
@@ -67,35 +101,43 @@ function BookDashboardUnitMidSec({ currentSection, handleSectionChange }) {
         </select> */}
       </div>
       {hasAccess === false ? (
-        <div className="access-denied-message" style={{ 
-          padding: '2rem', 
-          textAlign: 'center', 
-          backgroundColor: '#f8f9fa', 
-          border: '1px solid #dee2e6', 
-          borderRadius: '8px',
-          margin: '1rem 0'
-        }}>
-          <h3 style={{ color: '#6c757d', marginBottom: '1rem' }}>🔒 Premium Content</h3>
-          <p style={{ color: '#6c757d' }}>
-            You need a Basic or Pro plan to access Unit {selectedUnit} notes. 
+        <div
+          className="access-denied-message"
+          style={{
+            padding: "2rem",
+            textAlign: "center",
+            backgroundColor: "#f8f9fa",
+            border: "1px solid #dee2e6",
+            borderRadius: "8px",
+            margin: "1rem 0",
+          }}
+        >
+          <h3 style={{ color: "#6c757d", marginBottom: "1rem" }}>
+            🔒 Premium Content
+          </h3>
+          <p style={{ color: "#6c757d" }}>
+            You need a Basic or Pro plan to access Unit {selectedUnit} notes.
             Free users can only access Unit 1 notes.
           </p>
         </div>
-      ) : unitNotesLoading
-        ? (<div>Loading unit notes...</div>)
-        : unitNotesError
-          ? (<div>Error loading unit notes. Please contact support team or raise a query!</div>)
-          : unitNotesContent
-            ? (<div className="book-dashboard-question-summary-container">
-              <div className="book-dashboard-question">
-                {selectedTopicContent?.name || "Chapter Topic: Summary"}
-              </div>
-              {/* </div> */}
-              <div className="book-dashboard-answer">
-                {parse(unitNotesContent)}
-              </div>
-            </div>)
-            : (<div>Data will be available soon!</div>)}
+      ) : unitNotesLoading ? (
+        <div>Loading unit notes...</div>
+      ) : unitNotesError ? (
+        <div>
+          Error loading unit notes. Please contact support team or raise a
+          query!
+        </div>
+      ) : unitNotesContent ? (
+        <div className="book-dashboard-question-summary-container">
+          <div className="book-dashboard-question">
+            {selectedTopicContent?.name || "Chapter Topic: Summary"}
+          </div>
+          {/* </div> */}
+          <div className="book-dashboard-answer">{parse(unitNotesContent)}</div>
+        </div>
+      ) : (
+        <div>Data will be available soon!</div>
+      )}
     </div>
   );
 }

@@ -1,13 +1,14 @@
 import "./Review.css";
-import React, { useState, 
-  // useEffect 
+import React, {
+  useState,
+  // useEffect
 } from "react";
-import { 
-  // star, 
-  // AttachmentIcon 
-} from "../assets";
+import // star,
+// AttachmentIcon
+"../assets";
 import { useMutation } from "@tanstack/react-query";
 import { postFeedback } from "../api/api.jsx";
+import { trackReviewSubmitted } from "../utils/analytics";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,11 +23,20 @@ const Review = () => {
   const { mutate, status } = useMutation({
     mutationFn: postFeedback,
     onSuccess: () => {
+      // Track review submission
+      trackReviewSubmitted({
+        rating: rating,
+        feedback: feedbackText,
+      });
+
       toast.success("Feedback submitted successfully!");
       setFeedbackText("");
       setRating(0);
       setFiles(null);
-      setMsg({ type: "success", text: "Feedback submitted successfully!" });
+      setMsg({
+        type: "success",
+        text: "Feedback submitted successfully!",
+      });
     },
     onError: () => {
       toast.error("Failed to submit feedback.");
@@ -39,7 +49,10 @@ const Review = () => {
 
   const handleUpload = () => {
     if (!feedbackText.trim() || rating === 0) {
-      setMsg({ type: "error", text: "Please fill in all required fields." });
+      setMsg({
+        type: "error",
+        text: "Please fill in all required fields.",
+      });
       return;
     }
 
@@ -47,7 +60,6 @@ const Review = () => {
     fd.append("starRating", rating);
     fd.append("feedback", feedbackText);
     fd.append("profileId", profileId);
-
 
     if (files) {
       for (let i = 0; i < files.length; i++) {

@@ -26,6 +26,7 @@ import "./Navbar.css";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { trackUserLogout } from "../utils/analytics";
 import { ShoppingCart } from "lucide-react"; // ← Added cart icon
 
 const Navbar = () => {
@@ -102,11 +103,17 @@ const Navbar = () => {
 
   const markAllAsRead = () => {
     setNotifications(
-      notifications.map((notification) => ({ ...notification, isRead: true }))
+      notifications.map((notification) => ({
+        ...notification,
+        isRead: true,
+      })),
     );
   };
 
   const handleLogout = () => {
+    // Track logout event
+    trackUserLogout({});
+
     logout();
     setIsNotificationDropdownOpen(false);
     setIsDropdownOpen(false);

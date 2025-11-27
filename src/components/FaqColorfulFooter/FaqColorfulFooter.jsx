@@ -1,6 +1,7 @@
 import "./FaqColorfulFooter.css";
 import React, { useState } from "react";
 import emailjs from "emailjs-com";
+import { trackContactFormSubmitted } from "../../utils/analytics";
 function FaqColorfulFooter() {
     const [formData, setFormData] = useState({
         firstName: "",
@@ -58,10 +59,20 @@ function FaqColorfulFooter() {
                         subject: formData.subject,
                         question: formData.question,
                     },
-                    "zmdx6lUTZLqDyXlsw" // Replace with your EmailJS Public Key
+                    "zmdx6lUTZLqDyXlsw", // Replace with your EmailJS Public Key
                 )
                 .then(
                     () => {
+                        // Track contact form submission
+                        trackContactFormSubmitted({
+                            firstName: formData.firstName,
+                            lastName: formData.lastName,
+                            phone: formData.phone,
+                            email: formData.email,
+                            subject: formData.subject,
+                            location: "faq_page",
+                        });
+
                         alert("Your question has been submitted successfully!");
                         setFormData({
                             firstName: "",
@@ -75,18 +86,22 @@ function FaqColorfulFooter() {
                     (error) => {
                         alert("An error occurred. Please try again.");
                         console.error(error);
-                    }
+                    },
                 );
         }
     };
 
-
     return (
         <div className="container2 bg-animation">
             <div className="form-section">
-                <div className="form-section-text1">  Didn't find your answer?</div>
+                <div className="form-section-text1">
+                    {" "}
+                    Didn't find your answer?
+                </div>
                 <div className="form-section-text2"> Post your question!</div>
-                <div className="form-section-text3">We will get back to you absolutely as soon as possible!</div>
+                <div className="form-section-text3">
+                    We will get back to you absolutely as soon as possible!
+                </div>
             </div>
             <div className="faq-contact-form-container">
                 <form onSubmit={handleSubmit}>
@@ -111,26 +126,30 @@ function FaqColorfulFooter() {
                             required
                         />
                     </div>
-                    <input 
-                        type="tel" 
+                    <input
+                        type="tel"
                         className="phone"
-                        name="phone" 
-                        placeholder="Phone" 
+                        name="phone"
+                        placeholder="Phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        required 
+                        required
                     />
-                    {formErrors.phone && <p className="error">{formErrors.phone}</p>}
-                    <input 
-                        type="email" 
-                        className="email-footer" 
+                    {formErrors.phone && (
+                        <p className="error">{formErrors.phone}</p>
+                    )}
+                    <input
+                        type="email"
+                        className="email-footer"
                         name="email"
                         placeholder="Email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        required 
+                        required
                     />
-                    {formErrors.email && <p className="error">{formErrors.email}</p>}
+                    {formErrors.email && (
+                        <p className="error">{formErrors.email}</p>
+                    )}
                     <input
                         type="text"
                         className="subject"
@@ -140,24 +159,21 @@ function FaqColorfulFooter() {
                         onChange={handleInputChange}
                         required
                     />
-                    <textarea 
-                        className="question" 
+                    <textarea
+                        className="question"
                         name="question"
-                        placeholder="Your Question" 
-                        rows="4" 
+                        placeholder="Your Question"
+                        rows="4"
                         value={formData.question}
                         onChange={handleInputChange}
                         required
-                        ></textarea>
+                    ></textarea>
                     <div className="faq-submit-button">
                         <button type="submit">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
-
-
-
     );
 }
 

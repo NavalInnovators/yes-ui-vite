@@ -9,7 +9,7 @@ import { apiLogin } from "../api/api";
 
 const LoginSideSection = () => {
   const navigate = useNavigate();
-  const { setProfileId, setToken, } = useAuth();
+  const { setProfileId, setToken } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,8 +18,6 @@ const LoginSideSection = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
-
-
   const { mutate, isPending } = useMutation({
     mutationFn: (data) => apiLogin(data),
     onSuccess: (data) => {
@@ -27,12 +25,18 @@ const LoginSideSection = () => {
       if (data.validated === "true") {
         setToken(data.token);
         setProfileId(data.profileId);
+
+        // Dispatch custom event for analytics re-identification
+        window.dispatchEvent(new CustomEvent("userAuthenticated"));
+
         navigate("/all-subjects");
       }
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.message || error.message || "Something went wrong"
+        error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
       );
       console.error("Error:", error.response.data.message);
     },
@@ -76,9 +80,7 @@ const LoginSideSection = () => {
 
   return (
     <div className="login-form-container">
-      <div className="login-form-heading-black">
-        Login to your account!
-      </div>
+      <div className="login-form-heading-black">Login to your account!</div>
       <div className="login-container">
         <form onSubmit={handleSubmit} noValidate>
           <div className="login-form-email-container">
@@ -91,7 +93,6 @@ const LoginSideSection = () => {
               value={formData.email}
               onChange={handleInputChange}
             />
-
           </div>
           {errors.email && <div className="error-text">{errors.email}</div>}
 
@@ -110,16 +111,18 @@ const LoginSideSection = () => {
               alt="toggle-password-visibility"
               onClick={() => setShowPassword(!showPassword)}
             />
-
           </div>
-          {errors.password && (<div className="error-text">{errors.password}</div>)}
+          {errors.password && (
+            <div className="error-text">{errors.password}</div>
+          )}
 
           <div className="login-form-checkbox-frgt-pswd">
             <label class="custom-checkbox login-checkbox-remember">
-              <input type="checkbox" 
-              name="checkbox"
-              checked={formData.checkbox}
-              onChange={handleInputChange}
+              <input
+                type="checkbox"
+                name="checkbox"
+                checked={formData.checkbox}
+                onChange={handleInputChange}
               />
               <span class="checkmark"></span>
               Remember Me

@@ -174,7 +174,9 @@ const AllSubjects = ({ searchQuery }) => {
       toast.success(`${course.name} updated to ${plan} plan!`);
     } else {
       // Add new item to cart
-      addToCart(course, plan);
+      addToCart(course, plan, {
+        source: "all_subjects",
+      });
       toast.success(`${course.name} (${plan}) added to cart!`);
     }
   };
@@ -367,7 +369,7 @@ const AllSubjects = ({ searchQuery }) => {
                     <div>{c.name} ({c.plan})</div>
                     <div className="price-delete">
                       ₹{c.plan === "Basic" ? 110 : 150}
-                      <button onClick={() => removeFromCart(c.id)}>🗑️</button>
+                      <button onClick={() => removeFromCart(c.id, { source: "order_summary" })}>🗑️</button>
                     </div>
                   </div>
                 ))}

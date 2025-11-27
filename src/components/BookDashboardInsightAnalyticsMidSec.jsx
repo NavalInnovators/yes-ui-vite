@@ -9,6 +9,7 @@ import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
 import "./BookDashboardUnitMidSec.css";
 import BookDashboardBarGraph from "./BookDashboardBarGraph";
+import { findCourseByCode } from "../utils/courseUtils";
 
 
 
@@ -17,17 +18,13 @@ function BookDashboardInsightAnalyticsMidSec({ currentSection, handleSectionChan
   const { checkFeatureAccess } = useCart();
 
   const [isPrediction, setIsPrediction] = useState(false);
-  const subcode = sessionStorage.getItem('courseCode');
   const handleToggle = (tab) => {
     setIsPrediction(tab === "Prediction");
   };
   const [selectedUnit2, setSelectedUnit] = useState(1);
   
   // Get current course for access control
-  const getCurrentCourse = () => {
-    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-    return allCourses.find(course => course.courseCodes.includes(subCode));
-  };
+  const getCurrentCourse = () => findCourseByCode(subCode);
   
   // Check access before displaying content
   const currentCourse = getCurrentCourse();

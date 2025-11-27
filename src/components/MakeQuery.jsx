@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchSubjects, postQuery } from "../api/api";
+import { trackQuerySubmitted } from "../utils/analytics";
 // import { hat } from "../assets";
 import "./SubmitQueryProfile.css";
 
@@ -26,6 +27,15 @@ const MakeQuery = () => {
   const { mutate, status } = useMutation({
     mutationFn: postQuery,
     onSuccess: () => {
+      // Track query submission
+      const selectedSubject = subjects?.find(
+        (s) => s.id === parseInt(selectedSubjectId),
+      );
+      trackQuerySubmitted({
+        subject: selectedSubject?.name || "Unknown",
+        query: queryText,
+      });
+
       toast.success("Query submitted successfully!");
       setQueryText("");
       setSelectedSubjectId("");
@@ -42,7 +52,10 @@ const MakeQuery = () => {
 
   const handleUpload = () => {
     if (!selectedSubjectId.trim() || !queryText.trim()) {
-      setMsg({ type: "error", text: "Please fill in all required fields." });
+      setMsg({
+        type: "error",
+        text: "Please fill in all required fields.",
+      });
       return;
     }
 

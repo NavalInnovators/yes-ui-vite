@@ -32,8 +32,6 @@ const setEmail = (email) => {
   localStorage.setItem("email", email);
 };
 
-
-
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
@@ -56,23 +54,38 @@ export const AuthProvider = ({ children }) => {
       setIsLoggedIn(!!(token && profileId));
     };
 
-    window.addEventListener('storage', syncLoginStatus);
+    window.addEventListener("storage", syncLoginStatus);
     return () => {
-      window.removeEventListener('storage', syncLoginStatus);
+      window.removeEventListener("storage", syncLoginStatus);
     };
   }, []);
 
   const queryClient = useQueryClient();
   const logout = () => {
+    // Track logout before clearing data
+    if (typeof window !== "undefined" && window.trackUserLogout) {
+      window.trackUserLogout();
+    }
+
     setIsLoggedIn(false);
     localStorage.clear();
     sessionStorage.clear();
     queryClient.clear();
   };
 
-
   return (
-    <AuthContext.Provider value={{ isLoggedIn, getToken, setToken, getProfileId, setProfileId, getEmail, setEmail, logout }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        getToken,
+        setToken,
+        getProfileId,
+        setProfileId,
+        getEmail,
+        setEmail,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
