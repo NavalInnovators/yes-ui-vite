@@ -76,7 +76,7 @@ function BookDashboardMidSec({
     const hasPaidPlan = allOrders.some(
       (order) =>
         order.status === "active" &&
-        (order.plan === "Basic" || order.plan === "Pro"),
+        (order.plan === "BASIC" || order.plan === "PRO"),
     );
 
     console.log(

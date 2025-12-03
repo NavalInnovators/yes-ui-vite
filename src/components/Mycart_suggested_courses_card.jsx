@@ -18,12 +18,16 @@ export default function Mycart_suggested_courses_card({
     onAddToCart(course, plan);
   };
 
-  const bgClass = hasBasic 
-    ? "bg-gradient-to-r from-cyan-200 to-blue-200" 
+  const bgClass = hasBasic
+    ? "bg-gradient-to-r from-cyan-200 to-blue-200"
     : "bg-gray-300";
 
   return (
-    <div className={`w-64 flex-shrink-0 ${bgClass} text-black rounded-2xl shadow-md p-4 flex flex-col space-y-3 relative ${showSparkle ? 'animate-pulse' : ''}`}>
+    <div
+      className={`w-64 flex-shrink-0 ${bgClass} text-black rounded-2xl shadow-md p-4 flex flex-col space-y-3 relative ${
+        showSparkle ? "animate-pulse" : ""
+      }`}
+    >
       {/* Title */}
       <h2 className="text-lg font-semibold truncate">{title}</h2>
 
@@ -42,22 +46,22 @@ export default function Mycart_suggested_courses_card({
 
       {/* Buttons */}
       {hasBasic ? (
-        <button 
-          onClick={() => handleAddToCart("Pro")}
+        <button
+          onClick={() => handleAddToCart("PRO")}
           className="bg-white py-2 text-black font-semibold rounded-full px-4 text-xs hover:opacity-90 transition w-full"
         >
           Upgrade to Pro
         </button>
       ) : (
         <div className="buy-split-btn" role="group" aria-label="Buy plans">
-          <button 
-            onClick={() => handleAddToCart("Basic")}
+          <button
+            onClick={() => handleAddToCart("BASIC")}
             className="buy-btn buy-left"
           >
             Buy Basic
           </button>
-          <button 
-            onClick={() => handleAddToCart("Pro")}
+          <button
+            onClick={() => handleAddToCart("PRO")}
             className="buy-btn buy-right"
           >
             Buy Pro

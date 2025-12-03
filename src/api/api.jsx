@@ -1,9 +1,9 @@
 import axios from "axios";
-import { BACKEND_URL, AI_URL } from "../constants/api";
+import { BACKEND_URL, AI_URL, DEV_BACKEND_URL } from "../constants/api";
 import { track } from "@vercel/analytics/react";
 
 const api = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: DEV_BACKEND_URL, // change to BACKEND_URL for production
   headers: {
     "Content-Type": "application/json",
   },
@@ -154,7 +154,7 @@ export const fetchSubjects = async (profileId) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Failed to fetch subjects."
+      error.response?.data?.message || "Failed to fetch subjects.",
     );
   }
 };
@@ -333,22 +333,25 @@ export const getAnalyticData = async (subCode) => {
 
 export const enrollCourse = async (course) => {
   try {
-    const profileId = parseInt(localStorage.getItem("profileId"));
+    const profileId = localStorage.getItem("profileId");
+    const courseId = course.id;
     const token = localStorage.getItem("token");
+
+    const endpoint = `/api/profile/${profileId}/course/${courseId}/enroll`;
+
     const config = {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     };
-    const response = await api.post(
-      `/api/profile/${profileId}/course/${parseInt(course.id)}/enroll`,
-      {},
-      config
-    );
-    console.log(`Response from course enroll api: =============>`, response.data);
+
+    const response = await api.post(endpoint, {}, config);
+
+    console.log(`Enrollment API response:`, response.data);
     return [response.data, course];
   } catch (error) {
+    console.error("Enrollment API Error:", error.response);
     throw error;
   }
 }
@@ -392,40 +395,255 @@ export const summarizeAnswer = async (question, answer) => {
 
 export const rephraseAnswer = async (style, summary, answer) => {
   try {
-    console.log("Before making call from API.jsx type of are:" + typeof (style) + " " + typeof (summary) + typeof (answer));
-    const response = await apiAI.post(
-      `/rephrase`,
-      { style, summary, answer },
+    console.log(
+      "Before making call from API.jsx type of are:" +
+        typeof style +
+        " " +
+        typeof summary +
+        typeof answer,
     );
+    const response = await apiAI.post(`/rephrase`, {
+      style,
+      summary,
+      answer,
+    });
 
     const rephrasedText = response?.data?.data?.rephrased_text;
     console.log("Rephrased Text:", rephrasedText); // For debug
     return rephrasedText;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Failed to rephrase answer."
+      error.response?.data?.message || "Failed to rephrase answer.",
     );
   }
 };
 
 export const resetPasswordLink = async (email) => {
   try {
-    const response = await api.post(
-      '/api/password/forgot',
-      { email },
-    );
+    const response = await api.post("/api/password/forgot", { email });
     console.log("Response for forget API: " + response);
     console.log("Response.data is: " + response.data);
     console.log("Response.data is: " + response.data.success);
     return response.data;
-
   } catch (error) {
     console.error("Error response:", error.response);
 
     const message =
-      error.response?.data?.message || "Failed to send reset link. Please try again.";
+      error.response?.data?.message ||
+      "Failed to send reset link. Please try again.";
 
     // Optional: throw if needed by caller
+    throw new Error(message);
+  }
+};
+
+// CART APIs
+export const getCart = async (profileId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.get(`/api/cart/view/${profileId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message || "Failed to get cart. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const addToCart = async (profileId, planId, courseId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await api.post(
+      "/api/cart/add",
+      {
+        profileId,
+        planId,
+        courseId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    console.log("API Response:", response.status, response.data);
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to add course to cart. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const removeFromCart = async (cartId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/cart/remove/${cartId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to remove course from cart. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const clearCart = async (profileId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/cart/clear/${profileId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to clear cart. Please try again.";
+    throw new Error(message);
+  }
+};
+
+
+// COUPON APIs
+export const applyCoupon = async (profileId, couponCode) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/coupons/apply`,
+      {
+        profileId,
+        couponCode,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to apply coupon. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const getCoupons = async (profileId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.get(`/api/coupons/applicable/${profileId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to fetch coupons. Please try again.";
+    throw new Error(message);
+  }
+};
+
+
+// SUBSCRIPTION APIs
+export const cancelSubscription = async (reason, profileId, subscriptionId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/subscriptions/cancel`,
+      {
+        reason,
+        profileId,
+        subscriptionId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to cancel subscription. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const getSubscriptions = async (
+  profileId,
+  filter = "ALL",
+  pageable = {},
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    const params = new URLSearchParams();
+    params.append("filter", filter);
+
+    if (pageable.page !== undefined) params.append("page", pageable.page);
+    if (pageable.size !== undefined) params.append("size", pageable.size);
+    if (pageable.sort) params.append("sort", pageable.sort);
+
+    const response = await api.get(
+      `/api/subscriptions/${profileId}/get?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to fetch subscriptions. Please try again.";
     throw new Error(message);
   }
 };

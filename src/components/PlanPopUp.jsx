@@ -183,7 +183,7 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
                             </ul>
                             <button
                                 className="btn-basic"
-                                onClick={() => handlePlanSelect("Basic")}
+                                onClick={() => handlePlanSelect("BASIC")}
                             >
                                 Proceed with Basic
                             </button>
@@ -212,7 +212,7 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
                             </div>
                             <button
                                 className="btn-pro"
-                                onClick={() => handlePlanSelect("Pro")}
+                                onClick={() => handlePlanSelect("PRO")}
                             >
                                 Go Pro & Maximize Savings!
                             </button>

@@ -5,9 +5,10 @@ export default function Expired_Courses_Card({
   credits,
   purchaseDate,
   expiryDate,
+  onStartLearning,
 }) {
   return (
-    <div className="rounded-xl p-6 shadow-lg flex flex-col bg-gray-300 border border-gray-300 transition-transform hover:scale-[1.02] w-full">
+    <div className="rounded-xl p-6 shadow-md hover:shadow-lg flex flex-col bg-gray-200 border border-gray-300 transition-all duration-200 w-full">
       {/* Title */}
       <div className="flex items-center justify-between mb-2">
         <h2 className="font-bold text-lg md:text-xl truncate">{courseName}</h2>
@@ -19,8 +20,14 @@ export default function Expired_Courses_Card({
       {/* Dates + Grey pill */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-xs md:text-sm"> <b>Purchase Date:</b> {purchaseDate}</p>
-          <p className="text-xs md:text-sm"> <b>Expired on:</b> {expiryDate}</p>
+          <p className="text-xs md:text-sm">
+            {" "}
+            <b>Purchase Date:</b> {purchaseDate}
+          </p>
+          <p className="text-xs md:text-sm">
+            {" "}
+            <b>Expired on:</b> {expiryDate}
+          </p>
         </div>
         {/* Grey status pill */}
         <span className="mt-auto px-3 py-1 rounded-full text-sm font-semibold bg-gray-400 text-white">
@@ -29,9 +36,14 @@ export default function Expired_Courses_Card({
       </div>
 
       {/* Start Learning button (active) */}
-      <button className="w-full px-3 py-3 rounded-4xl bg-gray-50 hover:bg-white text-black font-semibold">
-        Start Learning
-      </button>
+      {onStartLearning && (
+        <button
+          onClick={onStartLearning}
+          className="w-full px-3 py-3 rounded-4xl bg-gray-50 hover:bg-[#ffffff] hover:scale-102 text-black font-semibold transition-all"
+        >
+          Start Learning
+        </button>
+      )}
     </div>
   );
 }
