@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import mermaid from "mermaid";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"; // Style for code blocks
@@ -14,9 +14,19 @@ import parse from "html-react-parser";
 import { summarizeAnswer, rephraseAnswer } from "../api/api";
 import { type } from "@testing-library/user-event/dist/type";
 import FilterIcon from "../roles/components/icons/FilterIcon";
+import {
+  trackRephraserUsed,
+  trackSummariserUsed,
+  getISTISOString,
+} from "../utils/analytics";
+import { getCourseTrackingMeta } from "../utils/courseUtils";
 
-
-function BookDashboardMidSec({ currentSection, handleSectionChange }) {
+function BookDashboardMidSec({
+  currentSection,
+  handleSectionChange,
+  trackQnAEngagement,
+  endQnAEngagement,
+}) {
   const {
     selectedUnit,
     qList,
@@ -28,102 +38,97 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     setSelectedQnATopic,
     qnaTopics,
     setFilteredQnAQuestions,
+    subCode,
   } = useBookDashboard();
-  
-  const { 
-    getLifetimeUsage, 
-    incrementLifetimeUsage, 
-    checkLifetimeLimit, 
+
+  const {
+    getLifetimeUsage,
+    incrementLifetimeUsage,
+    checkLifetimeLimit,
     getRemainingUsage,
-    getUserPlanForCourse 
+    getUserPlanForCourse,
   } = useCart();
+
+  const courseMeta = useMemo(() => getCourseTrackingMeta(subCode), [subCode]);
+  const currentCourse = courseMeta.course;
+  const courseId = currentCourse?.id || null;
+  const courseName = courseMeta.courseName;
+  const subjectCode = courseMeta.subjectCode;
 
   const summaryRef = useRef(null);
   const rephraserRef = useRef(null);
-  
+
   // Usage counter component
   const UsageCounter = ({ feature }) => {
-    // Get current course to check plan
-    const getCurrentCourse = () => {
-      const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-      const subCode = sessionStorage.getItem('courseCode');
-      console.log('Debug - allCourses:', allCourses.length, 'subCode:', subCode);
-      return allCourses.find(course => course.courseCodes.includes(subCode));
-    };
-    
-    const currentCourse = getCurrentCourse();
-    const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
-    
+    const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
+
     // Debug logging
-    console.log('UsageCounter Debug:', {
+    console.log("UsageCounter Debug:", {
       feature,
-      currentCourse: currentCourse?.name,
-      courseId: currentCourse?.id,
+      currentCourse: courseName,
+      courseId,
       userPlan,
-      shouldShow: userPlan === 'Free'
+      shouldShow: userPlan === "Free",
     });
-    
+
     // Check all orders to see if user has any paid plans
-    const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    const hasPaidPlan = allOrders.some(order => 
-      order.status === 'active' && 
-      (order.plan === 'Basic' || order.plan === 'Pro')
+    const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    const hasPaidPlan = allOrders.some(
+      (order) =>
+        order.status === "active" &&
+        (order.plan === "Basic" || order.plan === "Pro"),
     );
-    
-    console.log('UsageCounter - hasPaidPlan:', hasPaidPlan, 'allOrders:', allOrders.length);
-    
+
+    console.log(
+      "UsageCounter - hasPaidPlan:",
+      hasPaidPlan,
+      "allOrders:",
+      allOrders.length,
+    );
+
     // If user has any paid plan, don't show counters
     if (hasPaidPlan) {
-      console.log('UsageCounter: User has paid plan, hiding counters');
+      console.log("UsageCounter: User has paid plan, hiding counters");
       return null;
     }
-    
+
     // Only show for Free plan users
-    if (userPlan !== 'Free') {
-      console.log('UsageCounter: Not showing for plan:', userPlan);
+    if (userPlan !== "Free") {
+      console.log("UsageCounter: Not showing for plan:", userPlan);
       return null;
     }
-    
+
     // Final safety check - if we can't determine the plan, don't show counters
-    if (!userPlan || userPlan === 'undefined' || userPlan === 'null') {
-      console.log('UsageCounter: Cannot determine plan, hiding counters');
+    if (!userPlan || userPlan === "undefined" || userPlan === "null") {
+      console.log("UsageCounter: Cannot determine plan, hiding counters");
       return null;
     }
-    
+
     const currentUsage = getLifetimeUsage(feature);
     const remaining = getRemainingUsage(feature);
     const isLimitExceeded = !checkLifetimeLimit(feature);
-    
-    console.log('UsageCounter: Showing for Free user:', {
+
+    console.log("UsageCounter: Showing for Free user:", {
       currentUsage,
       remaining,
-      isLimitExceeded
+      isLimitExceeded,
     });
-    
-    if (isLimitExceeded) {
-      return (
-        <span className="usage-counter-crown">
-          👑
-        </span>
-      );
-    }
-    
-    return (
-      <span className="usage-counter">
-        {currentUsage}/50
-      </span>
-    );
-  };
 
+    if (isLimitExceeded) {
+      return <span className="usage-counter-crown">👑</span>;
+    }
+
+    return <span className="usage-counter">{currentUsage}/50</span>;
+  };
 
   const [pageNumber, setPageNumber] = useState(1);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
-  
+
   // Get topics for current unit only
   const getCurrentUnitTopics = () => {
     const unitQuestions = qList[selectedUnit - 1] || [];
     const uniqueTopics = new Set();
-    unitQuestions.forEach(q => {
+    unitQuestions.forEach((q) => {
       // Try multiple possible topic field names
       const topic = q.topic || q.topic_name || q.topicName;
       if (topic) {
@@ -132,9 +137,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     });
     return Array.from(uniqueTopics).sort();
   };
-  
+
   const currentUnitTopics = getCurrentUnitTopics();
-  
+
   // Get filtered questions based on selected topic
   const getFilteredQuestions = () => {
     const unitQuestions = qList[selectedUnit - 1] || [];
@@ -142,13 +147,14 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       return unitQuestions;
     }
     // Try multiple possible topic field names
-    return unitQuestions.filter(q => 
-      q.topic === selectedQnATopic || 
-      q.topic_name === selectedQnATopic ||
-      q.topicName === selectedQnATopic
+    return unitQuestions.filter(
+      (q) =>
+        q.topic === selectedQnATopic ||
+        q.topic_name === selectedQnATopic ||
+        q.topicName === selectedQnATopic,
     );
   };
-  
+
   const filteredQuestions = getFilteredQuestions();
   const totalPages = filteredQuestions.length;
 
@@ -158,38 +164,41 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
   const getSummaryKey = (unit, index) => `summaryList_u${unit}_q${index}`;
 
   const handleSummarize = async () => {
-    // Get current course to check plan
-    const getCurrentCourse = () => {
-      const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-      const subCode = sessionStorage.getItem('courseCode');
-      return allCourses.find(course => course.courseCodes.includes(subCode));
-    };
-    
-    const currentCourse = getCurrentCourse();
-    const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
-    
+    const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
+
     // Check lifetime usage limit for free users
-    if (userPlan === 'Free' && !checkLifetimeLimit('Summariser')) {
-      toast.error("You have reached your lifetime limit of 50 summaries. Please upgrade to Basic plan for unlimited usage.");
+    if (userPlan === "Free" && !checkLifetimeLimit("Summariser")) {
+      toast.error(
+        "You have reached your lifetime limit of 50 summaries. Please upgrade to Basic plan for unlimited usage.",
+      );
       return;
     }
 
     if (summaryRef.current) {
       const navbarOffset = 140; // Change this to match your navbar's height
-      const summaryPosition = summaryRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: summaryPosition - navbarOffset, behavior: "smooth" });
+      const summaryPosition =
+        summaryRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: summaryPosition - navbarOffset,
+        behavior: "smooth",
+      });
     }
 
     const currentKey = getSummaryKey(selectedUnit, selectedQuestion);
-    const existingSummaries = JSON.parse(localStorage.getItem(currentKey)) || [];
+    const existingSummaries =
+      JSON.parse(localStorage.getItem(currentKey)) || [];
 
     if (existingSummaries.length >= 3) {
-      toast.error("You have reached the limit, can't generate more than 3 summaries.");
+      toast.error(
+        "You have reached the limit, can't generate more than 3 summaries.",
+      );
       return;
     }
 
     if (existingSummaries.length > 0) {
-      const confirm = window.confirm("You've already generated a summary. Do you want to generate another one?");
+      const confirm = window.confirm(
+        "You've already generated a summary. Do you want to generate another one?",
+      );
       if (!confirm) return;
     }
 
@@ -206,11 +215,26 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       setSummaryList(updatedSummaries);
       setSummaryIndex(updatedSummaries.length - 1);
       localStorage.setItem(currentKey, JSON.stringify(updatedSummaries));
-      
+
       // Increment lifetime usage for free users
-      if (userPlan === 'Free') {
-        incrementLifetimeUsage('Summariser');
+      if (userPlan === "Free") {
+        incrementLifetimeUsage("Summariser");
       }
+
+      // Get current usage count after increment
+      const currentUsageCount =
+        userPlan === "Free" ? getLifetimeUsage("Summariser") : null;
+
+      trackSummariserUsed({
+        courseId,
+        courseName,
+        subjectCode,
+        unit: selectedUnit,
+        questionId,
+        topic: questionTopic,
+        timestamp: getISTISOString(),
+        usageCount: currentUsageCount,
+      });
     } catch (err) {
       toast.error("Failed to summarize the answer");
       console.error(err);
@@ -228,45 +252,47 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
   // Rephrasing styles and labels
   const getStyleLabel = (styleNum) => {
     switch (styleNum) {
-      case 1: return "Simple language";
-      case 2: return "Include Analogy";
-      case 3: return "Include Examples";
-      default: return "Unknown style";
+      case 1:
+        return "Simple language";
+      case 2:
+        return "Include Analogy";
+      case 3:
+        return "Include Examples";
+      default:
+        return "Unknown style";
     }
   };
   // Local storage key helper for rephrased answers
   const getRephrasedKey = (unit, index) => `rephrasedList_u${unit}_q${index}`;
 
-
   const handleRephrase = async (e) => {
-    const style = parseInt(e.target.value);
-    setSelectedStyle(style);
-    if (style === "0") return;
-    
-    // Get current course to check plan
-    const getCurrentCourse = () => {
-      const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-      const subCode = sessionStorage.getItem('courseCode');
-      return allCourses.find(course => course.courseCodes.includes(subCode));
-    };
-    
-    const currentCourse = getCurrentCourse();
-    const userPlan = currentCourse ? getUserPlanForCourse(currentCourse.id) : 'Free';
-    
+    const value = e.target.value;
+    const style = parseInt(value, 10);
+    setSelectedStyle(value);
+    if (value === "0") return;
+
+    const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
+    const styleLabel = getStyleLabel(style);
+
     // Check lifetime usage limit for free users
-    if (userPlan === 'Free' && !checkLifetimeLimit('Rephraser')) {
-      toast.error("You have reached your lifetime limit of 50 rephrases. Please upgrade to Basic plan for unlimited usage.");
+    if (userPlan === "Free" && !checkLifetimeLimit("Rephraser")) {
+      toast.error(
+        "You have reached your lifetime limit of 50 rephrases. Please upgrade to Basic plan for unlimited usage.",
+      );
       setSelectedStyle("0");
       return;
     }
-    
+
     // Scroll to rephraser section
     if (rephraserRef.current) {
       const navbarOffset = 140;
-      const rephraserPosition = rephraserRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: rephraserPosition - navbarOffset, behavior: "smooth" });
+      const rephraserPosition =
+        rephraserRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: rephraserPosition - navbarOffset,
+        behavior: "smooth",
+      });
     }
-
 
     if (!summaryList[0] || !answer) {
       toast.error("Please summarize the answer first.");
@@ -275,9 +301,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     }
 
     // Check if already generated for this style
-    if (rephrasedList.some(item => item.style === style)) {
+    if (rephrasedList.some((item) => item.style === style)) {
       // Just switch to that rephrased answer in the pagination
-      const idx = rephrasedList.findIndex(item => item.style === style);
+      const idx = rephrasedList.findIndex((item) => item.style === style);
       setRephraseIndex(idx);
       setSelectedStyle("0");
       return;
@@ -291,13 +317,32 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       const updatedList = [...rephrasedList, { style, answer: rephrased }];
       setRephrasedList(updatedList);
       setRephraseIndex(updatedList.length - 1);
-      localStorage.setItem(getRephrasedKey(selectedUnit, selectedQuestion), JSON.stringify(updatedList));
+      localStorage.setItem(
+        getRephrasedKey(selectedUnit, selectedQuestion),
+        JSON.stringify(updatedList),
+      );
       toast.success("Rephrased successfully.");
-      
+
       // Increment lifetime usage for free users
-      if (userPlan === 'Free') {
-        incrementLifetimeUsage('Rephraser');
+      if (userPlan === "Free") {
+        incrementLifetimeUsage("Rephraser");
       }
+
+      // Get current usage count after increment
+      const currentUsageCount =
+        userPlan === "Free" ? getLifetimeUsage("Rephraser") : null;
+
+      trackRephraserUsed({
+        courseId,
+        courseName,
+        subjectCode,
+        unit: selectedUnit,
+        questionId,
+        topic: questionTopic,
+        style: styleLabel,
+        timestamp: getISTISOString(),
+        usageCount: currentUsageCount,
+      });
     } catch (err) {
       toast.error(err.message || "Failed to rephrase.");
     } finally {
@@ -305,7 +350,6 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
       setSelectedStyle("0");
     }
   };
-
 
   const handlePrevClick = () => {
     if (pageNumber > 1) {
@@ -326,14 +370,49 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
   };
 
   const handleRephraseNext = () => {
-    if (rephraseIndex < rephrasedList.length - 1) setRephraseIndex(rephraseIndex + 1);
+    if (rephraseIndex < rephrasedList.length - 1)
+      setRephraseIndex(rephraseIndex + 1);
   };
 
   const question = filteredQuestions[selectedQuestion]?.question;
   const answer = filteredQuestions[selectedQuestion]?.solution;
+  const currentQuestionData = filteredQuestions[selectedQuestion] || {};
+  const questionId =
+    currentQuestionData.id ||
+    currentQuestionData._id ||
+    currentQuestionData.questionId ||
+    currentQuestionData.question_id ||
+    null;
+  const questionTopic =
+    currentQuestionData.topic ||
+    currentQuestionData.topic_name ||
+    currentQuestionData.topicName ||
+    null;
+
+  // Track Q&A engagement
+  useEffect(() => {
+    // Use questionId if available, otherwise use selectedQuestion index + 1 (1-based)
+    const trackingId = questionId || selectedQuestion + 1;
+
+    if (trackingId != null && trackQnAEngagement && endQnAEngagement) {
+      trackQnAEngagement(selectedUnit, trackingId);
+
+      return () => {
+        endQnAEngagement(selectedUnit, trackingId);
+      };
+    }
+  }, [
+    questionId,
+    selectedQuestion,
+    selectedUnit,
+    trackQnAEngagement,
+    endQnAEngagement,
+  ]);
 
   useEffect(() => {
-    const saved = localStorage.getItem(getSummaryKey(selectedUnit, selectedQuestion));
+    const saved = localStorage.getItem(
+      getSummaryKey(selectedUnit, selectedQuestion),
+    );
     if (saved) {
       const parsed = JSON.parse(saved);
       setSummaryList(parsed);
@@ -346,7 +425,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
 
   // Load saved rephrased answers from localStorage on question/unit/selectedQuestion change
   useEffect(() => {
-    const saved = localStorage.getItem(getRephrasedKey(selectedUnit, selectedQuestion));
+    const saved = localStorage.getItem(
+      getRephrasedKey(selectedUnit, selectedQuestion),
+    );
     if (saved) {
       setRephrasedList(JSON.parse(saved));
       setRephraseIndex(0);
@@ -356,23 +437,22 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     }
   }, [selectedUnit, selectedQuestion]);
 
-
   const containerRef = useRef(null);
 
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: false,
       themeVariables: {
-        nodePadding: 10,  // Increase padding
+        nodePadding: 10, // Increase padding
         nodeMinWidth: 10, // Set minimum node width
         nodeMinHeight: 10, // Set minimum node height
-        fontSize: '14px',  // Adjust font size
-      }
+        fontSize: "14px", // Adjust font size
+      },
     });
 
     if (containerRef.current) {
-      console.log('ContainerRef is: ', containerRef);
-      console.log('ContainerRef.current is: ', containerRef.current);
+      console.log("ContainerRef is: ", containerRef);
+      console.log("ContainerRef.current is: ", containerRef.current);
       const mermaidElements = containerRef.current.querySelectorAll(".mermaid");
       console.log("containerRef.current.querySelectorAll", mermaidElements);
 
@@ -400,16 +480,14 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
         console.log("Mermaid elements.length is not > 0");
         console.warn("No Mermaid elements found in the content.");
       }
-
     }
-
   }, [answer]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setPageNumber(1);
     setSelectedQuestion(0);
     setSelectedQnATopic("All Topics"); // Reset topic filter when unit changes
-  },[selectedUnit]);
+  }, [selectedUnit]);
 
   // Reset selected question when topic filter changes
   useEffect(() => {
@@ -435,21 +513,25 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
         .replace(/<\/?p\s*\/?>/g, "")
         .replace(/<code class=[\s\S]*?>/g, "")
         .replace(/<\/code\s*\/?>/g, "")
-        .replace(/<pre[^>]*>/g, '')  // Remove <pre> tag
-        .replace(/<\/pre>/g, '')     // Remove </pre> tag
-        .replace(/<code[^>]*>/g, '') // Remove <code> tag
-        .replace(/<\/code>/g, '');   // Remove </code> tag
+        .replace(/<pre[^>]*>/g, "") // Remove <pre> tag
+        .replace(/<\/pre>/g, "") // Remove </pre> tag
+        .replace(/<code[^>]*>/g, "") // Remove <code> tag
+        .replace(/<\/code>/g, ""); // Remove </code> tag
     };
     let parts = [];
     parts = rawContent.split(/\\`\\`\\`(mermaid|code)([\s\S]*?)\\`\\`\\`/g);
     console.log("Parts:", parts);
 
     return (
-      <div className="rendered-content"> {/* Wrapper with custom class */}
+      <div className="rendered-content">
+        {" "}
+        {/* Wrapper with custom class */}
         {parts.map((part, index) => {
           if (index % 3 === 0) {
             // Regular text content
-            return <span key={index} dangerouslySetInnerHTML={{ __html: part }} />;
+            return (
+              <span key={index} dangerouslySetInnerHTML={{ __html: part }} />
+            );
           } else if (parts[index - 1] === "mermaid") {
             // Mermaid block: Decode and render the mermaid code
             const mermaidCode = decodeMermaidCode(part.trim());
@@ -459,13 +541,12 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                 key={index}
                 className="mermaid"
                 data-mermaid-content={mermaidCode}
-              // style={{ color: "red" }}
+                // style={{ color: "red" }}
               >
                 {mermaidCode}
               </div>
             );
-          }
-          else if (parts[index - 1] === "code") {
+          } else if (parts[index - 1] === "code") {
             // Code block
             const code = decodeMermaidCode(part.trim());
             return (
@@ -486,10 +567,12 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
     );
   };
 
-
   return (
     <div className="book-dashboard-mid-sec">
-      <BookDashboardNavbar currentSection={currentSection} handleSectionChange={handleSectionChange} />
+      <BookDashboardNavbar
+        currentSection={currentSection}
+        handleSectionChange={handleSectionChange}
+      />
       <div className="not-for-small-screens">
         {/* === Pagination === */}
         <div className="parent-pagination-dropdown">
@@ -519,13 +602,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
             </button>
           </div>
 
-
           {/* AI Utility Buttons and Topic Filter */}
           <div className="ai-buttons">
-            <button
-              className="ai-btn summarizer-btn"
-              onClick={handleSummarize}
-            >
+            <button className="ai-btn summarizer-btn" onClick={handleSummarize}>
               {summaryLoading ? "Summarizing..." : "Summarizer"}
               <UsageCounter feature="Summariser" />
             </button>
@@ -535,9 +614,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                 onChange={handleRephrase}
                 value={selectedStyle}
               >
-                <option value="0" >
-                  Rephraser
-                </option>
+                <option value="0">Rephraser</option>
                 <option value="1">Simple language</option>
                 <option value="2">Include Analogy</option>
                 <option value="3">Include Examples</option>
@@ -545,7 +622,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
               <UsageCounter feature="Rephraser" />
             </div>
             <div className="topic-filter-container">
-              <select 
+              <select
                 className="book-dashboard-dropdown common-css-dropdown"
                 value={selectedQnATopic}
                 onChange={(e) => setSelectedQnATopic(e.target.value)}
@@ -562,7 +639,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
 
           {/* Mobile Filter Button */}
           <div className="mobile-filter-button-container">
-            <button 
+            <button
               className="mobile-filter-button"
               onClick={() => setShowMobileFilter(true)}
             >
@@ -572,31 +649,37 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           </div>
         </div>
         <div className="book-dashboard-question-summary-container">
-          {qnaLoading
-            ? (<div>Loading Questions and Answers...</div>)
-            : qnaError
-              ? (<div>Error loading Q&A data. Please contact support team or raise a query!</div>)
-              : question
-                ? (
-                  <div className="QnA">
-                    <div className="book-dashboard-question">
-                      Question:
-                      {parse(question)}
-                    </div>
+          {qnaLoading ? (
+            <div>Loading Questions and Answers...</div>
+          ) : qnaError ? (
+            <div>
+              Error loading Q&A data. Please contact support team or raise a
+              query!
+            </div>
+          ) : question ? (
+            <div className="QnA">
+              <div className="book-dashboard-question">
+                Question:
+                {parse(question)}
+              </div>
 
-                    <div className="book-dashboard-answer">
-                      <div key={`answer_${selectedUnit}_${selectedQuestion}`} ref={containerRef}>
-                        {renderContent(answer)}
-                      </div>
-                    </div>
-                  </div>
-                )
-                : (<div>Data will be available soon!</div>)
-          }
-
+              <div className="book-dashboard-answer">
+                <div
+                  key={`answer_${selectedUnit}_${selectedQuestion}`}
+                  ref={containerRef}
+                >
+                  {renderContent(answer)}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>Data will be available soon!</div>
+          )}
 
           {/* SUMMARY */}
-          <div className="book-dashboard-summary" ref={summaryRef} >Summary of this question</div>
+          <div className="book-dashboard-summary" ref={summaryRef}>
+            Summary of this question
+          </div>
           <div className="book-dashboard-summary-answer">
             <div className="book-dashboard-inner-summary">
               {summaryLoading ? (
@@ -607,7 +690,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                   <div className="summary-pagination-controls">
                     <div
                       disabled={summaryIndex === 0}
-                      onClick={() => setSummaryIndex((prev) => Math.max(prev - 1, 0))}
+                      onClick={() =>
+                        setSummaryIndex((prev) => Math.max(prev - 1, 0))
+                      }
                     >
                       ◀
                     </div>
@@ -616,7 +701,11 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                     </span>
                     <div
                       disabled={summaryIndex === summaryList.length - 1}
-                      onClick={() => setSummaryIndex((prev) => Math.min(prev + 1, summaryList.length - 1))}
+                      onClick={() =>
+                        setSummaryIndex((prev) =>
+                          Math.min(prev + 1, summaryList.length - 1),
+                        )
+                      }
                     >
                       ▶
                     </div>
@@ -637,7 +726,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           </div>
 
           {/** Rephraser */}
-          <div className="book-dashboard-summary" ref={rephraserRef} >Rephrased answer</div>
+          <div className="book-dashboard-summary" ref={rephraserRef}>
+            Rephrased answer
+          </div>
           <div className="book-dashboard-summary-answer">
             <div className="book-dashboard-inner-summary">
               {rephraseLoading ? (
@@ -653,7 +744,8 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
                       ◀
                     </button>
                     <span>
-                      {rephraseIndex + 1} / {rephrasedList.length} : {getStyleLabel(rephrasedList[rephraseIndex].style)}
+                      {rephraseIndex + 1} / {rephrasedList.length} :{" "}
+                      {getStyleLabel(rephrasedList[rephraseIndex].style)}
                     </span>
                     <button
                       disabled={rephraseIndex === rephrasedList.length - 1}
@@ -668,8 +760,6 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
               )}
             </div>
           </div>
-
-
         </div>
         {/* Lower Pagination */}
         <div className="lower-pagination-container">
@@ -704,7 +794,7 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
           <div className="mobile-filter-content">
             <div className="mobile-filter-header">
               <h3>Filter by Topic</h3>
-              <button 
+              <button
                 className="close-filter-btn"
                 onClick={() => setShowMobileFilter(false)}
               >
@@ -713,7 +803,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
             </div>
             <div className="mobile-filter-options">
               <button
-                className={`mobile-filter-option ${selectedQnATopic === "All Topics" ? "active" : ""}`}
+                className={`mobile-filter-option ${
+                  selectedQnATopic === "All Topics" ? "active" : ""
+                }`}
                 onClick={() => {
                   setSelectedQnATopic("All Topics");
                   setShowMobileFilter(false);
@@ -724,7 +816,9 @@ function BookDashboardMidSec({ currentSection, handleSectionChange }) {
               {currentUnitTopics.map((topic, index) => (
                 <button
                   key={index}
-                  className={`mobile-filter-option ${selectedQnATopic === topic ? "active" : ""}`}
+                  className={`mobile-filter-option ${
+                    selectedQnATopic === topic ? "active" : ""
+                  }`}
                   onClick={() => {
                     setSelectedQnATopic(topic);
                     setShowMobileFilter(false);

@@ -6,15 +6,27 @@ import Mycart_suggested_courses_card from "./Mycart_suggested_courses_card";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { trackCartEvent, getISTISOString } from "../utils/analytics";
 
 export default function Mycart() {
-  const { cart, removeFromCart, updateCartItem, addToCart, checkout, getSuggestedCourses, setCart } = useCart();
+  const {
+    cart,
+    removeFromCart,
+    updateCartItem,
+    addToCart,
+    checkout,
+    getSuggestedCourses,
+    setCart,
+  } = useCart();
   const navigate = useNavigate();
 
   // Get suggested courses based on cart items
   const allSuggestedCourses = getSuggestedCourses(cart);
-  
-  console.log('Debug - allSuggestedCourses in Mycart:', allSuggestedCourses.length);
+
+  console.log(
+    "Debug - allSuggestedCourses in Mycart:",
+    allSuggestedCourses.length,
+  );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showCouponPopup, setShowCouponPopup] = useState(false);
@@ -22,19 +34,21 @@ export default function Mycart() {
   const [couponCode, setCouponCode] = useState("");
 
   // Filter suggested courses based on search query
-  const filteredSuggestedCourses = allSuggestedCourses.filter(course => {
+  const filteredSuggestedCourses = allSuggestedCourses.filter((course) => {
     const title = (course.title || "").toLowerCase();
     const dept = (course.dept || "").toLowerCase();
     const subjectCode = (course.subjectCode || "").toLowerCase();
     const q = searchQuery.toLowerCase();
     return title.includes(q) || dept.includes(q) || subjectCode.includes(q);
   });
-  
-  console.log('Debug - filteredSuggestedCourses in Mycart:', filteredSuggestedCourses.length);
-  
+
+  console.log(
+    "Debug - filteredSuggestedCourses in Mycart:",
+    filteredSuggestedCourses.length,
+  );
 
   const upgradeToPro = (id) => {
-    const item = cart.find(item => item.id === id);
+    const item = cart.find((item) => item.id === id);
     if (item && item.plan === "Basic") {
       updateCartItem(id, { plan: "Pro", price: 150 });
     }
@@ -52,81 +66,95 @@ export default function Mycart() {
         universityName: course.universityName,
         year: course.year,
         branchNames: course.branchNames,
-        plan: 'Pro',
+        plan: "Pro",
         price: course.upgradePrice,
         originalOrderId: course.originalOrderId,
         isUpgrade: true,
-        addedAt: new Date().toISOString()
+        addedAt: getISTISOString(),
       };
-      
-      setCart(prev => [...prev, upgradeItem]);
+
+      setCart((prev) => [...prev, upgradeItem]);
       toast.success(`${course.title} upgrade added to cart!`);
+
+      trackCartEvent({
+        action: "added",
+        source: "suggested_upgrade",
+        courseId: upgradeItem.courseId,
+        courseName: upgradeItem.name,
+        plan: upgradeItem.plan,
+        price: upgradeItem.price,
+        subjectCode: upgradeItem.courseCodes?.[0] || null,
+        timestamp: upgradeItem.addedAt,
+        requiredPlan: null,
+      });
       return;
     }
-    
+
     // Handle regular course purchase
     const courseData = {
       id: course.id,
-      name: course.title??"Untitled",
-      courseCodes: course.courseCodes??[],
-      universityName: course.universityName??"",
-      year: course.year??"",
-      branchNames: course.branchNames??[]
+      name: course.title ?? "Untitled",
+      courseCodes: course.courseCodes ?? [],
+      universityName: course.universityName ?? "",
+      year: course.year ?? "",
+      branchNames: course.branchNames ?? [],
     };
-    addToCart(courseData, plan);
-    toast.success(`${course.title??"Course"} (${plan}) added to cart!`);
+    addToCart(courseData, plan, {
+      source: "suggested_course",
+    });
+    toast.success(`${course.title ?? "Course"} (${plan}) added to cart!`);
   };
 
   const handleCheckout = () => {
     checkout();
     toast.success("Order placed successfully!");
-    navigate('/myorders');
+    navigate("/myorders");
   };
 
   // Available coupons
   const availableCoupons = [
     {
-      id: 'bundle25',
-      code: 'BUNDLE25',
-      name: 'Bundle Discount',
-      description: 'Get 25% off on 5+ courses',
+      id: "bundle25",
+      code: "BUNDLE25",
+      name: "Bundle Discount",
+      description: "Get 25% off on 5+ courses",
       discount: 0.25,
-      type: 'bundle',
-      minItems: 5
+      type: "bundle",
+      minItems: 5,
     },
     {
-      id: 'pro30',
-      code: 'PRO30',
-      name: 'Pro Discount',
-      description: 'Get 30% off when all courses are Pro',
-      discount: 0.30,
-      type: 'pro',
-      requiresAllPro: true
+      id: "pro30",
+      code: "PRO30",
+      name: "Pro Discount",
+      description: "Get 30% off when all courses are Pro",
+      discount: 0.3,
+      type: "pro",
+      requiresAllPro: true,
     },
     {
-      id: 'earlybird',
-      code: 'EARLYBIRD',
-      name: 'Early Bird',
-      description: 'Get 15% off on your first purchase',
+      id: "earlybird",
+      code: "EARLYBIRD",
+      name: "Early Bird",
+      description: "Get 15% off on your first purchase",
       discount: 0.15,
-      type: 'general'
+      type: "general",
     },
     {
-      id: 'winner',
-      code: 'WINNER',
-      name: 'Competition Winner',
-      description: 'Get 20% off as a competition winner',
-      discount: 0.20,
-      type: 'general'
+      id: "winner",
+      code: "WINNER",
+      name: "Competition Winner",
+      description: "Get 20% off as a competition winner",
+      discount: 0.2,
+      type: "general",
     },
     {
-      id: 'student',
-      code: 'STUDENT15',
-      name: 'Student Discount',
-      description: 'Get 15% off with student ID',
+      id: "student",
+      code: "STUDENT15",
+      name: "Student Discount",
+      description: "Get 15% off with student ID",
       discount: 0.15,
-      type: 'general'
-    }
+      type: "general",
+    },
   ];
 
   const applyCoupon = (coupon) => {
@@ -153,7 +181,7 @@ export default function Mycart() {
         subtotal += c.price; // Use the upgrade price directly
         return;
       }
-      
+
       if (c.plan === "Basic") {
         subtotal += basicPrice;
         allPro = false;
@@ -164,32 +192,39 @@ export default function Mycart() {
     });
 
     let discount = 0;
-    let discountType = 'none';
+    let discountType = "none";
 
     // Auto-apply appropriate discount based on cart conditions
     // Only consider non-upgrade items for discount calculations
-    const nonUpgradeItems = cart.filter(item => !item.isUpgrade);
-    
+    const nonUpgradeItems = cart.filter((item) => !item.isUpgrade);
+
     if (appliedCoupon) {
       // Apply coupon discount
-      if (appliedCoupon.type === 'bundle' && nonUpgradeItems.length >= appliedCoupon.minItems) {
+      if (
+        appliedCoupon.type === "bundle" &&
+        nonUpgradeItems.length >= appliedCoupon.minItems
+      ) {
         discount = subtotal * appliedCoupon.discount;
-        discountType = 'coupon';
-      } else if (appliedCoupon.type === 'pro' && allPro && nonUpgradeItems.length > 0) {
+        discountType = "coupon";
+      } else if (
+        appliedCoupon.type === "pro" &&
+        allPro &&
+        nonUpgradeItems.length > 0
+      ) {
         discount = subtotal * appliedCoupon.discount;
-        discountType = 'coupon';
-      } else if (appliedCoupon.type === 'general') {
+        discountType = "coupon";
+      } else if (appliedCoupon.type === "general") {
         discount = subtotal * appliedCoupon.discount;
-        discountType = 'coupon';
+        discountType = "coupon";
       }
     } else {
       // Auto-apply system discounts
       if (nonUpgradeItems.length >= 5) {
         discount = subtotal * 0.25;
-        discountType = 'bundle';
+        discountType = "bundle";
       } else if (allPro && nonUpgradeItems.length > 0) {
-        discount = subtotal * 0.30;
-        discountType = 'pro';
+        discount = subtotal * 0.3;
+        discountType = "pro";
       }
     }
 
@@ -199,7 +234,7 @@ export default function Mycart() {
   }, [cart, appliedCoupon]);
 
   const upgradeAllToPro = () => {
-    cart.forEach(item => {
+    cart.forEach((item) => {
       if (item.plan === "Basic") {
         updateCartItem(item.id, { plan: "Pro", price: 150 });
       }
@@ -230,14 +265,23 @@ export default function Mycart() {
             </h1>
             <div className="grid gap-4 md:grid-cols-2">
               {cart.map((course) => (
-                <Mycart_purchased_course_card 
-                  key={course.id} 
+                <Mycart_purchased_course_card
+                  key={course.id}
                   title={course.name}
-                  credits={course.courseCodes??[]}
-                  dept={(Array.isArray(course.branchNames) && course.branchNames.length > 0) ? course.branchNames[0] : 'Unknown'}
+                  credits={course.courseCodes ?? []}
+                  dept={
+                    Array.isArray(course.branchNames) &&
+                    course.branchNames.length > 0
+                      ? course.branchNames[0]
+                      : "Unknown"
+                  }
                   plan={course.plan}
                   price={course.price}
-                  onRemove={() => removeFromCart(course.id)}
+                  onRemove={() =>
+                    removeFromCart(course.id, {
+                      source: "cart_item",
+                    })
+                  }
                   onUpgrade={() => upgradeToPro(course.id)}
                 />
               ))}
@@ -260,32 +304,63 @@ export default function Mycart() {
               </div>
             </div>
             <div className="relative">
-              <button 
+              <button
                 className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50 transition"
                 onClick={() => {
-                  const container = document.getElementById('suggested-courses');
-                  container.scrollBy({ left: -300, behavior: 'smooth' });
+                  const container =
+                    document.getElementById("suggested-courses");
+                  container.scrollBy({
+                    left: -300,
+                    behavior: "smooth",
+                  });
                 }}
               >
-                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg
+                  className="w-6 h-6 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
-              <button 
+              <button
                 className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50 transition"
                 onClick={() => {
-                  const container = document.getElementById('suggested-courses');
-                  container.scrollBy({ left: 300, behavior: 'smooth' });
+                  const container =
+                    document.getElementById("suggested-courses");
+                  container.scrollBy({
+                    left: 300,
+                    behavior: "smooth",
+                  });
                 }}
               >
-                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg
+                  className="w-6 h-6 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
-              <div id="suggested-courses" className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              <div
+                id="suggested-courses"
+                className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
+              >
                 {filteredSuggestedCourses.map((course) => (
-                  <Mycart_suggested_courses_card 
-                    key={course.id} 
+                  <Mycart_suggested_courses_card
+                    key={course.id}
                     course={course}
                     title={course.title}
                     credits={course.subjectCode}
@@ -304,10 +379,12 @@ export default function Mycart() {
         {/* Right side */}
         <div className="w-full md:w-[30%] mt-8 md:mt-0 flex items-start">
           <div className="w-full mx-auto">
-            <OrderSummary 
+            <OrderSummary
               cart={cart}
               pricing={pricing}
-              onRemoveFromCart={removeFromCart}
+              onRemoveFromCart={(id) =>
+                removeFromCart(id, { source: "order_summary" })
+              }
               onUpgradeAllToPro={upgradeAllToPro}
               onShowCouponPopup={() => setShowCouponPopup(true)}
               appliedCoupon={appliedCoupon}
@@ -325,8 +402,10 @@ export default function Mycart() {
         <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Available Coupons</h3>
-              <button 
+              <h3 className="text-2xl font-bold text-gray-800">
+                Available Coupons
+              </h3>
+              <button
                 onClick={() => setShowCouponPopup(false)}
                 className="text-gray-500 hover:text-gray-700 text-xl"
               >
@@ -335,14 +414,23 @@ export default function Mycart() {
             </div>
             <div className="space-y-4 max-h-96 overflow-y-auto">
               {availableCoupons.map((coupon) => (
-                <div key={coupon.id} className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                <div
+                  key={coupon.id}
+                  className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow"
+                >
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
-                      <div className="font-bold text-lg text-gray-800">{coupon.name}</div>
-                      <div className="text-sm text-gray-600 mt-1">{coupon.description}</div>
-                      <div className="text-xs text-gray-500 mt-2">Code: {coupon.code}</div>
+                      <div className="font-bold text-lg text-gray-800">
+                        {coupon.name}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        {coupon.description}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-2">
+                        Code: {coupon.code}
+                      </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => {
                         applyCoupon(coupon);
                         setShowCouponPopup(false);

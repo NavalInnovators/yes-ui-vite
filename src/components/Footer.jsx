@@ -1,14 +1,14 @@
 import "./Footer.css";
 import { logo, RightArrow, MobiusStrip, LogoNI } from "../assets";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { footerLinks } from "../constants";
+import { trackSocialLinkClicked } from "../utils/analytics";
 // import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
-
     // const navigate = useNavigate();
     // State to hold the email input value
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState("");
 
     // State to track if the checkbox is checked
     const [isChecked, setIsChecked] = useState(false);
@@ -34,26 +34,35 @@ const Footer = () => {
             <div className="upper-footer">
                 <div className="logo-section">
                     <img src={logo} alt="yes-logo" />
-                    <div className="company-email-btn">info@navalinnovators.com</div>
+                    <a
+                        href="mailto:info@navalinnovators.com"
+                        className="company-email-btn"
+                        onClick={() =>
+                            trackSocialLinkClicked({
+                                platform: "email",
+                                location: "footer",
+                                url: "mailto:info@navalinnovators.com",
+                            })
+                        }
+                    >
+                        info@navalinnovators.com
+                    </a>
                 </div>
 
-
                 <form onSubmit={handleSubmit} className="newsletter-section">
-
                     <div className="newsletter-heading">
                         Stay up to date with YES news & updates!
                     </div>
 
                     <div className="newsletter-email-btn">
-                        
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={handleEmailChange}
-                                placeholder="Enter Email"
-                                required // Makes the email field required
-                            />
-                        
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={handleEmailChange}
+                            placeholder="Enter Email"
+                            required // Makes the email field required
+                        />
+
                         <div>
                             <button type="submit" disabled={!isChecked}>
                                 <img src={RightArrow} alt="right-arrow" />
@@ -80,12 +89,35 @@ const Footer = () => {
                                 {header.header}
                             </div>
                             {header.innerLinks.map((title) => (
-                                <a 
-                                    key={title.id} 
-                                    href={title.id} 
-                                    className="inner-links" 
-                                    target={header.header.toLowerCase() === "connect" ? "_blank" : "_self"} 
-                                    rel={header.header.toLowerCase() === "connect" ? "noopener noreferrer" : undefined}
+                                <a
+                                    key={title.id}
+                                    href={title.id}
+                                    className="inner-links"
+                                    target={
+                                        header.header.toLowerCase() ===
+                                        "connect"
+                                            ? "_blank"
+                                            : "_self"
+                                    }
+                                    rel={
+                                        header.header.toLowerCase() ===
+                                        "connect"
+                                            ? "noopener noreferrer"
+                                            : undefined
+                                    }
+                                    onClick={() => {
+                                        if (
+                                            header.header.toLowerCase() ===
+                                            "connect"
+                                        ) {
+                                            trackSocialLinkClicked({
+                                                platform:
+                                                    title.title.toLowerCase(),
+                                                location: "footer",
+                                                url: title.id,
+                                            });
+                                        }
+                                    }}
                                 >
                                     {title.title}
                                 </a>
@@ -93,23 +125,24 @@ const Footer = () => {
                         </div>
                     ))}
                 </div>
-
-
             </div>
 
             <div className="lower-footer">
                 {/* TODO : NAVIGATE TO https://www.navalinnovators.com/ */}
-                <div className="product-by"  >
+                <div className="product-by">
                     <img src={MobiusStrip} alt="logoNI" />
                     <div className="product-by-text">
                         <div className="heading-small">Product by</div>
                         <img src={LogoNI} alt="naval innovators" />
                     </div>
                 </div>
-                <div className="copywrite"> Copyright @2025 All rights reserved</div>
+                <div className="copywrite">
+                    {" "}
+                    Copyright @2025 All rights reserved
+                </div>
             </div>
         </div>
     );
 };
 
-export default Footer
+export default Footer;

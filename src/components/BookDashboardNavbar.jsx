@@ -1,8 +1,9 @@
 import React from "react";
 import "./BookDashboardNavbar.css";
-import { PaidIcon } from "../assets"
+import { PaidIcon } from "../assets";
 import { useCart } from "../context/CartContext";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { findCourseByCode } from "../utils/courseUtils";
 
 function BookDashboardNavbar({ currentSection, handleSectionChange }) {
   const { checkFeatureAccess, checkLifetimeLimit } = useCart();
@@ -17,10 +18,7 @@ function BookDashboardNavbar({ currentSection, handleSectionChange }) {
   ];
 
   // Get current course to check plan access
-  const getCurrentCourse = () => {
-    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-    return allCourses.find(course => course.courseCodes.includes(subCode));
-  };
+  const getCurrentCourse = () => findCourseByCode(subCode);
 
   const shouldShowCrownIcon = (tab) => {
     const currentCourse = getCurrentCourse();

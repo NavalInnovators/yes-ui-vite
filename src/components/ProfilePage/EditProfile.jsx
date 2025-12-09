@@ -27,7 +27,8 @@ import { getProfile, updateProfile } from "../../api/api";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format, parseISO } from 'date-fns';
+import { format, parseISO } from "date-fns";
+import { trackProfileEdited } from "../../utils/analytics";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -40,8 +41,12 @@ const EditProfile = () => {
     gender: "",
     email: "Email Address",
     phone: "Phone number",
-    avatarUrl: null
+    avatarUrl: null,
   });
+
+  // Store original data for comparison
+  const [originalData, setOriginalData] = useState(null);
+
   const avatarMap = {
     Avatar01,
     Avatar02,
@@ -58,11 +63,11 @@ const EditProfile = () => {
 
   // Fetch profile data
   const { data: profileDetails, isLoading: isLoadingProfile } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ["profile"],
     queryFn: getProfile,
     onError: (error) => {
       toast.error(error.response?.data?.message || "Failed to fetch profile");
-    }
+    },
   });
 
   // Update profile mutation
@@ -74,7 +79,9 @@ const EditProfile = () => {
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.message || error.message || "Failed to update profile"
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update profile",
       );
     },
   });
@@ -90,6 +97,14 @@ const EditProfile = () => {
         gender: profileDetails.profile.gender || "",
         email: profileDetails.profile.email || "Email Address",
         phone: profileDetails.profile.phone || "Phone number",
+      });
+
+      // Store original data for tracking changes
+      setOriginalData({
+        firstName: profileDetails.profile.firstName || null,
+        lastName: profileDetails.profile.lastName || null,
+        gender: profileDetails.profile.gender || null,
+        dateOfBirth: profileDetails.profile.dateOfBirth || null,
       });
     }
   }, [profileDetails]);
@@ -126,7 +141,7 @@ const EditProfile = () => {
   // Handle Date change from the date picker
   const handleDateChange = (date) => {
     const formattedDate = format(date, "yyyy-MM-dd"); // Store in yyyy-mm-dd format
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       dob: formattedDate,
     }));
@@ -134,12 +149,11 @@ const EditProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-
 
   const getGenderIcon = (gender) => {
     if (!gender) return profileIconNew;
@@ -168,6 +182,15 @@ const EditProfile = () => {
       gender: formData.gender,
       dateOfBirth: formData.dob,
     };
+
+    // Track profile changes
+    if (originalData) {
+      trackProfileEdited({
+        previousData: originalData,
+        newData: updatedProfileDetails,
+      });
+    }
+
     mutate(updatedProfileDetails);
   };
 
@@ -202,7 +225,8 @@ const EditProfile = () => {
                   <img
                     src={
                       profileDetails?.profile?.avatarUrl
-                        ? avatarMap[profileDetails.profile.avatarUrl] || profileIconNew
+                        ? avatarMap[profileDetails.profile.avatarUrl] ||
+                          profileIconNew
                         : profileIconNew
                     }
                     alt="Profile"
@@ -226,7 +250,11 @@ const EditProfile = () => {
                         type="text"
                         name="firstName"
                         placeholder="First Name"
-                        value={formData.firstName === "First Name" ? "" : formData.firstName}
+                        value={
+                          formData.firstName === "First Name"
+                            ? ""
+                            : formData.firstName
+                        }
                         onChange={handleInputChange}
                         className="edit-profile-sec-input"
                         disabled={isLoadingProfile || status === "pending"}
@@ -242,7 +270,11 @@ const EditProfile = () => {
                         type="text"
                         name="lastName"
                         placeholder="Last Name"
-                        value={formData.lastName === "Last Name" ? "" : formData.lastName}
+                        value={
+                          formData.lastName === "Last Name"
+                            ? ""
+                            : formData.lastName
+                        }
                         onChange={handleInputChange}
                         className="edit-profile-sec-input"
                         disabled={isLoadingProfile || status === "pending"}
@@ -273,7 +305,11 @@ const EditProfile = () => {
                     <DatePicker
                       id="dob"
                       name="dob"
-                      selected={formData.dob ? parseISO(formData.dob, "yyyy-MM-dd", new Date()) : null}
+                      selected={
+                        formData.dob
+                          ? parseISO(formData.dob, "yyyy-MM-dd", new Date())
+                          : null
+                      }
                       onChange={handleDateChange}
                       dateFormat="dd-MM-yyyy" // Display in dd-MM-yyyy format
                       className="edit-profile-sec-input"
@@ -341,8 +377,12 @@ const EditProfile = () => {
                       className="profile-edit-submit-button font-black-btn password-button colourful-border-btn"
                       disabled={isLoadingProfile || status === "pending"}
                       style={{
-                        opacity: (isLoadingProfile || status === "pending") ? 0.7 : 1,
-                        cursor: (isLoadingProfile || status === "pending") ? "not-allowed" : "pointer",
+                        opacity:
+                          isLoadingProfile || status === "pending" ? 0.7 : 1,
+                        cursor:
+                          isLoadingProfile || status === "pending"
+                            ? "not-allowed"
+                            : "pointer",
                       }}
                     >
                       {status === "pending" ? "Saving..." : "Save"}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import emailjs from "emailjs-com";  // Import emailjs
+import emailjs from "emailjs-com"; // Import emailjs
+import { trackContactFormSubmitted } from "../utils/analytics";
 import "./ContactPageForm.css";
 
 function ContactPageForm() {
@@ -53,10 +54,20 @@ function ContactPageForm() {
           "service_xqrytv5", // Your service ID
           "template_f2s5jpq", // Your template ID
           e.target, // The form element
-          "zmdx6lUTZLqDyXlsw" // Your user ID from EmailJS
+          "zmdx6lUTZLqDyXlsw", // Your user ID from EmailJS
         )
         .then(
           (result) => {
+            // Track contact form submission
+            trackContactFormSubmitted({
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              phone: formData.phone,
+              email: formData.email,
+              subject: formData.subject,
+              location: "contacts_page",
+            });
+
             alert("Form submitted successfully!");
             setFormData({
               firstName: "",
@@ -69,7 +80,7 @@ function ContactPageForm() {
           },
           (error) => {
             alert("Error: " + error.text);
-          }
+          },
         );
     }
   };
@@ -114,7 +125,7 @@ function ContactPageForm() {
           required
         />
         {formErrors.email && <p className="error">{formErrors.email}</p>}
-        
+
         <input
           type="text"
           id="contact-page-input-subject"
@@ -134,7 +145,9 @@ function ContactPageForm() {
           onChange={handleInputChange}
           className="contact-us-textarea-form "
         ></textarea>
-        <button className="colourful-border-btn contact-page-btn" type="submit">Submit</button>
+        <button className="colourful-border-btn contact-page-btn" type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );

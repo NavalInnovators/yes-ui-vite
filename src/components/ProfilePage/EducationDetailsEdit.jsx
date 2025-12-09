@@ -2,9 +2,16 @@ import "./EducationDetailsEdit.css";
 import { BackArrow, hat } from "../../assets";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getEduData, getAllUniversities, getAllColleges, getBranches, updateEduData } from "../../api/api";
+import {
+  getEduData,
+  getAllUniversities,
+  getAllColleges,
+  getBranches,
+  updateEduData,
+} from "../../api/api";
 import { toast } from "react-toastify";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { trackProfileEdited } from "../../utils/analytics";
 
 const EducationDetailsEdit = () => {
   const navigate = useNavigate();
@@ -15,58 +22,71 @@ const EducationDetailsEdit = () => {
     universityId: 0,
     collegeId: 0,
     branchId: 0,
-    year: 0
+    year: 0,
   });
+
+  // Store original data for comparison
+  const [originalData, setOriginalData] = useState(null);
 
   // Fetch initial education data
   const { data: eduData, isLoading: isLoadingEduData } = useQuery({
-    queryKey: ['educationData'],
+    queryKey: ["educationData"],
     queryFn: getEduData,
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to fetch Education Details");
-    }
+      toast.error(
+        error.response?.data?.message || "Failed to fetch Education Details",
+      );
+    },
   });
 
   // Fetch universities
   const { data: universities, isLoading: isLoadingUniversities } = useQuery({
-    queryKey: ['universities'],
+    queryKey: ["universities"],
     queryFn: getAllUniversities,
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to fetch Universities");
-    }
+      toast.error(
+        error.response?.data?.message || "Failed to fetch Universities",
+      );
+    },
   });
 
   // Update education data mutation
-  const { mutate: updateEducation, isLoading: isUpdating, status } = useMutation({
+  const {
+    mutate: updateEducation,
+    isLoading: isUpdating,
+    status,
+  } = useMutation({
     mutationFn: updateEduData,
     onSuccess: () => {
       toast.success("Education details updated successfully");
-      queryClient.invalidateQueries(['educationData']);
+      queryClient.invalidateQueries(["educationData"]);
       navigate(-1);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to update education details");
-    }
+      toast.error(
+        error.response?.data?.message || "Failed to update education details",
+      );
+    },
   });
 
   // Fetch colleges based on selected university
   const { data: colleges, isLoading: isLoadingColleges } = useQuery({
-    queryKey: ['colleges', selectedUniversityId],
+    queryKey: ["colleges", selectedUniversityId],
     queryFn: () => getAllColleges(selectedUniversityId),
     enabled: !!selectedUniversityId,
     onError: (error) => {
       toast.error(error.response?.data?.message || "Failed to fetch Colleges");
-    }
+    },
   });
 
   // Fetch branches based on selected college
   const { data: branches, isLoading: isLoadingBranches } = useQuery({
-    queryKey: ['branches', selectedCollegeId],
+    queryKey: ["branches", selectedCollegeId],
     queryFn: () => getBranches(selectedCollegeId),
     enabled: !!selectedCollegeId,
     onError: (error) => {
       toast.error(error.response?.data?.message || "Failed to fetch Branches");
-    }
+    },
   });
 
   useEffect(() => {
@@ -74,14 +94,21 @@ const EducationDetailsEdit = () => {
       // Set the university ID from eduData
       const universityId = parseInt(eduData.universityId) || 0;
       setSelectedUniversityId(universityId);
-      
-      setFormData(prev => ({
-        ...prev,
+
+      const eduFormData = {
         universityId,
         collegeId: parseInt(eduData.collegeId) || 0,
         branchId: parseInt(eduData.branchId) || 0,
-        year: parseInt(eduData.year) || 0
+        year: parseInt(eduData.year) || 0,
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        ...eduFormData,
       }));
+
+      // Store original data for tracking changes
+      setOriginalData(eduFormData);
     }
   }, [eduData, universities]);
 
@@ -96,29 +123,29 @@ const EducationDetailsEdit = () => {
     const universityId = parseInt(e.target.value) || 0;
     setSelectedUniversityId(universityId);
     setSelectedCollegeId(null);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       universityId,
       collegeId: 0,
-      branchId: 0
+      branchId: 0,
     }));
   };
 
   const handleCollegeChange = (e) => {
     const collegeId = parseInt(e.target.value) || 0;
     setSelectedCollegeId(collegeId);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       collegeId,
-      branchId: 0
+      branchId: 0,
     }));
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: parseInt(value) || 0
+      [name]: parseInt(value) || 0,
     }));
   };
 
@@ -127,12 +154,25 @@ const EducationDetailsEdit = () => {
       universityId: parseInt(formData.universityId) || 0,
       collegeId: parseInt(formData.collegeId) || 0,
       branchId: parseInt(formData.branchId) || 0,
-      year: parseInt(formData.year) || 0
+      year: parseInt(formData.year) || 0,
     };
 
-    if (!payload.universityId || !payload.collegeId || !payload.branchId || !payload.year) {
+    if (
+      !payload.universityId ||
+      !payload.collegeId ||
+      !payload.branchId ||
+      !payload.year
+    ) {
       toast.error("Please fill in all fields");
       return;
+    }
+
+    // Track education details changes
+    if (originalData) {
+      trackProfileEdited({
+        previousData: originalData,
+        newData: payload,
+      });
     }
 
     updateEducation(payload);
@@ -172,7 +212,10 @@ const EducationDetailsEdit = () => {
                 >
                   <option value="">Select University</option>
                   {universities?.map((university) => (
-                    <option key={university.universityId} value={university.universityId}>
+                    <option
+                      key={university.universityId}
+                      value={university.universityId}
+                    >
                       {university.universityName}
                     </option>
                   ))}
@@ -187,7 +230,11 @@ const EducationDetailsEdit = () => {
                   value={formData.collegeId || ""}
                   onChange={handleCollegeChange}
                   className="edit-profile-sec-select edit-edu-sec-select"
-                  disabled={!selectedUniversityId || isLoadingColleges || isInitialLoading}
+                  disabled={
+                    !selectedUniversityId ||
+                    isLoadingColleges ||
+                    isInitialLoading
+                  }
                 >
                   <option value="">Select College</option>
                   {colleges?.map((college) => (
@@ -206,7 +253,9 @@ const EducationDetailsEdit = () => {
                   value={formData.branchId || ""}
                   onChange={handleChange}
                   className="edit-profile-sec-select edit-edu-sec-select"
-                  disabled={!selectedCollegeId || isLoadingBranches || isInitialLoading}
+                  disabled={
+                    !selectedCollegeId || isLoadingBranches || isInitialLoading
+                  }
                 >
                   <option value="">Select Branch</option>
                   {branches?.map((branch) => (
@@ -239,7 +288,9 @@ const EducationDetailsEdit = () => {
                 <button
                   className="profile-edit-submit-button font-black-btn password-button colourful-border-btn"
                   onClick={handleSave}
-                  disabled={isUpdating || isInitialLoading || status === "pending"}
+                  disabled={
+                    isUpdating || isInitialLoading || status === "pending"
+                  }
                 >
                   {status === "pending" ? "Saving..." : "Save"}
                 </button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Myorders from "./components/Myorders.jsx";
@@ -48,6 +48,18 @@ import Reviewer from "./roles/Reviewer/Reviewer.jsx";
 import "./main.css";
 import Creator from "./roles/Creator/Creator.jsx";
 import Admin from "./roles/Admin/Admin.jsx";
+import {
+  trackBookDashboardActivity,
+  getISTISOString,
+  initializeUserTracking,
+  reidentifyUserAfterAuth,
+  debugUmamiStatus,
+} from "./utils/analytics";
+
+// Expose debug function globally for testing
+if (typeof window !== "undefined") {
+  window.debugUmamiStatus = debugUmamiStatus;
+}
 
 function App() {
   return (
@@ -67,6 +79,107 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+
+  const navigationRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    // Initialize user tracking and identify user in Umami
+    initializeUserTracking();
+
+    // Listen for custom auth event (fired after login/signup)
+    const handleAuthEvent = () => {
+      console.log("[analytics] Auth event detected, re-identifying user");
+      reidentifyUserAfterAuth();
+    };
+
+    window.addEventListener("userAuthenticated", handleAuthEvent);
+
+    return () => {
+      window.removeEventListener("userAuthenticated", handleAuthEvent);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const handlePageHide = () => {
+      const current = navigationRef.current;
+      if (!current) {
+        return;
+      }
+
+      // Only track for book dashboard
+      if (!current.path.startsWith("/book-dashboard")) {
+        return;
+      }
+
+      const now = new Date();
+      const nowIST = getISTISOString(now);
+      const durationMs = now.getTime() - current.visitedAtDate;
+
+      if (durationMs < 10000) {
+        trackBookDashboardActivity({
+          courseId: null,
+          courseName: null,
+          subjectCode: current.subjectCode || null,
+          section: "left_early",
+          durationMs,
+          timestamp: nowIST,
+        });
+      }
+    };
+
+    window.addEventListener("beforeunload", handlePageHide);
+    window.addEventListener("pagehide", handlePageHide);
+    return () => {
+      window.removeEventListener("beforeunload", handlePageHide);
+      window.removeEventListener("pagehide", handlePageHide);
+    };
+  }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    const nowIST = getISTISOString(now);
+    const currentPath = `${location.pathname}${location.search}`;
+    const currentFeatureId = currentPath || "/";
+    const params = new URLSearchParams(location.search);
+    const currentSubjectCode = params.get("subcode");
+    const previous = navigationRef.current;
+
+    // Track left_early if leaving book dashboard after <10 seconds
+    if (previous && previous.path.startsWith("/book-dashboard")) {
+      const durationMs = now.getTime() - previous.visitedAtDate;
+
+      // Track if leaving book dashboard (to any page) after <10 seconds
+      if (
+        !location.pathname.startsWith("/book-dashboard") &&
+        durationMs < 10000
+      ) {
+        trackBookDashboardActivity({
+          courseId: null,
+          courseName: null,
+          subjectCode: previous.subjectCode || null,
+          section: "left_early",
+          durationMs,
+          timestamp: nowIST,
+        });
+      }
+    }
+
+    navigationRef.current = {
+      featureId: currentFeatureId,
+      visitedAtDate: now.getTime(),
+      visitedAtIST: nowIST,
+      path: currentPath,
+      subjectCode: currentSubjectCode,
+    };
+  }, [location.pathname, location.search]);
 
   const shouldRenderNavbar =
     !location.pathname.startsWith("/reviewer") &&
@@ -104,9 +217,7 @@ function AppContent() {
         <Route
           path="/membership-auth"
           element={
-            <ProtectedRoutes>
-              {/* <MembershipProfile /> */}
-            </ProtectedRoutes>
+            <ProtectedRoutes>{/* <MembershipProfile /> */}</ProtectedRoutes>
           }
         />
         {/* These are the pages that were built earlier by Sachin */}

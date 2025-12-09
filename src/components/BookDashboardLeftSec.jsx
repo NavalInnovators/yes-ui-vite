@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./BookDashboardLeftSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
-import PlanPopUp from "./PlanPopUp";
+import { findCourseByCode } from "../utils/courseUtils";
 
 const units = [
   {
@@ -37,10 +37,7 @@ function BookDashboardLeftSec({ currentSection, onUnitAccessDenied }) {
   // const [targetUnit, setTargetUnit] = useState(null);
 
   // Get current course to check plan
-  const getCurrentCourse = () => {
-    const allCourses = JSON.parse(sessionStorage.getItem('allCourses') || '[]');
-    return allCourses.find(course => course.courseCodes.includes(subCode));
-  };
+  const getCurrentCourse = () => findCourseByCode(subCode);
 
   // Handle unit change with access check
   const handleUnitChange = (unitNum) => {

@@ -14,24 +14,28 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthProvider";
 
-
 const SignUp = () => {
   const navigate = useNavigate();
   const { setToken, setProfileId, setEmail } = useAuth();
 
-
   // Properly configured useMutation hook
-  const { mutate, status, } = useMutation({
+  const { mutate, status } = useMutation({
     mutationFn: (data) => apiSignUp(data),
     onSuccess: (data) => {
       // TODO: save token and profileId in local storage with some other process
       setToken(data.accessToken);
       setProfileId(data.profileId);
+
+      // Dispatch custom event for analytics re-identification
+      window.dispatchEvent(new CustomEvent("userAuthenticated"));
+
       navigate("/otp-verification");
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.message || error.message || "Something went wrong"
+        error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
       );
       console.error("Error:", error);
     },
@@ -67,8 +71,7 @@ const SignUp = () => {
   const validatePhone = (phone) => {
     const phoneRegex = /^(\d{10})?$/;
     return phoneRegex.test(phone);
-  }
-
+  };
 
   const validatePassword = (password) => {
     const minLength = 8;
@@ -99,7 +102,7 @@ const SignUp = () => {
     else if (!validateEmail(formData.email))
       newErrors.email = "Invalid email format";
     if (!validatePhone(formData.phone))
-      newErrors.phone = "Invalid Phone Number"
+      newErrors.phone = "Invalid Phone Number";
     if (validatePassword(formData.password))
       newErrors.password = validatePassword(formData.password);
     if (formData.password !== formData.confirmPassword)
@@ -149,9 +152,7 @@ const SignUp = () => {
 
   return (
     <div className="signup-form-container">
-      <div className="signup-form-heading-black">
-        Signup your account!
-      </div>
+      <div className="signup-form-heading-black">Signup your account!</div>
       <div className="signup-container">
         <form onSubmit={handleSubmit} noValidate>
           <div className="signup-form-user">
@@ -179,11 +180,14 @@ const SignUp = () => {
                 onChange={handleInputChange}
                 disabled={status === "pending"}
               />
-
             </div>
           </div>
-          {errors.firstName && (<div className="error-text">{errors.firstName}</div>)}
-          {errors.lastName && (<div className="error-text">{errors.lastName}</div>)}
+          {errors.firstName && (
+            <div className="error-text">{errors.firstName}</div>
+          )}
+          {errors.lastName && (
+            <div className="error-text">{errors.lastName}</div>
+          )}
 
           <div className="signup-form-email-container">
             <img className="form-icon" src={EmailIcon} alt="email-icon" />
@@ -232,9 +236,10 @@ const SignUp = () => {
               alt="toggle-password-visibility"
               onClick={togglePasswordVisibility}
             />
-
           </div>
-          {errors.password && (<div className="error-text">{errors.password}</div>)}
+          {errors.password && (
+            <div className="error-text">{errors.password}</div>
+          )}
 
           <div className="signup-form-cnfrm-pswd-container">
             <img
@@ -256,13 +261,15 @@ const SignUp = () => {
               alt="toggle-confirm-password-visibility"
               onClick={toggleConfirmPasswordVisibility}
             />
-
           </div>
-          {errors.confirmPassword && (<div className="error-text">{errors.confirmPassword}</div>)}
+          {errors.confirmPassword && (
+            <div className="error-text">{errors.confirmPassword}</div>
+          )}
 
           <div className="signup-form-checkbox-tnc">
             <label class="custom-checkbox signup-checkbox-remember">
-              <input type="checkbox"
+              <input
+                type="checkbox"
                 name="checkbox"
                 checked={formData.checkbox}
                 onChange={handleInputChange}
@@ -275,8 +282,9 @@ const SignUp = () => {
             </label>
           </div>
 
-          {errors.checkbox && (<div className="error-text">{errors.checkbox}</div>)}
-
+          {errors.checkbox && (
+            <div className="error-text">{errors.checkbox}</div>
+          )}
 
           <div className="">
             <button
@@ -290,7 +298,6 @@ const SignUp = () => {
               {status === "pending" ? "Signing up..." : "Sign Up"}
             </button>
           </div>
-
         </form>
       </div>
       <div className="signup-form-login-link">
