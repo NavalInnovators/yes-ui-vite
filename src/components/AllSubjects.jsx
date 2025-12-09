@@ -128,7 +128,9 @@ const AllSubjects = ({ searchQuery }) => {
   const { data: myCourses = [] } = useMyCourses();
 
   const { mutate: mutateEnroll, isPending: isEnrolling } = useMutation({
-    mutationFn: (course) => enrollCourse(course),
+    mutationFn: (course) => {
+      return enrollCourse(course);
+    },
     onSuccess: (data) => {
       const enrolledCourse = data[1];
 
@@ -157,21 +159,38 @@ const AllSubjects = ({ searchQuery }) => {
       queryClient.invalidateQueries(["myCourses"]);
     },
     onError: (error) => {
-      console.log("Error in enrolling for the subject: ", error);
+      console.error("Enrollment Error:", error.response);
       toast.dismiss();
-      toast.error(`Enrollment failed! Please try again`);
+
+      if (error.response?.status === 404) {
+        toast.error(
+          "Course not found. Please refresh the page and try again.",
+        );
+      } else {
+        toast.error(`Enrollment failed! ${error.message}`);
+      }
     },
   });
 
   // Handler for Buy button
-  const handleBuyClick = (course, plan) => {
+  const handleBuyClick = async (course, plan) => {
     // Check if course already exists in cart
-    const existingItem = cart.find(item => item.courseId === course.id);
-    
+    const existingItem = cart.find((item) => item.courseId === course.id);
+
     if (existingItem) {
-      // Update existing item with new plan
-      updateCartItem(existingItem.id, { plan, price: plan === 'Basic' ? 110 : 150 });
-      toast.success(`${course.name} updated to ${plan} plan!`);
+      // If changing plan, remove old item and add new one via API to get correct price
+      if (existingItem.plan !== plan) {
+        toast.info(`Updating ${course.name} to ${plan} plan...`);
+        await removeFromCart(existingItem.id, {
+          source: "plan_change",
+        });
+        await addToCart(course, plan, {
+          source: "all_subjects",
+        });
+        toast.success(`${course.name} updated to ${plan} plan!`);
+      } else {
+        toast.info(`${course.name} is already in cart with ${plan} plan`);
+      }
     } else {
       // Add new item to cart
       addToCart(course, plan, {
@@ -182,34 +201,28 @@ const AllSubjects = ({ searchQuery }) => {
   };
 
   const pricing = useMemo(() => {
-    const basicPrice = 110;
-    const proPrice = 150;
-
     let subtotal = 0;
     let allPro = true;
     let hasBasic = false;
 
     cart.forEach((c) => {
-      if (c.plan === "Basic") {
-        subtotal += basicPrice;
+      // Use actual price from backend
+      subtotal += c.price || 0;
+
+      if (c.plan === "BASIC") {
         allPro = false;
         hasBasic = true;
-      } else {
-        subtotal += proPrice;
       }
     });
 
     let discount = 0;
 
-    // If more than 5 courses → 30% discount
-    if (cart.length >= 5) {
-      discount = subtotal * 0.25;
-    }
-
-    // If upgrade-to-pro → 10% discount
-    if (allPro && cart.length > 0) {
-      discount = subtotal * 0.30;
-    }
+    // if (cart.length >= 5) {
+    //     discount = subtotal * 0.25;
+    // }
+    // if (allPro && cart.length > 0) {
+    //     discount = subtotal * 0.3;
+    // }
 
     const total = subtotal - discount;
 
@@ -217,9 +230,9 @@ const AllSubjects = ({ searchQuery }) => {
   }, [cart]);
 
   const upgradeAllToPro = () => {
-    cart.forEach(item => {
-      if (item.plan === "Basic") {
-        updateCartItem(item.id, { plan: "Pro", price: 150 });
+    cart.forEach((item) => {
+      if (item.plan === "BASIC") {
+        updateCartItem(item.id, { plan: "PRO", price: 150 });
       }
     });
   };
@@ -271,12 +284,16 @@ const AllSubjects = ({ searchQuery }) => {
                   - Buttons have same width/shape as Start Learning
                   - Clicking opens the global sidebar with the selected plan
               */}
-                <div className="buy-split-btn" role="group" aria-label="Buy plans">
+                <div
+                  className="buy-split-btn"
+                  role="group"
+                  aria-label="Buy plans"
+                >
                   <button
                     className="buy-btn buy-left"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleBuyClick(course, "Basic");
+                      handleBuyClick(course, "BASIC");
                     }}
                   >
                     Buy Basic
@@ -285,7 +302,7 @@ const AllSubjects = ({ searchQuery }) => {
                     className="buy-btn buy-right"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleBuyClick(course, "Pro");
+                      handleBuyClick(course, "PRO");
                     }}
                   >
                     Buy Pro
@@ -297,37 +314,39 @@ const AllSubjects = ({ searchQuery }) => {
                     isEnrolling
                       ? null
                       : () => {
-                        console.log("Clicked on start learning.....");
-                        sessionStorage.setItem(
-                          "selectedCourseCode",
-                          course.courseCodes[0]
-                        );
-
-                        // Check if the course is already enrolled (from server)
-                        const courseExists = myCourses.some(
-                          (tempCourse) => tempCourse.id === course.id
-                        );
-                        // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
-
-                        if (courseExists) {
-                          navigate(
-                            `/book-dashboard?subcode=${course.courseCodes[0]}`
+                          console.log("Clicked on start learning.....");
+                          sessionStorage.setItem(
+                            "selectedCourseCode",
+                            course.courseCodes[0],
                           );
-                          return;
-                        } else {
-                          if (!localStorage.getItem("token")) {
-                            navigate("/login");
+
+                          // Check if the course is already enrolled (from server)
+                          const courseExists = myCourses.some(
+                            (tempCourse) => tempCourse.id === course.id,
+                          );
+                          // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
+
+                          if (courseExists) {
+                            navigate(
+                              `/book-dashboard?subcode=${course.courseCodes[0]}`,
+                            );
                             return;
                           } else {
-                            console.log("Have token!");
-                            toast.info(
-                              "Enrolling in the course... Please wait",
-                              { autoClose: false }
-                            );
-                            mutateEnroll(course);
+                            if (!localStorage.getItem("token")) {
+                              navigate("/login");
+                              return;
+                            } else {
+                              console.log("Have token!");
+                              toast.info(
+                                "Enrolling in the course... Please wait",
+                                {
+                                  autoClose: false,
+                                },
+                              );
+                              mutateEnroll(course);
+                            }
                           }
                         }
-                      }
                   }
                   className="all-course-card-start-learning-btn font-notification pointer-cursor"
                 >
@@ -360,16 +379,31 @@ const AllSubjects = ({ searchQuery }) => {
             </div>
 
             <div className="pricing-sidebar-body">
-            {cart.length <= 4 ? (<p className="muted green">Select 5+ courses to unlock 25% discount!</p>):(<p className="muted green">Upgrade to Pro, get 30% discount!</p>)}
+              {cart.length <= 4 ? (
+                <p className="muted green">
+                  Select 5+ courses to unlock 25% discount!
+                </p>
+              ) : (
+                <p className="muted green">Upgrade to Pro, get 30% discount!</p>
+              )}
 
               <div className="sidebar-card sidebar-card-content">
-                
                 {cart.map((c) => (
                   <div key={c.id} className="summary-row">
-                    <div>{c.name} ({c.plan})</div>
+                    <div>
+                      {c.name} ({c.plan})
+                    </div>
                     <div className="price-delete">
-                      ₹{c.plan === "Basic" ? 110 : 150}
-                      <button onClick={() => removeFromCart(c.id, { source: "order_summary" })}>🗑️</button>
+                      ₹{c.price || 0}
+                      <button
+                        onClick={() =>
+                          removeFromCart(c.id, {
+                            source: "order_summary",
+                          })
+                        }
+                      >
+                        🗑️
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -391,9 +425,14 @@ const AllSubjects = ({ searchQuery }) => {
                   <div className="bundle-row">
                     <div>
                       <div className="bundle-title">Bundle Savings</div>
-                      <div className="bundle-desc">Upgrade all to Pro & Save 10%</div>
+                      <div className="bundle-desc">
+                        Upgrade all to Pro & Save 10%
+                      </div>
                     </div>
-                    <button className="bundle-pro-btn" onClick={upgradeAllToPro}>
+                    <button
+                      className="bundle-pro-btn"
+                      onClick={upgradeAllToPro}
+                    >
                       Pro
                     </button>
                   </div>
@@ -407,14 +446,13 @@ const AllSubjects = ({ searchQuery }) => {
             </div>
 
             <div className="pricing-sidebar-footer">
-              <button 
+              <button
                 className="secure-checkout-btn"
-                onClick={() => navigate('/mycart')}
+                onClick={() => navigate("/mycart")}
               >
-                Secure Checkout
+                Proceed to cart
               </button>
             </div>
-
 
             {/* <div className="pricing-sidebar-body">
           

@@ -5,6 +5,14 @@ import {
   clearPopupTimersForCartItems,
   getISTISOString,
 } from "../utils/analytics";
+import {
+  getCart,
+  addToCart as addToCartAPI,
+  removeFromCart as removeFromCartAPI,
+  clearCart as clearCartAPI,
+  getSubscriptions,
+} from "../api/api";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
@@ -19,116 +27,177 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [isLoadingCart, setIsLoadingCart] = useState(true);
+  const [subscriptions, setSubscriptions] = useState([]);
 
-  // Load cart and orders from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    const savedOrders = localStorage.getItem("orders");
-
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+  // Helper function to get all courses from storage
+  const getAllCourses = () => {
+    try {
+      const coursesFromSession = sessionStorage.getItem("allCourses");
+      const coursesFromLocal = localStorage.getItem("allCourses");
+      return JSON.parse(coursesFromSession || coursesFromLocal || "[]");
+    } catch {
+      return [];
     }
+  };
 
+  // Helper function to find courseId by course name
+  const getCourseIdByName = (courseName) => {
+    const allCourses = getAllCourses();
+    const matchingCourse = allCourses.find((c) => c.name === courseName);
+    return matchingCourse ? matchingCourse.id : null;
+  };
+
+  // Helper function to transform API cart response
+  const transformCartItem = (item) => {
+    const actualCourseId = getCourseIdByName(item.courseName);
+
+    return {
+      cartId: item.cartId,
+      id: item.cartId,
+      courseId: actualCourseId,
+      name: item.courseName,
+      courseCodes: item.courseCodes || [],
+      universityName: item.universityName || "",
+      year: item.year || "",
+      branchNames: item.branchNames || [],
+      plan: item.planName,
+      price: item.amount / 100, // Convert paise to rupees
+      addedAt: item.addedAt || getISTISOString(),
+      isUpgrade: item.isUpgrade || false,
+    };
+  };
+
+  // Load cart from API on mount
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const profileId = localStorage.getItem("profileId");
+        if (!profileId) {
+          setIsLoadingCart(false);
+          return;
+        }
+
+        // Clear old localStorage cart data (migration to API)
+        localStorage.removeItem("cart");
+        localStorage.removeItem("courseIdMap"); // Clean up old mapping approach
+
+        const response = await getCart(profileId);
+        console.log("Cart loaded from API:", response);
+
+        if (response && Array.isArray(response)) {
+          const transformedCart = response.map((item) =>
+            transformCartItem(item),
+          );
+          setCart(transformedCart);
+          console.log("Transformed cart:", transformedCart);
+        }
+      } catch (error) {
+        console.error("Failed to load cart:", error);
+      } finally {
+        setIsLoadingCart(false);
+      }
+    };
+
+    loadCart();
+
+    // Load subscriptions from API
+    const loadSubscriptions = async () => {
+      try {
+        const profileId = localStorage.getItem("profileId");
+        const token = localStorage.getItem("token");
+
+        if (!profileId || !token) return;
+
+        const response = await getSubscriptions(profileId, "ACTIVE");
+
+        if (response && response.content && Array.isArray(response.content)) {
+          setSubscriptions(response.content);
+        }
+      } catch (error) {
+        console.error("Failed to load subscriptions:", error);
+      }
+    };
+
+    loadSubscriptions();
+
+    // Load orders from localStorage (keeping this for now)
+    const savedOrders = localStorage.getItem("orders");
     if (savedOrders) {
       setOrders(JSON.parse(savedOrders));
     }
   }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
 
   // Save orders to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("orders", JSON.stringify(orders));
   }, [orders]);
 
-  const addToCart = (course, plan, options = {}) => {
+  const addToCart = async (course, plan, options = {}) => {
     const { source = "unknown", metadata = {} } = options;
-    const cartItem = {
-      id: `${course.id}-${plan}`,
-      courseId: course.id,
-      name: course.name,
-      courseCodes: course.courseCodes,
-      universityName: course.universityName,
-      year: course.year,
-      branchNames: course.branchNames,
-      plan: plan,
-      price: plan === "Basic" ? 110 : 150,
-      addedAt: getISTISOString(),
-      isUpgrade: !!course.isUpgrade,
-    };
 
-    setCart((prev) => {
-      // Check if course already exists in cart (regardless of plan)
-      const existingCourseIndex = prev.findIndex(
-        (item) => item.courseId === course.id,
-      );
+    try {
+      const profileId = localStorage.getItem("profileId");
+      const token = localStorage.getItem("token");
 
-      if (existingCourseIndex !== -1) {
-        // Update existing course with new plan
-        const updatedCart = [...prev];
-        const previousItem = prev[existingCourseIndex];
-        updatedCart[existingCourseIndex] = cartItem;
-
-        // Determine if it's an upgrade or downgrade (only between basic and pro)
-        const planHierarchy = { free: 0, basic: 1, pro: 2 };
-        const previousPlanLevel =
-          planHierarchy[previousItem?.plan?.toLowerCase()] || 0;
-        const newPlanLevel = planHierarchy[cartItem.plan?.toLowerCase()] || 0;
-
-        // Only track as upgrade/downgrade if both plans are paid (basic or pro)
-        let action = "updated";
-        if (previousPlanLevel >= 1 && newPlanLevel >= 1) {
-          if (newPlanLevel > previousPlanLevel) {
-            action = "upgraded";
-          } else if (newPlanLevel < previousPlanLevel) {
-            action = "downgraded";
-          }
-        }
-
-        trackCartEvent({
-          action,
-          source,
-          courseId: cartItem.courseId,
-          courseName: cartItem.name,
-          plan: cartItem.plan,
-          price: cartItem.price,
-          subjectCode: cartItem.courseCodes?.[0] || null,
-          timestamp: cartItem.addedAt,
-          requiredPlan: metadata?.required_plan || null,
-          previousPlan: previousItem?.plan || null,
-          previousPrice: previousItem?.price || null,
-        });
-
-        return updatedCart;
+      if (!profileId) {
+        toast.error("Please login to add items to cart");
+        return;
       }
 
-      // Add new course to cart
+      const planId = plan;
+
+      await addToCartAPI(profileId, planId, course.id);
+
+      console.log("Add to cart successful");
+
+      // Reload cart from API to get updated state
+      const updatedCart = await getCart(profileId);
+      if (updatedCart && Array.isArray(updatedCart)) {
+        const transformedCart = updatedCart.map((item) =>
+          transformCartItem(item),
+        );
+        setCart(transformedCart);
+      }
+
+      // Track analytics
       trackCartEvent({
         action: "added",
         source,
-        courseId: cartItem.courseId,
-        courseName: cartItem.name,
-        plan: cartItem.plan,
-        price: cartItem.price,
-        subjectCode: cartItem.courseCodes?.[0] || null,
-        timestamp: cartItem.addedAt,
+        courseId: course.id,
+        courseName: course.name,
+        plan: plan,
+        price: plan === "BASIC" ? 110 : 150,
+        subjectCode: course.courseCodes?.[0] || null,
+        timestamp: getISTISOString(),
         requiredPlan: metadata?.required_plan || null,
       });
-
-      return [...prev, cartItem];
-    });
+    } catch (error) {
+      console.group("❌ Add to Cart Failed");
+      console.error("Error:", error.message);
+      console.error("Full error:", error);
+      if (error.response) {
+        console.error("Response status:", error.response?.status);
+        console.error("Response data:", error.response?.data);
+      }
+      console.groupEnd();
+      toast.error(error.message || "Failed to add item to cart");
+    }
   };
 
-  const removeFromCart = (id, options = {}) => {
+  const removeFromCart = async (id, options = {}) => {
     const { source = "cart", metadata = {} } = options;
-    setCart((prev) => {
-      const removedItem = prev.find((item) => item.id === id);
+
+    try {
+      const removedItem = cart.find((item) => item.id === id);
 
       if (removedItem) {
-        const removedAt = getISTISOString();
+        await removeFromCartAPI(id);
+
+        // Update local state
+        setCart((prev) => prev.filter((item) => item.id !== id));
+
+        // Track analytics
         trackCartEvent({
           action: "removed",
           source,
@@ -137,14 +206,15 @@ export const CartProvider = ({ children }) => {
           plan: removedItem.plan,
           price: removedItem.price,
           subjectCode: removedItem.courseCodes?.[0] || null,
-          timestamp: removedAt,
+          timestamp: getISTISOString(),
           requiredPlan: metadata?.required_plan || null,
         });
         cancelPopupAbandonment(removedItem.courseId);
       }
-
-      return prev.filter((item) => item.id !== id);
-    });
+    } catch (error) {
+      console.error("Failed to remove from cart:", error);
+      toast.error(error.message || "Failed to remove item from cart");
+    }
   };
 
   const updateCartItem = (id, updates) => {
@@ -153,9 +223,21 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const clearCart = () => {
-    clearPopupTimersForCartItems(cart);
-    setCart([]);
+  const clearCart = async () => {
+    try {
+      const profileId = localStorage.getItem("profileId");
+      if (!profileId) {
+        return;
+      }
+
+      await clearCartAPI(profileId);
+
+      clearPopupTimersForCartItems(cart);
+      setCart([]);
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
+      toast.error(error.message || "Failed to clear cart");
+    }
   };
 
   const checkout = () => {
@@ -184,7 +266,6 @@ export const CartProvider = ({ children }) => {
       let updatedOrders = [...prev];
 
       newOrders.forEach((newOrder) => {
-        // Find existing orders with the same course name and courseId
         const existingOrderIndex = updatedOrders.findIndex(
           (existingOrder) =>
             existingOrder.name === newOrder.name &&
@@ -192,11 +273,9 @@ export const CartProvider = ({ children }) => {
         );
 
         if (existingOrderIndex !== -1) {
-          // Replace the existing order with the new one
           console.log(`Replacing existing order for course: ${newOrder.name}`);
           updatedOrders[existingOrderIndex] = newOrder;
         } else {
-          // Add new order if no duplicate found
           updatedOrders.push(newOrder);
         }
       });
@@ -216,7 +295,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const addUpgradeToCart = (order) => {
-    const upgradePrice = 150 - 110; // Pro price - Basic price
+    const upgradePrice = 150 - 110;
     const upgradeItem = {
       id: `upgrade-${order.id}`,
       courseId: order.courseId,
@@ -225,10 +304,10 @@ export const CartProvider = ({ children }) => {
       universityName: order.universityName,
       year: order.year,
       branchNames: order.branchNames,
-      plan: "Pro", // This should be Pro plan, not "Upgrade to Pro"
+      plan: "Pro",
       price: upgradePrice,
       originalOrderId: order.id,
-      isUpgrade: true, // Mark this as an upgrade item
+      isUpgrade: true,
       addedAt: getISTISOString(),
     };
 
@@ -247,13 +326,29 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Plan-based feature access utilities
   const getUserPlanForCourse = (courseId) => {
+    // Checking API subscriptions
+    const apiSubscription = subscriptions.find(
+      (sub) =>
+        sub.course?.id === courseId &&
+        sub.status === "ACTIVE",
+    );
+
+    if (apiSubscription) {
+      return apiSubscription.plan; // Returns "FREE", "BASIC", or "PRO"
+    }
+
+    // Fallback to localStorage orders (for mock/test data)
     const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     const courseOrder = allOrders.find(
       (order) => order.courseId === courseId && order.status === "active",
     );
-    return courseOrder ? courseOrder.plan : "Free";
+
+    if (courseOrder) {
+      return courseOrder.plan;
+    }
+
+    return "Free";
   };
 
   const checkFeatureAccess = (courseId, feature, unitNumber = null) => {
@@ -278,18 +373,15 @@ export const CartProvider = ({ children }) => {
       "AI Chatbot": { Free: false, Basic: false, Pro: true },
     };
 
-    // Handle unit-wise restrictions for Notes and Insights FIRST
     if ((feature === "Notes" || feature === "Insights") && unitNumber) {
       if (userPlan === "Free" && unitNumber > 1) {
-        return false; // Free users can only access Unit 1
+        return false;
       }
-      // If Free user accessing Unit 1, allow access
       if (userPlan === "Free" && unitNumber === 1) {
-        return "limited"; // Free users have limited access to Unit 1
+        return "limited";
       }
     }
 
-    // For other features or if no unit restrictions apply
     const access = featureAccess[feature]
       ? featureAccess[feature][userPlan]
       : false;
@@ -310,7 +402,6 @@ export const CartProvider = ({ children }) => {
     return featureRequirements[feature] || "Free";
   };
 
-  // Lifetime usage tracking for Summariser and Rephraser
   const getLifetimeUsage = (feature) => {
     const usageKey = `lifetime_${feature.toLowerCase()}_usage`;
     return parseInt(localStorage.getItem(usageKey) || "0");
@@ -323,14 +414,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const checkLifetimeLimit = (feature) => {
-    const userPlan = getUserPlanForCourse("global"); // Check global plan
+    const userPlan = getUserPlanForCourse("global");
     const currentUsage = getLifetimeUsage(feature);
-    const limit = 50; // Free plan limit
+    const limit = 50;
 
     if (userPlan === "Free" && currentUsage >= limit) {
-      return false; // Limit exceeded
+      return false;
     }
-    return true; // Within limit or has paid plan
+    return true;
   };
 
   const getRemainingUsage = (feature) => {
@@ -345,39 +436,24 @@ export const CartProvider = ({ children }) => {
   };
 
   const getSuggestedCourses = (cartItems) => {
-    // Get all courses from sessionStorage first, then try localStorage as fallback
     let allCourses = JSON.parse(sessionStorage.getItem("allCourses") || "[]");
 
-    // If no courses in sessionStorage, try localStorage
     if (!allCourses || allCourses.length === 0) {
-      console.log("Debug - No courses in sessionStorage, trying localStorage");
       allCourses = JSON.parse(localStorage.getItem("allCourses") || "[]");
     }
 
-    console.log("Debug - allCourses from storage:", allCourses.length);
-    console.log("Debug - cartItems:", cartItems);
-
-    // If still no courses, return empty array
     if (!allCourses || allCourses.length === 0) {
-      console.log("Debug - No courses found in any storage");
       return [];
     }
 
-    // Get years from cart items
     const cartYears = [...new Set(cartItems.map((item) => item.year))];
-    console.log("Debug - cartYears:", cartYears);
 
-    // If no cart items, return empty array
     if (cartYears.length === 0) {
-      console.log("Debug - No cart years found");
       return [];
     }
 
-    // Get all orders to check for Basic Plan courses that can be upgraded
     const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    console.log("Debug - allOrders:", allOrders.length);
 
-    // FIRST PRIORITY: Basic Plan courses from My Orders that can be upgraded
     const basicPlanOrders = allOrders.filter(
       (order) =>
         order.plan === "Basic" &&
@@ -385,19 +461,13 @@ export const CartProvider = ({ children }) => {
         !cartItems.some((cartItem) => cartItem.courseId === order.courseId),
     );
 
-    console.log("Debug - basicPlanOrders for upgrade:", basicPlanOrders.length);
-
-    // SECOND PRIORITY: Same year courses (excluding already purchased courses)
     const sameYearCourses = allCourses.filter(
       (course) =>
         cartYears.includes(course.year) &&
         !cartItems.some((cartItem) => cartItem.courseId === course.id) &&
-        !allOrders.some((order) => order.courseId === course.id), // Exclude already purchased courses
+        !allOrders.some((order) => order.courseId === course.id),
     );
 
-    console.log("Debug - sameYearCourses:", sameYearCourses.length);
-
-    // Combine and prioritize: First priority courses first, then second priority
     const prioritizedCourses = [
       ...basicPlanOrders.map((order) => ({
         id: order.courseId,
@@ -408,10 +478,10 @@ export const CartProvider = ({ children }) => {
         universityName: order.universityName,
         branchNames: order.branchNames,
         courseCodes: order.courseCodes,
-        hasBasic: true, // This is a Basic plan that can be upgraded
-        isUpgrade: true, // Mark as upgrade course
+        hasBasic: true,
+        isUpgrade: true,
         originalOrderId: order.id,
-        upgradePrice: 150 - 110, // Pro - Basic price
+        upgradePrice: 150 - 110,
       })),
       ...sameYearCourses.map((course) => ({
         id: course.id,
@@ -427,20 +497,25 @@ export const CartProvider = ({ children }) => {
       })),
     ];
 
-    console.log(
-      "Debug - prioritized courses total:",
-      prioritizedCourses.length,
-    );
-    console.log(
-      "Debug - upgrade courses:",
-      prioritizedCourses.filter((c) => c.isUpgrade).length,
-    );
-    console.log(
-      "Debug - regular courses:",
-      prioritizedCourses.filter((c) => !c.isUpgrade).length,
-    );
-
     return prioritizedCourses;
+  };
+
+  // Function to reload subscriptions (after payment)
+  const reloadSubscriptions = async () => {
+    try {
+      const profileId = localStorage.getItem("profileId");
+      const token = localStorage.getItem("token");
+
+      if (!profileId || !token) return;
+
+      const response = await getSubscriptions(profileId, "ACTIVE");
+
+      if (response && response.content && Array.isArray(response.content)) {
+        setSubscriptions(response.content);
+      }
+    } catch (error) {
+      console.error("Failed to reload subscriptions:", error);
+    }
   };
 
   const value = {
@@ -462,6 +537,9 @@ export const CartProvider = ({ children }) => {
     incrementLifetimeUsage,
     checkLifetimeLimit,
     getRemainingUsage,
+    isLoadingCart,
+    reloadSubscriptions,
+    subscriptions,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
