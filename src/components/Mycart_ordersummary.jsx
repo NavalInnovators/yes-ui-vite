@@ -128,7 +128,7 @@ export default function OrderSummary({
       </div>
 
       {/* Savings Message */}
-      {!pricing.allPro && (
+      {/* {!pricing.allPro && (
         <>
           {cart.length <= 4 ? (
             <div className="mt-4 bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-xl py-3 px-4 text-center text-sm text-green-800 shadow-sm">
@@ -142,10 +142,10 @@ export default function OrderSummary({
                 Upgrade to Pro, get 30% discount!
               </span>
             </div>
-          )}
+          )} */}
 
           {/* Bundle Savings Card */}
-          {pricing.hasBasic && (
+          {/* {pricing.hasBasic && (
             <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4">
               <div className="flex justify-between items-center">
                 <div>
@@ -166,7 +166,7 @@ export default function OrderSummary({
             </div>
           )}
         </>
-      )}
+      )} */}
 
       {/* Divider */}
       <div className="border-t border-gray-200 my-6"></div>

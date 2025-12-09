@@ -647,3 +647,87 @@ export const getSubscriptions = async (
     throw new Error(message);
   }
 };
+
+// TRANSACTION APIs
+export const createTransaction = async (profileId, couponCode = null) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/transactions/create-transaction`,
+      {
+        profileId,
+        couponCode,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    console.log("Transaction Created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating transaction:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to create transaction. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const verifyPayment = async (orderId, paymentId, signature) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/transactions/verify-payment`,
+      {
+        razorpayOrderId: orderId,
+        razorpayPaymentId: paymentId,
+        razorpaySignature: signature,
+        status: "SUCCESS",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    console.log("Payment Verified:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error verifying payment:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Payment verification failed. Please contact support.";
+    throw new Error(message);
+  }
+};
+
+export const removeTransaction = async (orderId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/transactions/remove/${orderId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    console.log("Transaction Removed:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error removing transaction:", error.response);
+
+    const message =
+      error.response?.data?.message ||
+      "Failed to remove transaction. Please try again.";
+    throw new Error(message);
+  }
+};

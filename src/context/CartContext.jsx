@@ -10,6 +10,7 @@ import {
   addToCart as addToCartAPI,
   removeFromCart as removeFromCartAPI,
   clearCart as clearCartAPI,
+  getSubscriptions,
 } from "../api/api";
 import { toast } from "react-toastify";
 
@@ -27,6 +28,7 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [isLoadingCart, setIsLoadingCart] = useState(true);
+  const [subscriptions, setSubscriptions] = useState([]);
 
   // Helper function to get all courses from storage
   const getAllCourses = () => {
@@ -60,7 +62,7 @@ export const CartProvider = ({ children }) => {
       year: item.year || "",
       branchNames: item.branchNames || [],
       plan: item.planName,
-      price: item.amount,
+      price: item.amount / 100, // Convert paise to rupees
       addedAt: item.addedAt || getISTISOString(),
       isUpgrade: item.isUpgrade || false,
     };
@@ -98,6 +100,26 @@ export const CartProvider = ({ children }) => {
     };
 
     loadCart();
+
+    // Load subscriptions from API
+    const loadSubscriptions = async () => {
+      try {
+        const profileId = localStorage.getItem("profileId");
+        const token = localStorage.getItem("token");
+
+        if (!profileId || !token) return;
+
+        const response = await getSubscriptions(profileId, "ACTIVE");
+
+        if (response && response.content && Array.isArray(response.content)) {
+          setSubscriptions(response.content);
+        }
+      } catch (error) {
+        console.error("Failed to load subscriptions:", error);
+      }
+    };
+
+    loadSubscriptions();
 
     // Load orders from localStorage (keeping this for now)
     const savedOrders = localStorage.getItem("orders");
@@ -305,11 +327,28 @@ export const CartProvider = ({ children }) => {
   };
 
   const getUserPlanForCourse = (courseId) => {
+    // Checking API subscriptions
+    const apiSubscription = subscriptions.find(
+      (sub) =>
+        sub.course?.id === courseId &&
+        sub.status === "ACTIVE",
+    );
+
+    if (apiSubscription) {
+      return apiSubscription.plan; // Returns "FREE", "BASIC", or "PRO"
+    }
+
+    // Fallback to localStorage orders (for mock/test data)
     const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     const courseOrder = allOrders.find(
       (order) => order.courseId === courseId && order.status === "active",
     );
-    return courseOrder ? courseOrder.plan : "Free";
+
+    if (courseOrder) {
+      return courseOrder.plan;
+    }
+
+    return "Free";
   };
 
   const checkFeatureAccess = (courseId, feature, unitNumber = null) => {
@@ -461,6 +500,24 @@ export const CartProvider = ({ children }) => {
     return prioritizedCourses;
   };
 
+  // Function to reload subscriptions (after payment)
+  const reloadSubscriptions = async () => {
+    try {
+      const profileId = localStorage.getItem("profileId");
+      const token = localStorage.getItem("token");
+
+      if (!profileId || !token) return;
+
+      const response = await getSubscriptions(profileId, "ACTIVE");
+
+      if (response && response.content && Array.isArray(response.content)) {
+        setSubscriptions(response.content);
+      }
+    } catch (error) {
+      console.error("Failed to reload subscriptions:", error);
+    }
+  };
+
   const value = {
     cart,
     orders,
@@ -481,6 +538,8 @@ export const CartProvider = ({ children }) => {
     checkLifetimeLimit,
     getRemainingUsage,
     isLoadingCart,
+    reloadSubscriptions,
+    subscriptions,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

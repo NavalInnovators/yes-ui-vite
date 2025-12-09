@@ -45,7 +45,8 @@ export const BookDashboardProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["syllabus", subCode],
     queryFn: () => getSyllabus(subCode),
-    enabled: !!subCode,
+    enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
+    retry: false,
   });
 
   // Fetch QnA data
@@ -56,7 +57,8 @@ export const BookDashboardProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["qna", subCode],
     queryFn: () => getQnA(subCode),
-    enabled: !!subCode,
+    enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
+    retry: false,
   });
 
   //Fetch unitNotes
@@ -67,7 +69,8 @@ export const BookDashboardProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["unitNotes", subCode],
     queryFn: () => getUnitNotes(subCode),
-    enabled: !!subCode,
+    enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
+    retry: false,
   });
 
   //Fetch Insights Data 
@@ -78,7 +81,8 @@ export const BookDashboardProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["insights", subCode],
     queryFn: () => getAnalyticData(subCode),
-    enabled: !!subCode,
+    enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
+    retry: false,
   });
 
 

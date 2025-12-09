@@ -7,7 +7,13 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { trackCartEvent, getISTISOString } from "../utils/analytics";
-import { getCoupons, applyCoupon } from "../api/api";
+import {
+    getCoupons,
+    applyCoupon,
+    createTransaction,
+    verifyPayment,
+    removeTransaction,
+} from "../api/api";
 
 export default function Mycart() {
   const {
@@ -18,6 +24,7 @@ export default function Mycart() {
     checkout,
     getSuggestedCourses,
     setCart,
+    reloadSubscriptions,
   } = useCart();
   const navigate = useNavigate();
 
@@ -178,10 +185,109 @@ export default function Mycart() {
     toast.success(`${course.title ?? "Course"} (${plan}) added to cart!`);
   };
 
-  const handleCheckout = () => {
-    checkout();
-    toast.success("Order placed successfully!");
-    navigate("/myorders");
+  const handleCheckout = async () => {
+    try {
+      const profileId = localStorage.getItem("profileId");
+
+      if (!profileId) {
+        toast.error("Please login to checkout");
+        navigate("/login");
+        return;
+      }
+
+      if (cart.length === 0) {
+        toast.error("Your cart is empty");
+        return;
+      }
+
+      // Step 1: Create transaction
+      const transactionData = await createTransaction(
+        profileId,
+        appliedCoupon?.couponCode || null,
+      );
+
+      const { orderId, razorpayKey, amount } = transactionData;
+
+      // Step 2: Open Razorpay payment modal
+      const options = {
+        key: razorpayKey,
+        amount: amount,
+        currency: "INR",
+        name: "Your Exam Saathi",
+        description: "Course Purchase",
+        order_id: orderId,
+        handler: async function (response) {
+          // Step 3: Payment successful, verify it
+          try {
+            toast.info("Verifying payment...");
+
+            await verifyPayment(
+              response.razorpay_order_id,
+              response.razorpay_payment_id,
+              response.razorpay_signature,
+            );
+
+            toast.dismiss();
+            toast.success("Payment successful! Subscriptions activated.");
+
+            // Reload subscriptions to update plan status
+            await reloadSubscriptions();
+
+            // Clear local cart state
+            setCart([]);
+
+            // Navigate to orders page
+            navigate("/myorders");
+          } catch (error) {
+            console.error("Payment verification failed:", error);
+            toast.error(
+              "Payment verification failed. Please contact support with order ID: " +
+                orderId,
+            );
+          }
+        },
+        prefill: {
+          name: localStorage.getItem("userName") || "",
+          email: localStorage.getItem("userEmail") || "",
+          contact: localStorage.getItem("userPhone") || "",
+        },
+        theme: {
+          color: "#9333EA",
+        },
+        modal: {
+          ondismiss: async function () {
+            // User closed the payment modal
+            toast.info("Payment cancelled");
+
+            try {
+              await removeTransaction(orderId);
+            } catch (error) {
+              console.error("Failed to remove transaction:", error);
+            }
+          },
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.on("payment.failed", async function (response) {
+        console.error("Payment failed:", response.error);
+        toast.error(
+          `Payment failed: ${response.error.description || "Please try again"}`,
+        );
+
+        try {
+          await removeTransaction(orderId);
+        } catch (error) {
+          console.error("Failed to remove transaction:", error);
+        }
+      });
+
+      razorpay.open();
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error(error.message || "Failed to initiate payment");
+    }
   };
 
   const handleApplyCoupon = async (coupon) => {

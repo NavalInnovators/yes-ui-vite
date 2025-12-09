@@ -61,58 +61,26 @@ function BookDashboardMidSec({
   // Usage counter component
   const UsageCounter = ({ feature }) => {
     const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
-
-    // Debug logging
-    console.log("UsageCounter Debug:", {
-      feature,
-      currentCourse: courseName,
-      courseId,
-      userPlan,
-      shouldShow: userPlan === "Free",
-    });
-
-    // Check all orders to see if user has any paid plans
-    const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    const hasPaidPlan = allOrders.some(
-      (order) =>
-        order.status === "active" &&
-        (order.plan === "BASIC" || order.plan === "PRO"),
-    );
-
-    console.log(
-      "UsageCounter - hasPaidPlan:",
-      hasPaidPlan,
-      "allOrders:",
-      allOrders.length,
-    );
+    const hasPaidPlan = userPlan === "BASIC" || userPlan === "PRO" || userPlan === "Basic" || userPlan === "Pro";
 
     // If user has any paid plan, don't show counters
     if (hasPaidPlan) {
-      console.log("UsageCounter: User has paid plan, hiding counters");
       return null;
     }
 
     // Only show for Free plan users
     if (userPlan !== "Free") {
-      console.log("UsageCounter: Not showing for plan:", userPlan);
       return null;
     }
 
     // Final safety check - if we can't determine the plan, don't show counters
     if (!userPlan || userPlan === "undefined" || userPlan === "null") {
-      console.log("UsageCounter: Cannot determine plan, hiding counters");
       return null;
     }
 
     const currentUsage = getLifetimeUsage(feature);
     const remaining = getRemainingUsage(feature);
     const isLimitExceeded = !checkLifetimeLimit(feature);
-
-    console.log("UsageCounter: Showing for Free user:", {
-      currentUsage,
-      remaining,
-      isLimitExceeded,
-    });
 
     if (isLimitExceeded) {
       return <span className="usage-counter-crown">👑</span>;
