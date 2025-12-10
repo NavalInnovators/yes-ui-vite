@@ -1,8 +1,10 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import "./BookDashboardMap.css";
 import "./BookDashboardRightSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
-import { generateRoadmapFromSyllabus } from "../utils/roadmapUtils";
+import { generateRoadmapFromSyllabus, convertApiRoadmapToInternal } from "../utils/roadmapUtils";
+import { getRoadmap } from "../api/api";
+import { useQuery } from "@tanstack/react-query";
 
 const PRIORITY_ORDER = { high: 1, medium: 2, low: 3};
 const PRIORITY_META = {
@@ -12,16 +14,37 @@ const PRIORITY_META = {
 }
 
 export default function BookDashboardRoadmapRight({ data }) {
-    const { syllabus, syllabusLoading, syllabusError } = useBookDashboard();
+    const { syllabus, syllabusLoading, syllabusError, subCode } = useBookDashboard();
     const [selectedTopicIndex, setSelectedTopicIndex] = useState(0);
+    const profileId = localStorage.getItem("profileId");
 
-    // Generate roadmap data from syllabus
+    // Fetch personalized roadmap from API
+    const { 
+        data: apiRoadmap, 
+        error: roadmapError 
+    } = useQuery({
+        queryKey: ["roadmap", profileId, subCode],
+        queryFn: () => getRoadmap(profileId, subCode),
+        enabled: !!profileId && !!subCode,
+        retry: false,
+        staleTime: 5 * 60 * 1000,
+    });
+
+    // Generate roadmap data with priority: API > Syllabus > Window > Demo
     const roadmapData = useMemo(() => {
+        // Priority 1: Use API roadmap if available
+        if (apiRoadmap && !roadmapError) {
+            return convertApiRoadmapToInternal(apiRoadmap);
+        }
+        
+        // Priority 2: Generate from syllabus
         if (syllabus && !syllabusLoading && !syllabusError) {
             return generateRoadmapFromSyllabus(syllabus);
         }
+        
+        // Priority 3: Use window data or provided data
         return data || window.__YES_ROADMAP__ || { units: [] };
-    }, [syllabus, syllabusLoading, syllabusError, data]);
+    }, [apiRoadmap, roadmapError, syllabus, syllabusLoading, syllabusError, data]);
 
     const units = roadmapData?.units || [];
 
@@ -64,7 +87,7 @@ export default function BookDashboardRoadmapRight({ data }) {
                                         {meta.label} Priority
                                     </div>
                                     <div className="rs-list">
-                                        {list.map((t, index) => {
+                                        {list.map((t) => {
                                             const globalIndex = summaryList.findIndex(item => item.id === t.id);
                                             return (
                                                 <button 

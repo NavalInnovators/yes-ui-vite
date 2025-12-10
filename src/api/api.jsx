@@ -731,3 +731,69 @@ export const removeTransaction = async (orderId) => {
     throw new Error(message);
   }
 };
+
+// ROADMAP APIs
+export const submitRoadmapInput = async (profileId, subCode, inputData) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.put(
+      `/api/roadmap/input/${profileId}/${subCode}`,
+      inputData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting roadmap input:", error.response);
+    const message =
+      error.response?.data?.message ||
+      "Failed to submit roadmap input. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const generateRoadmap = async (profileId, subCode) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.post(
+      `/api/roadmap/generate/${profileId}/${subCode}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error generating roadmap:", error.response);
+    const message =
+      error.response?.data?.message ||
+      "Failed to generate roadmap. Please try again.";
+    throw new Error(message);
+  }
+};
+
+export const getRoadmap = async (profileId, subCode) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.get(
+      `/api/roadmap/${profileId}/${subCode}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching roadmap:", error.response);
+    const message =
+      error.response?.data?.message ||
+      "Failed to fetch roadmap. Please try again.";
+    throw new Error(message);
+  }
+};

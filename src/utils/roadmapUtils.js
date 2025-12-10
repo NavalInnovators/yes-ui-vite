@@ -231,3 +231,110 @@ export const getTopicsForUnit = (roadmapData, unitId) => {
   const unit = roadmapData.units.find(u => u.id === unitId);
   return unit ? unit.topics : [];
 };
+
+/**
+ * Converts API roadmap response to internal roadmap format
+ * @param {Object} apiRoadmap - roadmap data from API
+ * @returns {Object} - roadmap data structure
+ */
+export const convertApiRoadmapToInternal = (apiRoadmap) => {
+  if (!apiRoadmap || !apiRoadmap.topicPriorities) {
+    return { units: [] };
+  }
+
+  // Group topics by unit
+  const unitMap = new Map();
+  
+  apiRoadmap.topicPriorities.forEach((topicData) => {
+    const unitId = topicData.unit;
+    const unitTitle = topicData.unitTitle || `Unit ${unitId}`;
+    
+    if (!unitMap.has(unitId)) {
+      unitMap.set(unitId, {
+        id: unitId,
+        name: unitTitle,
+        topics: []
+      });
+    }
+    
+    // Determine priority based on priorityScore
+    let priority = 'medium';
+    if (topicData.priorityScore >= 70) {
+      priority = 'high';
+    } else if (topicData.priorityScore < 40) {
+      priority = 'low';
+    }
+    
+    // Convert allocated hours to readable time
+    const hours = topicData.allocatedHours || 0;
+    const avgTime = hours >= 1 
+      ? `${Math.round(hours * 10) / 10} hrs` 
+      : `${Math.round(hours * 60)} mins`;
+    
+    // Determine priority type based on weightage and marks
+    let priorityType = 'Theory Type';
+    if (topicData.marks >= 10) {
+      priorityType = 'Numerical Type';
+    } else if (topicData.weightage >= 15) {
+      priorityType = 'Conceptual';
+    }
+    
+    // Generate focus areas based on priority
+    let focus = ['key concepts'];
+    if (priority === 'high') {
+      focus = ['formulas', 'practice problems', 'previous year questions'];
+    } else if (priority === 'low') {
+      focus = ['summary', 'quick review'];
+    }
+    
+    // Generate advice based on priority and data
+    let advice = 'Review this topic thoroughly.';
+    if (priority === 'high') {
+      advice = `High priority topic with ${topicData.marks} marks weightage. Practice extensively.`;
+    } else if (priority === 'medium') {
+      advice = 'Moderate priority. Understand core concepts well.';
+    } else {
+      advice = 'Low priority. Review if time permits.';
+    }
+    
+    const topic = {
+      id: `u${unitId}-t${unitMap.get(unitId).topics.length + 1}`,
+      unitId: unitId,
+      name: topicData.topic,
+      priority: priority,
+      avgTime: avgTime,
+      priorityType: priorityType,
+      focus: focus,
+      advice: advice,
+      // Keep original API data for reference
+      apiData: {
+        priorityScore: topicData.priorityScore,
+        marks: topicData.marks,
+        count: topicData.count,
+        repetition: topicData.repetition,
+        weightage: topicData.weightage,
+        difficultyAdjustment: topicData.difficultyAdjustment,
+        allocatedHours: topicData.allocatedHours
+      }
+    };
+    
+    unitMap.get(unitId).topics.push(topic);
+  });
+  
+  // Convert map to array and sort by unit ID
+  const units = Array.from(unitMap.values()).sort((a, b) => a.id - b.id);
+  
+  return { 
+    units,
+    metadata: {
+      roadmapId: apiRoadmap.roadmapId,
+      profileId: apiRoadmap.profileId,
+      courseCode: apiRoadmap.courseCode,
+      daysToExam: apiRoadmap.daysToExam,
+      dailyStudyHours: apiRoadmap.dailyStudyHours,
+      totalStudyHours: apiRoadmap.totalStudyHours,
+      generatedAt: apiRoadmap.generatedAt || apiRoadmap.createdAt,
+      lastModified: apiRoadmap.lastModified
+    }
+  };
+};

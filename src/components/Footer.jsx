@@ -49,7 +49,7 @@ const Footer = () => {
                     </a>
                 </div>
 
-                <form onSubmit={handleSubmit} className="newsletter-section">
+                {/* <form onSubmit={handleSubmit} className="newsletter-section">
                     <div className="newsletter-heading">
                         Stay up to date with YES news & updates!
                     </div>
@@ -80,7 +80,7 @@ const Footer = () => {
                         </label>
                         <div>I accept the Privacy Policy</div>
                     </div>
-                </form>
+                </form> */}
 
                 <div className="all-links-section">
                     {footerLinks.map((header, innerLinks) => (

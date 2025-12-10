@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import GradientDiv from "../roles/components/GradientDiv";
 import Active_Courses_Card from "./Myorders_Active_Courses_Card";
 import Expired_Courses_Card from "./Myorders_Expired_Courses_Card";
@@ -15,7 +15,6 @@ export default function Myorders() {
   const [expiredSubscriptions, setExpiredSubscriptions] = useState([]);
   const [cancelledSubscriptions, setCancelledSubscriptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState("ALL"); // ALL, ACTIVE, EXPIRED, CANCELLED
 
   // Fetch subscriptions from API
   useEffect(() => {
@@ -118,7 +117,35 @@ export default function Myorders() {
 
   const handleStartLearning = async (subscription) => {
     try {
-      // Convert subscription to course format
+      const profileId = localStorage.getItem("profileId");
+      const token = localStorage.getItem("token");
+      
+      if (!profileId) {
+        toast.error("Please login to start learning");
+        return;
+      }
+
+      if (!token) {
+        toast.error("Authentication required. Please login again.");
+        return;
+      }
+
+      // Check if course is already active to prevent duplicate enrollment
+      const isAlreadyActive = activeSubscriptions.some(
+        (activeSub) => activeSub.course.id === subscription.course.id
+      );
+
+      if (isAlreadyActive) {
+        toast.info("You are already enrolled in this course!");
+        // Navigate to course dashboard
+        const courseCode = subscription.course.courseCode?.[0] || subscription.course.courseCodes?.[0];
+        if (courseCode) {
+          navigate(`/book-dashboard?subcode=${courseCode}`);
+        }
+        return;
+      }
+
+      // Convert subscription to course format for enrollment
       const courseForEnrollment = {
         id: subscription.course.id,
         name: subscription.course.name,
@@ -128,29 +155,117 @@ export default function Myorders() {
         year: subscription.course.year || "",
       };
 
-      toast.info("Enrolling in FREE course...");
-
-      // Add FREE plan to cart via API
-      await addToCart(courseForEnrollment, "FREE", {
-        source: "re_enroll_cancelled",
+      console.log("Starting free enrollment for cancelled course:", {
+        courseId: courseForEnrollment.id,
+        courseName: courseForEnrollment.name,
+        profileId
       });
 
-      // Remove from cancelled list (frontend only - backend should handle this)
+      toast.info("Enrolling in course... Please wait", {
+        autoClose: false,
+      });
+
+      // Use direct enrollment API for free courses (same as AllSubjects component)
+      const { enrollCourse } = await import("../api/api");
+      const [enrollmentResponse] = await enrollCourse(courseForEnrollment);
+      
+      console.log("Enrollment successful:", enrollmentResponse);
+
+      // Remove from cancelled list immediately
       setCancelledSubscriptions((prev) =>
         prev.filter((sub) => sub.id !== subscription.id),
       );
 
-      toast.success("Successfully enrolled in FREE course!");
+      // Create a new active subscription entry for the re-enrolled course
+      const newActiveSubscription = {
+        ...subscription,
+        status: "ACTIVE",
+        plan: "FREE", // Re-enrollment is always free
+        purchaseDate: new Date().toISOString(),
+        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year from now
+      };
 
-      // Optionally navigate to the course
-      if (subscription.course.courseCode?.[0]) {
-        navigate(
-          `/book-dashboard?subcode=${subscription.course.courseCode[0]}`,
-        );
+      // Add to active subscriptions
+      setActiveSubscriptions((prev) => [...prev, newActiveSubscription]);
+
+      // Refresh subscriptions from backend after a short delay to ensure backend has processed
+      setTimeout(async () => {
+        try {
+          const response = await getSubscriptions(profileId, "ALL");
+          
+          if (response?.content) {
+            const newActive = response.content.filter(sub => sub.status === "ACTIVE");
+            const newExpired = response.content.filter(sub => sub.status === "EXPIRED");
+            const newCancelled = response.content.filter(sub => sub.status === "CANCELLED");
+            
+            setActiveSubscriptions(newActive);
+            setExpiredSubscriptions(newExpired);
+            setCancelledSubscriptions(newCancelled);
+            
+            console.log("Subscriptions refreshed after enrollment");
+          }
+        } catch (refreshError) {
+          console.warn("Failed to refresh subscriptions:", refreshError);
+          // Don't show error to user as the main enrollment was successful
+        }
+      }, 1000); // 1 second delay to allow backend processing
+
+      toast.dismiss(); // Dismiss the loading toast
+      toast.success("Successfully enrolled in course!");
+
+      // Navigate to the course dashboard
+      const courseCode = subscription.course.courseCode?.[0] || subscription.course.courseCodes?.[0];
+      
+      console.log("Navigation details:", {
+        courseCode,
+        courseCodeArray: subscription.course.courseCode,
+        courseCodesArray: subscription.course.courseCodes,
+        navigationUrl: courseCode ? `/book-dashboard?subcode=${courseCode}` : null
+      });
+
+      if (courseCode) {
+        console.log(`Navigating to: /book-dashboard?subcode=${courseCode}`);
+        navigate(`/book-dashboard?subcode=${courseCode}`);
+      } else {
+        console.warn("No course code found for navigation");
+        toast.success("Enrollment successful! Redirecting to your subjects...");
+        // Fallback navigation to my-subjects page
+        setTimeout(() => {
+          navigate("/my-subjects");
+        }, 1500);
       }
     } catch (error) {
-      console.error("Failed to enroll:", error);
-      toast.error("Failed to enroll in course");
+      toast.dismiss(); // Dismiss any loading toasts
+      console.error("Failed to enroll in cancelled course:", error);
+      console.error("Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      
+      // Show more specific error messages
+      if (error.response?.status === 401) {
+        toast.error("Authentication expired. Please login again.");
+      } else if (error.response?.status === 400) {
+        toast.error(error.response?.data?.message || "Invalid request. Please try again.");
+      } else if (error.response?.status === 404) {
+        toast.error("Course not found. Please refresh and try again.");
+      } else if (error.response?.status === 409) {
+        toast.info("You are already enrolled in this course!");
+        
+        // Remove from cancelled list since user is already enrolled
+        setCancelledSubscriptions((prev) =>
+          prev.filter((sub) => sub.id !== subscription.id),
+        );
+        
+        // Navigate to the course dashboard
+        const courseCode = subscription.course.courseCode?.[0] || subscription.course.courseCodes?.[0];
+        if (courseCode) {
+          navigate(`/book-dashboard?subcode=${courseCode}`);
+        }
+      } else {
+        toast.error(error.message || "Failed to enroll in course");
+      }
     }
   };
 

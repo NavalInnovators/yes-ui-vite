@@ -119,10 +119,17 @@
 /* Center header */
 .roadmap-center-header {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
 }
+
+.roadmap-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .rc-title {
   font-weight: 600;
   font-size: 16px;
@@ -130,6 +137,78 @@
 .rc-sub {
   font-size: 12px;
   color: #6b7280;
+}
+
+.roadmap-metadata {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.metadata-items {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.metadata-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.metadata-icon {
+  flex-shrink: 0;
+}
+
+.update-preferences-btn {
+  background: transparent;
+  border: none;
+  color: #3498db;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+  text-align: right;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.update-preferences-btn:hover {
+  color: #2980b9;
+}
+
+@media (max-width: 768px) {
+  .roadmap-center-header {
+    gap: 10px;
+  }
+  
+  .roadmap-metadata {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .metadata-items {
+    font-size: 0.8rem;
+    gap: 8px;
+  }
+  
+  .update-preferences-btn {
+    font-size: 0.8rem;
+    text-align: left;
+  }
 }
 
 /* Topic stack */
@@ -161,7 +240,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  cursor: pointer;
+  gap: 8px;
 }
 
 .topic-bar-title {
@@ -169,8 +248,44 @@
   align-items: center;
   gap: 8px;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  cursor: pointer;
 }
-.topic-name { font-weight: 600; }
+
+.topic-name { 
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .topic-bar-head {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .topic-bar-title {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  
+  .topic-bar-actions {
+    flex: 1 1 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .pill-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  
+  .expand-icon-btn {
+    margin-left: auto;
+  }
+}
 
 .topic-dot {
   width: 12px;
@@ -199,6 +314,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .pill-btn {
@@ -207,6 +323,7 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+  white-space: nowrap;
 }
 .pill-btn.outline {
   background: #fff;
@@ -214,11 +331,33 @@
 }
 .pill-btn.outline:hover { border-color: #cbd5e1; }
 
+@media (max-width: 480px) {
+  .pill-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+.expand-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.expand-icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .expand-icon {
-  font-size: 14px;
+  font-size: 16px;
   transition: transform .2s ease;
   display: inline-block;
-  margin-left: 4px;
 }
 .expand-icon.open { transform: rotate(180deg); }
 
@@ -236,10 +375,27 @@
   align-items: start;
 }
 .info-label { font-size: 12px; color: #6b7280; }
-.info-value { font-size: 14px; font-weight: 500; }
+.info-value { font-size: 14px; font-weight: 500; word-break: break-word; }
 .focus-list { list-style: none; margin: 0; padding: 0; }
 .focus-list li { font-size: 14px; line-height: 1.4; }
-.advice-text { font-size: 14px; line-height: 1.45; }
+.advice-text { font-size: 14px; line-height: 1.45; word-break: break-word; }
+
+@media (max-width: 768px) {
+  .info-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  
+  .info-label {
+    font-weight: 600;
+  }
+  
+  .info-value,
+  .focus-list li,
+  .advice-text {
+    font-size: 13px;
+  }
+}
 
 /* Summary */
 .rs-header {
