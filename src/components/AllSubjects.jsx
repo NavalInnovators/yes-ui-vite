@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./UserDashboard.css";
 import UserDashboardRight from "./UserDashboardRight";
 import { useNavigate } from "react-router-dom";
-import { getAllCourses, enrollCourse } from "../api/api";
+import { getAllCourses, enrollCourse, getCoupons } from "../api/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { useMemo } from "react";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
 import { useCart } from "../context/CartContext";
 
@@ -14,6 +13,7 @@ const AllSubjects = ({ searchQuery }) => {
   const { cart, addToCart, removeFromCart, updateCartItem } = useCart();
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [availableCoupons, setAvailableCoupons] = useState([]);
   const navigate = useNavigate();
   const yearCategoryMap = {
     "1st Year": 1,
@@ -38,10 +38,22 @@ const AllSubjects = ({ searchQuery }) => {
   // calling myCourses from shared query
   useMyCourses();
 
-  // if (myCourses.length > 0 && !localStorage.getItem('myCourses')) {
-  //   console.log("My courses api called......")
-  //   localStorage.setItem('myCourses', JSON.stringify(myCourses));
-  // }
+  // Fetch available coupons
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const profileId = localStorage.getItem("profileId");
+        if (!profileId) return;
+
+        const coupons = await getCoupons(profileId);
+        setAvailableCoupons(coupons || []);
+      } catch (error) {
+        console.error("Failed to fetch coupons:", error);
+      }
+    };
+
+    fetchCoupons();
+  }, []);
 
   // Filter the courses based on the search query
   const categories = useMemo(() => {
@@ -217,17 +229,57 @@ const AllSubjects = ({ searchQuery }) => {
 
     let discount = 0;
 
-    // if (cart.length >= 5) {
-    //     discount = subtotal * 0.25;
-    // }
-    // if (allPro && cart.length > 0) {
-    //     discount = subtotal * 0.3;
-    // }
-
     const total = subtotal - discount;
 
     return { subtotal, discount, total, allPro, hasBasic };
   }, [cart]);
+
+  // Calculate best available coupon
+  const bestCoupon = useMemo(() => {
+    if (availableCoupons.length === 0 || cart.length === 0) return null;
+
+    const subtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+
+    let maxDiscount = 0;
+    let bestCouponOption = null;
+
+    availableCoupons.forEach((coupon) => {
+      // Skip if not applicable
+      if (!coupon.applicable) return;
+
+      // Check if requirements are met
+      if (coupon.minCourseSelection && cart.length < coupon.minCourseSelection)
+        return;
+      if (coupon.activationAmount && subtotal < coupon.activationAmount) return;
+
+      let potentialDiscount = 0;
+
+      if (coupon.discountType === "PERCENTAGE") {
+        potentialDiscount = (subtotal * coupon.discountValue) / 100;
+        if (
+          coupon.maxDiscountAmount &&
+          potentialDiscount > coupon.maxDiscountAmount
+        ) {
+          potentialDiscount = coupon.maxDiscountAmount;
+        }
+      } else if (
+        coupon.discountType === "FIXED" ||
+        coupon.discountType === "FIXED_AMOUNT"
+      ) {
+        potentialDiscount = coupon.discountValue / 100; // Convert paise to rupees
+      }
+
+      if (potentialDiscount > maxDiscount) {
+        maxDiscount = potentialDiscount;
+        bestCouponOption = {
+          ...coupon,
+          calculatedDiscount: potentialDiscount,
+        };
+      }
+    });
+
+    return bestCouponOption;
+  }, [cart, availableCoupons]);
 
   const upgradeAllToPro = () => {
     cart.forEach((item) => {
@@ -379,12 +431,27 @@ const AllSubjects = ({ searchQuery }) => {
             </div>
 
             <div className="pricing-sidebar-body">
-              {cart.length <= 4 ? (
-                <p className="muted green">
-                  Select 5+ courses to unlock 25% discount!
-                </p>
-              ) : (
-                <p className="muted green">Upgrade to Pro, get 30% discount!</p>
+              {/* Best Coupon Banner */}
+              {bestCoupon && (
+                <div
+                  style={{
+                    marginBottom: "1rem",
+                    background: "linear-gradient(to right, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1))",
+                    border: "2px solid rgb(16, 185, 129)",
+                    borderRadius: "12px",
+                    padding: "12px",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                    <span style={{ fontSize: "18px" }}>🎉</span>
+                    <span style={{ fontWeight: "bold", color: "rgb(6, 95, 70)" }}>
+                      Save ₹{bestCoupon.calculatedDiscount.toFixed(2)}!
+                    </span>
+                  </div>
+                  <div style={{ fontSize: "14px", color: "rgb(21, 128, 61)" }}>
+                    Use code <span style={{ fontWeight: "600" }}>{bestCoupon.couponCode}</span> at checkout
+                  </div>
+                </div>
               )}
 
               <div className="sidebar-card sidebar-card-content">
