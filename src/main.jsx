@@ -5,7 +5,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Disable refetching on window focus
+      refetchOnWindowFocus: false,
+      // Increase stale time to 10 minutes
+      staleTime: 10 * 60 * 1000,
+      // Retry failed requests only once
+      retry: false,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

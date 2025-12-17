@@ -113,6 +113,8 @@ export const CartProvider = ({ children }) => {
 
         if (response && response.content && Array.isArray(response.content)) {
           setSubscriptions(response.content);
+          // Store subscriptions in localStorage for API access
+          localStorage.setItem('userSubscriptions', JSON.stringify(response.content));
         }
       } catch (error) {
         console.error("Failed to load subscriptions:", error);
@@ -512,6 +514,8 @@ export const CartProvider = ({ children }) => {
 
       if (response && response.content && Array.isArray(response.content)) {
         setSubscriptions(response.content);
+        // Store subscriptions in localStorage for API access
+        localStorage.setItem('userSubscriptions', JSON.stringify(response.content));
       }
     } catch (error) {
       console.error("Failed to reload subscriptions:", error);

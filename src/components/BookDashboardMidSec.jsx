@@ -170,7 +170,7 @@ function BookDashboardMidSec({
       if (!confirm) return;
     }
 
-    if (!question || !answer) {
+    if (!question || !answer || !questionId) {
       toast.error("Question or answer not available for summarization.");
       return;
     }
@@ -178,7 +178,7 @@ function BookDashboardMidSec({
     setSummaryLoading(true);
     toast.info("Summarizing answer...");
     try {
-      const newSummary = await summarizeAnswer(question, answer);
+      const newSummary = await summarizeAnswer(questionId);
       const updatedSummaries = [...existingSummaries, newSummary];
       setSummaryList(updatedSummaries);
       setSummaryIndex(updatedSummaries.length - 1);
@@ -281,7 +281,7 @@ function BookDashboardMidSec({
     setRephraseLoading(true);
 
     try {
-      const rephrased = await rephraseAnswer(style, summaryList[0], answer);
+      const rephrased = await rephraseAnswer(questionId, style);
       const updatedList = [...rephrasedList, { style, answer: rephrased }];
       setRephrasedList(updatedList);
       setRephraseIndex(updatedList.length - 1);
