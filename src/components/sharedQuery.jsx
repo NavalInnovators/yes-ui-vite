@@ -23,33 +23,18 @@ export const useMyCourses = () => {
   return useQuery({
     queryKey: ["myCourses"],
     queryFn: async () => {
-      try {
-        // Fetching my courses from server
-        const coursesData = await getMyCourses();
+      // Fetching my courses from server only
+      const coursesData = await getMyCourses();
 
-        // Update local cache
-        localStorage.setItem("myCourses", JSON.stringify(coursesData));
-        localStorage.setItem(
-          "bookDetails",
-          JSON.stringify(getBookDetails(coursesData))
-        );
+      // Update local cache for API calls (keep for getUserContext, etc.)
+      localStorage.setItem("myCourses", JSON.stringify(coursesData));
+      localStorage.setItem(
+        "bookDetails",
+        JSON.stringify(getBookDetails(coursesData))
+      );
 
-        return coursesData;
-      } catch (error) {
-        console.error(
-          "Failed to fetch courses, falling back to localStorage",
-          error
-        );
-
-        // Fallback: use cached data if available
-        const cachedData = localStorage.getItem("myCourses");
-        if (cachedData) {
-          return JSON.parse(cachedData);
-        }
-
-        throw error;
-      }
-    },
+      return coursesData;
+      },
     staleTime: 0,
   });
 };

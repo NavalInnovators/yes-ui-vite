@@ -7,12 +7,15 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { trackCartEvent, getISTISOString } from "../utils/analytics";
+import { useQueryClient } from "@tanstack/react-query";
 import {
     getCoupons,
     applyCoupon,
     createTransaction,
     verifyPayment,
     removeTransaction,
+    getSubscriptions,
+    enrollCourse,
 } from "../api/api";
 
 export default function Mycart() {
@@ -27,6 +30,8 @@ export default function Mycart() {
     reloadSubscriptions,
   } = useCart();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
 
   // Get suggested courses based on cart items
   const allSuggestedCourses = getSuggestedCourses(cart);
@@ -219,7 +224,7 @@ export default function Mycart() {
         handler: async function (response) {
           // Step 3: Payment successful, verify it
           try {
-            toast.info("Verifying payment...");
+            const loadingToast = toast.loading("Processing payment...");
 
             await verifyPayment(
               response.razorpay_order_id,
@@ -227,17 +232,84 @@ export default function Mycart() {
               response.razorpay_signature,
             );
 
-            toast.dismiss();
-            toast.success("Payment successful! Subscriptions activated.");
+            // Store cart items for enrollment before clearing
+            const purchasedCourses = [...cart];
 
-            // Reload subscriptions to update plan status
-            await reloadSubscriptions();
-
-            // Clear local cart state
+            // Clear cart immediately
             setCart([]);
 
-            // Navigate to orders page
-            navigate("/myorders");
+            // Enroll in purchased courses
+            toast.dismiss(loadingToast);
+            const enrollingToast = toast.loading("Enrolling in courses...");
+            
+            try {
+              const enrollmentPromises = purchasedCourses.map(async (cartItem) => {
+                try {
+                  // Get course from allCourses for enrollment
+                  const allCourses = [
+                    ...JSON.parse(sessionStorage.getItem("allCourses") || "[]"),
+                    ...JSON.parse(localStorage.getItem("allCourses") || "[]"),
+                  ];
+                  
+                  const actualCourse = allCourses.find(course => course.id === cartItem.courseId);
+                  
+                  if (actualCourse) {
+                    const enrollmentResult = await enrollCourse(actualCourse);
+                    return enrollmentResult[1] || actualCourse;
+                  }
+                  return null;
+                } catch (enrollError) {
+                  console.error(`Enrollment failed for ${cartItem.name}:`, enrollError);
+                  // Don't fail the entire process if one enrollment fails
+                  return null;
+                }
+              });
+
+              const enrolledCourses = await Promise.all(enrollmentPromises);
+              const successfulEnrollments = enrolledCourses.filter(course => course !== null);
+
+              if (successfulEnrollments.length > 0) {
+                // Update myCourses in localStorage
+                const existingMyCourses = JSON.parse(localStorage.getItem("myCourses") || "[]");
+                const updatedMyCourses = [...existingMyCourses];
+
+                successfulEnrollments.forEach(enrolledCourse => {
+                  const alreadyExists = updatedMyCourses.some(course => course.id === enrolledCourse.id);
+                  if (!alreadyExists) {
+                    updatedMyCourses.push(enrolledCourse);
+                  }
+                });
+
+                localStorage.setItem("myCourses", JSON.stringify(updatedMyCourses));
+                
+                const { getBookDetails } = await import("./sharedQuery");
+                localStorage.setItem("bookDetails", JSON.stringify(getBookDetails(updatedMyCourses)));
+              }
+
+              toast.dismiss(enrollingToast);
+              
+            } catch (enrollmentError) {
+              console.error("Enrollment process failed:", enrollmentError);
+              toast.dismiss(enrollingToast);
+            }
+
+            try {
+              await reloadSubscriptions();
+              
+              toast.dismiss(loadingToast);
+              toast.success("Payment successful! Courses activated.");
+              
+              queryClient.invalidateQueries(["myCourses"]);
+              
+              navigate("/my-subjects");
+            } catch (error) {
+              toast.dismiss(loadingToast);
+              toast.success("Payment successful! Please check your courses.");
+              
+              queryClient.invalidateQueries(["myCourses"]);
+              navigate("/my-subjects");
+            }
+
           } catch (error) {
             console.error("Payment verification failed:", error);
             toast.error(
@@ -488,10 +560,7 @@ export default function Mycart() {
       <GradientDiv>
         <div className="py-6 px-4 md:py-10">
           <span className="text-lg md:text-2xl font-semibold block">
-            Your savings on this order could be maximized!
-          </span>
-          <span className="text-yellow-400 text-xs md:text-sm">
-            Add 1 or 2 more courses to unlock bundle discount
+            Review Your Cart
           </span>
         </div>
       </GradientDiv>

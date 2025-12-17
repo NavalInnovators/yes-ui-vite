@@ -12,18 +12,6 @@ export const generateProtectedHeaders = async (profileId, courseCode, unitNo, pl
   const message = `${pid}${code}${unit}${feature}${timestamp}`; 
   const signature = await hmacSHA256(token, message);
   
-  // Debug logging in development mode
-  if (process.env.NODE_ENV === 'development') {
-    console.log("Signature generation inputs:");
-    console.log("- profileId:", pid);
-    console.log("- courseCode:", code);
-    console.log("- unitNo:", unit);
-    console.log("- featureId:", feature);
-    console.log("- timestamp:", timestamp);
-    console.log("Message to sign:", message);
-    console.log("Generated signature:", signature);
-  }
-  
   return {
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json',

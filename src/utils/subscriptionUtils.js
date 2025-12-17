@@ -1,6 +1,15 @@
 // Utility functions for managing user subscriptions
 
-// Ensure subscriptions are loaded in localStorage
+export const fetchAllSubscriptions = async (profileId) => {
+  const { getSubscriptions } = await import('../api/api');
+  const response = await getSubscriptions(profileId, "ALL", {
+    page: 0,
+    size: 1000,
+  });
+
+  return response?.content || [];
+};
+
 export const ensureSubscriptionsLoaded = async () => {
   try {
     // Check if subscriptions are already loaded
@@ -18,24 +27,20 @@ export const ensureSubscriptionsLoaded = async () => {
       return [];
     }
 
-    // Dynamic import to avoid circular dependency
-    const { getSubscriptions } = await import('../api/api');
-    const response = await getSubscriptions(profileId, "ACTIVE");
+    // FIlter active subscriptions
+    const allSubscriptions = await fetchAllSubscriptions(profileId);
+    const activeSubscriptions = allSubscriptions.filter(sub => sub.status === 'ACTIVE');
     
-    if (response && response.content && Array.isArray(response.content)) {
-      // Store subscriptions in localStorage
-      localStorage.setItem('userSubscriptions', JSON.stringify(response.content));
-      return response.content;
-    }
-    
-    return [];
+    // Store active subscriptions in localStorage
+    localStorage.setItem('userSubscriptions', JSON.stringify(activeSubscriptions));
+    return activeSubscriptions;
   } catch (error) {
     console.error('Failed to ensure subscriptions are loaded:', error);
     return [];
   }
 };
 
-// Clear subscriptions from localStorage (useful for logout)
+// Clear subscriptions from localStorage
 export const clearSubscriptions = () => {
   localStorage.removeItem('userSubscriptions');
 };
@@ -78,4 +83,52 @@ export const getUserPlanForCourse = (courseCode) => {
     console.error('Error getting user plan for course:', error);
     return 'FREE';
   }
+};
+
+
+export const enhanceSubscription = (sub) => {
+  if (sub.course.courseCode && sub.course.courseCode.length > 0) {
+    return sub;
+  }
+
+  // find matching course in localStorage to get course codes
+  const allCourses = JSON.parse(localStorage.getItem("allCourses") || "[]");
+  const myCourses = JSON.parse(localStorage.getItem("myCourses") || "[]");
+
+  const matchingCourse =
+    allCourses.find((course) => course.id === sub.course.id) ||
+    myCourses.find((course) => course.id === sub.course.id);
+
+  if (matchingCourse?.courseCodes?.length > 0) {
+    return {
+      ...sub,
+      course: {
+        ...sub.course,
+        courseCode: matchingCourse.courseCodes,
+        universityName: matchingCourse.universityName
+          ? [matchingCourse.universityName]
+          : sub.course.universityName,
+        branchNames: matchingCourse.branchNames || sub.course.branchNames,
+      },
+    };
+  }
+
+  return sub;
+};
+
+// Helper function to process and categorize subscriptions
+export const processSubscriptions = (subscriptions) => {
+  const enhanced = subscriptions.map(enhanceSubscription);
+  
+  const valid = enhanced.filter((sub) => 
+    sub?.course?.name && 
+    sub?.course?.courseCode && 
+    sub.course.courseCode.length > 0
+  );
+
+  return {
+    active: valid.filter((sub) => sub.status === "ACTIVE"),
+    expired: valid.filter((sub) => sub.status === "EXPIRED"),
+    cancelled: valid.filter((sub) => sub.status === "CANCELLED"),
+  };
 };

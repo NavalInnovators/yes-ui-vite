@@ -4,7 +4,6 @@ import { track } from "@vercel/analytics/react";
 import { generateProtectedHeaders, getUserContext } from "../utils/apiUtils";
 
 
-
 const api = axios.create({
   baseURL: DEV_BACKEND_URL, // change to BACKEND_URL for production
   headers: {
@@ -349,18 +348,24 @@ export const getUnitNotes = async (subCode) => {
   }
 }
 
-export const getAnalyticData = async (subCode, unit) => {
+export const getAnalyticData = async (subCode, unitNo) => {
   try {
-    const { profileId, unitNo, planId } = getUserContext(subCode);
+    const { profileId, unitNo: contextUnitNo, planId } = getUserContext(subCode);
     
     if (!profileId) {
       throw new Error('Missing profileId - user not logged in');
     }
     
-    const headers = await generateProtectedHeaders(profileId, subCode, unit || unitNo, planId, 'INSIGHTS');
+    // Use provided unitNo parameter, fallback to context unitNo
+    const finalUnitNo = unitNo || contextUnitNo;
+    
+    const headers = await generateProtectedHeaders(profileId, subCode, finalUnitNo, planId, 'INSIGHTS');
     const config = { headers };
-    const url = unit ? `/api/analyticData/${subCode}?unit=${unit}` : `/api/analyticData/${subCode}`;
-    const response = await api.get(url, config);
+    
+    // Add unitNo as query parameter if available
+    const unitParam = finalUnitNo ? `?unitNo=${finalUnitNo}` : '';
+    const response = await api.get(`/api/analyticData/${subCode}${unitParam}`, config);
+    
     return response.data.data;
   } catch (error) {
     throw error;
@@ -385,7 +390,6 @@ export const enrollCourse = async (course) => {
 
     const response = await api.post(endpoint, {}, config);
 
-    console.log(`Enrollment API response:`, response.data);
     return [response.data, course];
   } catch (error) {
     console.error("Enrollment API Error:", error.response);
@@ -696,7 +700,10 @@ export const createTransaction = async (profileId, couponCode = null) => {
       },
     );
 
-    console.log("Transaction Created:", response.data);
+    console.log("Transaction Creation:", {
+      status: response.status,
+      data: response.data,
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating transaction:", error.response);
@@ -726,7 +733,10 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
       },
     );
 
-    console.log("Payment Verified:", response.data);
+    console.log("Payment Verification:", {
+      status: response.status,
+      data: response.data
+    });
     return response.data;
   } catch (error) {
     console.error("Error verifying payment:", error.response);
