@@ -4,11 +4,11 @@ import { PasswordEye, PasswordLock } from "../assets";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // import api from "../api/api";
-import { BACKEND_URL } from "../constants/api";
+import { DEV_BACKEND_URL } from "../constants/api";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: DEV_BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
