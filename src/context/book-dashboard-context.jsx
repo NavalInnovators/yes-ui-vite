@@ -28,14 +28,24 @@ export const BookDashboardProvider = ({ children }) => {
   const [filteredQnAQuestions, setFilteredQnAQuestions] = useState([]);
   // const [subSyllabus, setSubSyllabus] = useState([]);
 
-  // Fetch subcode from URL
+  // Fetch subcode from URL with debouncing
   const [searchParams] = useSearchParams();
   useEffect(() => {
     const code = searchParams.get("subcode");
-    if (code) {
-      setSubCode(code);
+    console.log('URL subcode:', code, 'Current subCode:', subCode);
+    
+    if (code && code !== subCode) {
+      console.log('Updating course code from', subCode, 'to', code);
+      // Add small delay to prevent rapid API calls on tab changes
+      const timer = setTimeout(() => {
+        setSubCode(code);
+        sessionStorage.setItem('selectedCourseCode', code);
+        console.log('Course code updated in sessionStorage:', code);
+      }, 100);
+      
+      return () => clearTimeout(timer);
     }
-  }, [searchParams]);
+  }, [searchParams, subCode]);
 
   // Fetch syllabus data
   const {
@@ -46,7 +56,6 @@ export const BookDashboardProvider = ({ children }) => {
     queryKey: ["syllabus", subCode],
     queryFn: () => getSyllabus(subCode),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
-    retry: false,
   });
 
   // Fetch QnA data
@@ -58,7 +67,6 @@ export const BookDashboardProvider = ({ children }) => {
     queryKey: ["qna", subCode],
     queryFn: () => getQnA(subCode),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
-    retry: false,
   });
 
   //Fetch unitNotes
@@ -70,7 +78,6 @@ export const BookDashboardProvider = ({ children }) => {
     queryKey: ["unitNotes", subCode],
     queryFn: () => getUnitNotes(subCode),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
-    retry: false,
   });
 
   //Fetch Insights Data 
@@ -82,7 +89,6 @@ export const BookDashboardProvider = ({ children }) => {
     queryKey: ["insights", subCode],
     queryFn: () => getAnalyticData(subCode),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
-    retry: false,
   });
 
 

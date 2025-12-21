@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
   trackCartEvent,
   cancelPopupAbandonment,
@@ -113,6 +113,8 @@ export const CartProvider = ({ children }) => {
 
         if (response && response.content && Array.isArray(response.content)) {
           setSubscriptions(response.content);
+          // Store subscriptions in localStorage for API access
+          localStorage.setItem('userSubscriptions', JSON.stringify(response.content));
         }
       } catch (error) {
         console.error("Failed to load subscriptions:", error);
@@ -338,16 +340,6 @@ export const CartProvider = ({ children }) => {
       return apiSubscription.plan; // Returns "FREE", "BASIC", or "PRO"
     }
 
-    // Fallback to localStorage orders (for mock/test data)
-    const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    const courseOrder = allOrders.find(
-      (order) => order.courseId === courseId && order.status === "active",
-    );
-
-    if (courseOrder) {
-      return courseOrder.plan;
-    }
-
     return "Free";
   };
 
@@ -452,37 +444,13 @@ export const CartProvider = ({ children }) => {
       return [];
     }
 
-    const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-    const basicPlanOrders = allOrders.filter(
-      (order) =>
-        order.plan === "Basic" &&
-        cartYears.includes(order.year) &&
-        !cartItems.some((cartItem) => cartItem.courseId === order.courseId),
-    );
-
     const sameYearCourses = allCourses.filter(
       (course) =>
         cartYears.includes(course.year) &&
-        !cartItems.some((cartItem) => cartItem.courseId === course.id) &&
-        !allOrders.some((order) => order.courseId === course.id),
+        !cartItems.some((cartItem) => cartItem.courseId === course.id),
     );
 
     const prioritizedCourses = [
-      ...basicPlanOrders.map((order) => ({
-        id: order.courseId,
-        title: order.name,
-        subjectCode: order.courseCodes[0],
-        dept: order.branchNames[0] || "CSE",
-        year: order.year,
-        universityName: order.universityName,
-        branchNames: order.branchNames,
-        courseCodes: order.courseCodes,
-        hasBasic: true,
-        isUpgrade: true,
-        originalOrderId: order.id,
-        upgradePrice: 150 - 110,
-      })),
       ...sameYearCourses.map((course) => ({
         id: course.id,
         title: course.name,
@@ -508,10 +476,19 @@ export const CartProvider = ({ children }) => {
 
       if (!profileId || !token) return;
 
-      const response = await getSubscriptions(profileId, "ACTIVE");
+      // Fetch ALL subscriptions to see the complete picture
+      const response = await getSubscriptions(profileId, "ALL");
+      
+      console.log("Reloaded subscriptions after payment:", response);
 
       if (response && response.content && Array.isArray(response.content)) {
-        setSubscriptions(response.content);
+        // Store all subscriptions for debugging
+        const allSubs = response.content;
+        const activeSubs = allSubs.filter(sub => sub.status === 'ACTIVE');
+        
+        setSubscriptions(activeSubs);
+        // Store active subscriptions in localStorage for API access
+        localStorage.setItem('userSubscriptions', JSON.stringify(activeSubs));
       }
     } catch (error) {
       console.error("Failed to reload subscriptions:", error);

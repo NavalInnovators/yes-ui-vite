@@ -4,8 +4,11 @@ import Active_Courses_Card from "./Myorders_Active_Courses_Card";
 import Expired_Courses_Card from "./Myorders_Expired_Courses_Card";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { getSubscriptions } from "../api/api";
 import { toast } from "react-toastify";
+import {
+  fetchAllSubscriptions,
+  processSubscriptions,
+} from "../utils/subscriptionUtils";
 
 export default function Myorders() {
   const { addToCart } = useCart();
@@ -29,56 +32,38 @@ export default function Myorders() {
 
         setIsLoading(true);
 
-        // Fetch from API
-        let apiActive = [];
-        let apiExpired = [];
-        let apiCancelled = [];
+        const allSubscriptions = await fetchAllSubscriptions(profileId);
 
-        try {
-          const response = await getSubscriptions(profileId, "ALL");
+        // Process and categorize subscriptions
+        const { active, expired, cancelled } =
+          processSubscriptions(allSubscriptions);
 
-          response.content?.forEach((sub) => {
-            if (sub.status === "ACTIVE") {
-              apiActive.push(sub);
-            } else if (sub.status === "EXPIRED") {
-              apiExpired.push(sub);
-            } else if (sub.status === "CANCELLED") {
-              apiCancelled.push(sub);
+        setActiveSubscriptions(active);
+        setExpiredSubscriptions(expired);
+        setCancelledSubscriptions(cancelled);
+
+        // Check for recent cancelled subscriptions that might be pending activation
+        const recentCancelled = cancelled.filter((sub) => {
+          const purchaseDate = new Date(sub.purchaseDate);
+          const timeDiff = Date.now() - purchaseDate.getTime();
+          const minutesDiff = timeDiff / (1000 * 60);
+          return minutesDiff < 10;
+        });
+
+        if (recentCancelled.length > 0) {
+          // Retry after 5 seconds to check if they got activated
+          setTimeout(async () => {
+            try {
+              const retrySubscriptions = await fetchAllSubscriptions(profileId);
+              const retryProcessed = processSubscriptions(retrySubscriptions);
+              setActiveSubscriptions(retryProcessed.active);
+              setExpiredSubscriptions(retryProcessed.expired);
+              setCancelledSubscriptions(retryProcessed.cancelled);
+            } catch (retryError) {
             }
-          });
-        } catch (apiError) {
-          console.warn("API subscriptions not available:", apiError);
+          }, 5000);
         }
-
-        // Fetch from localStorage (mock orders from checkout)
-        const localOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-        console.log("💾 LocalStorage Orders:", localOrders);
-
-        // Convert localStorage orders to subscription format
-        const localActive = localOrders
-          .filter((order) => order.status === "active")
-          .map((order) => ({
-            id: order.id,
-            course: {
-              name: order.name,
-              id: order.courseId,
-              courseCode: order.courseCodes || [],
-              universityName: [order.universityName || ""],
-              branchNames: order.branchNames || [],
-            },
-            plan: order.plan,
-            purchaseDate: order.purchaseDate,
-            expiryDate: order.expiryDate,
-            status: "ACTIVE",
-            isLocal: true, // Flag to identify localStorage orders
-          }));
-
-        // Combine API and localStorage orders
-        setActiveSubscriptions([...apiActive, ...localActive]);
-        setExpiredSubscriptions(apiExpired);
-        setCancelledSubscriptions(apiCancelled);
       } catch (error) {
-        console.error("Failed to fetch subscriptions:", error);
         toast.error("Failed to load orders");
       } finally {
         setIsLoading(false);
@@ -110,7 +95,6 @@ export default function Myorders() {
       toast.success("PRO plan added to cart!");
       navigate("/mycart");
     } catch (error) {
-      console.error("Failed to upgrade:", error);
       toast.error("Failed to add PRO plan to cart");
     }
   };
@@ -119,7 +103,7 @@ export default function Myorders() {
     try {
       const profileId = localStorage.getItem("profileId");
       const token = localStorage.getItem("token");
-      
+
       if (!profileId) {
         toast.error("Please login to start learning");
         return;
@@ -132,13 +116,14 @@ export default function Myorders() {
 
       // Check if course is already active to prevent duplicate enrollment
       const isAlreadyActive = activeSubscriptions.some(
-        (activeSub) => activeSub.course.id === subscription.course.id
+        (activeSub) => activeSub.course.id === subscription.course.id,
       );
 
       if (isAlreadyActive) {
         toast.info("You are already enrolled in this course!");
-        // Navigate to course dashboard
-        const courseCode = subscription.course.courseCode?.[0] || subscription.course.courseCodes?.[0];
+        const courseCode =
+          subscription.course.courseCode?.[0] ||
+          subscription.course.courseCodes?.[0];
         if (courseCode) {
           navigate(`/book-dashboard?subcode=${courseCode}`);
         }
@@ -155,23 +140,14 @@ export default function Myorders() {
         year: subscription.course.year || "",
       };
 
-      console.log("Starting free enrollment for cancelled course:", {
-        courseId: courseForEnrollment.id,
-        courseName: courseForEnrollment.name,
-        profileId
-      });
-
       toast.info("Enrolling in course... Please wait", {
         autoClose: false,
       });
 
-      // Use direct enrollment API for free courses (same as AllSubjects component)
+      // Use direct enrollment API for free courses
       const { enrollCourse } = await import("../api/api");
-      const [enrollmentResponse] = await enrollCourse(courseForEnrollment);
-      
-      console.log("Enrollment successful:", enrollmentResponse);
+      await enrollCourse(courseForEnrollment);
 
-      // Remove from cancelled list immediately
       setCancelledSubscriptions((prev) =>
         prev.filter((sub) => sub.id !== subscription.id),
       );
@@ -180,86 +156,75 @@ export default function Myorders() {
       const newActiveSubscription = {
         ...subscription,
         status: "ACTIVE",
-        plan: "FREE", // Re-enrollment is always free
+        plan: "FREE",
         purchaseDate: new Date().toISOString(),
-        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year from now
+        expiryDate: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       };
 
-      // Add to active subscriptions
       setActiveSubscriptions((prev) => [...prev, newActiveSubscription]);
 
       // Refresh subscriptions from backend after a short delay to ensure backend has processed
       setTimeout(async () => {
         try {
           const response = await getSubscriptions(profileId, "ALL");
-          
+
           if (response?.content) {
-            const newActive = response.content.filter(sub => sub.status === "ACTIVE");
-            const newExpired = response.content.filter(sub => sub.status === "EXPIRED");
-            const newCancelled = response.content.filter(sub => sub.status === "CANCELLED");
-            
+            const newActive = response.content.filter(
+              (sub) => sub.status === "ACTIVE",
+            );
+            const newExpired = response.content.filter(
+              (sub) => sub.status === "EXPIRED",
+            );
+            const newCancelled = response.content.filter(
+              (sub) => sub.status === "CANCELLED",
+            );
+
             setActiveSubscriptions(newActive);
             setExpiredSubscriptions(newExpired);
             setCancelledSubscriptions(newCancelled);
-            
-            console.log("Subscriptions refreshed after enrollment");
           }
         } catch (refreshError) {
-          console.warn("Failed to refresh subscriptions:", refreshError);
-          // Don't show error to user as the main enrollment was successful
         }
-      }, 1000); // 1 second delay to allow backend processing
+      }, 1000);
 
-      toast.dismiss(); // Dismiss the loading toast
+      toast.dismiss();
       toast.success("Successfully enrolled in course!");
 
-      // Navigate to the course dashboard
-      const courseCode = subscription.course.courseCode?.[0] || subscription.course.courseCodes?.[0];
-      
-      console.log("Navigation details:", {
-        courseCode,
-        courseCodeArray: subscription.course.courseCode,
-        courseCodesArray: subscription.course.courseCodes,
-        navigationUrl: courseCode ? `/book-dashboard?subcode=${courseCode}` : null
-      });
+      const courseCode =
+        subscription.course.courseCode?.[0] ||
+        subscription.course.courseCodes?.[0];
 
       if (courseCode) {
-        console.log(`Navigating to: /book-dashboard?subcode=${courseCode}`);
         navigate(`/book-dashboard?subcode=${courseCode}`);
       } else {
-        console.warn("No course code found for navigation");
         toast.success("Enrollment successful! Redirecting to your subjects...");
-        // Fallback navigation to my-subjects page
         setTimeout(() => {
           navigate("/my-subjects");
         }, 1500);
       }
     } catch (error) {
-      toast.dismiss(); // Dismiss any loading toasts
-      console.error("Failed to enroll in cancelled course:", error);
-      console.error("Error details:", {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
-      
-      // Show more specific error messages
+      toast.dismiss();
+
       if (error.response?.status === 401) {
         toast.error("Authentication expired. Please login again.");
       } else if (error.response?.status === 400) {
-        toast.error(error.response?.data?.message || "Invalid request. Please try again.");
+        toast.error(
+          error.response?.data?.message || "Invalid request. Please try again.",
+        );
       } else if (error.response?.status === 404) {
         toast.error("Course not found. Please refresh and try again.");
       } else if (error.response?.status === 409) {
         toast.info("You are already enrolled in this course!");
-        
-        // Remove from cancelled list since user is already enrolled
+
         setCancelledSubscriptions((prev) =>
           prev.filter((sub) => sub.id !== subscription.id),
         );
-        
-        // Navigate to the course dashboard
-        const courseCode = subscription.course.courseCode?.[0] || subscription.course.courseCodes?.[0];
+
+        const courseCode =
+          subscription.course.courseCode?.[0] ||
+          subscription.course.courseCodes?.[0];
         if (courseCode) {
           navigate(`/book-dashboard?subcode=${courseCode}`);
         }
@@ -279,40 +244,22 @@ export default function Myorders() {
     try {
       const profileId = localStorage.getItem("profileId");
 
-      // If it's a localStorage order, just remove it
-      if (subscription.isLocal) {
-        const localOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-        const updatedOrders = localOrders.filter(
-          (order) => order.id !== subscription.id,
-        );
-        localStorage.setItem("orders", JSON.stringify(updatedOrders));
+      // Call API to cancel subscription
+      const { cancelSubscription } = await import("../api/api");
+      const reason = "User requested cancellation";
 
-        // Update state
-        setActiveSubscriptions((prev) =>
-          prev.filter((sub) => sub.id !== subscription.id),
-        );
+      await cancelSubscription(reason, profileId, subscription.id);
 
-        toast.success("Subscription cancelled successfully");
-      } else {
-        // Call API to cancel subscription
-        const { cancelSubscription } = await import("../api/api");
-        const reason = "User requested cancellation";
+      setActiveSubscriptions((prev) =>
+        prev.filter((sub) => sub.id !== subscription.id),
+      );
+      setCancelledSubscriptions((prev) => [
+        ...prev,
+        { ...subscription, status: "CANCELLED" },
+      ]);
 
-        await cancelSubscription(reason, profileId, subscription.id);
-
-        // Move to cancelled list
-        setActiveSubscriptions((prev) =>
-          prev.filter((sub) => sub.id !== subscription.id),
-        );
-        setCancelledSubscriptions((prev) => [
-          ...prev,
-          { ...subscription, status: "CANCELLED" },
-        ]);
-
-        toast.success("Subscription cancelled successfully");
-      }
+      toast.success("Subscription cancelled successfully");
     } catch (error) {
-      console.error("Failed to cancel subscription:", error);
       toast.error(error.message || "Failed to cancel subscription");
     }
   };
@@ -355,8 +302,8 @@ export default function Myorders() {
                 {activeSubscriptions.map((sub) => (
                   <Active_Courses_Card
                     key={sub.id}
-                    courseName={sub.course.name}
-                    credits={sub.course.courseCode?.[0] || "N/A"}
+                    courseName={sub.course?.name || "Unknown Course"}
+                    credits={sub.course?.courseCode?.[0] || "N/A"}
                     planType={
                       sub.plan === "PRO"
                         ? "Pro Plan"
@@ -368,8 +315,8 @@ export default function Myorders() {
                     }
                     purchaseDate={formatDate(sub.purchaseDate)}
                     expiryDate={formatDate(sub.expiryDate)}
-                    branchName={sub.course.branchNames?.[0] || "CSE"}
-                    universityName={sub.course.universityName?.[0] || ""}
+                    branchName={sub.course?.branchNames?.[0] || "CSE"}
+                    universityName={sub.course?.universityName?.[0] || "AKTU"}
                     onUpgrade={
                       sub.plan === "BASIC" || sub.plan === "FREE"
                         ? () => handleUpgradeToPro(sub)

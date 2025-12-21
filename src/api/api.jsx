@@ -1,6 +1,8 @@
 import axios from "axios";
 import { BACKEND_URL, AI_URL, DEV_BACKEND_URL } from "../constants/api";
 import { track } from "@vercel/analytics/react";
+import { generateProtectedHeaders, getUserContext } from "../utils/apiUtils";
+
 
 const api = axios.create({
   baseURL: DEV_BACKEND_URL, // change to BACKEND_URL for production
@@ -283,51 +285,91 @@ export const updateEduData = async (data) => {
 };
 
 export const getSyllabus = async (subCode) => {
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      accept: "*/*",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await api.get(`/api/getSyllabus?subcode=${subCode}`, config)
-  return response.data.data;
+  try {
+    const { unitNo } = getUserContext(subCode);
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    
+    // Add unitNo as optional parameter if available
+    const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
+    const response = await api.get(`/api/getSyllabus?subcode=${subCode}${unitParam}`, config);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const getQnA = async (subCode) => {
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      accept: "*/*",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await api.get(`/api/getQA?subcode=${subCode}`, config)
-  return response.data.data;
+  try {
+    const { profileId, unitNo } = getUserContext(subCode);
+    
+    if (!profileId) {
+      throw new Error('Missing profileId - user not logged in');
+    }
+    
+    // Get planId specifically for this course
+    const { planId } = getUserContext(subCode);
+    
+    const headers = await generateProtectedHeaders(profileId, subCode, unitNo, planId, 'QNA');
+    const config = { headers };
+    
+    // Add unitNo as optional parameter if available
+    const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
+    const response = await api.get(`/api/getQA?subcode=${subCode}${unitParam}`, config);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const getUnitNotes = async (subCode) => {
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      accept: "*/*",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await api.get(`/api/getUnitNotes/${subCode}`, config)
-  return response.data.data;
+  try {
+    const { profileId, courseCode, unitNo, planId } = getUserContext();
+    
+    if (!profileId) {
+      throw new Error('Missing profileId - user not logged in');
+    }
+    
+    const actualCourseCode = courseCode || subCode;
+    const headers = await generateProtectedHeaders(profileId, actualCourseCode, unitNo, planId, 'NOTES');
+    const config = { headers };
+    
+    // Add unitNo as optional parameter if available
+    const unitParam = unitNo ? `?unitNo=${unitNo}` : '';
+    const response = await api.get(`/api/getUnitNotes/${subCode}${unitParam}`, config);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
-export const getAnalyticData = async (subCode) => {
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      accept: "*/*",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await api.get(`/api/analyticData/${subCode}`, config);
-  return response.data.data;
+export const getAnalyticData = async (subCode, unitNo) => {
+  try {
+    const { profileId, unitNo: contextUnitNo, planId } = getUserContext(subCode);
+    
+    if (!profileId) {
+      throw new Error('Missing profileId - user not logged in');
+    }
+    
+    // Use provided unitNo parameter, fallback to context unitNo
+    const finalUnitNo = unitNo || contextUnitNo;
+    
+    const headers = await generateProtectedHeaders(profileId, subCode, finalUnitNo, planId, 'INSIGHTS');
+    const config = { headers };
+    
+    // Add unitNo as query parameter if available
+    const unitParam = finalUnitNo ? `?unitNo=${finalUnitNo}` : '';
+    const response = await api.get(`/api/analyticData/${subCode}${unitParam}`, config);
+    
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 
@@ -348,7 +390,6 @@ export const enrollCourse = async (course) => {
 
     const response = await api.post(endpoint, {}, config);
 
-    console.log(`Enrollment API response:`, response.data);
     return [response.data, course];
   } catch (error) {
     console.error("Enrollment API Error:", error.response);
@@ -357,35 +398,30 @@ export const enrollCourse = async (course) => {
 }
 
 // APIs of Summrizer and Rephraser
-export const summarizeAnswer = async (question, answer) => {
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      accept: "*/*",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
+export const summarizeAnswer = async (q_id) => {
   try {
-    const response = await api.post(
-      `api/summarize`,
-      { question, answer },
-      config
-    );
-    // Step 1: Extract the raw string
-    const rawData = response.data; // This is a string like "FastAPI Response: {...}"
+    const { profileId, courseCode, unitNo, planId } = getUserContext();
+    
+    if (!profileId) {
+      throw new Error('Missing profileId - user not logged in');
+    }
+    
+    const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'SUMMARIZER');
+    const config = { headers };
 
-    // Step 2: Remove the prefix
-    const jsonString = rawData.replace("FastAPI Response: ", "");
-
-    // Step 3: Parse it
-    const parsed = JSON.parse(jsonString);
-
-    // Step 4: Return the summarized answer
-
-    console.log("response is " + parsed?.data?.summarized_answer);
-    return parsed?.data?.summarized_answer;
-    // return response.data?.data?.summarized_answer;
+    // Add unitNo as optional parameter if available
+    const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
+    const response = await api.get(`/api/summarize?q_id=${q_id}${unitParam}`, config);
+    
+    // Handle the response format
+    const rawData = response.data;
+    if (typeof rawData === 'string' && rawData.startsWith("FastAPI Response: ")) {
+      const jsonString = rawData.replace("FastAPI Response: ", "");
+      const parsed = JSON.parse(jsonString);
+      return parsed?.data?.summarized_answer;
+    }
+    
+    return response.data?.data?.summarized_answer || response.data;
   } catch (error) {
     throw new Error(
       error.response?.data?.message || "Failed to summarize answer."
@@ -393,23 +429,22 @@ export const summarizeAnswer = async (question, answer) => {
   }
 };
 
-export const rephraseAnswer = async (style, summary, answer) => {
+export const rephraseAnswer = async (q_id, style) => {
   try {
-    console.log(
-      "Before making call from API.jsx type of are:" +
-        typeof style +
-        " " +
-        typeof summary +
-        typeof answer,
-    );
-    const response = await apiAI.post(`/rephrase`, {
-      style,
-      summary,
-      answer,
-    });
+    const { profileId, courseCode, unitNo, planId } = getUserContext();
+    
+    if (!profileId) {
+      throw new Error('Missing profileId - user not logged in');
+    }
+    
+    const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'REPHRASER');
+    const config = { headers };
 
-    const rephrasedText = response?.data?.data?.rephrased_text;
-    console.log("Rephrased Text:", rephrasedText); // For debug
+    // Add unitNo as optional parameter if available
+    const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
+    const response = await api.get(`/api/rephrase?q_id=${q_id}&style=${style}${unitParam}`, config);
+
+    const rephrasedText = response?.data?.data?.rephrased_text || response.data;
     return rephrasedText;
   } catch (error) {
     throw new Error(
@@ -665,7 +700,10 @@ export const createTransaction = async (profileId, couponCode = null) => {
       },
     );
 
-    console.log("Transaction Created:", response.data);
+    console.log("Transaction Creation:", {
+      status: response.status,
+      data: response.data,
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating transaction:", error.response);
@@ -695,7 +733,10 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
       },
     );
 
-    console.log("Payment Verified:", response.data);
+    console.log("Payment Verification:", {
+      status: response.status,
+      data: response.data
+    });
     return response.data;
   } catch (error) {
     console.error("Error verifying payment:", error.response);
@@ -735,15 +776,13 @@ export const removeTransaction = async (orderId) => {
 // ROADMAP APIs
 export const submitRoadmapInput = async (profileId, subCode, inputData) => {
   try {
-    const token = localStorage.getItem("token");
+    const { courseCode, unitNo, planId } = getUserContext();
+    const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'ROADMAP');
+    
     const response = await api.put(
       `/api/roadmap/input/${profileId}/${subCode}`,
       inputData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      { headers }
     );
     return response.data;
   } catch (error) {
@@ -757,15 +796,13 @@ export const submitRoadmapInput = async (profileId, subCode, inputData) => {
 
 export const generateRoadmap = async (profileId, subCode) => {
   try {
-    const token = localStorage.getItem("token");
+    const { courseCode, unitNo, planId } = getUserContext();
+    const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'ROADMAP');
+    
     const response = await api.post(
       `/api/roadmap/generate/${profileId}/${subCode}`,
       {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      { headers }
     );
     return response.data;
   } catch (error) {
@@ -779,14 +816,12 @@ export const generateRoadmap = async (profileId, subCode) => {
 
 export const getRoadmap = async (profileId, subCode) => {
   try {
-    const token = localStorage.getItem("token");
+    const { courseCode, unitNo, planId } = getUserContext();
+    const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'ROADMAP');
+    
     const response = await api.get(
       `/api/roadmap/${profileId}/${subCode}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      { headers }
     );
     return response.data;
   } catch (error) {
