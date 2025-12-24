@@ -10,44 +10,120 @@ export default function OrderSummary({
   onCouponCodeChange,
   onApplyCoupon,
   onCheckout,
+  showCouponInput = true,
+  checkoutButtonText = "Secure Checkout",
 }) {
   return (
     <div
-      className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-8 flex flex-col border border-gray-100"
-      style={{ minHeight: "fit-content", maxHeight: "90vh" }}
+      className="w-full lg:max-w-md bg-[#fafafa] rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 md:p-6 flex flex-col border border-gray-200 mx-auto"
+      style={{ minHeight: "fit-content", maxHeight: "none" }}
     >
       {/* Heading */}
-      <h1 className="text-2xl font-bold text-gray-900 border-b border-gray-200 pb-4 tracking-tight">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 tracking-tight flex items-center gap-3">
         Order Summary
-      </h1>
+        <span className="bg-gray-200 text-gray-500 text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full font-bold">
+          {cart.length} Courses
+        </span>
+      </h2>
 
-      {/* Coupon Section */}
-      <div className="mt-6">
-        {appliedCoupon ? (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="font-semibold text-green-800">
-                  {appliedCoupon.couponCode}
+      {/* Cart Items Scroll Area */}
+      <div className="flex-1 overflow-y-auto pr-1 mb-6 space-y-4 custom-scrollbar">
+        {cart.map((item) => {
+          const displayPlan = item.plan?.toLowerCase().includes("plan")
+            ? item.plan
+            : `${item.plan} Plan`;
+
+          return (
+            <div
+              key={item.id}
+              className="flex justify-between items-center group bg-white border border-gray-100 rounded-2xl p-4 transition-all duration-300 hover:border-gray-200 hover:shadow-sm"
+            >
+              <div className="flex-1 min-w-0 pr-4">
+                <div className="font-bold text-gray-900 text-base truncate mb-1">
+                  {item.name}
                 </div>
-                <div className="text-sm text-green-600">
-                  {appliedCoupon.description || appliedCoupon.message}
+                <div className="flex items-center gap-3">
+                  <span className={`text-[11px] font-bold uppercase tracking-tight px-2 py-0.5 rounded-lg ${displayPlan.toUpperCase().includes("PRO")
+                    ? "bg-purple-100 text-purple-700"
+                    : displayPlan.toUpperCase().includes("BASIC")
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-gray-100 text-gray-700"
+                    }`}>
+                    {displayPlan}
+                  </span>
+                  <span className="text-sm font-bold text-gray-900">
+                    ₹{item.price}
+                  </span>
                 </div>
               </div>
               <button
-                onClick={onRemoveCoupon}
-                className="text-red-500 hover:text-red-700 text-sm"
+                onClick={() => onRemoveFromCart(item.id)}
+                className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all cursor-pointer shadow-sm border border-gray-100"
               >
-                Remove
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </button>
             </div>
+          );
+        })}
+      </div>
+
+      {/* Coupon Section */}
+      <div className="mb-8">
+        {!showCouponInput ? (
+          // Highlight Mode (For All Subjects / Browsing)
+          appliedCoupon && (
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-xl">🎉</span>
+                <span className="bg-green-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                  Best Offer
+                </span>
+              </div>
+              <div className="font-black text-green-900 text-sm mb-1 tracking-tight">
+                Save ₹{appliedCoupon.calculatedDiscount?.toFixed(0) || appliedCoupon.discountValue} instantly!
+              </div>
+              <div className="text-[11px] text-green-700 font-bold uppercase tracking-widest leading-none">
+                Use code <span className="text-green-900 underline decoration-2">{appliedCoupon.couponCode}</span> at checkout
+              </div>
+            </div>
+          )
+        ) : appliedCoupon ? (
+          // Applied Mode (Manual / Cart)
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center justify-between shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="bg-green-100 p-2 rounded-xl">
+                <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-2 0v1h2zm3 0H10V5a3 3 0 116 0v1h-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-black text-green-800 uppercase tracking-tighter">
+                    {appliedCoupon.couponCode}
+                  </span>
+                  <span className="text-xs font-bold text-green-600">Applied</span>
+                </div>
+                <div className="text-[11px] text-green-600 font-bold">
+                  {appliedCoupon.description || appliedCoupon.message}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={onRemoveCoupon}
+              className="text-xs font-bold text-red-500 hover:text-red-700 cursor-pointer uppercase tracking-widest"
+            >
+              Remove
+            </button>
           </div>
         ) : (
-          <div className="space-y-2 mb-4">
+          // Input Mode (Empty / Cart)
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
               <input
                 type="text"
-                placeholder="Enter coupon code"
+                placeholder="PROMO CODE"
                 value={couponCode}
                 onChange={(e) => onCouponCodeChange(e.target.value)}
                 onKeyPress={(e) => {
@@ -55,155 +131,73 @@ export default function OrderSummary({
                     onApplyCoupon();
                   }
                 }}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="flex-1 bg-white px-4 py-3.5 border-2 border-gray-100 rounded-xl text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-purple-500 transition-all placeholder:text-gray-300"
               />
               <button
                 onClick={onApplyCoupon}
                 disabled={!couponCode.trim()}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-zinc-900 text-white px-6 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-black transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-md"
               >
                 Apply
               </button>
             </div>
             <button
               onClick={onShowCouponPopup}
-              className="text-purple-600 text-sm hover:underline font-medium"
+              className="px-1 text-[11px] text-purple-600 font-black uppercase tracking-widest hover:text-purple-700 transition-colors"
             >
-              View All Coupons
+              View Available Coupons
             </button>
           </div>
         )}
       </div>
 
-      {/* Cart Items */}
-      <div className="mt-4 space-y-3">
-        {cart.map((item) => (
-          <div
-            key={item.id}
-            className="flex justify-between items-center text-sm bg-gray-50 rounded-lg p-3"
-          >
-            <div className="flex-1">
-              <div className="font-medium truncate">{item.name}</div>
-              <div className="text-gray-500 text-xs">
-                {item.plan?.includes("Plan")
-                  ? item.plan
-                  : `${
-                      item.plan === "BASIC"
-                        ? "Basic"
-                        : item.plan === "PRO"
-                        ? "Pro"
-                        : item.plan
-                    } Plan`}
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">₹{item.price}</span>
-              <button
-                onClick={() => onRemoveFromCart(item.id)}
-                className="text-red-500 hover:text-red-700 text-xs"
-              >
-                🗑️
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Price details */}
-      <div className="space-y-3 text-base text-gray-700 mt-6">
-        <div className="flex justify-between">
+      <div className="space-y-4 pt-6 border-t-2 border-dashed border-gray-200">
+        <div className="flex justify-between items-center text-sm font-bold text-gray-500 uppercase tracking-wide">
           <span>Subtotal</span>
-          <span className="text-gray-900 font-semibold">
-            ₹{pricing.subtotal}
-          </span>
+          <span className="text-gray-900 font-bold">₹{pricing.subtotal}</span>
         </div>
+
         {pricing.discount > 0 && (
-          <div className="flex justify-between">
-            <span>Discount</span>
-            <span className="text-green-600 font-semibold">
-              - ₹{pricing.discount}
-            </span>
+          <div className="flex justify-between items-center text-sm font-bold text-green-600 uppercase tracking-wide">
+            <div className="flex items-center gap-2">
+              <span>Discount</span>
+              <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-black">SAVE</span>
+            </div>
+            <span className="font-black">- ₹{pricing.discount}</span>
           </div>
         )}
-      </div>
 
-      {/* Savings Message */}
-      {/* {!pricing.allPro && (
-        <>
-          {cart.length <= 4 ? (
-            <div className="mt-4 bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-xl py-3 px-4 text-center text-sm text-green-800 shadow-sm">
-              <span className="font-semibold">
-                Select 5+ courses to unlock 25% discount!
-              </span>
-            </div>
-          ) : (
-            <div className="mt-4 bg-gradient-to-r from-purple-50 to-purple-100 border border-purple-200 rounded-xl py-3 px-4 text-center text-sm text-purple-800 shadow-sm">
-              <span className="font-semibold">
-                Upgrade to Pro, get 30% discount!
-              </span>
-            </div>
-          )} */}
-
-          {/* Bundle Savings Card */}
-          {/* {pricing.hasBasic && (
-            <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="font-semibold text-gray-800">
-                    Bundle Savings
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Upgrade all to Pro & Save 30%
-                  </div>
-                </div>
-                <button
-                  onClick={onUpgradeAllToPro}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-purple-800 transition-all"
-                >
-                  Pro
-                </button>
-              </div>
-            </div>
-          )}
-        </>
-      )} */}
-
-      {/* Divider */}
-      <div className="border-t border-gray-200 my-6"></div>
-
-      {/* Total */}
-      <div className="text-xl font-bold text-gray-900 text-center mb-4">
-        Total Amount Payable:
-        <span className="ml-2 font-extrabold text-purple-700">
-          ₹{pricing.total}
-        </span>
+        {/* Total Display */}
+        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+          <div className="text-sm font-black text-gray-500 uppercase tracking-widest">
+            Grand Total
+          </div>
+          <div className="text-4xl font-bold text-gray-900 tracking-tighter">
+            ₹{pricing.total}
+          </div>
+        </div>
       </div>
 
       {/* Checkout Button */}
-      <button
-        onClick={onCheckout}
-        className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 text-white font-semibold rounded-full py-3 text-sm shadow-md hover:scale-[1.03] hover:shadow-lg transition transform mb-4"
-      >
-        🔒 Secure Checkout
-      </button>
+      <div className="mt-8 space-y-4">
+        <button
+          onClick={onCheckout}
+          className="w-full py-4 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 cursor-pointer shadow-lg"
+          style={{
+            background: "linear-gradient(90deg, #4b05d4 0%, #7c3aed 28%, #f59e0b 100%)",
+          }}
+        >
+          <span>{checkoutButtonText}</span>
+          <span className="text-lg">→</span>
+        </button>
 
-      {/* Payment methods */}
-      <div className="flex items-center justify-center gap-3 opacity-70">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-          alt="Visa"
-          className="h-6"
-        />
-        <img
-          src="https://imageio.forbes.com/blogs-images/steveolenski/files/2016/07/Mastercard_new_logo-1200x865.jpg?height=512&width=711&fit=bounds"
-          alt="MasterCard"
-          className="h-6"
-        />
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
-          alt="PayPal"
-          className="h-6"
-        />
+        {/* Payment methods */}
+        <div className="flex justify-center items-center gap-5 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-4 w-auto object-contain" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="MasterCard" className="h-6 w-auto object-contain" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-4 w-auto object-contain" />
+        </div>
       </div>
     </div>
   );

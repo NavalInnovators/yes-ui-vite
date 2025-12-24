@@ -2,11 +2,14 @@ import "./UserDashboard.css";
 import { useNavigate } from "react-router-dom";
 import UserDashboardRight from "./UserDashboardRight";
 import { useMyCourses } from "./sharedQuery";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSubscriptions } from "../hooks/useSubscriptions";
+
 function MySubjects({ searchQuery }) {
   const navigate = useNavigate();
   const { data: myCourses, isLoading, isError } = useMyCourses();
   const [selectedCategory, setSelectedCategory] = useState("");
+  const { getPlanForCourse, isLoading: subscriptionsLoading } = useSubscriptions();
   const categories = (() => {
     if (!myCourses) return [];
 
@@ -74,7 +77,7 @@ function MySubjects({ searchQuery }) {
   return (
     <div className="userdashboard-content-page">
       <div className="all-course-card-container">
-        {isLoading ? (
+        {isLoading || subscriptionsLoading ? (
           <div>Please wait while we load your courses....</div>
         ) : isError ? (
           <div>Error loading your courses. Please try again!</div>
@@ -82,10 +85,14 @@ function MySubjects({ searchQuery }) {
           <div>No courses found.</div>
         ) : (
           filteredSubjects.map((subject, index) => {
+            const plan = getPlanForCourse(subject.courseCodes[0]);
+            const isPro = plan === "PRO" || plan === "Pro Plan";
+            const isBasic = plan === "BASIC" || plan === "Basic Plan";
+
             return (
               <div
                 key={index}
-                className="all-course-card pointer-cursor"
+                className="w-full min-h-[220px] bg-[#fafafa] rounded-2xl p-6 flex flex-col justify-between border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer"
                 onClick={() => {
                   sessionStorage.setItem(
                     "selectedCourseCode",
@@ -94,35 +101,49 @@ function MySubjects({ searchQuery }) {
                   navigate(`/book-dashboard?subcode=${subject.courseCodes[0]}`);
                 }}
               >
-                <div className="all-course-card-info-container">
-                  <div className="all-course-card-header-container">
-                    <div className="font-subheading-black">{subject.name}</div>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+                        ? "bg-purple-100 text-purple-700 border border-purple-200"
+                        : isBasic
+                          ? "bg-blue-100 text-blue-700 border border-blue-200"
+                          : "bg-gray-100 text-gray-700 border border-gray-200"
+                        }`}
+                    >
+                      {isPro ? "Pro Plan" : isBasic ? "Basic Plan" : "Free Plan"}
+                    </span>
                   </div>
-                  <div className="all-course-card-tags-container font-mark-read-btn">
-                    <div className="all-course-card-each-tag">
+
+                  <div className="text-lg font-bold text-gray-900 leading-snug">
+                    {subject.name}
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
                       {subject.universityName}
                     </div>
-                    <div className="all-course-card-each-tag">
-                      {subject.year}
+                    <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                      Year {subject.year}
                     </div>
-                    {subject.branchNames.map((branch, index) => (
-                      <div key={index} className="all-course-card-each-tag">
+                    {subject.branchNames.slice(0, 1).map((branch, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase"
+                      >
                         {branch}
                       </div>
                     ))}
-                    {subject.courseCodes.map((courseCode, index) => (
-                      <div key={index} className="all-course-card-each-tag">
+                    {subject.courseCodes.slice(0, 1).map((courseCode, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase"
+                      >
                         {courseCode}
                       </div>
                     ))}
                   </div>
                 </div>
-                {/* <div className="all-course-card-slider-container">
-                      <MySubjectSlider
-                        totalUnits={totalUnits}
-                        completedUnits={completedUnits}
-                      />
-                    </div> */}
               </div>
             );
           })

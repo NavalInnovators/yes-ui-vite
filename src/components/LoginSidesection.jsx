@@ -117,14 +117,14 @@ const LoginSideSection = () => {
           )}
 
           <div className="login-form-checkbox-frgt-pswd">
-            <label class="custom-checkbox login-checkbox-remember">
+            <label className="custom-checkbox login-checkbox-remember">
               <input
                 type="checkbox"
                 name="checkbox"
                 checked={formData.checkbox}
                 onChange={handleInputChange}
               />
-              <span class="checkmark"></span>
+              <span className="checkmark"></span>
               Remember Me
             </label>
             <div className="forgot-password">

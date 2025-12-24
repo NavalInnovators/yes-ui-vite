@@ -156,6 +156,11 @@ function BookDashboardMidSec({
     const existingSummaries =
       JSON.parse(localStorage.getItem(currentKey)) || [];
 
+    if (existingSummaries.length > 0 && summaryList.length === 0) {
+      setSummaryList(existingSummaries);
+      setSummaryIndex(0);
+      return;
+    }
     if (existingSummaries.length >= 3) {
       toast.error(
         "You have reached the limit, can't generate more than 3 summaries.",
@@ -179,7 +184,13 @@ function BookDashboardMidSec({
     toast.info("Summarizing answer...");
     try {
       const newSummary = await summarizeAnswer(questionId);
-      const updatedSummaries = [...existingSummaries, newSummary];
+      
+      let summaryToStore = newSummary;
+      if (typeof newSummary === 'object' && newSummary !== null) {
+        summaryToStore = newSummary.summary || newSummary.summarized_answer || newSummary.text || newSummary.content;
+      }
+      
+      const updatedSummaries = [...existingSummaries, summaryToStore];
       setSummaryList(updatedSummaries);
       setSummaryIndex(updatedSummaries.length - 1);
       localStorage.setItem(currentKey, JSON.stringify(updatedSummaries));
@@ -204,7 +215,8 @@ function BookDashboardMidSec({
         usageCount: currentUsageCount,
       });
     } catch (err) {
-      toast.error("Failed to summarize the answer");
+      const errorMessage = err.message || "Failed to summarize the answer";
+      toast.error(errorMessage);
       console.error(err);
     } finally {
       setSummaryLoading(false);
@@ -262,6 +274,13 @@ function BookDashboardMidSec({
       });
     }
 
+    // Load existing rephrased answers
+    const existingRephrased = JSON.parse(localStorage.getItem(getRephrasedKey(selectedUnit, selectedQuestion))) || [];
+    if (existingRephrased.length > 0 && rephrasedList.length === 0) {
+      setRephrasedList(existingRephrased);
+      setRephraseIndex(0);
+    }
+
     if (!summaryList[0] || !answer) {
       toast.error("Please summarize the answer first.");
       setSelectedStyle("0");
@@ -282,7 +301,13 @@ function BookDashboardMidSec({
 
     try {
       const rephrased = await rephraseAnswer(questionId, style);
-      const updatedList = [...rephrasedList, { style, answer: rephrased }];
+      
+      let rephrasedToStore = rephrased;
+      if (typeof rephrased === 'object' && rephrased !== null) {
+        rephrasedToStore = rephrased.content || rephrased.rephrased_text || rephrased.text || rephrased.answer;
+      }
+      
+      const updatedList = [...rephrasedList, { style, answer: rephrasedToStore }];
       setRephrasedList(updatedList);
       setRephraseIndex(updatedList.length - 1);
       localStorage.setItem(
@@ -346,6 +371,7 @@ function BookDashboardMidSec({
   const answer = filteredQuestions[selectedQuestion]?.solution;
   const currentQuestionData = filteredQuestions[selectedQuestion] || {};
   const questionId =
+    currentQuestionData.qid ||
     currentQuestionData.id ||
     currentQuestionData._id ||
     currentQuestionData.questionId ||
@@ -378,32 +404,30 @@ function BookDashboardMidSec({
   ]);
 
   useEffect(() => {
-    const saved = localStorage.getItem(
-      getSummaryKey(selectedUnit, selectedQuestion),
-    );
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setSummaryList(parsed);
+    // Check for existing summaries
+    const summaryKey = getSummaryKey(selectedUnit, selectedQuestion);
+    const existingSummaries = JSON.parse(localStorage.getItem(summaryKey)) || [];
+    
+    if (existingSummaries.length > 0) {
+      setSummaryList(existingSummaries);
       setSummaryIndex(0);
     } else {
       setSummaryList([]);
       setSummaryIndex(0);
     }
-  }, [question, selectedUnit, selectedQuestion]);
 
-  // Load saved rephrased answers from localStorage on question/unit/selectedQuestion change
-  useEffect(() => {
-    const saved = localStorage.getItem(
-      getRephrasedKey(selectedUnit, selectedQuestion),
-    );
-    if (saved) {
-      setRephrasedList(JSON.parse(saved));
+    // Check for existing rephrased answers
+    const rephrasedKey = getRephrasedKey(selectedUnit, selectedQuestion);
+    const existingRephrased = JSON.parse(localStorage.getItem(rephrasedKey)) || [];
+    
+    if (existingRephrased.length > 0) {
+      setRephrasedList(existingRephrased);
       setRephraseIndex(0);
     } else {
       setRephrasedList([]);
       setRephraseIndex(0);
     }
-  }, [selectedUnit, selectedQuestion]);
+  }, [selectedQuestion, selectedUnit]);
 
   const containerRef = useRef(null);
 

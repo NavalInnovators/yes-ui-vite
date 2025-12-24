@@ -18,6 +18,9 @@ export default function Myorders() {
   const [expiredSubscriptions, setExpiredSubscriptions] = useState([]);
   const [cancelledSubscriptions, setCancelledSubscriptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [subToCancel, setSubToCancel] = useState(null);
+  const [showAllCancelled, setShowAllCancelled] = useState(false);
 
   // Fetch subscriptions from API
   useEffect(() => {
@@ -33,6 +36,15 @@ export default function Myorders() {
         setIsLoading(true);
 
         const allSubscriptions = await fetchAllSubscriptions(profileId);
+
+        // Ensure allCourses is loaded for metadata enhancement
+        if (!localStorage.getItem("allCourses")) {
+          const { getAllCourses } = await import("../api/api");
+          const allCoursesResponse = await getAllCourses();
+          if (allCoursesResponse?.content) {
+            localStorage.setItem("allCourses", JSON.stringify(allCoursesResponse.content));
+          }
+        }
 
         // Process and categorize subscriptions
         const { active, expired, cancelled } =
@@ -73,9 +85,8 @@ export default function Myorders() {
     fetchSubscriptions();
   }, [navigate]);
 
-  const handleUpgradeToPro = async (subscription) => {
+  const handleUpgrade = async (subscription, plan) => {
     try {
-      // Convert subscription to course format for cart
       const courseForCart = {
         id: subscription.course.id,
         name: subscription.course.name,
@@ -85,20 +96,20 @@ export default function Myorders() {
         year: subscription.course.year || "",
       };
 
-      toast.info("Adding PRO plan to cart...");
+      toast.info(`Adding ${plan} plan to cart...`);
 
-      // Add PRO plan to cart via API
-      await addToCart(courseForCart, "PRO", {
+      await addToCart(courseForCart, plan, {
         source: "upgrade_from_orders",
       });
 
-      toast.success("PRO plan added to cart!");
+      toast.success(`${plan} plan added to cart!`);
       navigate("/mycart");
     } catch (error) {
-      toast.error("Failed to add PRO plan to cart");
+      toast.error(`Failed to add ${plan} plan to cart`);
     }
   };
 
+  /*
   const handleStartLearning = async (subscription) => {
     try {
       const profileId = localStorage.getItem("profileId");
@@ -234,33 +245,44 @@ export default function Myorders() {
     }
   };
 
-  const handleCancelSubscription = async (subscription) => {
-    const confirmCancel = window.confirm(
-      `Are you sure you want to cancel "${subscription.course.name}"?`,
-    );
+  const handleReEnrollAction = async (subscription, plan) => {
+    if (plan === "FREE") {
+      await handleStartLearning(subscription);
+    } else {
+      await handleUpgrade(subscription, plan);
+    }
+  };
+  */
 
-    if (!confirmCancel) return;
+  const handleCancelSubscription = (subscription) => {
+    setSubToCancel(subscription);
+    setShowCancelModal(true);
+  };
+
+  const confirmCancellation = async () => {
+    if (!subToCancel) return;
 
     try {
       const profileId = localStorage.getItem("profileId");
-
-      // Call API to cancel subscription
       const { cancelSubscription } = await import("../api/api");
       const reason = "User requested cancellation";
 
-      await cancelSubscription(reason, profileId, subscription.id);
+      await cancelSubscription(reason, profileId, subToCancel.id);
 
       setActiveSubscriptions((prev) =>
-        prev.filter((sub) => sub.id !== subscription.id),
+        prev.filter((sub) => sub.id !== subToCancel.id),
       );
       setCancelledSubscriptions((prev) => [
         ...prev,
-        { ...subscription, status: "CANCELLED" },
+        { ...subToCancel, status: "CANCELLED" },
       ]);
 
       toast.success("Subscription cancelled successfully");
     } catch (error) {
       toast.error(error.message || "Failed to cancel subscription");
+    } finally {
+      setShowCancelModal(false);
+      setSubToCancel(null);
     }
   };
 
@@ -298,12 +320,12 @@ export default function Myorders() {
                 No active courses. Browse courses to get started!
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {activeSubscriptions.map((sub) => (
                   <Active_Courses_Card
                     key={sub.id}
                     courseName={sub.course?.name || "Unknown Course"}
-                    credits={sub.course?.courseCode?.[0] || "N/A"}
+                    courseCode={sub.course?.courseCode?.[0] || "N/A"}
                     planType={
                       sub.plan === "PRO"
                         ? "Pro Plan"
@@ -315,11 +337,16 @@ export default function Myorders() {
                     }
                     purchaseDate={formatDate(sub.purchaseDate)}
                     expiryDate={formatDate(sub.expiryDate)}
-                    branchName={sub.course?.branchNames?.[0] || "CSE"}
+                    branchNames={sub.course?.branchNames || []}
                     universityName={sub.course?.universityName?.[0] || "AKTU"}
-                    onUpgrade={
-                      sub.plan === "BASIC" || sub.plan === "FREE"
-                        ? () => handleUpgradeToPro(sub)
+                    onUpgradeBasic={
+                      sub.plan === "FREE"
+                        ? () => handleUpgrade(sub, "BASIC")
+                        : null
+                    }
+                    onUpgradePro={
+                      sub.plan === "FREE" || sub.plan === "BASIC"
+                        ? () => handleUpgrade(sub, "PRO")
                         : null
                     }
                     onCancel={() => handleCancelSubscription(sub)}
@@ -342,16 +369,23 @@ export default function Myorders() {
                   <Expired_Courses_Card
                     key={sub.id}
                     courseName={sub.course.name}
-                    credits={sub.course.courseCode?.[0] || "N/A"}
+                    courseCode={sub.course.courseCode?.[0] || "N/A"}
                     planType={
                       sub.plan === "PRO"
                         ? "Pro Plan"
                         : sub.plan === "BASIC"
-                        ? "Basic Plan"
-                        : sub.plan
+                          ? "Basic Plan"
+                          : sub.plan === "FREE"
+                            ? "Free Plan"
+                            : sub.plan
                     }
                     purchaseDate={formatDate(sub.purchaseDate)}
                     expiryDate={formatDate(sub.expiryDate)}
+                    isCancelled={false}
+                    universityName={sub.course?.universityName?.[0]}
+                    branchNames={sub.course?.branchNames || []}
+                    course={sub.course}
+                    // onAction={(plan) => handleReEnrollAction(sub, plan)}
                   />
                 ))}
               </div>
@@ -363,30 +397,102 @@ export default function Myorders() {
                 <h1 className="text-2xl font-semibold py-8">
                   Cancelled Courses ({cancelledSubscriptions.length})
                 </h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {cancelledSubscriptions.map((sub) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {(showAllCancelled ? cancelledSubscriptions : cancelledSubscriptions.slice(0, 3)).map((sub) => (
                     <Expired_Courses_Card
                       key={sub.id}
                       courseName={sub.course.name}
-                      credits={sub.course.courseCode?.[0] || "N/A"}
+                      courseCode={sub.course.courseCode?.[0] || "N/A"}
                       planType={
                         sub.plan === "PRO"
                           ? "Pro Plan"
                           : sub.plan === "BASIC"
-                          ? "Basic Plan"
-                          : sub.plan
+                            ? "Basic Plan"
+                            : sub.plan
                       }
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
-                      onStartLearning={() => handleStartLearning(sub)}
+                      // onAction={(plan) => handleReEnrollAction(sub, plan)}
+                      isCancelled={true}
+                      universityName={sub.course?.universityName?.[0]}
+                      branchNames={sub.course?.branchNames || []}
+                      course={sub.course}
                     />
                   ))}
                 </div>
+                {cancelledSubscriptions.length > 3 && (
+                  <div className="flex justify-center mt-6">
+                    <button
+                      onClick={() => setShowAllCancelled(!showAllCancelled)}
+                      className="px-6 py-3 bg-zinc-900 hover:bg-zinc-950 text-white rounded-lg font-medium transition-colors duration-200 cursor-pointer"
+                    >
+                      {showAllCancelled 
+                        ? "Show Less" 
+                        : `Show More (${cancelledSubscriptions.length - 3} more)`
+                      }
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </>
         )}
       </div>
+
+      {/* Cancellation Confirmation Modal */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
+                <svg
+                  className="w-8 h-8 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-black text-gray-900 mb-3 tracking-tight">
+                Wait, Are you sure?
+              </h3>
+              <div className="flex flex-col gap-2 mb-8">
+                <p className="text-gray-500 text-[13px] leading-relaxed">
+                  You're about to cancel your access to:
+                </p>
+                <div className="bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+                  <span className="text-sm font-bold text-gray-900 italic">
+                    {subToCancel?.course?.name}
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col w-full gap-3">
+                <button
+                  onClick={confirmCancellation}
+                  className="w-full py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-red-200 cursor-pointer"
+                >
+                  Yes, Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowCancelModal(false);
+                    setSubToCancel(null);
+                  }}
+                  className="w-full py-3 bg-gray-50 hover:bg-zinc-100 text-gray-700 border border-gray-300 rounded-xl font-bold transition-all active:scale-95 cursor-pointer"
+                >
+                  Keep Subscription
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

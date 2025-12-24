@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function Mycart_suggested_courses_card({
   course,
   title,
-  credits,
-  dept,
+  courseCode,
+  branchNames,
   hasBasic,
-  isUpgrade,
-  upgradePrice,
   onAddToCart,
 }) {
   const [showSparkle, setShowSparkle] = useState(false);
@@ -18,56 +16,59 @@ export default function Mycart_suggested_courses_card({
     onAddToCart(course, plan);
   };
 
-  const bgClass = hasBasic
-    ? "bg-gradient-to-r from-cyan-200 to-blue-200"
-    : "bg-gray-300";
-
   return (
-    <div
-      className={`w-64 flex-shrink-0 ${bgClass} text-black rounded-2xl shadow-md p-4 flex flex-col space-y-3 relative ${
-        showSparkle ? "animate-pulse" : ""
-      }`}
-    >
-      {/* Title */}
-      <h2 className="text-lg font-semibold truncate">{title}</h2>
+    <div className="w-64 flex-shrink-0 bg-[#fafafa] rounded-2xl p-5 flex flex-col justify-between border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 relative">
+      <div className="flex flex-col gap-3">
+        <div className="text-lg font-bold text-gray-900 leading-snug">
+          {title}
+        </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2">
-        <span className="bg-white text-xs font-medium px-2 py-1 rounded-full">
-          AKTU
-        </span>
-        <span className="bg-white text-xs font-medium px-2 py-1 rounded-full">
-          {credits}
-        </span>
-        <span className="bg-white text-xs font-medium px-2 py-1 rounded-full">
-          {dept}
-        </span>
+        <div className="flex flex-wrap gap-1.5">
+          {courseCode && (
+            <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+              {courseCode}
+            </div>
+          )}
+          <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+            AKTU
+          </div>
+          {Array.isArray(branchNames) && branchNames.length > 0 && 
+            branchNames.slice(0, 2).map((branch, index) => 
+              branch && (
+                <div key={index} className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                  {branch}
+                </div>
+              )
+            )
+          }
+        </div>
       </div>
 
-      {/* Buttons */}
-      {hasBasic ? (
-        <button
-          onClick={() => handleAddToCart("PRO")}
-          className="bg-white py-2 text-black font-semibold rounded-full px-4 text-xs hover:opacity-90 transition w-full"
-        >
-          Upgrade to Pro
-        </button>
-      ) : (
-        <div className="buy-split-btn" role="group" aria-label="Buy plans">
-          <button
-            onClick={() => handleAddToCart("BASIC")}
-            className="buy-btn buy-left"
-          >
-            Buy Basic
-          </button>
+      <div className="flex flex-col gap-2 mt-5">
+        {hasBasic ? (
           <button
             onClick={() => handleAddToCart("PRO")}
-            className="buy-btn buy-right"
+            className="w-full py-2.5 bg-zinc-900 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-sm hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
           >
-            Buy Pro
+            Upgrade to Pro
           </button>
-        </div>
-      )}
+        ) : (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleAddToCart("BASIC")}
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-[#ffffff] border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm active:scale-95 cursor-pointer"
+            >
+              Buy Basic
+            </button>
+            <button
+              onClick={() => handleAddToCart("PRO")}
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-zinc-900 text-white hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+            >
+              Buy Pro
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Sparkle effect */}
       {showSparkle && (

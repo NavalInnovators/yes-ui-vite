@@ -19,7 +19,7 @@ export default function BookDashboardSyllabus({ currentSection, handleSectionCha
   //   return <div>Error loading syllabus. Please contact support team or raise a query!</div>;
   // }
 
-  const syllabusContent = syllabus?.units[selectedUnit - 1]?.topics || [];
+  const syllabusContent = syllabus?.units?.[selectedUnit - 1]?.topics || [];
 
   return (
     <div className="bookdashboard-syllabus-mid-section">
@@ -30,7 +30,8 @@ export default function BookDashboardSyllabus({ currentSection, handleSectionCha
             ? (<div>Loading syllabus...</div>)
             : syllabusError
               ? (<div>Error loading syllabus. Please contact support team or raise a query!</div>)
-              : (<><div className="syllabus-title">{syllabus.units[selectedUnit - 1].unitTitle}</div>
+              : syllabus?.units?.[selectedUnit - 1]
+                ? (<><div className="syllabus-title">{syllabus?.units?.[selectedUnit - 1]?.unitTitle}</div>
                 <div className="book-dashboard-syllabus-sec-container">
                   <div className="syllabus-content">
                     {syllabusContent.length === 0 ? (
@@ -60,7 +61,8 @@ export default function BookDashboardSyllabus({ currentSection, handleSectionCha
                 </div>
               ))}
             </div> */}
-                </div></>)}
+                </div></>)
+              : (<div>Syllabus data will be available soon!</div>)}
         </div>
       </div>
     </div>

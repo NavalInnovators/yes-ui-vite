@@ -77,7 +77,6 @@ export const getUserPlanForCourse = (courseCode) => {
         return currentSubscription.plan;
       }
     }
-    
     return 'FREE';
   } catch (error) {
     console.error('Error getting user plan for course:', error);
@@ -120,15 +119,16 @@ export const enhanceSubscription = (sub) => {
 export const processSubscriptions = (subscriptions) => {
   const enhanced = subscriptions.map(enhanceSubscription);
   
-  const valid = enhanced.filter((sub) => 
-    sub?.course?.name && 
-    sub?.course?.courseCode && 
-    sub.course.courseCode.length > 0
+  const valid = enhanced.filter((sub) =>
+    sub?.course?.name
   );
 
   return {
-    active: valid.filter((sub) => sub.status === "ACTIVE"),
-    expired: valid.filter((sub) => sub.status === "EXPIRED"),
-    cancelled: valid.filter((sub) => sub.status === "CANCELLED"),
+    active: valid.filter((sub) => sub.status?.toUpperCase() === "ACTIVE"),
+    expired: valid.filter((sub) => sub.status?.toUpperCase() === "EXPIRED"),
+    cancelled: valid.filter((sub) =>
+      sub.status?.toUpperCase() === "CANCELLED" ||
+      ["ACTIVE", "EXPIRED"].indexOf(sub.status?.toUpperCase()) === -1
+    ),
   };
 };

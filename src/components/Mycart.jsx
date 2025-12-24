@@ -287,7 +287,7 @@ export default function Mycart() {
               }
 
               toast.dismiss(enrollingToast);
-              
+
             } catch (enrollmentError) {
               console.error("Enrollment process failed:", enrollmentError);
               toast.dismiss(enrollingToast);
@@ -301,13 +301,13 @@ export default function Mycart() {
               
               queryClient.invalidateQueries(["myCourses"]);
               
-              navigate("/my-subjects");
+              navigate("/my-orders");
             } catch (error) {
               toast.dismiss(loadingToast);
               toast.success("Payment successful! Please check your courses.");
               
               queryClient.invalidateQueries(["myCourses"]);
-              navigate("/my-subjects");
+              navigate("/my-orders");
             }
 
           } catch (error) {
@@ -576,11 +576,11 @@ export default function Mycart() {
 
             {/* Best Coupon Banner */}
             {bestCoupon && (
-              <div className="mb-4 bg-gradient-to-r from-green-50/60 to-emerald-50/60 border-2 border-green-200 rounded-xl p-4 shadow-sm">
-                <div className="flex items-center justify-between">
+              <div className="mb-4 bg-gradient-to-r from-green-50/60 to-emerald-50/60 border-2 border-green-200 rounded-2xl p-4 md:p-6 shadow-sm">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-lg">🎉</span>
+                      <span className="text-xl">🎉</span>
                       <span className="font-bold text-green-800">
                         Save ₹{bestCoupon.calculatedDiscount}!
                       </span>
@@ -595,7 +595,7 @@ export default function Mycart() {
                   </div>
                   <button
                     onClick={() => handleApplyCoupon(bestCoupon)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ml-4"
+                    className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap cursor-pointer shadow-sm hover:shadow-md"
                   >
                     Apply Now
                   </button>
@@ -608,13 +608,8 @@ export default function Mycart() {
                 <Mycart_purchased_course_card
                   key={course.id}
                   title={course.name}
-                  credits={course.courseCodes ?? []}
-                  dept={
-                    Array.isArray(course.branchNames) &&
-                    course.branchNames.length > 0
-                      ? course.branchNames[0]
-                      : "Unknown"
-                  }
+                  courseCode={course.courseCodes ?? []}
+                  branchNames={course.branchNames ?? []}
                   plan={course.plan}
                   price={course.price}
                   onRemove={() =>
@@ -703,8 +698,8 @@ export default function Mycart() {
                     key={course.id}
                     course={course}
                     title={course.title}
-                    credits={course.subjectCode}
-                    dept={course.dept}
+                    courseCode={course.subjectCode}
+                    branchNames={course.branchNames}
                     hasBasic={course.hasBasic}
                     isUpgrade={course.isUpgrade}
                     upgradePrice={course.upgradePrice}

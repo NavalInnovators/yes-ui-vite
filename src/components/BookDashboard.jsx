@@ -63,6 +63,7 @@ function BookDashboard() {
     getRequiredPlanForFeature,
     getUserPlanForCourse,
     checkLifetimeLimit,
+    reloadSubscriptions,
   } = useCart();
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -85,6 +86,24 @@ function BookDashboard() {
       sessionStorage.setItem("courseCode", subCode.toUpperCase());
     }
   }, [subCode]);
+
+  // Reload subscriptions when component mounts
+  useEffect(() => {
+    const loadSubscriptions = async () => {
+      try {
+        await reloadSubscriptions();
+        console.log("Subscriptions reloaded for book dashboard");
+      } catch (error) {
+        console.error("Failed to reload subscriptions:", error);
+      }
+    };
+
+    // Only reload if user is logged in
+    const profileId = localStorage.getItem("profileId");
+    if (profileId) {
+      loadSubscriptions();
+    }
+  }, []);
 
   // Handle URL parameters for section and topic filtering
   useEffect(() => {
