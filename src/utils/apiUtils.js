@@ -127,7 +127,10 @@ export const getUserContextAsync = async (overrideCourseCode = null) => {
         try {
           // Dynamic import to avoid circular dependency
           const { getSubscriptions } = await import('../api/api');
-          const response = await getSubscriptions(profileId, "ACTIVE");
+          const response = await getSubscriptions(profileId, "ACTIVE", {
+            page: 0,
+            size: 100
+          });
           
           if (response && response.content && Array.isArray(response.content)) {
             subscriptions = response.content;

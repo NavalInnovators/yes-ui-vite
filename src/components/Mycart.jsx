@@ -601,6 +601,39 @@ export default function Mycart() {
       {/* Main content */}
       {isLoadingCart ? (
         <CartContentSkeleton />
+      ) : cart.length === 0 ? (
+        // Empty cart state
+        <div className="px-4 py-6 md:p-10 flex justify-center items-center min-h-[60vh]">
+          <div className="text-center max-w-md">
+            <div className="mb-6">
+              <svg 
+                className="w-24 h-24 mx-auto text-gray-300 mb-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={1.5} 
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" 
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+              Your cart is empty
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Take the next step in your learning journey. Browse and choose courses made for you.
+            </p>
+            <button
+              onClick={() => navigate("/all-subjects")}
+              className="bg-zinc-900 hover:bg-zinc-800 text-white px-8 py-3 rounded-xl font-semibold transition-colors duration-300 ease-in-out shadow-md hover:shadow-lg cursor-pointer"
+            >
+              Browse All Subjects
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="px-4 py-6 md:p-10 md:flex gap-6">
         {/* Left side */}
@@ -901,6 +934,7 @@ export default function Mycart() {
           </div>
         </div>
       )}
+
     </div>
   )}
 

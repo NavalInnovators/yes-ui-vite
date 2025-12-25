@@ -111,7 +111,10 @@ export const CartProvider = ({ children }) => {
 
         if (!profileId || !token) return;
 
-        const response = await getSubscriptions(profileId, "ACTIVE");
+        const response = await getSubscriptions(profileId, "ACTIVE", {
+          page: 0,
+          size: 100
+        });
 
         if (response && response.content && Array.isArray(response.content)) {
           setSubscriptions(response.content);
@@ -342,7 +345,13 @@ export const CartProvider = ({ children }) => {
     );
 
     if (apiSubscription) {
-      return apiSubscription.plan; // Returns "FREE", "BASIC", or "PRO"
+      // Normalize plan names to title case to match featureAccess keys
+      const planMap = {
+        "FREE": "Free",
+        "BASIC": "Basic", 
+        "PRO": "Pro"
+      };
+      return planMap[apiSubscription.plan] || apiSubscription.plan;
     }
 
     return "Free";
@@ -490,7 +499,10 @@ export const CartProvider = ({ children }) => {
       if (!profileId || !token) return;
 
       // Fetch ALL subscriptions to see the complete picture
-      const response = await getSubscriptions(profileId, "ALL");
+      const response = await getSubscriptions(profileId, "ALL", {
+        page: 0,
+        size: 200
+      });
       
       console.log("Reloaded subscriptions after payment:", response);
 

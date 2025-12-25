@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import "./PlanPopUp.css";
+import { Crown, X, Check, Zap, Star, Sparkles } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 import {
@@ -127,108 +127,146 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
     };
 
     return (
-        <div
-            className="popup-overlay"
-            role="dialog"
-            aria-modal="true"
+        <div 
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[10000] p-4"
+            role="dialog" 
+            aria-modal="true" 
             aria-label="Choose plan"
         >
-            <div className="popup-box">
-                <div className="popup-header-and-close">
-                    <div className="popup-header">
+            <div className="bg-white rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-xl">
+                <div className="relative px-6 py-4" style={{
+                    background: 'linear-gradient(90deg, #17082c, #381ab2, #9b32ad, #feac2f)'
+                }}>
+                    <button 
+                        onClick={handleClose}
+                        className="absolute top-4 right-4 p-1 hover:bg-white/20 rounded-full transition-colors cursor-pointer"
+                        aria-label="Close"
+                    >
+                        <X size={20} className="text-white" />
+                    </button>
+                    
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                            <Crown size={20} className="text-yellow-300" />
+                        </div>
                         <div>
-                            <h2 className="popup-title">
-                                Unlock Your Full Potential
-                            </h2>
+                            <h2 className="text-xl font-semibold text-white">Upgrade to Premium</h2>
+                            <p className="text-white/80 text-sm">Choose a plan to unlock all features</p>
                         </div>
                     </div>
-                    <button
-                        className="popup-close"
-                        onClick={handleClose}
-                        aria-label="Close plan popup"
-                        title="Close"
-                    >
-                        ✕
-                    </button>
                 </div>
 
-                {/* Scrollable content area */}
-                <div className="popup-content">
-                    <div className="subtitle">
-                        {" "}
-                        <p>Choose the Perfect Plan for Success</p>
-                    </div>
 
-                    <div className="plans-wrapper">
+                <div className="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
+                    <div className="grid md:grid-cols-2 gap-4">
                         {/* Basic Plan */}
-                        <div
-                            className="plan-card basic"
-                            role="group"
-                            aria-labelledby="basic-title"
-                        >
-                            <h3 id="basic-title" className="card-plan-title">
-                                {" "}
-                                <b>Basic Plan </b>
-                            </h3>
-                            <p className="price">₹110/year</p>
+                        <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="p-1.5 bg-blue-50 rounded">
+                                    <Check size={16} className="text-blue-600" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900">Basic Plan</h3>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-lg font-bold text-gray-900">₹110</span>
+                                        <span className="text-sm text-gray-500">/year</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-2 mb-4">
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">Everything in Free Plan</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">Unlimited Summarizer</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">Unlimited Rephraser</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">All 5 Unit Notes</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">All 5 Unit Insights</span>
+                                </div>
+                            </div>
 
-                            <b>Buy 5+ Courses get 25% off</b>
-                            <ul>
-                                <li>🎓 Everything in Free Plan+</li>
-                                <li>🎓 Unlimited Summarizer</li>
-                                <li>🎓 Unlimited Rephraser</li>
-                                <li>🎓 All 5 Unit Notes</li>
-                                <li>🎓 All 5 Unit Insights</li>
-                            </ul>
-                            <button
-                                className="btn-basic"
+                            <button 
                                 onClick={() => handlePlanSelect("BASIC")}
+                                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 text-sm shadow-md hover:shadow-lg cursor-pointer"
                             >
-                                Proceed with Basic
+                                Choose Basic
                             </button>
                         </div>
 
                         {/* Pro Plan */}
-                        <div
-                            className="plan-card pro"
-                            role="group"
-                            aria-labelledby="pro-title"
-                        >
-                            <h3 id="pro-title" className="card-plan-title">
-                                <b>Pro Plan</b>{" "}
-                                <span className="badge">Best Value!</span>
-                            </h3>
-                            <p className="price">₹150/year</p>
-                            <b>Buy 5+ Courses get 30% off</b>
-                            <ul>
-                                <li>⚡ Everything in Basic+</li>
-                                <li>⚡ AI-powered Chatbot (Notes)</li>
-                                <li>⚡ Personalized Roadmap</li>
-                            </ul>
-                            <div className="alert">
-                                🚀 Don’t Miss Out! Upgrade now for exclusive
-                                tools!
+                        <div className="relative border border-purple-200 rounded-lg p-4 hover:border-purple-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">
+
+                            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                                <div className="bg-purple-600 text-white px-3 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <Sparkles size={10} />
+                                    Popular
+                                </div>
                             </div>
-                            <button
-                                className="btn-pro"
+                            
+                            <div className="flex items-center gap-3 mb-3 mt-1">
+                                <div className="p-1.5 bg-purple-50 rounded">
+                                    <Zap size={16} className="text-purple-600" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900">Pro Plan</h3>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-lg font-bold text-gray-900">₹150</span>
+                                        <span className="text-sm text-gray-500">/year</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-2 mb-4">
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">Everything in Basic Plan</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">AI-powered Chatbot</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">Personalized Roadmap</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                    <span className="text-gray-700">Priority Support</span>
+                                </div>
+                            </div>
+
+                            <button 
                                 onClick={() => handlePlanSelect("PRO")}
+                                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 text-sm shadow-md hover:shadow-lg cursor-pointer"
                             >
-                                Go Pro & Maximize Savings!
+                                Choose Pro
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Footer: kept outside scroll area so it's always reachable on mobile */}
-                <div className="popup-footer">
-                    <p
-                        className="free-link"
-                        onClick={handleSkip}
-                        role="button"
-                        tabIndex={0}
-                    >
-                        Skip for now
-                    </p>
+                {/* Footer */}
+                <div className="border-t border-gray-200 px-6 py-3 bg-gray-50">
+                    <div className="flex justify-center">
+                        <button 
+                            onClick={handleSkip}
+                            className="text-gray-500 hover:text-gray-700 text-sm underline transition-colors cursor-pointer"
+                        >
+                            Continue with Free Plan
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

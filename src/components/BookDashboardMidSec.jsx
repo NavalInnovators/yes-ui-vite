@@ -14,6 +14,7 @@ import parse from "html-react-parser";
 import { summarizeAnswer, rephraseAnswer } from "../api/api";
 import { type } from "@testing-library/user-event/dist/type";
 import FilterIcon from "../roles/components/icons/FilterIcon";
+import { Crown } from "lucide-react";
 import {
   trackRephraserUsed,
   trackSummariserUsed,
@@ -83,7 +84,7 @@ function BookDashboardMidSec({
     const isLimitExceeded = !checkLifetimeLimit(feature);
 
     if (isLimitExceeded) {
-      return <span className="usage-counter-crown">👑</span>;
+      return <span className="usage-counter-crown"><Crown size={16} color="#FFD700" /></span>;
     }
 
     return <span className="usage-counter">{currentUsage}/50</span>;

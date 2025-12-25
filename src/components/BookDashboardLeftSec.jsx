@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./BookDashboardLeftSec.css";
+import { Crown } from "lucide-react";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
 import { findCourseByCode } from "../utils/courseUtils";
@@ -38,6 +39,22 @@ function BookDashboardLeftSec({ currentSection, onUnitAccessDenied }) {
 
   // Get current course to check plan
   const getCurrentCourse = () => findCourseByCode(subCode);
+
+  const shouldShowUnitCrownIcon = (unitNum) => {
+    const currentCourse = getCurrentCourse();
+    if (!currentCourse) return false;
+    
+    const unitNumber = parseInt(unitNum);
+    const userPlan = getUserPlanForCourse(currentCourse.id);
+    
+    const restrictedSections = ['Notes', 'Insights'];
+    if (restrictedSections.includes(currentSection)) {
+      const isFreeUser = userPlan === "Free" || userPlan === "FREE" || !userPlan;
+      return isFreeUser && unitNumber > 1;
+    }
+    
+    return false;
+  };
 
   // Handle unit change with access check
   const handleUnitChange = (unitNum) => {
@@ -88,9 +105,14 @@ function BookDashboardLeftSec({ currentSection, onUnitAccessDenied }) {
             <li
               key={u.name}
               onClick={() => handleUnitChange(u.num)}
-              className={u.num === selectedUnit ? "active-unit" : ""}
+              className={`${u.num === selectedUnit ? "active-unit" : ""} unit-item`}
             >
-              {u.name}
+              <span className="unit-text">{u.name}</span>
+              {shouldShowUnitCrownIcon(u.num) && (
+                <span className="unit-crown-icon">
+                   <Crown size={16} fill="#FFD700" color="#141414" />
+                </span>
+              )}
             </li>
           ))}
         </ul>
@@ -104,7 +126,7 @@ function BookDashboardLeftSec({ currentSection, onUnitAccessDenied }) {
         >
           {units.map((u) => (
             <option key={u.num} value={u.num}>
-              {u.name}
+              {u.name} {shouldShowUnitCrownIcon(u.num) ? '👑' : ''}
             </option>
           ))}
         </select>
