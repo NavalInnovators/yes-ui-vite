@@ -55,7 +55,7 @@ const AllSubjects_CourseCard = ({
                         {course.universityName}
                     </div>
                     <div className="bg-gray-200 inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium text-gray-500">
-                        {course.year}
+                        Year {course.year}
                     </div>
                     {course.branchNames?.map((branch, index) => (
                         <div

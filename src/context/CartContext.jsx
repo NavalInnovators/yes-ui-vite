@@ -176,6 +176,9 @@ export const CartProvider = ({ children }) => {
         timestamp: getISTISOString(),
         requiredPlan: metadata?.required_plan || null,
       });
+
+      // Show success notification
+      toast.success(`${course.name} (${plan}) added to cart!`);
     } catch (error) {
       console.group("❌ Add to Cart Failed");
       console.error("Error:", error.message);

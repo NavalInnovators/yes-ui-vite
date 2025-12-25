@@ -131,101 +131,9 @@ function BookDashboardMidSec({
   const [summaryLoading, setSummaryLoading] = useState(false);
   const getSummaryKey = (unit, index) => `summaryList_u${unit}_q${index}`;
 
-  const handleSummarize = async () => {
-    const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
-
-    // Check lifetime usage limit for free users
-    if (userPlan === "Free" && !checkLifetimeLimit("Summariser")) {
-      toast.error(
-        "You have reached your lifetime limit of 50 summaries. Please upgrade to Basic plan for unlimited usage.",
-      );
-      return;
-    }
-
-    if (summaryRef.current) {
-      const navbarOffset = 140; // Change this to match your navbar's height
-      const summaryPosition =
-        summaryRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: summaryPosition - navbarOffset,
-        behavior: "smooth",
-      });
-    }
-
-    const currentKey = getSummaryKey(selectedUnit, selectedQuestion);
-    const existingSummaries =
-      JSON.parse(localStorage.getItem(currentKey)) || [];
-
-    if (existingSummaries.length > 0 && summaryList.length === 0) {
-      setSummaryList(existingSummaries);
-      setSummaryIndex(0);
-      return;
-    }
-    if (existingSummaries.length >= 3) {
-      toast.error(
-        "You have reached the limit, can't generate more than 3 summaries.",
-      );
-      return;
-    }
-
-    if (existingSummaries.length > 0) {
-      const confirm = window.confirm(
-        "You've already generated a summary. Do you want to generate another one?",
-      );
-      if (!confirm) return;
-    }
-
-    if (!question || !answer || !questionId) {
-      toast.error("Question or answer not available for summarization.");
-      return;
-    }
-
-    setSummaryLoading(true);
-    toast.info("Summarizing answer...");
-    try {
-      const newSummary = await summarizeAnswer(questionId);
-      
-      let summaryToStore = newSummary;
-      if (typeof newSummary === 'object' && newSummary !== null) {
-        summaryToStore = newSummary.summary || newSummary.summarized_answer || newSummary.text || newSummary.content;
-      }
-      
-      const updatedSummaries = [...existingSummaries, summaryToStore];
-      setSummaryList(updatedSummaries);
-      setSummaryIndex(updatedSummaries.length - 1);
-      localStorage.setItem(currentKey, JSON.stringify(updatedSummaries));
-
-      // Increment lifetime usage for free users
-      if (userPlan === "Free") {
-        incrementLifetimeUsage("Summariser");
-      }
-
-      // Get current usage count after increment
-      const currentUsageCount =
-        userPlan === "Free" ? getLifetimeUsage("Summariser") : null;
-
-      trackSummariserUsed({
-        courseId,
-        courseName,
-        subjectCode,
-        unit: selectedUnit,
-        questionId,
-        topic: questionTopic,
-        timestamp: getISTISOString(),
-        usageCount: currentUsageCount,
-      });
-    } catch (err) {
-      const errorMessage = err.message || "Failed to summarize the answer";
-      toast.error(errorMessage);
-      console.error(err);
-    } finally {
-      setSummaryLoading(false);
-    }
-  };
-
   // Rephrased answers states
-  const [rephrasedList, setRephrasedList] = useState([]); // Will store 3 rephrased answers (one per style)
-  const [rephraseIndex, setRephraseIndex] = useState(0); // Current page index of rephrased answer
+  const [rephrasedList, setRephrasedList] = useState([]);
+  const [rephraseIndex, setRephraseIndex] = useState(0);
   const [rephraseLoading, setRephraseLoading] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState("0");
 
@@ -242,107 +150,269 @@ function BookDashboardMidSec({
         return "Unknown style";
     }
   };
-  // Local storage key helper for rephrased answers
   const getRephrasedKey = (unit, index) => `rephrasedList_u${unit}_q${index}`;
 
-  const handleRephrase = async (e) => {
-    const value = e.target.value;
-    const style = parseInt(value, 10);
-    setSelectedStyle(value);
-    if (value === "0") return;
+  const handleSummarize = async () => {
+  const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
 
-    const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
-    const styleLabel = getStyleLabel(style);
+  if (userPlan === "Free" && !checkLifetimeLimit("Summariser")) {
+    toast.error(
+      "You have reached your lifetime limit of 50 summaries. Please upgrade to Basic plan for unlimited usage.",
+    );
+    return;
+  }
 
-    // Check lifetime usage limit for free users
-    if (userPlan === "Free" && !checkLifetimeLimit("Rephraser")) {
-      toast.error(
-        "You have reached your lifetime limit of 50 rephrases. Please upgrade to Basic plan for unlimited usage.",
-      );
-      setSelectedStyle("0");
-      return;
+  const currentKey = getSummaryKey(selectedUnit, selectedQuestion);
+  const existingSummaries =
+    JSON.parse(localStorage.getItem(currentKey)) || [];
+
+  if (existingSummaries.length > 0 && summaryList.length === 0) {
+    setSummaryList(existingSummaries);
+    setSummaryIndex(0);
+    
+    // Scroll to summary section 
+    setTimeout(() => {
+      if (summaryRef.current) {
+        const scrollEndHandler = () => {
+          window.scrollBy({
+            top: 100,
+            behavior: 'smooth'
+          });
+          window.removeEventListener('scrollend', scrollEndHandler);
+        };
+        
+        window.addEventListener('scrollend', scrollEndHandler);
+        
+        summaryRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, 300);
+    return;
+  }
+
+  if (existingSummaries.length >= 3) {
+    toast.error(
+      "You have reached the limit, can't generate more than 3 summaries.",
+    );
+    return;
+  }
+
+  if (existingSummaries.length > 0) {
+    const confirm = window.confirm(
+      "You've already generated a summary. Do you want to generate another one?",
+    );
+    if (!confirm) return;
+  }
+
+  if (!question || !answer || !questionId) {
+    toast.error("Question or answer not available for summarization.");
+    return;
+  }
+
+  setSummaryLoading(true);
+  toast.info("Summarizing answer...");
+  try {
+    const newSummary = await summarizeAnswer(questionId);
+    
+    let summaryToStore = newSummary;
+    if (typeof newSummary === 'object' && newSummary !== null) {
+      summaryToStore = newSummary.summary || newSummary.summarized_answer || newSummary.text || newSummary.content;
     }
+    
+    const updatedSummaries = [...existingSummaries, summaryToStore];
+    setSummaryList(updatedSummaries);
+    setSummaryIndex(updatedSummaries.length - 1);
+    localStorage.setItem(currentKey, JSON.stringify(updatedSummaries));
+
+    // Scroll to summary section
+    setTimeout(() => {
+      if (summaryRef.current) {
+        const scrollEndHandler = () => {
+          window.scrollBy({
+            top: 100,
+            behavior: 'smooth'
+          });
+          window.removeEventListener('scrollend', scrollEndHandler);
+        };
+        
+        window.addEventListener('scrollend', scrollEndHandler);
+        
+        summaryRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, 300);
+
+    if (userPlan === "Free") {
+      incrementLifetimeUsage("Summariser");
+    }
+
+    const currentUsageCount =
+      userPlan === "Free" ? getLifetimeUsage("Summariser") : null;
+
+    trackSummariserUsed({
+      courseId,
+      courseName,
+      subjectCode,
+      unit: selectedUnit,
+      questionId,
+      topic: questionTopic,
+      timestamp: getISTISOString(),
+      usageCount: currentUsageCount,
+    });
+  } catch (err) {
+    const errorMessage = err.message || "Failed to summarize the answer";
+    toast.error(errorMessage);
+    console.error(err);
+  } finally {
+    setSummaryLoading(false);
+  }
+};
+
+const handleRephrase = async (e) => {
+  const value = e.target.value;
+  const style = parseInt(value, 10);
+  setSelectedStyle(value);
+  if (value === "0") return;
+
+  const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
+  const styleLabel = getStyleLabel(style);
+
+  if (userPlan === "Free" && !checkLifetimeLimit("Rephraser")) {
+    toast.error(
+      "You have reached your lifetime limit of 50 rephrases. Please upgrade to Basic plan for unlimited usage.",
+    );
+    setSelectedStyle("0");
+    return;
+  }
+
+  const existingRephrased = JSON.parse(localStorage.getItem(getRephrasedKey(selectedUnit, selectedQuestion))) || [];
+  if (existingRephrased.length > 0 && rephrasedList.length === 0) {
+    setRephrasedList(existingRephrased);
+    setRephraseIndex(0);
+    
+    // Scroll to rephraser section
+    setTimeout(() => {
+      if (rephraserRef.current) {
+        const scrollEndHandler = () => {
+          window.scrollBy({
+            top: 100,
+            behavior: 'smooth'
+          });
+          window.removeEventListener('scrollend', scrollEndHandler);
+        };
+        
+        window.addEventListener('scrollend', scrollEndHandler);
+        
+        rephraserRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, 300);
+  }
+
+  if (!summaryList[0] || !answer) {
+    toast.error("Please summarize the answer first.");
+    setSelectedStyle("0");
+    return;
+  }
+
+  if (rephrasedList.some((item) => item.style === style)) {
+    const idx = rephrasedList.findIndex((item) => item.style === style);
+    setRephraseIndex(idx);
+    setSelectedStyle("0");
+    
+    // Scroll to rephraser section
+    setTimeout(() => {
+      if (rephraserRef.current) {
+        const scrollEndHandler = () => {
+          window.scrollBy({
+            top: 100,
+            behavior: 'smooth'
+          });
+          window.removeEventListener('scrollend', scrollEndHandler);
+        };
+        
+        window.addEventListener('scrollend', scrollEndHandler);
+        
+        rephraserRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, 300);
+    return;
+  }
+
+  toast.info("Rephrasing...");
+  setRephraseLoading(true);
+
+  try {
+    const rephrased = await rephraseAnswer(questionId, style);
+    
+    let rephrasedToStore = rephrased;
+    if (typeof rephrased === 'object' && rephrased !== null) {
+      rephrasedToStore = rephrased.content || rephrased.rephrased_text || rephrased.text || rephrased.answer;
+    }
+    
+    const updatedList = [...rephrasedList, { style, answer: rephrasedToStore }];
+    setRephrasedList(updatedList);
+    setRephraseIndex(updatedList.length - 1);
+    localStorage.setItem(
+      getRephrasedKey(selectedUnit, selectedQuestion),
+      JSON.stringify(updatedList),
+    );
+    toast.success("Rephrased successfully.");
 
     // Scroll to rephraser section
-    if (rephraserRef.current) {
-      const navbarOffset = 140;
-      const rephraserPosition =
-        rephraserRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: rephraserPosition - navbarOffset,
-        behavior: "smooth",
-      });
-    }
-
-    // Load existing rephrased answers
-    const existingRephrased = JSON.parse(localStorage.getItem(getRephrasedKey(selectedUnit, selectedQuestion))) || [];
-    if (existingRephrased.length > 0 && rephrasedList.length === 0) {
-      setRephrasedList(existingRephrased);
-      setRephraseIndex(0);
-    }
-
-    if (!summaryList[0] || !answer) {
-      toast.error("Please summarize the answer first.");
-      setSelectedStyle("0");
-      return;
-    }
-
-    // Check if already generated for this style
-    if (rephrasedList.some((item) => item.style === style)) {
-      // Just switch to that rephrased answer in the pagination
-      const idx = rephrasedList.findIndex((item) => item.style === style);
-      setRephraseIndex(idx);
-      setSelectedStyle("0");
-      return;
-    }
-
-    toast.info("Rephrasing...");
-    setRephraseLoading(true);
-
-    try {
-      const rephrased = await rephraseAnswer(questionId, style);
-      
-      let rephrasedToStore = rephrased;
-      if (typeof rephrased === 'object' && rephrased !== null) {
-        rephrasedToStore = rephrased.content || rephrased.rephrased_text || rephrased.text || rephrased.answer;
+    setTimeout(() => {
+      if (rephraserRef.current) {
+        const scrollEndHandler = () => {
+          window.scrollBy({
+            top: 100,
+            behavior: 'smooth'
+          });
+          window.removeEventListener('scrollend', scrollEndHandler);
+        };
+        
+        window.addEventListener('scrollend', scrollEndHandler);
+        
+        rephraserRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
       }
-      
-      const updatedList = [...rephrasedList, { style, answer: rephrasedToStore }];
-      setRephrasedList(updatedList);
-      setRephraseIndex(updatedList.length - 1);
-      localStorage.setItem(
-        getRephrasedKey(selectedUnit, selectedQuestion),
-        JSON.stringify(updatedList),
-      );
-      toast.success("Rephrased successfully.");
+    }, 300);
 
-      // Increment lifetime usage for free users
-      if (userPlan === "Free") {
-        incrementLifetimeUsage("Rephraser");
-      }
-
-      // Get current usage count after increment
-      const currentUsageCount =
-        userPlan === "Free" ? getLifetimeUsage("Rephraser") : null;
-
-      trackRephraserUsed({
-        courseId,
-        courseName,
-        subjectCode,
-        unit: selectedUnit,
-        questionId,
-        topic: questionTopic,
-        style: styleLabel,
-        timestamp: getISTISOString(),
-        usageCount: currentUsageCount,
-      });
-    } catch (err) {
-      toast.error(err.message || "Failed to rephrase.");
-    } finally {
-      setRephraseLoading(false);
-      setSelectedStyle("0");
+    if (userPlan === "Free") {
+      incrementLifetimeUsage("Rephraser");
     }
-  };
+
+    const currentUsageCount =
+      userPlan === "Free" ? getLifetimeUsage("Rephraser") : null;
+
+    trackRephraserUsed({
+      courseId,
+      courseName,
+      subjectCode,
+      unit: selectedUnit,
+      questionId,
+      topic: questionTopic,
+      style: styleLabel,
+      timestamp: getISTISOString(),
+      usageCount: currentUsageCount,
+    });
+  } catch (err) {
+    toast.error(err.message || "Failed to rephrase.");
+  } finally {
+    setRephraseLoading(false);
+    setSelectedStyle("0");
+  }
+};
 
   const handlePrevClick = () => {
     if (pageNumber > 1) {

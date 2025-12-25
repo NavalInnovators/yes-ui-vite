@@ -183,9 +183,16 @@ export default function OrderSummary({
       <div className="mt-8 space-y-4">
         <button
           onClick={onCheckout}
-          className="w-full py-4 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 cursor-pointer shadow-lg"
+          disabled={cart.length === 0}
+          className={`w-full py-4 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-3 shadow-lg ${
+            cart.length === 0
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:shadow-xl hover:-translate-y-1 active:scale-95 cursor-pointer"
+          }`}
           style={{
-            background: "linear-gradient(90deg, #4b05d4 0%, #7c3aed 28%, #f59e0b 100%)",
+            background: cart.length === 0 
+              ? "#374151" 
+              : "linear-gradient(90deg, #4b05d4 0%, #7c3aed 28%, #f59e0b 100%)",
           }}
         >
           <span>{checkoutButtonText}</span>
@@ -193,7 +200,7 @@ export default function OrderSummary({
         </button>
 
         {/* Payment methods */}
-        <div className="flex justify-center items-center gap-5 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+        <div className="flex justify-center items-center gap-5">
           <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-4 w-auto object-contain" />
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="MasterCard" className="h-6 w-auto object-contain" />
           <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-4 w-auto object-contain" />

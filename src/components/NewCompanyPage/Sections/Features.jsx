@@ -43,7 +43,7 @@ export default function Features() {
 
 function FeatureCard({ icon, title, desc }) {
     return (
-        <div className="bg-white text-black md:w-65 py-4 md:py-10 px-4 rounded-4xl">
+        <div className="bg-white text-black md:w-65 py-4 md:py-10 px-4 rounded-2xl">
             <div className="flex justify-end">
                 <div className="rounded-full">
                     <img

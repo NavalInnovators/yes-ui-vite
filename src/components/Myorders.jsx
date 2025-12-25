@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import GradientDiv from "../roles/components/GradientDiv";
 import Active_Courses_Card from "./Myorders_Active_Courses_Card";
 import Expired_Courses_Card from "./Myorders_Expired_Courses_Card";
+import { OrdersSkeleton } from "./SkeletonCard";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -21,6 +22,7 @@ export default function Myorders() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [subToCancel, setSubToCancel] = useState(null);
   const [showAllCancelled, setShowAllCancelled] = useState(false);
+  const [showAllExpired, setShowAllExpired] = useState(false);
 
   // Fetch subscriptions from API
   useEffect(() => {
@@ -102,157 +104,13 @@ export default function Myorders() {
         source: "upgrade_from_orders",
       });
 
-      toast.success(`${plan} plan added to cart!`);
       navigate("/mycart");
     } catch (error) {
       toast.error(`Failed to add ${plan} plan to cart`);
     }
   };
 
-  /*
-  const handleStartLearning = async (subscription) => {
-    try {
-      const profileId = localStorage.getItem("profileId");
-      const token = localStorage.getItem("token");
 
-      if (!profileId) {
-        toast.error("Please login to start learning");
-        return;
-      }
-
-      if (!token) {
-        toast.error("Authentication required. Please login again.");
-        return;
-      }
-
-      // Check if course is already active to prevent duplicate enrollment
-      const isAlreadyActive = activeSubscriptions.some(
-        (activeSub) => activeSub.course.id === subscription.course.id,
-      );
-
-      if (isAlreadyActive) {
-        toast.info("You are already enrolled in this course!");
-        const courseCode =
-          subscription.course.courseCode?.[0] ||
-          subscription.course.courseCodes?.[0];
-        if (courseCode) {
-          navigate(`/book-dashboard?subcode=${courseCode}`);
-        }
-        return;
-      }
-
-      // Convert subscription to course format for enrollment
-      const courseForEnrollment = {
-        id: subscription.course.id,
-        name: subscription.course.name,
-        courseCodes: subscription.course.courseCode || [],
-        universityName: subscription.course.universityName?.[0] || "",
-        branchNames: subscription.course.branchNames || [],
-        year: subscription.course.year || "",
-      };
-
-      toast.info("Enrolling in course... Please wait", {
-        autoClose: false,
-      });
-
-      // Use direct enrollment API for free courses
-      const { enrollCourse } = await import("../api/api");
-      await enrollCourse(courseForEnrollment);
-
-      setCancelledSubscriptions((prev) =>
-        prev.filter((sub) => sub.id !== subscription.id),
-      );
-
-      // Create a new active subscription entry for the re-enrolled course
-      const newActiveSubscription = {
-        ...subscription,
-        status: "ACTIVE",
-        plan: "FREE",
-        purchaseDate: new Date().toISOString(),
-        expiryDate: new Date(
-          Date.now() + 365 * 24 * 60 * 60 * 1000,
-        ).toISOString(),
-      };
-
-      setActiveSubscriptions((prev) => [...prev, newActiveSubscription]);
-
-      // Refresh subscriptions from backend after a short delay to ensure backend has processed
-      setTimeout(async () => {
-        try {
-          const response = await getSubscriptions(profileId, "ALL");
-
-          if (response?.content) {
-            const newActive = response.content.filter(
-              (sub) => sub.status === "ACTIVE",
-            );
-            const newExpired = response.content.filter(
-              (sub) => sub.status === "EXPIRED",
-            );
-            const newCancelled = response.content.filter(
-              (sub) => sub.status === "CANCELLED",
-            );
-
-            setActiveSubscriptions(newActive);
-            setExpiredSubscriptions(newExpired);
-            setCancelledSubscriptions(newCancelled);
-          }
-        } catch (refreshError) {
-        }
-      }, 1000);
-
-      toast.dismiss();
-      toast.success("Successfully enrolled in course!");
-
-      const courseCode =
-        subscription.course.courseCode?.[0] ||
-        subscription.course.courseCodes?.[0];
-
-      if (courseCode) {
-        navigate(`/book-dashboard?subcode=${courseCode}`);
-      } else {
-        toast.success("Enrollment successful! Redirecting to your subjects...");
-        setTimeout(() => {
-          navigate("/my-subjects");
-        }, 1500);
-      }
-    } catch (error) {
-      toast.dismiss();
-
-      if (error.response?.status === 401) {
-        toast.error("Authentication expired. Please login again.");
-      } else if (error.response?.status === 400) {
-        toast.error(
-          error.response?.data?.message || "Invalid request. Please try again.",
-        );
-      } else if (error.response?.status === 404) {
-        toast.error("Course not found. Please refresh and try again.");
-      } else if (error.response?.status === 409) {
-        toast.info("You are already enrolled in this course!");
-
-        setCancelledSubscriptions((prev) =>
-          prev.filter((sub) => sub.id !== subscription.id),
-        );
-
-        const courseCode =
-          subscription.course.courseCode?.[0] ||
-          subscription.course.courseCodes?.[0];
-        if (courseCode) {
-          navigate(`/book-dashboard?subcode=${courseCode}`);
-        }
-      } else {
-        toast.error(error.message || "Failed to enroll in course");
-      }
-    }
-  };
-
-  const handleReEnrollAction = async (subscription, plan) => {
-    if (plan === "FREE") {
-      await handleStartLearning(subscription);
-    } else {
-      await handleUpgrade(subscription, plan);
-    }
-  };
-  */
 
   const handleCancelSubscription = (subscription) => {
     setSubToCancel(subscription);
@@ -306,9 +164,7 @@ export default function Myorders() {
 
       <div className="w-[90%] mx-auto">
         {isLoading ? (
-          <div className="text-center py-12">
-            <div className="text-lg text-gray-600">Loading your orders...</div>
-          </div>
+          <OrdersSkeleton />
         ) : (
           <>
             {/* Active Courses */}
@@ -364,31 +220,44 @@ export default function Myorders() {
                 No expired courses
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {expiredSubscriptions.map((sub) => (
-                  <Expired_Courses_Card
-                    key={sub.id}
-                    courseName={sub.course.name}
-                    courseCode={sub.course.courseCode?.[0] || "N/A"}
-                    planType={
-                      sub.plan === "PRO"
-                        ? "Pro Plan"
-                        : sub.plan === "BASIC"
-                          ? "Basic Plan"
-                          : sub.plan === "FREE"
-                            ? "Free Plan"
-                            : sub.plan
-                    }
-                    purchaseDate={formatDate(sub.purchaseDate)}
-                    expiryDate={formatDate(sub.expiryDate)}
-                    isCancelled={false}
-                    universityName={sub.course?.universityName?.[0]}
-                    branchNames={sub.course?.branchNames || []}
-                    course={sub.course}
-                    // onAction={(plan) => handleReEnrollAction(sub, plan)}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {(showAllExpired ? expiredSubscriptions : expiredSubscriptions.slice(0, 3)).map((sub) => (
+                    <Expired_Courses_Card
+                      key={sub.id}
+                      courseName={sub.course.name}
+                      courseCode={sub.course.courseCode?.[0] || "N/A"}
+                      planType={
+                        sub.plan === "PRO"
+                          ? "Pro Plan"
+                          : sub.plan === "BASIC"
+                            ? "Basic Plan"
+                            : sub.plan === "FREE"
+                              ? "Free Plan"
+                              : sub.plan
+                      }
+                      purchaseDate={formatDate(sub.purchaseDate)}
+                      expiryDate={formatDate(sub.expiryDate)}
+                      isCancelled={false}
+                      universityName={sub.course?.universityName?.[0]}
+                      branchNames={sub.course?.branchNames || []}
+                    />
+                  ))}
+                </div>
+                {expiredSubscriptions.length > 3 && (
+                  <div className="flex justify-center mt-6">
+                    <button
+                      onClick={() => setShowAllExpired(!showAllExpired)}
+                      className="px-6 py-3 bg-zinc-900 hover:bg-zinc-950 text-white rounded-lg font-medium transition-all duration-200 cursor-pointer active:scale-95"
+                    >
+                      {showAllExpired 
+                        ? "Show Less" 
+                        : `Show More (${expiredSubscriptions.length - 3} more)`
+                      }
+                    </button>
+                  </div>
+                )}
+              </>
             )}
 
             {/* Cancelled Courses */}
@@ -412,11 +281,9 @@ export default function Myorders() {
                       }
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
-                      // onAction={(plan) => handleReEnrollAction(sub, plan)}
                       isCancelled={true}
                       universityName={sub.course?.universityName?.[0]}
                       branchNames={sub.course?.branchNames || []}
-                      course={sub.course}
                     />
                   ))}
                 </div>
@@ -424,7 +291,7 @@ export default function Myorders() {
                   <div className="flex justify-center mt-6">
                     <button
                       onClick={() => setShowAllCancelled(!showAllCancelled)}
-                      className="px-6 py-3 bg-zinc-900 hover:bg-zinc-950 text-white rounded-lg font-medium transition-colors duration-200 cursor-pointer"
+                      className="px-6 py-3 bg-zinc-900 hover:bg-zinc-950 text-white rounded-lg font-medium transition-all duration-200 cursor-pointer active:scale-95"
                     >
                       {showAllCancelled 
                         ? "Show Less" 
@@ -475,7 +342,7 @@ export default function Myorders() {
               <div className="flex flex-col w-full gap-3">
                 <button
                   onClick={confirmCancellation}
-                  className="w-full py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-red-200 cursor-pointer"
+                  className="w-full py-3 bg-gray-50 hover:bg-zinc-100 text-gray-700 border border-gray-300 rounded-xl font-bold transition-all active:scale-95 cursor-pointer"
                 >
                   Yes, Cancel
                 </button>
@@ -484,7 +351,7 @@ export default function Myorders() {
                     setShowCancelModal(false);
                     setSubToCancel(null);
                   }}
-                  className="w-full py-3 bg-gray-50 hover:bg-zinc-100 text-gray-700 border border-gray-300 rounded-xl font-bold transition-all active:scale-95 cursor-pointer"
+                  className="w-full py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-red-200 cursor-pointer"
                 >
                   Keep Subscription
                 </button>

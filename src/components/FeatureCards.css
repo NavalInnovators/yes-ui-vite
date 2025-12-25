@@ -40,273 +40,391 @@
 }
 .each-card:hover::before {
   opacity: 1;
-  animation: borderAnimation 0.8s ease-in;
+  animation: borderAnimation 1.2s ease-in-out;
 }
 @keyframes borderAnimation {
   0% {
     background: conic-gradient(
-      from -60deg,
+      from 315deg at 50% 50%,
       transparent 0deg,
-      transparent 20deg,
-      #381ab2 20deg,
-      #381ab2 30deg,
-      transparent 30deg,
+      #5a2bb5 5deg,
+      #c947a8 10deg,
+      #ffb84d 15deg,
+      transparent 15deg,
       transparent 360deg
     );
-    opacity: 0;
+    opacity: 0.8;
   }
   5% {
-    opacity: 0.5;
     background: conic-gradient(
-      from -63deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #381ab2 30deg,
-      transparent 40deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 6deg,
+      #c947a8 12deg,
+      #ffb84d 18deg,
+      transparent 18deg,
       transparent 360deg
     );
+    opacity: 0.82;
   }
   10% {
-    opacity: 1;
     background: conic-gradient(
-      from -66deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      transparent 50deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 7deg,
+      #9b32ad 7deg,
+      #c947a8 14deg,
+      #ffb84d 22deg,
+      transparent 25deg,
       transparent 360deg
     );
+    opacity: 0.85;
   }
   15% {
     background: conic-gradient(
-      from -69deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 40deg,
-      transparent 60deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 8deg,
+      #9b32ad 12deg,
+      #c947a8 16deg,
+      #ffb84d 26deg,
+      #ff9f42 30deg,
+      transparent 30deg,
       transparent 360deg
     );
+    opacity: 0.87;
   }
   20% {
     background: conic-gradient(
-      from -72deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 50deg,
-      transparent 80deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 9deg,
+      #9b32ad 12deg,
+      #c947a8 18deg,
+      #feac2f 24deg,
+      #ffb84d 30deg,
+      #ffa93f 35deg,
+      #ff9f42 40deg,
+      transparent 45deg,
       transparent 360deg
     );
+    opacity: 0.9;
   }
   25% {
     background: conic-gradient(
-      from -75deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 60deg,
-      transparent 100deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 10deg,
+      #9b32ad 10deg,
+      #c947a8 22deg,
+      #d65aa3 28deg,
+      #feac2f 32deg,
+      #ffb84d 38deg,
+      #ffa93f 45deg,
+      #ff9f42 50deg,
+      transparent 65deg,
       transparent 360deg
     );
+    opacity: 0.92;
   }
   30% {
     background: conic-gradient(
-      from -80deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 70deg,
-      #ffa93f 120deg,
-      transparent 160deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 10deg,
+      #9b32ad 15deg,
+      #c947a8 28deg,
+      #d65aa3 35deg,
+      #feac2f 42deg,
+      #ffb84d 50deg,
+      #ffa93f 60deg,
+      #ff9f42 65deg,
+      transparent 85deg,
       transparent 360deg
     );
+    opacity: 0.95;
   }
   35% {
     background: conic-gradient(
-      from -75deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 140deg,
-      transparent 180deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 10deg,
+      #9b32ad 15deg,
+      #c947a8 35deg,
+      #d65aa3 42deg,
+      #feac2f 50deg,
+      #ffb84d 65deg,
+      #ffa93f 75deg,
+      #ff9f42 80deg,
+      transparent 105deg,
       transparent 360deg
     );
+    opacity: 0.97;
   }
   40% {
     background: conic-gradient(
-      from -72deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 150deg,
-      #9b32ad 190deg,
-      transparent 220deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 10deg,
+      #9b32ad 15deg,
+      #c947a8 42deg,
+      #d65aa3 50deg,
+      #feac2f 65deg,
+      #ffb84d 80deg,
+      #ffa93f 90deg,
+      #ff9f42 95deg,
+      transparent 125deg,
       transparent 360deg
     );
+    opacity: 1;
   }
   45% {
     background: conic-gradient(
-      from -69deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 15deg,
+      #7c2fb0 18deg,
+      #9b32ad 20deg,
+      #c947a8 50deg,
+      #d65aa3 58deg,
       #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      transparent 240deg,
+      #ffb84d 95deg,
+      #ffa93f 105deg,
+      #ff9f42 110deg,
+      transparent 145deg,
       transparent 360deg
     );
   }
   50% {
     background: conic-gradient(
-      from -66deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 260deg,
-      transparent 280deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 20deg,
+      #7c2fb0 23deg,
+      #9b32ad 25deg,
+      #c947a8 58deg,
+      #d65aa3 66deg,
+      #feac2f 95deg,
+      #ffb84d 110deg,
+      #ffa93f 120deg,
+      #ff9f42 125deg,
+      transparent 165deg,
       transparent 360deg
     );
   }
   55% {
     background: conic-gradient(
-      from -63deg,
-      transparent 5deg,
-      #381ab2 20deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 25deg,
+      #7c2fb0 28deg,
       #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 270deg,
-      transparent 300deg,
+      #c947a8 65deg,
+      #d65aa3 73deg,
+      #feac2f 100deg,
+      #ffb84d 125deg,
+      #ffa93f 135deg,
+      #ff9f42 140deg,
+      transparent 185deg,
       transparent 360deg
     );
   }
   60% {
     background: conic-gradient(
-      from -60deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 280deg,
-      transparent 320deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 30deg,
+      #7c2fb0 33deg,
+      #9b32ad 35deg,
+      #c947a8 72deg,
+      #d65aa3 80deg,
+      #feac2f 115deg,
+      #ffb84d 140deg,
+      #ffa93f 150deg,
+      #ff9f42 155deg,
+      transparent 205deg,
       transparent 360deg
     );
   }
   65% {
     background: conic-gradient(
-      from -60deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 320deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 35deg,
+      #7c2fb0 38deg,
+      #9b32ad 40deg,
+      #c947a8 80deg,
+      #d65aa3 88deg,
+      #feac2f 130deg,
+      #ffb84d 155deg,
+      #ffa93f 165deg,
+      #ff9f42 175deg,
+      #e8873f 178deg,
+      transparent 225deg,
       transparent 360deg
     );
   }
   70% {
     background: conic-gradient(
-      from -60deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 320deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 40deg,
+      #7c2fb0 43deg,
+      #9b32ad 45deg,
+      #c947a8 87deg,
+      #d65aa3 95deg,
+      #feac2f 140deg,
+      #ffb84d 170deg,
+      #ffa93f 180deg,
+      #ff9f42 195deg,
+      #e8873f 198deg,
+      transparent 245deg,
       transparent 360deg
     );
   }
   75% {
     background: conic-gradient(
-      from -65deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 330deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 45deg,
+      #7c2fb0 48deg,
+      #9b32ad 50deg,
+      #c947a8 95deg,
+      #d65aa3 103deg,
+      #feac2f 150deg,
+      #ffb84d 185deg,
+      #ffa93f 195deg,
+      #ff9f42 215deg,
+      #e8873f 218deg,
+      #d4743c 225deg,
+      transparent 265deg,
       transparent 360deg
     );
   }
   80% {
     background: conic-gradient(
-      from -70deg,
-      transparent 5deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 340deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 50deg,
+      #7c2fb0 53deg,
+      #9b32ad 55deg,
+      #c947a8 102deg,
+      #d65aa3 110deg,
+      #feac2f 160deg,
+      #ffb84d 200deg,
+      #ffa93f 210deg,
+      #ff9f42 235deg,
+      #e8873f 238deg,
+      #d4743c 245deg,
+      transparent 285deg,
       transparent 360deg
     );
   }
   85% {
     background: conic-gradient(
-      from -70deg,
+      from 315deg at 50% 50%,
       transparent 0deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 350deg,
+      #381ab2 4deg,
+      #5a2bb5 55deg,
+      #7c2fb0 58deg,
+      #9b32ad 60deg,
+      #c947a8 110deg,
+      #d65aa3 118deg,
+      #feac2f 180deg,
+      #ffb84d 215deg,
+      #ffa93f 225deg,
+      #ff9f42 255deg,
+      #e8873f 258deg,
+      #d4743c 265deg,
+      #c2613a 268deg,
+      transparent 305deg,
       transparent 360deg
     );
   }
   90% {
     background: conic-gradient(
-      from -75deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 350deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 60deg,
+      #7c2fb0 63deg,
+      #9b32ad 65deg,
+      #c947a8 117deg,
+      #d65aa3 125deg,
+      #feac2f 200deg,
+      #ffb84d 230deg,
+      #ffa93f 240deg,
+      #ff9f42 275deg,
+      #e8873f 278deg,
+      #d4743c 285deg,
+      #c2613a 288deg,
+      #b8563a 305deg,
+      transparent 325deg,
+      transparent 360deg
     );
   }
   95% {
     background: conic-gradient(
-      from -85deg,
-      #381ab2 20deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
-      #381ab2 360deg,
+      from 315deg at 50% 50%,
+      transparent 0deg,
+      #381ab2 4deg,
+      #5a2bb5 65deg,
+      #7c2fb0 68deg,
+      #9b32ad 70deg,
+      #c947a8 125deg,
+      #d65aa3 133deg,
+      #feac2f 210deg,
+      #ffb84d 245deg,
+      #ffa93f 255deg,
+      #ff9f42 295deg,
+      #e8873f 298deg,
+      #d4743c 305deg,
+      #c2613a 308deg,
+      #b8563a 325deg,
+      #a04d37 328deg,
+      transparent 345deg,
+      transparent 360deg
     );
+    opacity: 0.95;
   }
   100% {
     background: conic-gradient(
-      from -100deg,
-      #381ab2 10deg,
-      #9b32ad 30deg,
-      #feac2f 80deg,
-      #ffa93f 160deg,
-      #9b32ad 200deg,
-      #17082c 290deg,
+      from 315deg at 50% 50%,
+      #381ab2 4deg,
+      #5a2bb5 70deg,
+      #7c2fb0 73deg,
+      #9b32ad 75deg,
+      #c947a8 132deg,
+      #d65aa3 140deg,
+      #feac2f 230deg,
+      #ffb84d 260deg,
+      #ffa93f 270deg,
+      #ff9f42 315deg,
+      #e8873f 318deg,
+      #d4743c 325deg,
+      #c2613a 328deg,
+      #b8563a 345deg,
+      #a04d37 348deg,
+      #381ab2 355deg,
       #381ab2 360deg
     );
+    opacity: 0.9;
   }
 }
 

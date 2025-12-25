@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import "./UserDashboard.css";
-import UserDashboardRight from "./UserDashboardRight";
+import SearchAndFilterBar from "./SearchAndFilterBar";
+import { SkeletonGrid } from "./SkeletonCard";
 import { useNavigate } from "react-router-dom";
 import { getAllCourses, enrollCourse, getCoupons } from "../api/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +11,7 @@ import { useCart } from "../context/CartContext";
 import AllSubjects_CourseCard from "./AllSubjects_CourseCard";
 import OrderSummary from "./Mycart_ordersummary";
 
-const AllSubjects = ({ searchQuery }) => {
+const AllSubjects = ({ searchQuery, onSearch }) => {
   const queryClient = useQueryClient();
   const { cart, addToCart, removeFromCart, updateCartItem } = useCart();
 
@@ -19,12 +20,6 @@ const AllSubjects = ({ searchQuery }) => {
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const navigate = useNavigate();
-  const yearCategoryMap = {
-    "1st Year": 1,
-    "2nd Year": 2,
-    "3rd Year": 3,
-    "4th Year": 4,
-  };
   const {
     data: allCourses = [],
     isLoading: isLoadingAllCourses,
@@ -39,8 +34,8 @@ const AllSubjects = ({ searchQuery }) => {
     sessionStorage.setItem("allCourses", JSON.stringify(allCourses));
   }
 
-  // calling myCourses from shared query
-  useMyCourses();
+  // calling myCourses from shared query - only when logged in
+  const { data: myCourses = [] } = useMyCourses();
 
   // Fetch available coupons
   useEffect(() => {
@@ -56,7 +51,11 @@ const AllSubjects = ({ searchQuery }) => {
       }
     };
 
-    fetchCoupons();
+    // Only fetch coupons if user is logged in
+    const profileId = localStorage.getItem("profileId");
+    if (profileId) {
+      fetchCoupons();
+    }
   }, []);
 
   // Filter the courses based on the search query
@@ -69,7 +68,7 @@ const AllSubjects = ({ searchQuery }) => {
       ? allCourses
       : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
     ).forEach((course) => {
-      if (course.year) years.add(`${course.year} Year`);
+      if (course.year) years.add(`Year ${course.year}`);
       if (course.branchNames) {
         course.branchNames.forEach((branch) => branches.add(branch));
       }
@@ -79,8 +78,8 @@ const AllSubjects = ({ searchQuery }) => {
 
     // Sort years numerically
     const sortedYears = Array.from(years).sort((a, b) => {
-      const numA = parseInt(a); // extract number before "Year"
-      const numB = parseInt(b);
+      const numA = parseInt(a.replace("Year ", ""));
+      const numB = parseInt(b.replace("Year ", ""));
       return numA - numB;
     });
 
@@ -103,6 +102,10 @@ const AllSubjects = ({ searchQuery }) => {
       "2 Year": 2,
       "3 Year": 3,
       "4 Year": 4,
+      "Year 1": 1,
+      "Year 2": 2,
+      "Year 3": 3,
+      "Year 4": 4,
       "1st Year": 1,
       "2nd Year": 2,
       "3rd Year": 3,
@@ -141,8 +144,6 @@ const AllSubjects = ({ searchQuery }) => {
     );
   });
 
-  const { data: myCourses = [] } = useMyCourses();
-
   const { mutate: mutateEnroll, isPending: isEnrolling } = useMutation({
     mutationFn: (course) => {
       return enrollCourse(course);
@@ -170,7 +171,7 @@ const AllSubjects = ({ searchQuery }) => {
 
       toast.dismiss();
       toast.success("Successfully enrolled in the course!");
-      navigate(`/book-dashboard?subcode=${enrolledCourse.courseCodes[0]}`);
+      navigate("/my-subjects");
 
       queryClient.invalidateQueries(["myCourses"]);
     },
@@ -212,7 +213,6 @@ const AllSubjects = ({ searchQuery }) => {
       addToCart(course, plan, {
         source: "all_subjects",
       });
-      toast.success(`${course.name} (${plan}) added to cart!`);
     }
   };
 
@@ -294,67 +294,73 @@ const AllSubjects = ({ searchQuery }) => {
   };
 
   return (
-    <div className="userdashboard-content-page">
-      <div className="all-course-card-container">
-        {/* Handle loading and error states */}
-        {isLoadingAllCourses ? (
-          <div>Loading all your courses...</div>
-        ) : isError ? (
-          <div>Error loading courses. Please try again later.</div>
-        ) : filteredCourses.length === 0 ? (
-          <div>No courses found.</div>
-        ) : (
-          filteredCourses.map((course) => (
-            <AllSubjects_CourseCard
-              key={course.id}
-              course={course}
-              myCourses={myCourses}
-              navigate={navigate}
-              mutateEnroll={mutateEnroll}
-              isEnrolling={isEnrolling}
-              handleBuyClick={handleBuyClick}
+    <div className="new-dashboard-layout">
+      {/* Search and Filter Bar */}
+      <SearchAndFilterBar
+        searchQuery={searchQuery}
+        onSearch={onSearch}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategorySelect={(category) => {
+          if (selectedCategory === category) {
+            setSelectedCategory("");
+          } else {
+            setSelectedCategory(category);
+          }
+        }}
+      />
+      
+      <div className="dashboard-main-content">
+        <div className={`courses-grid ${cart.length > 0 ? 'with-sidebar' : 'full-width'}`}>
+          {isLoadingAllCourses ? (
+            <SkeletonGrid 
+              count={cart.length > 0 ? 6 : 8} 
             />
-          ))
-        )}
-      </div>
+          ) : isError ? (
+            <div className="error-message">Error loading courses. Please try again later.</div>
+          ) : filteredCourses.length === 0 ? (
+            <div className="no-courses-message">No courses found.</div>
+          ) : (
+            filteredCourses.map((course) => (
+              <AllSubjects_CourseCard
+                key={course.id}
+                course={course}
+                myCourses={myCourses}
+                navigate={navigate}
+                mutateEnroll={mutateEnroll}
+                isEnrolling={isEnrolling}
+                handleBuyClick={handleBuyClick}
+              />
+            ))
+          )}
+        </div>
 
-      <div className="userdashboard-sidesection">
-        {/* Show Categories if no course is selected, else show Order Summary */}
-        {cart.length === 0 ? (
-          <UserDashboardRight
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategorySelect={(category) => {
-              if (selectedCategory === category) {
-                setSelectedCategory("");
-              } else {
-                setSelectedCategory(category);
-              }
-            }}
-          />
-        ) : (
-          <OrderSummary
-            cart={cart}
-            pricing={pricing}
-            onRemoveFromCart={(id) => removeFromCart(id, { source: "order_summary" })}
-            onUpgradeAllToPro={upgradeAllToPro}
-            onShowCouponPopup={() => navigate("/mycart")}
-            appliedCoupon={appliedCoupon || bestCoupon} // Show best available if none applied
-            onRemoveCoupon={() => setAppliedCoupon(null)}
-            couponCode={couponCode}
-            onCouponCodeChange={setCouponCode}
-            onApplyCoupon={() => {
-              if (bestCoupon && couponCode === bestCoupon.couponCode) {
-                setAppliedCoupon(bestCoupon);
-                toast.success("Coupon applied!");
-              } else {
-                toast.error("Invalid coupon code");
-              }
-            }}
-            onCheckout={() => navigate("/mycart")}
-            showCouponInput={false}
-            checkoutButtonText="Proceed to Cart"
-          />
+        {/* Order Summary Sidebar */}
+        {cart.length > 0 && (
+          <div className="order-summary-sidebar">
+            <OrderSummary
+              cart={cart}
+              pricing={pricing}
+              onRemoveFromCart={(id) => removeFromCart(id, { source: "order_summary" })}
+              onUpgradeAllToPro={upgradeAllToPro}
+              onShowCouponPopup={() => navigate("/mycart")}
+              appliedCoupon={appliedCoupon || bestCoupon}
+              onRemoveCoupon={() => setAppliedCoupon(null)}
+              couponCode={couponCode}
+              onCouponCodeChange={setCouponCode}
+              onApplyCoupon={() => {
+                if (bestCoupon && couponCode === bestCoupon.couponCode) {
+                  setAppliedCoupon(bestCoupon);
+                  toast.success("Coupon applied!");
+                } else {
+                  toast.error("Invalid coupon code");
+                }
+              }}
+              onCheckout={() => navigate("/mycart")}
+              showCouponInput={false}
+              checkoutButtonText="Proceed to Cart"
+            />
+          </div>
         )}
       </div>
     </div>
