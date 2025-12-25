@@ -20,6 +20,9 @@ export const getBookDetails = (allCoursesData) => {
 };
 
 export const useMyCourses = () => {
+  const profileId = localStorage.getItem("profileId");
+  const token = localStorage.getItem("token");
+  
   return useQuery({
     queryKey: ["myCourses"],
     queryFn: async () => {
@@ -36,5 +39,6 @@ export const useMyCourses = () => {
       return coursesData;
       },
     staleTime: 0,
+    enabled: !!(profileId && token),
   });
 };

@@ -1,90 +1,77 @@
-import { useState } from "react";
-
 export default function Mycart_purchased_course_card({
   title,
-  credits,
-  dept,
+  courseCode,
+  branchNames,
   plan,
   price,
   onRemove,
   onUpgrade,
 }) {
-  const [showSparkle, setShowSparkle] = useState(false);
-
-  const handleUpgrade = () => {
-    setShowSparkle(true);
-    setTimeout(() => setShowSparkle(false), 1000);
-    onUpgrade();
-  };
-
-  // Handle both backend formats: "PRO"/"BASIC" and "Pro Plan"/"Basic Plan"
   const isPro =
     plan === "PRO" ||
     plan === "Pro Plan" ||
     plan?.toLowerCase().includes("pro");
-  const bgClass = isPro
-    ? "bg-[linear-gradient(90deg,rgba(56,26,178,1)_12%,rgba(155,50,173,1)_44%,rgba(254,172,47,1)_86%)]"
-    : "bg-gradient-to-r from-cyan-200 to-blue-200";
-  const textClass = isPro ? "text-white" : "text-black";
 
   return (
-    <div
-      className={`w-full max-w-md relative flex items-center justify-between ${bgClass} ${textClass} rounded-2xl shadow-md p-4 ${
-        showSparkle ? "animate-pulse" : ""
-      }`}
-    >
-      {/* Remove button */}
-      <button
-        onClick={onRemove}
-        className={`absolute top-2 right-2 ${
-          isPro
-            ? "text-white hover:text-red-300"
-            : "text-gray-600 hover:text-red-600"
-        } transition-colors`}
-      >
-        ✕
-      </button>
-
-      {/* Left side */}
-      <div className="flex items-center space-x-3 pr-8">
-        <div>
-          <h2 className="text-sm font-semibold truncate max-w-[150px]">
-            {title}
-          </h2>
-          <p className={`text-xs ${isPro ? "text-gray-200" : "text-gray-600"}`}>
-            AKTU · {credits} · {dept}
-          </p>
-          <p
-            className={`text-xs font-medium ${
-              isPro ? "text-gray-100" : "text-gray-700"
-            } mt-1`}
+    <div className="w-full bg-[#fafafa] rounded-2xl p-4 flex flex-col justify-between border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 pr-2">
+            <h3 className="text-lg font-bold text-gray-900 leading-snug mb-1 line-clamp-2">
+              {title}
+            </h3>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                {Array.isArray(courseCode) ? courseCode[0] : courseCode || "N/A"}
+              </div>
+              {Array.isArray(branchNames) && branchNames.length > 0 && (
+                branchNames.slice(0, 2).map((branch, index) => (
+                  <div key={index} className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                    {branch}
+                  </div>
+                ))
+              )}
+              <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                AKTU
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={onRemove}
+            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 border border-transparent hover:border-red-100 cursor-pointer"
+            aria-label="Remove"
           >
-            {plan?.includes("Plan")
-              ? plan
-              : `${
-                  plan === "BASIC" ? "Basic" : plan === "PRO" ? "Pro" : plan
-                } Plan`}{" "}
-            - ₹{price}
-          </p>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      {/* Right side - Upgrade button only for Basic plans */}
-      {!isPro && (
-        <button
-          onClick={handleUpgrade}
-          className="bg-white text-purple-900 font-semibold rounded-full px-3 py-1 text-xs hover:opacity-90 transition"
-        >
-          Upgrade to Pro
-        </button>
-      )}
-
-      {/* Sparkle effect */}
-      {showSparkle && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-4xl animate-bounce">✨</div>
+      <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-100">
+        <div className="flex flex-col gap-0.5">
+          <span
+            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider w-fit ${isPro
+              ? "bg-purple-100 text-purple-700 border border-purple-200"
+              : "bg-blue-100 text-blue-700 border border-blue-200"
+              }`}
+          >
+            {plan?.includes("Plan")
+              ? plan
+              : `${plan === "BASIC" ? "Basic" : plan === "PRO" ? "Pro" : plan} Plan`}
+          </span>
+          <span className="text-xl font-extrabold text-gray-900">₹{price}</span>
         </div>
-      )}
+
+        {!isPro && (
+          <button
+            onClick={onUpgrade}
+            className="px-6 py-2.5 bg-zinc-900 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-sm hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+          >
+            Upgrade to Pro
+          </button>
+        )}
+      </div>
     </div>
   );
 }

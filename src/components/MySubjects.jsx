@@ -1,12 +1,43 @@
 import "./UserDashboard.css";
 import { useNavigate } from "react-router-dom";
-import UserDashboardRight from "./UserDashboardRight";
+import SearchAndFilterBar from "./SearchAndFilterBar";
+import { SkeletonGrid } from "./SkeletonCard";
 import { useMyCourses } from "./sharedQuery";
 import { useState } from "react";
-function MySubjects({ searchQuery }) {
+import { useSubscriptions } from "../hooks/useSubscriptions";
+import { useCart } from "../context/CartContext";
+import { toast } from "react-toastify";
+
+function MySubjects({ searchQuery, onSearch }) {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const { data: myCourses, isLoading, isError } = useMyCourses();
   const [selectedCategory, setSelectedCategory] = useState("");
+  const { getPlanForCourse, isLoading: subscriptionsLoading } = useSubscriptions();
+
+  // Handle upgrade functionality
+  const handleUpgrade = async (course, plan) => {
+    try {
+      const courseForCart = {
+        id: course.id,
+        name: course.name,
+        courseCodes: course.courseCodes || [],
+        universityName: course.universityName || "",
+        branchNames: course.branchNames || [],
+        year: course.year || "",
+      };
+
+      toast.info(`Adding ${plan} plan to cart...`);
+
+      await addToCart(courseForCart, plan, {
+        source: "upgrade_from_my_subjects",
+      });
+
+      navigate("/mycart");
+    } catch (error) {
+      toast.error(`Failed to add ${plan} plan to cart`);
+    }
+  };
   const categories = (() => {
     if (!myCourses) return [];
 
@@ -40,7 +71,6 @@ function MySubjects({ searchQuery }) {
     "4th Year": 4,
   };
 
-  // Filter the subjects based on the search query or show all if the query is empty
   const filteredSubjects = myCourses
     ? myCourses.filter((subject) => {
       const normalize = (str) => str?.toLowerCase().trim();
@@ -72,109 +102,123 @@ function MySubjects({ searchQuery }) {
     })
     : [];
   return (
-    <div className="userdashboard-content-page">
-      <div className="all-course-card-container">
-        {isLoading ? (
-          <div>Please wait while we load your courses....</div>
-        ) : isError ? (
-          <div>Error loading your courses. Please try again!</div>
-        ) : filteredSubjects.length === 0 ? (
-          <div>No courses found.</div>
-        ) : (
-          filteredSubjects.map((subject, index) => {
-            return (
-              <div
-                key={index}
-                className="all-course-card pointer-cursor"
-                onClick={() => {
-                  sessionStorage.setItem(
-                    "selectedCourseCode",
-                    subject.courseCodes[0]
-                  );
-                  navigate(`/book-dashboard?subcode=${subject.courseCodes[0]}`);
-                }}
-              >
-                <div className="all-course-card-info-container">
-                  <div className="all-course-card-header-container">
-                    <div className="font-subheading-black">{subject.name}</div>
+    <div className="new-dashboard-layout">
+      <SearchAndFilterBar
+        searchQuery={searchQuery}
+        onSearch={onSearch}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategorySelect={(category) =>
+          setSelectedCategory((prev) => (prev === category ? "" : category))
+        }
+      />
+      
+      {/* Main Content Area */}
+      <div className="dashboard-main-content">
+        {/* Courses Grid */}
+        <div className="courses-grid full-width">
+          {isLoading || subscriptionsLoading ? (
+            <SkeletonGrid count={8} />
+          ) : isError ? (
+            <div className="error-message">Error loading your courses. Please try again!</div>
+          ) : filteredSubjects.length === 0 ? (
+            <div className="no-courses-message">No courses found.</div>
+          ) : (
+            filteredSubjects.map((subject, index) => {
+              const plan = getPlanForCourse(subject.courseCodes[0]);
+              const isPro = plan === "PRO" || plan === "Pro Plan";
+              const isBasic = plan === "BASIC" || plan === "Basic Plan";
+              const isFree = !isPro && !isBasic;
+
+              return (
+                <div
+                  key={index}
+                  className="w-full min-h-[220px] bg-[#fafafa] rounded-2xl p-6 flex flex-col justify-between border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer"
+                  onClick={() => {
+                    sessionStorage.setItem(
+                      "selectedCourseCode",
+                      subject.courseCodes[0]
+                    );
+                    navigate(`/book-dashboard?subcode=${subject.courseCodes[0]}`);
+                  }}
+                >
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+                          ? "bg-purple-100 text-purple-700 border border-purple-200"
+                          : isBasic
+                            ? "bg-blue-100 text-blue-700 border border-blue-200"
+                            : "bg-gray-100 text-gray-700 border border-gray-200"
+                          }`}
+                      >
+                        {isPro ? "Pro Plan" : isBasic ? "Basic Plan" : "Free Plan"}
+                      </span>
+                    </div>
+
+                    <div className="text-lg font-bold text-gray-900 leading-snug">
+                      {subject.name}
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-xs text-gray-500">
+                        {subject.universityName}
+                      </div>
+                      <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-xs text-gray-500 ">
+                        Year {subject.year}
+                      </div>
+                      {subject.branchNames.slice(0, 1).map((branch, index) => (
+                        <div
+                          key={index}
+                          className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-xs  text-gray-500 "
+                        >
+                          {branch}
+                        </div>
+                      ))}
+                      {subject.courseCodes.slice(0, 1).map((courseCode, index) => (
+                        <div
+                          key={index}
+                          className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-xs text-gray-500 "
+                        >
+                          {courseCode}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="all-course-card-tags-container font-mark-read-btn">
-                    <div className="all-course-card-each-tag">
-                      {subject.universityName}
+
+                  {/* Upgrade Buttons */}
+                  <div className="flex flex-col gap-2 mt-4">
+                    <div className="flex items-center gap-2">
+                      {isFree && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpgrade(subject, "BASIC");
+                          }}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-[#ffffff] border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm active:scale-95 cursor-pointer"
+                        >
+                          Get Basic
+                        </button>
+                      )}
+                      
+                      {!isPro && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpgrade(subject, "PRO");
+                          }}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-zinc-900 text-white hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+                        >
+                          Get Pro
+                        </button>
+                      )}
                     </div>
-                    <div className="all-course-card-each-tag">
-                      {subject.year}
-                    </div>
-                    {subject.branchNames.map((branch, index) => (
-                      <div key={index} className="all-course-card-each-tag">
-                        {branch}
-                      </div>
-                    ))}
-                    {subject.courseCodes.map((courseCode, index) => (
-                      <div key={index} className="all-course-card-each-tag">
-                        {courseCode}
-                      </div>
-                    ))}
                   </div>
                 </div>
-                {/* <div className="all-course-card-slider-container">
-                      <MySubjectSlider
-                        totalUnits={totalUnits}
-                        completedUnits={completedUnits}
-                      />
-                    </div> */}
-              </div>
-            );
-          })
-        )}
-
-        {/* <div className="recommended-courses">
-              <div className="recommended-heading heading-500-30-black">
-                Recommended Courses
-              </div>
-              <div className="recomended-all-course-card-container">
-                {allCourseCard.slice(8, 11).map((allCourseCard) => (
-                  <div className="all-course-card" key={allCourseCard.subCode}>
-                    <div className="all-course-card-info-container">
-                      <div className="all-course-card-header-container">
-                        <div className="font-subheading-black">
-                          {allCourseCard.sub}
-                        </div>
-                        <div className="font-paragraph-grey">
-                          {allCourseCard.totalUnits}
-                        </div>
-                      </div>
-                      <div className="all-course-card-tags-container font-mark-read-btn">
-                        <div className="all-course-card-each-tag">
-                          {allCourseCard.univ}
-                        </div>
-                        <div className="all-course-card-each-tag">
-                          {allCourseCard.year}
-                        </div>
-                        <div className="all-course-card-each-tag">
-                          {allCourseCard.branch}
-                        </div>
-                        <div className="all-course-card-each-tag">
-                          {allCourseCard.subCode}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="all-course-card-start-learning-btn font-notification">
-                      Start Learning
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div> */}
-      </div>
-      <div className="userdashboard-sidesection">
-        <UserDashboardRight
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategorySelect={(category) =>
-            setSelectedCategory((prev) => (prev === category ? "" : category))
-          }
-        />
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

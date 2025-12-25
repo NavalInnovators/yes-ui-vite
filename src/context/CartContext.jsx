@@ -50,17 +50,19 @@ export const CartProvider = ({ children }) => {
 
   // Helper function to transform API cart response
   const transformCartItem = (item) => {
-    const actualCourseId = getCourseIdByName(item.courseName);
+    const allCourses = getAllCourses();
+    const matchingCourse = allCourses.find((c) => c.name === item.courseName);
+    const actualCourseId = matchingCourse ? matchingCourse.id : null;
 
     return {
       cartId: item.cartId,
       id: item.cartId,
       courseId: actualCourseId,
       name: item.courseName,
-      courseCodes: item.courseCodes || [],
-      universityName: item.universityName || "",
-      year: item.year || "",
-      branchNames: item.branchNames || [],
+      courseCodes: matchingCourse?.courseCodes || [],
+      universityName: matchingCourse?.universityName || item.universityName || "",
+      year: matchingCourse?.year || item.year || "",
+      branchNames: matchingCourse?.branchNames || item.branchNames || [],
       plan: item.planName,
       price: item.amount / 100, // Convert paise to rupees
       addedAt: item.addedAt || getISTISOString(),
@@ -174,6 +176,9 @@ export const CartProvider = ({ children }) => {
         timestamp: getISTISOString(),
         requiredPlan: metadata?.required_plan || null,
       });
+
+      // Show success notification
+      toast.success(`${course.name} (${plan}) added to cart!`);
     } catch (error) {
       console.group("❌ Add to Cart Failed");
       console.error("Error:", error.message);
@@ -445,9 +450,17 @@ export const CartProvider = ({ children }) => {
     }
 
     const sameYearCourses = allCourses.filter(
-      (course) =>
-        cartYears.includes(course.year) &&
-        !cartItems.some((cartItem) => cartItem.courseId === course.id),
+      (course) => {
+        const isSameYear = cartYears.includes(course.year);
+        
+        const isInCart = cartItems.some((cartItem) => cartItem.courseId === course.id);
+        
+        const hasActiveSubscription = subscriptions.some(
+          (sub) => sub.course?.id === course.id && sub.status === "ACTIVE"
+        );
+        
+        return isSameYear && !isInCart && !hasActiveSubscription;
+      }
     );
 
     const prioritizedCourses = [
@@ -455,7 +468,7 @@ export const CartProvider = ({ children }) => {
         id: course.id,
         title: course.name,
         subjectCode: course.courseCodes[0],
-        dept: course.branchNames[0] || "CSE",
+        dept: course.branchNames[0],
         year: course.year,
         universityName: course.universityName,
         branchNames: course.branchNames,

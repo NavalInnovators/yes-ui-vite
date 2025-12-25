@@ -3,6 +3,7 @@ import GradientDiv from "../roles/components/GradientDiv";
 import Mycart_purchased_course_card from "./Mycart_purchased_course_card";
 import OrderSummary from "./Mycart_ordersummary";
 import Mycart_suggested_courses_card from "./Mycart_suggested_courses_card";
+import { CartContentSkeleton } from "./SkeletonCard";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -16,6 +17,7 @@ import {
     removeTransaction,
     getSubscriptions,
     enrollCourse,
+    // getSuggestedCourses, // API function when available
 } from "../api/api";
 
 export default function Mycart() {
@@ -25,16 +27,18 @@ export default function Mycart() {
     updateCartItem,
     addToCart,
     checkout,
-    getSuggestedCourses,
     setCart,
     reloadSubscriptions,
+    isLoadingCart,
   } = useCart();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
 
-  // Get suggested courses based on cart items
-  const allSuggestedCourses = getSuggestedCourses(cart);
+  // State for suggested courses from API
+  const [suggestedCourses, setSuggestedCourses] = useState([]);
+  const [isLoadingSuggestedCourses, setIsLoadingSuggestedCourses] = useState(false);
+  const [suggestedCoursesError, setSuggestedCoursesError] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showCouponPopup, setShowCouponPopup] = useState(false);
@@ -42,6 +46,36 @@ export default function Mycart() {
   const [couponCode, setCouponCode] = useState("");
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [isLoadingCoupons, setIsLoadingCoupons] = useState(false);
+
+  // Fetch suggested courses from API
+  useEffect(() => {
+    const fetchSuggestedCourses = async () => {
+      try {
+        const profileId = localStorage.getItem("profileId");
+        if (!profileId || cart.length === 0) {
+          setSuggestedCourses([]);
+          return;
+        }
+
+        setIsLoadingSuggestedCourses(true);
+        setSuggestedCoursesError(null);
+
+        // const response = await getSuggestedCourses(profileId, cart);
+        // setSuggestedCourses(response.data || []);
+
+        setSuggestedCourses([]);
+
+      } catch (error) {
+        console.error("Failed to fetch suggested courses:", error);
+        setSuggestedCoursesError("Failed to load suggested courses");
+        setSuggestedCourses([]);
+      } finally {
+        setIsLoadingSuggestedCourses(false);
+      }
+    };
+
+    fetchSuggestedCourses();
+  }, [cart]);
 
   // Fetch available coupons
   useEffect(() => {
@@ -98,7 +132,7 @@ export default function Mycart() {
   }, [cart, appliedCoupon]);
 
   // Filter suggested courses based on search query
-  const filteredSuggestedCourses = allSuggestedCourses.filter((course) => {
+  const filteredSuggestedCourses = suggestedCourses.filter((course) => {
     const title = (course.title || "").toLowerCase();
     const dept = (course.dept || "").toLowerCase();
     const subjectCode = (course.subjectCode || "").toLowerCase();
@@ -122,7 +156,7 @@ export default function Mycart() {
 
         // Add PRO plan using the stored courseId
         const courseData = {
-          id: item.courseId, // This should now be the actual courseId, not cartId
+          id: item.courseId,
           name: item.name,
           courseCodes: item.courseCodes,
           universityName: item.universityName,
@@ -187,7 +221,6 @@ export default function Mycart() {
     addToCart(courseData, plan, {
       source: "suggested_course",
     });
-    toast.success(`${course.title ?? "Course"} (${plan}) added to cart!`);
   };
 
   const handleCheckout = async () => {
@@ -287,7 +320,7 @@ export default function Mycart() {
               }
 
               toast.dismiss(enrollingToast);
-              
+
             } catch (enrollmentError) {
               console.error("Enrollment process failed:", enrollmentError);
               toast.dismiss(enrollingToast);
@@ -566,21 +599,24 @@ export default function Mycart() {
       </GradientDiv>
 
       {/* Main content */}
-      <div className="px-4 py-6 md:p-10 md:flex gap-6">
+      {isLoadingCart ? (
+        <CartContentSkeleton />
+      ) : (
+        <div className="px-4 py-6 md:p-10 md:flex gap-6">
         {/* Left side */}
         <div className="w-full md:w-[70%]" id="left-section">
           <div>
-            <h1 className="text-2xl md:text-4xl font-bold py-4 md:py-6">
+            <h1 className="text-2xl font-bold py-4 md:py-6">
               Review Your Order
             </h1>
 
             {/* Best Coupon Banner */}
             {bestCoupon && (
-              <div className="mb-4 bg-gradient-to-r from-green-50/60 to-emerald-50/60 border-2 border-green-200 rounded-xl p-4 shadow-sm">
-                <div className="flex items-center justify-between">
+              <div className="mb-4 bg-gradient-to-r from-green-50/60 to-emerald-50/60 border-2 border-green-200 rounded-2xl p-4 md:p-6 shadow-sm">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-lg">🎉</span>
+                      <span className="text-xl">🎉</span>
                       <span className="font-bold text-green-800">
                         Save ₹{bestCoupon.calculatedDiscount}!
                       </span>
@@ -595,7 +631,7 @@ export default function Mycart() {
                   </div>
                   <button
                     onClick={() => handleApplyCoupon(bestCoupon)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ml-4"
+                    className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap cursor-pointer shadow-sm hover:shadow-md"
                   >
                     Apply Now
                   </button>
@@ -608,13 +644,8 @@ export default function Mycart() {
                 <Mycart_purchased_course_card
                   key={course.id}
                   title={course.name}
-                  credits={course.courseCodes ?? []}
-                  dept={
-                    Array.isArray(course.branchNames) &&
-                    course.branchNames.length > 0
-                      ? course.branchNames[0]
-                      : "Unknown"
-                  }
+                  courseCode={course.courseCodes ?? []}
+                  branchNames={course.branchNames ?? []}
                   plan={course.plan}
                   price={course.price}
                   onRemove={() =>
@@ -628,92 +659,149 @@ export default function Mycart() {
             </div>
           </div>
 
-          <div className="mt-8">
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-2xl md:text-4xl font-bold">
-                Suggested Courses to add
-              </h1>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder="Search courses..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
+          {/* Suggested Courses */}
+          {(suggestedCourses.length > 0 || isLoadingSuggestedCourses) && (
+            <div className="mt-8">
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">
+                  Suggested Courses to add
+                </h1>
+                {!isLoadingSuggestedCourses && suggestedCourses.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Search courses..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                )}
               </div>
+
+              {isLoadingSuggestedCourses ? (
+                <div className="flex justify-center py-12">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    <div className="text-gray-500">Loading suggested courses...</div>
+                  </div>
+                </div>
+              ) : suggestedCoursesError ? (
+                <div className="text-center py-8">
+                  <div className="text-red-500 mb-2">{suggestedCoursesError}</div>
+                  <button
+                    onClick={() => {
+                      // Retry fetching suggested courses
+                      const fetchSuggestedCourses = async () => {
+                        try {
+                          const profileId = localStorage.getItem("profileId");
+                          if (!profileId || cart.length === 0) return;
+
+                          setIsLoadingSuggestedCourses(true);
+                          setSuggestedCoursesError(null);
+
+                          // TODO: Replace with actual API call when available
+                          // const response = await getSuggestedCourses(profileId, cart);
+                          // setSuggestedCourses(response.data || []);
+                          
+                          setSuggestedCourses([]);
+                        } catch (error) {
+                          setSuggestedCoursesError("Failed to load suggested courses");
+                        } finally {
+                          setIsLoadingSuggestedCourses(false);
+                        }
+                      };
+                      fetchSuggestedCourses();
+                    }}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              ) : filteredSuggestedCourses.length > 0 ? (
+                <div>
+                  <div
+                    id="suggested-courses"
+                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
+                  >
+                    {filteredSuggestedCourses.map((course) => (
+                      <Mycart_suggested_courses_card
+                        key={course.id}
+                        course={course}
+                        title={course.title}
+                        courseCode={course.subjectCode}
+                        branchNames={course.branchNames}
+                        hasBasic={course.hasBasic}
+                        isUpgrade={course.isUpgrade}
+                        upgradePrice={course.upgradePrice}
+                        onAddToCart={handleAddToCart}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Navigation buttons below carousel */}
+                  {filteredSuggestedCourses.length > 1 && (
+                    <div className="flex justify-center gap-4 mt-4">
+                      <button
+                        className="bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-all border border-gray-200"
+                        onClick={() => {
+                          const container =
+                            document.getElementById("suggested-courses");
+                          container.scrollBy({
+                            left: -300,
+                            behavior: "smooth",
+                          });
+                        }}
+                      >
+                        <svg
+                          className="w-5 h-5 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 19l-7-7 7-7"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        className="bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-all border border-gray-200"
+                        onClick={() => {
+                          const container =
+                            document.getElementById("suggested-courses");
+                          container.scrollBy({
+                            left: 300,
+                            behavior: "smooth",
+                          });
+                        }}
+                      >
+                        <svg
+                          className="w-5 h-5 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  {searchQuery ? "No courses match your search criteria" : "No suggested courses available"}
+                </div>
+              )}
             </div>
-            <div className="relative">
-              <button
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50 transition"
-                onClick={() => {
-                  const container =
-                    document.getElementById("suggested-courses");
-                  container.scrollBy({
-                    left: -300,
-                    behavior: "smooth",
-                  });
-                }}
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <button
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50 transition"
-                onClick={() => {
-                  const container =
-                    document.getElementById("suggested-courses");
-                  container.scrollBy({
-                    left: 300,
-                    behavior: "smooth",
-                  });
-                }}
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-              <div
-                id="suggested-courses"
-                className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
-              >
-                {filteredSuggestedCourses.map((course) => (
-                  <Mycart_suggested_courses_card
-                    key={course.id}
-                    course={course}
-                    title={course.title}
-                    credits={course.subjectCode}
-                    dept={course.dept}
-                    hasBasic={course.hasBasic}
-                    isUpgrade={course.isUpgrade}
-                    upgradePrice={course.upgradePrice}
-                    onAddToCart={handleAddToCart}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Right side */}
@@ -736,7 +824,7 @@ export default function Mycart() {
             />
           </div>
         </div>
-      </div>
+      
 
       {/* Coupon Popup */}
       {showCouponPopup && (
@@ -814,5 +902,8 @@ export default function Mycart() {
         </div>
       )}
     </div>
-  );
+  )}
+
+</div>
+)
 }

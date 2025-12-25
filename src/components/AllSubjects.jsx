@@ -1,26 +1,25 @@
 import { useState, useEffect, useMemo } from "react";
 import "./UserDashboard.css";
-import UserDashboardRight from "./UserDashboardRight";
+import SearchAndFilterBar from "./SearchAndFilterBar";
+import { SkeletonGrid } from "./SkeletonCard";
 import { useNavigate } from "react-router-dom";
 import { getAllCourses, enrollCourse, getCoupons } from "../api/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useMyCourses, getBookDetails } from "./sharedQuery";
 import { useCart } from "../context/CartContext";
+import AllSubjects_CourseCard from "./AllSubjects_CourseCard";
+import OrderSummary from "./Mycart_ordersummary";
 
-const AllSubjects = ({ searchQuery }) => {
+const AllSubjects = ({ searchQuery, onSearch }) => {
   const queryClient = useQueryClient();
   const { cart, addToCart, removeFromCart, updateCartItem } = useCart();
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const navigate = useNavigate();
-  const yearCategoryMap = {
-    "1st Year": 1,
-    "2nd Year": 2,
-    "3rd Year": 3,
-    "4th Year": 4,
-  };
   const {
     data: allCourses = [],
     isLoading: isLoadingAllCourses,
@@ -35,8 +34,8 @@ const AllSubjects = ({ searchQuery }) => {
     sessionStorage.setItem("allCourses", JSON.stringify(allCourses));
   }
 
-  // calling myCourses from shared query
-  useMyCourses();
+  // calling myCourses from shared query - only when logged in
+  const { data: myCourses = [] } = useMyCourses();
 
   // Fetch available coupons
   useEffect(() => {
@@ -52,7 +51,11 @@ const AllSubjects = ({ searchQuery }) => {
       }
     };
 
-    fetchCoupons();
+    // Only fetch coupons if user is logged in
+    const profileId = localStorage.getItem("profileId");
+    if (profileId) {
+      fetchCoupons();
+    }
   }, []);
 
   // Filter the courses based on the search query
@@ -65,7 +68,7 @@ const AllSubjects = ({ searchQuery }) => {
       ? allCourses
       : JSON.parse(sessionStorage.getItem("allCourses") || "[]")
     ).forEach((course) => {
-      if (course.year) years.add(`${course.year} Year`);
+      if (course.year) years.add(`Year ${course.year}`);
       if (course.branchNames) {
         course.branchNames.forEach((branch) => branches.add(branch));
       }
@@ -75,8 +78,8 @@ const AllSubjects = ({ searchQuery }) => {
 
     // Sort years numerically
     const sortedYears = Array.from(years).sort((a, b) => {
-      const numA = parseInt(a); // extract number before "Year"
-      const numB = parseInt(b);
+      const numA = parseInt(a.replace("Year ", ""));
+      const numB = parseInt(b.replace("Year ", ""));
       return numA - numB;
     });
 
@@ -99,6 +102,10 @@ const AllSubjects = ({ searchQuery }) => {
       "2 Year": 2,
       "3 Year": 3,
       "4 Year": 4,
+      "Year 1": 1,
+      "Year 2": 2,
+      "Year 3": 3,
+      "Year 4": 4,
       "1st Year": 1,
       "2nd Year": 2,
       "3rd Year": 3,
@@ -137,8 +144,6 @@ const AllSubjects = ({ searchQuery }) => {
     );
   });
 
-  const { data: myCourses = [] } = useMyCourses();
-
   const { mutate: mutateEnroll, isPending: isEnrolling } = useMutation({
     mutationFn: (course) => {
       return enrollCourse(course);
@@ -166,7 +171,7 @@ const AllSubjects = ({ searchQuery }) => {
 
       toast.dismiss();
       toast.success("Successfully enrolled in the course!");
-      navigate(`/book-dashboard?subcode=${enrolledCourse.courseCodes[0]}`);
+      navigate("/my-subjects");
 
       queryClient.invalidateQueries(["myCourses"]);
     },
@@ -208,7 +213,6 @@ const AllSubjects = ({ searchQuery }) => {
       addToCart(course, plan, {
         source: "all_subjects",
       });
-      toast.success(`${course.name} (${plan}) added to cart!`);
     }
   };
 
@@ -290,372 +294,72 @@ const AllSubjects = ({ searchQuery }) => {
   };
 
   return (
-    <div className="userdashboard-content-page">
-      <div className="all-course-card-container">
-        {/* Handle loading and error states */}
-        {isLoadingAllCourses ? (
-          <div>Loading all your courses...</div>
-        ) : isError ? (
-          <div>Error loading courses. Please try again later.</div>
-        ) : filteredCourses.length === 0 ? (
-          <div>No courses found.</div>
-        ) : (
-          filteredCourses.map((course) => (
-            <div className="all-course-card" key={course.id}>
-              <div className="all-course-card-info-container">
-                <div className="all-course-card-header-container">
-                  <div className="font-subheading-black">{course.name}</div>
-                </div>
-                <div className="all-course-card-tags-container font-mark-read-btn">
-                  <div className="all-course-card-each-tag">
-                    {course.universityName}
-                  </div>
-                  <div className="all-course-card-each-tag">{course.year}</div>
-                  {course.branchNames.map((branch, index) => (
-                    <div
-                      className="all-course-card-each-tag"
-                      key={`branch-${index}`}
-                    >
-                      {branch}
-                    </div>
-                  ))}
-                  {course.courseCodes.map((courseCode, index) => (
-                    <div
-                      className="all-course-card-each-tag"
-                      key={`code-${index}`}
-                    >
-                      {courseCode}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="all-course-card-footer">
-                {/* ===== NEW: Buy split button =====
-                  - Split into two halves: Buy Basic | Buy Pro
-                  - Buttons have same width/shape as Start Learning
-                  - Clicking opens the global sidebar with the selected plan
-              */}
-                <div
-                  className="buy-split-btn"
-                  role="group"
-                  aria-label="Buy plans"
-                >
-                  <button
-                    className="buy-btn buy-left"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleBuyClick(course, "BASIC");
-                    }}
-                  >
-                    Buy Basic
-                  </button>
-                  <button
-                    className="buy-btn buy-right"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleBuyClick(course, "PRO");
-                    }}
-                  >
-                    Buy Pro
-                  </button>
-                </div>
-
-                <div
-                  onClick={
-                    isEnrolling
-                      ? null
-                      : () => {
-                          console.log("Clicked on start learning.....");
-                          sessionStorage.setItem(
-                            "selectedCourseCode",
-                            course.courseCodes[0],
-                          );
-
-                          // Check if the course is already enrolled (from server)
-                          const courseExists = myCourses.some(
-                            (tempCourse) => tempCourse.id === course.id,
-                          );
-                          // const courseExists = myCourses.length > 0 ? myCourses : JSON.parse(localStorage.getItem('myCourses')).some(tempCourse => tempCourse.id === course.id);
-
-                          if (courseExists) {
-                            navigate(
-                              `/book-dashboard?subcode=${course.courseCodes[0]}`,
-                            );
-                            return;
-                          } else {
-                            if (!localStorage.getItem("token")) {
-                              navigate("/login");
-                              return;
-                            } else {
-                              console.log("Have token!");
-                              toast.info(
-                                "Enrolling in the course... Please wait",
-                                {
-                                  autoClose: false,
-                                },
-                              );
-                              mutateEnroll(course);
-                            }
-                          }
-                        }
-                  }
-                  className="all-course-card-start-learning-btn font-notification pointer-cursor"
-                >
-                  Start Learning
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-
-      <div className="userdashboard-sidesection">
-        {/* Show Categories if no course is selected, else show Order Summary */}
-        {cart.length === 0 ? (
-          <UserDashboardRight
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategorySelect={(category) => {
-              if (selectedCategory === category) {
-                setSelectedCategory("");
-              } else {
-                setSelectedCategory(category);
-              }
-            }}
-          />
-        ) : (
-          <div className="order-summary-container">
-            <div className="pricing-sidebar-title">
-              <div className="title-text">Order Summary</div>
-            </div>
-
-            <div className="pricing-sidebar-body">
-              {/* Best Coupon Banner */}
-              {bestCoupon && (
-                <div
-                  style={{
-                    marginBottom: "1rem",
-                    background: "linear-gradient(to right, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1))",
-                    border: "2px solid rgb(16, 185, 129)",
-                    borderRadius: "12px",
-                    padding: "12px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                    <span style={{ fontSize: "18px" }}>🎉</span>
-                    <span style={{ fontWeight: "bold", color: "rgb(6, 95, 70)" }}>
-                      Save ₹{bestCoupon.calculatedDiscount.toFixed(2)}!
-                    </span>
-                  </div>
-                  <div style={{ fontSize: "14px", color: "rgb(21, 128, 61)" }}>
-                    Use code <span style={{ fontWeight: "600" }}>{bestCoupon.couponCode}</span> at checkout
-                  </div>
-                </div>
-              )}
-
-              <div className="sidebar-card sidebar-card-content">
-                {cart.map((c) => (
-                  <div key={c.id} className="summary-row">
-                    <div>
-                      {c.name} ({c.plan})
-                    </div>
-                    <div className="price-delete">
-                      ₹{c.price || 0}
-                      <button
-                        onClick={() =>
-                          removeFromCart(c.id, {
-                            source: "order_summary",
-                          })
-                        }
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </div>
-                ))}
-
-                <hr />
-                <div className="summary-row">
-                  <div>Subtotal</div>
-                  <div>₹{pricing.subtotal}</div>
-                </div>
-
-                <div className="summary-row green">
-                  <div>Discount</div>
-                  <div>-₹{pricing.discount}</div>
-                </div>
-              </div>
-
-              {pricing.hasBasic && (
-                <div className="sidebar-card small">
-                  <div className="bundle-row">
-                    <div>
-                      <div className="bundle-title">Bundle Savings</div>
-                      <div className="bundle-desc">
-                        Upgrade all to Pro & Save 10%
-                      </div>
-                    </div>
-                    <button
-                      className="bundle-pro-btn"
-                      onClick={upgradeAllToPro}
-                    >
-                      Pro
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              <div className="sidebar-total">
-                <div className="total-label">Total Amount Payable:</div>
-                <div className="total-value">₹{pricing.total}</div>
-              </div>
-            </div>
-
-            <div className="pricing-sidebar-footer">
-              <button
-                className="secure-checkout-btn"
-                onClick={() => navigate("/mycart")}
-              >
-                Proceed to cart
-              </button>
-            </div>
-
-            {/* <div className="pricing-sidebar-body">
-          
-          <div className="sidebar-card">
-            <div className="sidebar-card-content">
-              <p className="muted">Select 3+ courses to unlock bundle discounts!</p>
-
-              <div className="summary-row">
-                <div>Subtotal</div>
-                <div className="muted strike">$3,000</div>
-              </div>
-
-              <hr />
-
-              <div className="summary-row">
-                <div>Subtotal (3 items)</div>
-                <div>$9,000</div>
-              </div>
-
-              <div className="summary-row green">
-                <div>-$45</div>
-                <div className="muted">(Save 15%)</div>
-              </div>
-            </div>
-          </div>
-
-          
-          <div className="sidebar-card small">
-            <div className="bundle-row">
-              <div>
-                <div className="bundle-title">Bundle Savings</div>
-                <div className="bundle-desc">Maximize Savings! Upgrade All to Pro</div>
-              </div>
-
-              <div>
-              
-                <button
-                  className="bundle-pro-btn"
-                  onClick={() => {
-                    toast.info("Upgrade all to Pro clicked (implement logic)");
-                    // Here you might set a state to mark 'upgrade all' or open checkout
-                  }}
-                >
-                  Pro
-                </button>
-              </div>
-            </div>
-          </div>
-
-          
-          <div className="sidebar-total">
-            <div className="total-label">Total Amount Payable:</div>
-            <div className="total-value">$8,955</div>
-          </div>
-        </div>
-
-        
-        <div className="pricing-sidebar-footer">
-          <button
-            className="secure-checkout-btn"
-            onClick={() => {
-              // TODO: wire to your payment flow
-              toast.info("Proceeding to checkout (implement flow)");
-            }}
-          >
-            Secure Checkout
-          </button>
-        </div> */}
-
-            {/* ###########################
-        ###########################
-        ########################### */}
-
-            {/* <div className="pricing-sidebar-header">
-          <div>
-            <strong>{sidebarPlan ? `${sidebarPlan} Plan` : "Plan"}</strong>
-            <div className="small-muted">
-              {sidebarCourse ? sidebarCourse.name : ""}
-            </div>
-          </div>
-          <button
-            className="pricing-sidebar-close"
-            onClick={closeSidebar}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="pricing-sidebar-body">
-          {/* Example content — replace with your payment / purchase UI */}
-            {/* {sidebarCourse ? (
-            <>
-              <p>
-                You chose <strong>{sidebarPlan}</strong> for{" "}
-                <em>{sidebarCourse.name}</em>.
-              </p>
-
-              <div className="plan-features">
-                <p>
-                  <strong>What's included</strong>
-                </p>
-                <ul>
-                  <li>Access to course notes</li>
-                  <li>AI summaries & rephraser</li>
-                  <li>Previous year insights</li>
-                </ul>
-              </div>
-
-              <div className="purchase-actions">
-                <button
-                  className="confirm-purchase-btn"
-                  onClick={() => {
-                    // TODO: replace this with actual purchase flow
-                    toast.info(
-                      `Proceeding to buy ${sidebarPlan} for ${sidebarCourse.name}`
-                    );
-                    // close sidebar for now
-                    closeSidebar();
-                  }}
-                >
-                  Proceed to Pay
-                </button>
-
-                <button
-                  className="cancel-purchase-btn"
-                  onClick={closeSidebar}
-                >
-                  Cancel
-                </button>
-              </div>
-            </>
+    <div className="new-dashboard-layout">
+      {/* Search and Filter Bar */}
+      <SearchAndFilterBar
+        searchQuery={searchQuery}
+        onSearch={onSearch}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategorySelect={(category) => {
+          if (selectedCategory === category) {
+            setSelectedCategory("");
+          } else {
+            setSelectedCategory(category);
+          }
+        }}
+      />
+      
+      <div className="dashboard-main-content">
+        <div className={`courses-grid ${cart.length > 0 ? 'with-sidebar' : 'full-width'}`}>
+          {isLoadingAllCourses ? (
+            <SkeletonGrid 
+              count={cart.length > 0 ? 6 : 8} 
+            />
+          ) : isError ? (
+            <div className="error-message">Error loading courses. Please try again later.</div>
+          ) : filteredCourses.length === 0 ? (
+            <div className="no-courses-message">No courses found.</div>
           ) : (
-            <div>Select a plan to continue.</div>
-          )} 
-        </div> */}
+            filteredCourses.map((course) => (
+              <AllSubjects_CourseCard
+                key={course.id}
+                course={course}
+                myCourses={myCourses}
+                navigate={navigate}
+                mutateEnroll={mutateEnroll}
+                isEnrolling={isEnrolling}
+                handleBuyClick={handleBuyClick}
+              />
+            ))
+          )}
+        </div>
+
+        {/* Order Summary Sidebar */}
+        {cart.length > 0 && (
+          <div className="order-summary-sidebar">
+            <OrderSummary
+              cart={cart}
+              pricing={pricing}
+              onRemoveFromCart={(id) => removeFromCart(id, { source: "order_summary" })}
+              onUpgradeAllToPro={upgradeAllToPro}
+              onShowCouponPopup={() => navigate("/mycart")}
+              appliedCoupon={appliedCoupon || bestCoupon}
+              onRemoveCoupon={() => setAppliedCoupon(null)}
+              couponCode={couponCode}
+              onCouponCodeChange={setCouponCode}
+              onApplyCoupon={() => {
+                if (bestCoupon && couponCode === bestCoupon.couponCode) {
+                  setAppliedCoupon(bestCoupon);
+                  toast.success("Coupon applied!");
+                } else {
+                  toast.error("Invalid coupon code");
+                }
+              }}
+              onCheckout={() => navigate("/mycart")}
+              showCouponInput={false}
+              checkoutButtonText="Proceed to Cart"
+            />
           </div>
         )}
       </div>

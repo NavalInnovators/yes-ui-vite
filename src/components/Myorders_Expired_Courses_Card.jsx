@@ -1,49 +1,79 @@
-import React from "react";
-
 export default function Expired_Courses_Card({
   courseName,
-  credits,
+  courseCode,
+  planType,
   purchaseDate,
   expiryDate,
-  onStartLearning,
+  isCancelled = false,
+  universityName,
+  branchNames,
 }) {
+
+  const isPro = planType === "Pro Plan";
+  const isBasic = planType === "Basic Plan";
+
   return (
-    <div className="rounded-xl p-6 shadow-md hover:shadow-lg flex flex-col bg-gray-200 border border-gray-300 transition-all duration-200 w-full">
-      {/* Title */}
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="font-bold text-lg md:text-xl truncate">{courseName}</h2>
-      </div>
+    <div
+      className="w-full bg-gray-200 rounded-2xl p-5 flex flex-col justify-between border border-gray-300 transition-all duration-300 relative opacity-75"
+    >
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex gap-2">
+            <span
+              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+                ? "bg-purple-100 text-purple-700 border border-purple-200"
+                : isBasic
+                  ? "bg-blue-100 text-blue-700 border border-blue-200"
+                  : "bg-gray-100 text-gray-700 border border-gray-200"
+                }`}
+            >
+              {planType}
+            </span>
 
-      {/* Course Info */}
-      <p className="text-sm md:text-base pb-8">{credits} | AKTU | CEE</p>
-
-      {/* Dates + Grey pill */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <p className="text-xs md:text-sm">
-            {" "}
-            <b>Purchase Date:</b> {purchaseDate}
-          </p>
-          <p className="text-xs md:text-sm">
-            {" "}
-            <b>Expired on:</b> {expiryDate}
-          </p>
+            <span
+              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isCancelled
+                ? "bg-orange-100 text-orange-700 border border-orange-200"
+                : "bg-red-50 text-red-600 border border-red-100"
+                }`}
+            >
+              {isCancelled ? "Cancelled" : "Expired"}
+            </span>
+          </div>
         </div>
-        {/* Grey status pill */}
-        <span className="mt-auto px-3 py-1 rounded-full text-sm font-semibold bg-gray-400 text-white">
-          Expired
-        </span>
-      </div>
 
-      {/* Start Learning button (active) */}
-      {onStartLearning && (
-        <button
-          onClick={onStartLearning}
-          className="w-full px-3 py-3 rounded-4xl bg-gray-50 hover:bg-[#ffffff] hover:scale-102 text-black font-semibold transition-all"
-        >
-          Start Learning
-        </button>
-      )}
+        <div className="text-lg font-bold text-gray-700 leading-snug">
+          {courseName}
+        </div>
+
+        <div className="flex flex-wrap gap-1.5">
+          <div className="bg-gray-300 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+            {courseCode}
+          </div>
+          <div className="bg-gray-300 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+            {universityName || "AKTU"}
+          </div>
+          {Array.isArray(branchNames) && branchNames.length > 0 && (
+            branchNames.slice(0, 2).map((branch, index) => (
+              <div key={index} className="bg-gray-300 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                {branch}
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1 mt-1 text-[13px]">
+          <div className="flex gap-1 items-center text-gray-500">
+            <span className="font-medium">Purchased:</span>
+            <span className="font-semibold">{purchaseDate}</span>
+          </div>
+          {!isCancelled && (
+            <div className="flex gap-1 items-center text-gray-500">
+              <span className="font-medium">Expired:</span>
+              <span className="font-semibold">{expiryDate}</span>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

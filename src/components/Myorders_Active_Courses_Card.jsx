@@ -1,87 +1,115 @@
-import React from "react";
-
-// Dynamic color mapping for the card background
-const planColors = {
-  "Basic Plan": "bg-gradient-to-r from-cyan-200 to-blue-200 text-black",
-  "Pro Plan": "bg-[linear-gradient(90deg,rgba(56,26,178,1)_12%,rgba(155,50,173,1)_44%,rgba(254,172,47,1)_86%)] text-white",
-};
-
-// Dynamic button style based on plan type
-const buttonColors = {
-  "Basic Plan": "bg-white text-purple-900 hover:opacity-90",
-  "Pro Plan": "bg-white text-black hover:opacity-90",
-};
+import { useNavigate } from "react-router-dom";
 
 export default function Active_Courses_Card({
   courseName,
-  credits,
+  courseCode,
   planType,
   purchaseDate,
   expiryDate,
-  onUpgrade,
+  onUpgradeBasic,
+  onUpgradePro,
   onCancel,
-  branchName,
+  branchNames,
   universityName,
 }) {
-  const cardColor =
-    planColors[planType] || "bg-gray-200 text-black border border-gray-300";
-  const buttonStyle =
-    buttonColors[planType] ||
-    "bg-white text-black hover:bg-gray-100 hover:shadow-lg";
+  const navigate = useNavigate();
+
+  const isPro = planType === "Pro Plan";
+  const isBasic = planType === "Basic Plan";
+
+  const handleCardClick = () => {
+    if (courseCode && courseCode !== "N/A") {
+      navigate(`/book-dashboard?subcode=${courseCode}`);
+    }
+  };
 
   return (
     <div
-      className={`rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-200 flex flex-col ${cardColor}`}
+      onClick={handleCardClick}
+      className="w-full bg-[#fafafa] rounded-2xl p-5 flex flex-col justify-between border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer"
     >
-      {/* Course Title */}
-      <h2 className="font-bold text-lg md:text-xl truncate pb-1">
-        {courseName}
-      </h2>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <span
+            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+              ? "bg-purple-100 text-purple-700 border border-purple-200"
+              : isBasic
+                ? "bg-blue-100 text-blue-700 border border-blue-200"
+                : "bg-gray-100 text-gray-700 border border-gray-200"
+              }`}
+          >
+            {planType}
+          </span>
+          {onCancel && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onCancel();
+              }}
+              className="px-3 py-1 text-[12px] font-semibold text-zinc-700 hover:bg-red-100 hover:text-red-600 rounded-md transition-all duration-300 cursor-pointer"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
 
-      {/* Course Info */}
-      <p className="text-sm md:text-base pb-8">
-        {credits} | {universityName || "AKTU"} | {branchName || "CSE"}
-      </p>
+        <div className="text-lg font-bold text-gray-900 leading-snug">
+          {courseName}
+        </div>
 
-      {/* Dates */}
-      <div className="mb-4">
-        <p className="text-xs md:text-sm">
-          {" "}
-          <b>Purchase Date: </b>
-          {purchaseDate}
-        </p>
-        <p className="text-xs md:text-sm">
-          <b>Expires On: </b>
-          {expiryDate}
-        </p>
+        <div className="flex flex-wrap gap-1.5">
+          <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+            {courseCode}
+          </div>
+          <div className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+            {universityName || "AKTU"}
+          </div>
+          {Array.isArray(branchNames) && branchNames.length > 0 && (
+            branchNames.slice(0, 2).map((branch, index) => (
+              <div key={index} className="bg-gray-200 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-gray-500 uppercase">
+                {branch}
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1 mt-1 text-[13px]">
+          <div className="flex gap-1 items-center text-gray-500">
+            <span className="font-medium">Purchased:</span>
+            <span className="font-semibold">{purchaseDate}</span>
+          </div>
+          <div className="flex gap-1 items-center text-gray-500">
+            <span className="font-medium">Expires:</span>
+            <span className="font-semibold">{expiryDate}</span>
+          </div>
+        </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex items-center gap-2 mt-auto">
-        {/* Plan Button */}
-        {onUpgrade ? (
-          <button
-            onClick={onUpgrade}
-            className="flex-1 px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-200 bg-[linear-gradient(90deg,rgba(56,26,178,1)_12%,rgba(155,50,173,1)_44%,rgba(254,172,47,1)_96%)] text-white hover:scale-102"
-          >
-            Upgrade to Pro
-          </button>
-        ) : (
-          <div className="flex-1 px-4 py-2 rounded-full text-sm font-semibold bg-white text-black text-center shadow-md">
-            Pro Plan Active
-          </div>
-        )}
-
-        {/* Cancel Button */}
-        {onCancel && (
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 rounded-full text-sm font-semibold bg-red-500 text-white hover:bg-red-600 shadow-md transition-all duration-200 hover:scale-102"
-            title="Cancel Subscription"
-          >
-            Cancel
-          </button>
-        )}
+      <div className="flex flex-col gap-2 mt-5">
+        <div className="flex items-center gap-2">
+          {onUpgradeBasic && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onUpgradeBasic();
+              }}
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-[#ffffff] border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm active:scale-95 cursor-pointer"
+            >
+              Get Basic
+            </button>
+          )}
+          {onUpgradePro && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onUpgradePro();
+              }}
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-zinc-900 text-white hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+            >
+              Get Pro
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

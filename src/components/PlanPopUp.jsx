@@ -114,7 +114,6 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
                     required_plan: requiredPlan ?? "pro",
                 },
             });
-            toast.success(`${course.name} (${plan}) added to cart!`);
 
             schedulePopupAbandonment({
                 subjectId: course.id,
