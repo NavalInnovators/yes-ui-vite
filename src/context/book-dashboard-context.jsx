@@ -13,7 +13,7 @@ export const useBookDashboard = () => {
 
 // Provider component for the context
 export const BookDashboardProvider = ({ children }) => {
-  const [selectedUnit, setSelectedUnit] = useState("1");
+  const [selectedUnit, setSelectedUnitState] = useState("1");
   const [navigation, setNavigation] = useState("");
   const [topics, setTopics] = useState("");
   const [subCode, setSubCode] = useState(sessionStorage.getItem('selectedCourseCode'));
@@ -28,6 +28,19 @@ export const BookDashboardProvider = ({ children }) => {
   const [filteredQnAQuestions, setFilteredQnAQuestions] = useState([]);
   // const [subSyllabus, setSubSyllabus] = useState([]);
 
+  const setSelectedUnit = (newUnit) => {
+    setSelectedUnitState(newUnit);
+    sessionStorage.setItem('selectedUnit', newUnit);
+  };
+
+  useEffect(() => {
+    const storedUnit = sessionStorage.getItem('selectedUnit');
+    if (storedUnit && storedUnit !== selectedUnit) {
+      setSelectedUnitState(storedUnit);
+    }
+  }, []);
+
+
   // Fetch subcode from URL with debouncing
   const [searchParams] = useSearchParams();
   useEffect(() => {
@@ -40,6 +53,8 @@ export const BookDashboardProvider = ({ children }) => {
       const timer = setTimeout(() => {
         setSubCode(code);
         sessionStorage.setItem('selectedCourseCode', code);
+        // Reset to unit 1 when switching courses
+        setSelectedUnit("1");
         console.log('Course code updated in sessionStorage:', code);
       }, 100);
       
@@ -64,7 +79,7 @@ export const BookDashboardProvider = ({ children }) => {
     isLoading: qnaLoading,
     error: qnaError,
   } = useQuery({
-    queryKey: ["qna", subCode],
+    queryKey: ["qna", subCode, selectedUnit],
     queryFn: () => getQnA(subCode),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
   });
@@ -75,7 +90,7 @@ export const BookDashboardProvider = ({ children }) => {
     isLoading: unitNotesLoading,
     error: unitNotesError,
   } = useQuery({
-    queryKey: ["unitNotes", subCode],
+    queryKey: ["unitNotes", subCode, selectedUnit],
     queryFn: () => getUnitNotes(subCode),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
   });
@@ -86,8 +101,8 @@ export const BookDashboardProvider = ({ children }) => {
     isLoading: insightsLoading,
     error: insightsError,
   } = useQuery({
-    queryKey: ["insights", subCode],
-    queryFn: () => getAnalyticData(subCode),
+    queryKey: ["insights", subCode, selectedUnit],
+    queryFn: () => getAnalyticData(subCode, selectedUnit),
     enabled: !!subCode && subCode !== "undefined" && subCode !== "null",
   });
 
@@ -105,9 +120,7 @@ export const BookDashboardProvider = ({ children }) => {
       
       setQList(newQList);
     }
-    // if (syllabus) {
-    //   setSubSyllabus(syllabus);
-    // }
+
     if (unitNotes) {
       const tempNotesObj = {};
       const tempTopicsObj = {};
@@ -125,8 +138,7 @@ export const BookDashboardProvider = ({ children }) => {
       setNotesTopics(tempTopicsObj);
     }
 
-    if(insights)
-    {
+    if (insights) {
       const tempUnitInsights = {};
       insights.forEach((u) => {
         tempUnitInsights[u.unit] = {
@@ -137,7 +149,7 @@ export const BookDashboardProvider = ({ children }) => {
       });
       setUnitInsights(tempUnitInsights);
     }
-  }, [qna, unitNotes, insights]);
+  }, [qna, unitNotes, insights, selectedUnit]);
 
   return (
     <DashboardContext.Provider
