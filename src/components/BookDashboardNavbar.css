@@ -28,6 +28,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+}
+
+.tab-icon {
+  flex-shrink: 0;
+}
+
+.tab-text {
+  white-space: nowrap;
 }
 
 .book-dashboard-nav-bar div.bookdashboard-active-tab {
@@ -68,10 +77,26 @@
   }
 }
 
+/* Tablet view (show icons and text) */
+@media (min-width: 481px) and (max-width: 1023px) {
+  .book-dashboard-nav-bar div {
+    padding: 1.5vh 1.5vw;
+    font-size: 1.2vh;
+  }
+}
+
 /* Mobile view (show dropdown, hide list, hide navbar) */
 @media (max-width: 480px) {
   .book-dashboard-nav-bar {
     display: flex;
     top: 3.5rem;
+  }
+  
+  .tab-icon {
+    display: none;
+  }
+  
+  .book-dashboard-nav-bar div {
+    padding: 1.5vh 1vw;
   }
 }

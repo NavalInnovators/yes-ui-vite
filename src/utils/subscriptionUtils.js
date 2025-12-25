@@ -4,7 +4,7 @@ export const fetchAllSubscriptions = async (profileId) => {
   const { getSubscriptions } = await import('../api/api');
   const response = await getSubscriptions(profileId, "ALL", {
     page: 0,
-    size: 1000,
+    size: 200,
   });
 
   return response?.content || [];
