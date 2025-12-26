@@ -6,6 +6,7 @@ import { OrdersSkeleton } from "./SkeletonCard";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getPlanDisplayName } from "../utils/planUtils";
 import {
   fetchAllSubscriptions,
   processSubscriptions,
@@ -182,15 +183,7 @@ export default function Myorders() {
                     key={sub.id}
                     courseName={sub.course?.name || "Unknown Course"}
                     courseCode={sub.course?.courseCode?.[0] || "N/A"}
-                    planType={
-                      sub.plan === "PRO"
-                        ? "Pro Plan"
-                        : sub.plan === "BASIC"
-                        ? "Basic Plan"
-                        : sub.plan === "FREE"
-                        ? "Free Plan"
-                        : sub.plan
-                    }
+                    planType={getPlanDisplayName(sub.plan)}
                     purchaseDate={formatDate(sub.purchaseDate)}
                     expiryDate={formatDate(sub.expiryDate)}
                     branchNames={sub.course?.branchNames || []}
@@ -227,15 +220,7 @@ export default function Myorders() {
                       key={sub.id}
                       courseName={sub.course.name}
                       courseCode={sub.course.courseCode?.[0] || "N/A"}
-                      planType={
-                        sub.plan === "PRO"
-                          ? "Pro Plan"
-                          : sub.plan === "BASIC"
-                            ? "Basic Plan"
-                            : sub.plan === "FREE"
-                              ? "Free Plan"
-                              : sub.plan
-                      }
+                      planType={getPlanDisplayName(sub.plan)}
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
                       isCancelled={false}
@@ -272,13 +257,7 @@ export default function Myorders() {
                       key={sub.id}
                       courseName={sub.course.name}
                       courseCode={sub.course.courseCode?.[0] || "N/A"}
-                      planType={
-                        sub.plan === "PRO"
-                          ? "Pro Plan"
-                          : sub.plan === "BASIC"
-                            ? "Basic Plan"
-                            : sub.plan
-                      }
+                      planType={getPlanDisplayName(sub.plan)}
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
                       isCancelled={true}

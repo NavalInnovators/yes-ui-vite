@@ -1,3 +1,5 @@
+import { isPro, getPlanDisplayName } from "../utils/planUtils";
+
 export default function Mycart_purchased_course_card({
   title,
   courseCode,
@@ -7,10 +9,7 @@ export default function Mycart_purchased_course_card({
   onRemove,
   onUpgrade,
 }) {
-  const isPro =
-    plan === "PRO" ||
-    plan === "Pro Plan" ||
-    plan?.toLowerCase().includes("pro");
+  const isProPlan = isPro(plan);
 
   return (
     <div className="w-full bg-[#fafafa] rounded-2xl p-4 flex flex-col justify-between border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
@@ -51,22 +50,21 @@ export default function Mycart_purchased_course_card({
       <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-100">
         <div className="flex flex-col gap-0.5">
           <span
-            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider w-fit ${isPro
+            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider w-fit ${isProPlan
               ? "bg-purple-100 text-purple-700 border border-purple-200"
               : "bg-blue-100 text-blue-700 border border-blue-200"
               }`}
           >
-            {plan?.includes("Plan")
-              ? plan
-              : `${plan === "BASIC" ? "Basic" : plan === "PRO" ? "Pro" : plan} Plan`}
+            {getPlanDisplayName(plan)}
           </span>
           <span className="text-xl font-extrabold text-gray-900">₹{price}</span>
         </div>
 
-        {!isPro && (
+        {!isProPlan && (
           <button
             onClick={onUpgrade}
-            className="px-6 py-2.5 bg-zinc-900 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-sm hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+            className="px-6 py-2.5 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-sm hover:opacity-90 hover:shadow-lg active:scale-95 cursor-pointer border border-purple-300"
+            style={{background: 'linear-gradient(270deg,#feac2f,#9b32ad,#381ab2)'}}
           >
             Upgrade to Pro
           </button>

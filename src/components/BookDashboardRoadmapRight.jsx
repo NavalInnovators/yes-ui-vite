@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import "./BookDashboardMap.css";
 import "./BookDashboardRightSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
-import { generateRoadmapFromSyllabus, convertApiRoadmapToInternal } from "../utils/roadmapUtils";
+import { convertApiRoadmapToInternal } from "../utils/roadmapUtils";
 import { getRoadmap } from "../api/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -30,21 +30,14 @@ export default function BookDashboardRoadmapRight({ data }) {
         staleTime: 5 * 60 * 1000,
     });
 
-    // Generate roadmap data with priority: API > Syllabus > Window > Demo
+    // Generate roadmap
     const roadmapData = useMemo(() => {
-        // Priority 1: Use API roadmap if available
         if (apiRoadmap && !roadmapError) {
             return convertApiRoadmapToInternal(apiRoadmap);
         }
         
-        // Priority 2: Generate from syllabus
-        if (syllabus && !syllabusLoading && !syllabusError) {
-            return generateRoadmapFromSyllabus(syllabus);
-        }
-        
-        // Priority 3: Use window data or provided data
-        return data || window.__YES_ROADMAP__ || { units: [] };
-    }, [apiRoadmap, roadmapError, syllabus, syllabusLoading, syllabusError, data]);
+        return data || { units: [] };
+    }, [apiRoadmap, roadmapError, data]);
 
     const units = roadmapData?.units || [];
 

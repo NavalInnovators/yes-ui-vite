@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getMyCourses } from "../api/api";
+import { ensureSubscriptionsLoaded } from "../utils/subscriptionUtils";
 
 export const getBookDetails = (allCoursesData) => {
   if (!allCoursesData || allCoursesData.length === 0) return {};
@@ -24,10 +25,13 @@ export const useMyCourses = () => {
   const token = localStorage.getItem("token");
   
   return useQuery({
-    queryKey: ["myCourses"],
+    queryKey: ["myCourses", "subscriptions"],
     queryFn: async () => {
-      // Fetching my courses from server only
-      const coursesData = await getMyCourses();
+      // Load both courses and subscriptions
+      const [coursesData] = await Promise.all([
+        getMyCourses(),
+        ensureSubscriptionsLoaded()
+      ]);
 
       // Update local cache for API calls (keep for getUserContext, etc.)
       localStorage.setItem("myCourses", JSON.stringify(coursesData));

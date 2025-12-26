@@ -48,7 +48,8 @@ export default function Mycart_suggested_courses_card({
         {hasBasic ? (
           <button
             onClick={() => handleAddToCart("PRO")}
-            className="w-full py-2.5 bg-zinc-900 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-sm hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+            className="w-full py-2.5 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-sm hover:opacity-90 hover:shadow-lg active:scale-95 cursor-pointer border border-purple-300"
+           style={{background: 'linear-gradient(270deg,#feac2f,#9b32ad,#381ab2)'}}
           >
             Upgrade to Pro
           </button>
@@ -62,7 +63,8 @@ export default function Mycart_suggested_courses_card({
             </button>
             <button
               onClick={() => handleAddToCart("PRO")}
-              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-zinc-900 text-white hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 text-white hover:opacity-90 hover:shadow-lg active:scale-95 cursor-pointer"
+              style={{background: 'linear-gradient(270deg,#feac2f 0%,#9b32ad 33.48%,#381ab2 71.46%,#17082c 140.19%)'}}
             >
               Buy Pro
             </button>

@@ -10,6 +10,7 @@ import { useMyCourses, getBookDetails } from "./sharedQuery";
 import { useCart } from "../context/CartContext";
 import AllSubjects_CourseCard from "./AllSubjects_CourseCard";
 import OrderSummary from "./Mycart_ordersummary";
+import { isBasic } from "../utils/planUtils";
 
 const AllSubjects = ({ searchQuery, onSearch }) => {
   const queryClient = useQueryClient();
@@ -37,26 +38,26 @@ const AllSubjects = ({ searchQuery, onSearch }) => {
   // calling myCourses from shared query - only when logged in
   const { data: myCourses = [] } = useMyCourses();
 
-  // Fetch available coupons
+  // Fetch available coupons only when there are items in cart
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
         const profileId = localStorage.getItem("profileId");
-        if (!profileId) return;
+        if (!profileId || cart.length === 0) {
+          setAvailableCoupons([]);
+          return;
+        }
 
         const coupons = await getCoupons(profileId);
         setAvailableCoupons(coupons || []);
       } catch (error) {
         console.error("Failed to fetch coupons:", error);
+        setAvailableCoupons([]);
       }
     };
 
-    // Only fetch coupons if user is logged in
-    const profileId = localStorage.getItem("profileId");
-    if (profileId) {
-      fetchCoupons();
-    }
-  }, []);
+    fetchCoupons();
+  }, [cart.length]);
 
   // Filter the courses based on the search query
   const categories = useMemo(() => {
@@ -171,7 +172,7 @@ const AllSubjects = ({ searchQuery, onSearch }) => {
 
       toast.dismiss();
       toast.success("Successfully enrolled in the course!");
-      navigate("/my-subjects");
+      navigate(`/book-dashboard?subcode=${enrolledCourse.courseCodes[0]}`);
 
       queryClient.invalidateQueries(["myCourses"]);
     },
@@ -225,69 +226,22 @@ const AllSubjects = ({ searchQuery, onSearch }) => {
       // Use actual price from backend
       subtotal += c.price || 0;
 
-      if (c.plan === "BASIC") {
+      if (isBasic(c.plan)) {
         allPro = false;
         hasBasic = true;
       }
     });
 
     let discount = 0;
-
     const total = subtotal - discount;
 
     return { subtotal, discount, total, allPro, hasBasic };
   }, [cart]);
 
-  // Calculate best available coupon
-  const bestCoupon = useMemo(() => {
-    if (availableCoupons.length === 0 || cart.length === 0) return null;
-
-    const subtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
-
-    let maxDiscount = 0;
-    let bestCouponOption = null;
-
-    availableCoupons.forEach((coupon) => {
-      // Skip if not applicable
-      if (!coupon.applicable) return;
-
-      // Check if requirements are met
-      if (coupon.minCourseSelection && cart.length < coupon.minCourseSelection)
-        return;
-      if (coupon.activationAmount && subtotal < coupon.activationAmount) return;
-
-      let potentialDiscount = 0;
-
-      if (coupon.discountType === "PERCENTAGE") {
-        potentialDiscount = (subtotal * coupon.discountValue) / 100;
-        if (
-          coupon.maxDiscountAmount &&
-          potentialDiscount > coupon.maxDiscountAmount
-        ) {
-          potentialDiscount = coupon.maxDiscountAmount;
-        }
-      } else if (
-        coupon.discountType === "FIXED" ||
-        coupon.discountType === "FIXED_AMOUNT"
-      ) {
-        potentialDiscount = coupon.discountValue / 100; // Convert paise to rupees
-      }
-
-      if (potentialDiscount > maxDiscount) {
-        maxDiscount = potentialDiscount;
-        bestCouponOption = {
-          ...coupon,
-          calculatedDiscount: potentialDiscount,
-        };
-      }
-    });
-
-    return bestCouponOption;
-  }, [cart, availableCoupons]);
 
   const upgradeAllToPro = () => {
     cart.forEach((item) => {
-      if (item.plan === "BASIC") {
+      if (isBasic(item.plan)) {
         updateCartItem(item.id, { plan: "PRO", price: 150 });
       }
     });
@@ -344,18 +298,12 @@ const AllSubjects = ({ searchQuery, onSearch }) => {
               onRemoveFromCart={(id) => removeFromCart(id, { source: "order_summary" })}
               onUpgradeAllToPro={upgradeAllToPro}
               onShowCouponPopup={() => navigate("/mycart")}
-              appliedCoupon={appliedCoupon || bestCoupon}
+              appliedCoupon={null}
+              availableCouponsCount={availableCoupons.length}
               onRemoveCoupon={() => setAppliedCoupon(null)}
               couponCode={couponCode}
               onCouponCodeChange={setCouponCode}
-              onApplyCoupon={() => {
-                if (bestCoupon && couponCode === bestCoupon.couponCode) {
-                  setAppliedCoupon(bestCoupon);
-                  toast.success("Coupon applied!");
-                } else {
-                  toast.error("Invalid coupon code");
-                }
-              }}
+              onApplyCoupon={() => navigate("/mycart")}
               onCheckout={() => navigate("/mycart")}
               showCouponInput={false}
               checkoutButtonText="Proceed to Cart"

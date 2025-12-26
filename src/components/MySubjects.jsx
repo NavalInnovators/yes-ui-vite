@@ -4,16 +4,16 @@ import SearchAndFilterBar from "./SearchAndFilterBar";
 import { SkeletonGrid } from "./SkeletonCard";
 import { useMyCourses } from "./sharedQuery";
 import { useState } from "react";
-import { useSubscriptions } from "../hooks/useSubscriptions";
+import { getUserPlanForCourse } from "../utils/subscriptionUtils";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
+import { isPro, isBasic, isFree } from "../utils/planUtils";
 
 function MySubjects({ searchQuery, onSearch }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { data: myCourses, isLoading, isError } = useMyCourses();
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { getPlanForCourse, isLoading: subscriptionsLoading } = useSubscriptions();
 
   // Handle upgrade functionality
   const handleUpgrade = async (course, plan) => {
@@ -117,7 +117,7 @@ function MySubjects({ searchQuery, onSearch }) {
       <div className="dashboard-main-content">
         {/* Courses Grid */}
         <div className="courses-grid full-width">
-          {isLoading || subscriptionsLoading ? (
+          {isLoading ? (
             <SkeletonGrid count={8} />
           ) : isError ? (
             <div className="error-message">Error loading your courses. Please try again!</div>
@@ -125,10 +125,10 @@ function MySubjects({ searchQuery, onSearch }) {
             <div className="no-courses-message">No courses found.</div>
           ) : (
             filteredSubjects.map((subject, index) => {
-              const plan = getPlanForCourse(subject.courseCodes[0]);
-              const isPro = plan === "PRO" || plan === "Pro Plan";
-              const isBasic = plan === "BASIC" || plan === "Basic Plan";
-              const isFree = !isPro && !isBasic;
+              const plan = getUserPlanForCourse(subject.courseCodes[0]);
+              const isProPlan = isPro(plan);
+              const isBasicPlan = isBasic(plan);
+              const isFreePlan = isFree(plan);
 
               return (
                 <div
@@ -145,14 +145,14 @@ function MySubjects({ searchQuery, onSearch }) {
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                       <span
-                        className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+                        className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isProPlan
                           ? "bg-purple-100 text-purple-700 border border-purple-200"
-                          : isBasic
+                          : isBasicPlan
                             ? "bg-blue-100 text-blue-700 border border-blue-200"
                             : "bg-gray-100 text-gray-700 border border-gray-200"
                           }`}
                       >
-                        {isPro ? "Pro Plan" : isBasic ? "Basic Plan" : "Free Plan"}
+                        {isProPlan ? "Pro Plan" : isBasicPlan ? "Basic Plan" : "Free Plan"}
                       </span>
                     </div>
 
@@ -201,13 +201,14 @@ function MySubjects({ searchQuery, onSearch }) {
                         </button>
                       )}
                       
-                      {!isPro && (
+                      {!isProPlan && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleUpgrade(subject, "PRO");
                           }}
-                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-zinc-900 text-white hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 text-white hover:opacity-90 hover:shadow-lg active:scale-95 cursor-pointer border border-purple-300"
+                          style={{background: 'linear-gradient(270deg,#feac2f,#9b32ad,#381ab2)'}}
                         >
                           Get Pro
                         </button>

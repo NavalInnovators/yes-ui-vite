@@ -1,3 +1,5 @@
+import { normalizePlanForDisplay, getPlanColorClass } from "../utils/planUtils";
+
 export default function OrderSummary({
   cart,
   pricing,
@@ -5,6 +7,7 @@ export default function OrderSummary({
   onUpgradeAllToPro,
   onShowCouponPopup,
   appliedCoupon,
+  availableCouponsCount = 0,
   onRemoveCoupon,
   couponCode,
   onCouponCodeChange,
@@ -29,9 +32,8 @@ export default function OrderSummary({
       {/* Cart Items Scroll Area */}
       <div className="flex-1 overflow-y-auto pr-1 mb-6 space-y-4 custom-scrollbar">
         {cart.map((item) => {
-          const displayPlan = item.plan?.toLowerCase().includes("plan")
-            ? item.plan
-            : `${item.plan} Plan`;
+          const displayPlan = normalizePlanForDisplay(item.plan);
+          const planColorClass = getPlanColorClass(item.plan);
 
           return (
             <div
@@ -43,12 +45,7 @@ export default function OrderSummary({
                   {item.name}
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className={`text-[11px] font-bold uppercase tracking-tight px-2 py-0.5 rounded-lg ${displayPlan.toUpperCase().includes("PRO")
-                    ? "bg-purple-100 text-purple-700"
-                    : displayPlan.toUpperCase().includes("BASIC")
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-gray-100 text-gray-700"
-                    }`}>
+                  <span className={`text-[11px] font-bold uppercase tracking-tight px-2 py-0.5 rounded-lg ${planColorClass}`}>
                     {displayPlan}
                   </span>
                   <span className="text-sm font-bold text-gray-900">
@@ -72,23 +69,23 @@ export default function OrderSummary({
       {/* Coupon Section */}
       <div className="mb-8">
         {!showCouponInput ? (
-          // Highlight Mode (For All Subjects / Browsing)
-          appliedCoupon && (
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-5 shadow-sm">
+          // AllSubjects 
+          availableCouponsCount > 0 ? (
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 shadow-sm">
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-xl">🎉</span>
-                <span className="bg-green-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">
-                  Best Offer
+                <span className="text-xl">🎫</span>
+                <span className="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                  {availableCouponsCount} Coupon{availableCouponsCount > 1 ? 's' : ''} Available
                 </span>
               </div>
-              <div className="font-black text-green-900 text-sm mb-1 tracking-tight">
-                Save ₹{appliedCoupon.calculatedDiscount?.toFixed(0) || appliedCoupon.discountValue} instantly!
+              <div className="font-black text-blue-900 text-sm mb-1 tracking-tight">
+                Save money with available coupons!
               </div>
-              <div className="text-[11px] text-green-700 font-bold uppercase tracking-widest leading-none">
-                Use code <span className="text-green-900 underline decoration-2">{appliedCoupon.couponCode}</span> at checkout
+              <div className="text-[11px] text-blue-700 font-bold uppercase tracking-widest leading-none">
+                Go to cart to apply coupons and save more
               </div>
             </div>
-          )
+          ) : null
         ) : appliedCoupon ? (
           // Applied Mode (Manual / Cart)
           <div className="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center justify-between shadow-sm">
