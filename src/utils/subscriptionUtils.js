@@ -126,9 +126,8 @@ export const processSubscriptions = (subscriptions) => {
   return {
     active: valid.filter((sub) => sub.status?.toUpperCase() === "ACTIVE"),
     expired: valid.filter((sub) => sub.status?.toUpperCase() === "EXPIRED"),
-    cancelled: valid.filter((sub) =>
-      sub.status?.toUpperCase() === "CANCELLED" ||
-      ["ACTIVE", "EXPIRED"].indexOf(sub.status?.toUpperCase()) === -1
+    cancelled: valid.filter((sub) => 
+      sub.status?.toUpperCase() === "CANCELLED"
     ),
   };
 };

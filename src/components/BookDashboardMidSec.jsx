@@ -15,6 +15,7 @@ import { summarizeAnswer, rephraseAnswer } from "../api/api";
 import { type } from "@testing-library/user-event/dist/type";
 import FilterIcon from "../roles/components/icons/FilterIcon";
 import { Crown } from "lucide-react";
+import { isPro, isBasic } from "../utils/planUtils";
 import {
   trackRephraserUsed,
   trackSummariserUsed,
@@ -62,7 +63,7 @@ function BookDashboardMidSec({
   // Usage counter component
   const UsageCounter = ({ feature }) => {
     const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
-    const hasPaidPlan = userPlan === "BASIC" || userPlan === "PRO" || userPlan === "Basic" || userPlan === "Pro";
+    const hasPaidPlan = isPro(userPlan) || isBasic(userPlan);
 
     // If user has any paid plan, don't show counters
     if (hasPaidPlan) {

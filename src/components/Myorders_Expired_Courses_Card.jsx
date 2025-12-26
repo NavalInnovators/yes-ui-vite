@@ -1,3 +1,5 @@
+import { isPro, isBasic } from "../utils/planUtils";
+
 export default function Expired_Courses_Card({
   courseName,
   courseCode,
@@ -9,8 +11,8 @@ export default function Expired_Courses_Card({
   branchNames,
 }) {
 
-  const isPro = planType === "Pro Plan";
-  const isBasic = planType === "Basic Plan";
+  const isProPlan = isPro(planType);
+  const isBasicPlan = isBasic(planType);
 
   return (
     <div
@@ -20,9 +22,9 @@ export default function Expired_Courses_Card({
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex gap-2">
             <span
-              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isProPlan
                 ? "bg-purple-100 text-purple-700 border border-purple-200"
-                : isBasic
+                : isBasicPlan
                   ? "bg-blue-100 text-blue-700 border border-blue-200"
                   : "bg-gray-100 text-gray-700 border border-gray-200"
                 }`}

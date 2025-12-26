@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { isPro, isBasic } from "../utils/planUtils";
 
 export default function Active_Courses_Card({
   courseName,
@@ -14,8 +15,8 @@ export default function Active_Courses_Card({
 }) {
   const navigate = useNavigate();
 
-  const isPro = planType === "Pro Plan";
-  const isBasic = planType === "Basic Plan";
+  const isProPlan = isPro(planType);
+  const isBasicPlan = isBasic(planType);
 
   const handleCardClick = () => {
     if (courseCode && courseCode !== "N/A") {
@@ -31,9 +32,9 @@ export default function Active_Courses_Card({
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <span
-            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isPro
+            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isProPlan
               ? "bg-purple-100 text-purple-700 border border-purple-200"
-              : isBasic
+              : isBasicPlan
                 ? "bg-blue-100 text-blue-700 border border-blue-200"
                 : "bg-gray-100 text-gray-700 border border-gray-200"
               }`}
@@ -104,7 +105,8 @@ export default function Active_Courses_Card({
                 e.stopPropagation();
                 onUpgradePro();
               }}
-              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 bg-zinc-900 text-white hover:bg-black hover:shadow-lg active:scale-95 cursor-pointer"
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 text-white hover:opacity-90 hover:shadow-lg active:scale-95 cursor-pointer border border-purple-300"
+              style={{background: 'linear-gradient(270deg,#feac2f,#9b32ad,#381ab2)'}}
             >
               Get Pro
             </button>

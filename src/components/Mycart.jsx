@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { trackCartEvent, getISTISOString } from "../utils/analytics";
 import { useQueryClient } from "@tanstack/react-query";
+import { isBasic, isPro } from "../utils/planUtils";
 import {
     getCoupons,
     applyCoupon,
@@ -30,6 +31,7 @@ export default function Mycart() {
     setCart,
     reloadSubscriptions,
     isLoadingCart,
+    isAddingToCart,
   } = useCart();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -142,14 +144,9 @@ export default function Mycart() {
 
   const upgradeToPro = async (id) => {
     const item = cart.find((item) => item.id === id);
-    // Handle both formats: "BASIC" and "Basic Plan"
-    const isBasic =
-      item &&
-      (item.plan === "BASIC" ||
-        item.plan === "Basic Plan" ||
-        item.plan?.toLowerCase().includes("basic"));
+    const itemIsBasic = isBasic(item?.plan);
 
-    if (isBasic) {
+    if (itemIsBasic) {
       try {
         // Remove BASIC item
         await removeFromCart(id, { source: "upgrade" });
@@ -456,13 +453,7 @@ export default function Mycart() {
       // Use actual price from backend
       subtotal += c.price || 0;
 
-      // Handle both formats: "BASIC" and "Basic Plan"
-      const isBasic =
-        c.plan === "BASIC" ||
-        c.plan === "Basic Plan" ||
-        c.plan?.toLowerCase().includes("basic");
-
-      if (isBasic) {
+      if (isBasic(c.plan)) {
         allPro = false;
         hasBasic = true;
       }
@@ -555,13 +546,7 @@ export default function Mycart() {
   }, [cart, availableCoupons, appliedCoupon]);
 
   const upgradeAllToPro = async () => {
-    // Handle both formats: "BASIC" and "Basic Plan"
-    const basicItems = cart.filter(
-      (item) =>
-        item.plan === "BASIC" ||
-        item.plan === "Basic Plan" ||
-        item.plan?.toLowerCase().includes("basic"),
-    );
+    const basicItems = cart.filter((item) => isBasic(item.plan));
 
     for (const item of basicItems) {
       try {
@@ -599,7 +584,7 @@ export default function Mycart() {
       </GradientDiv>
 
       {/* Main content */}
-      {isLoadingCart ? (
+      {isLoadingCart || isAddingToCart ? (
         <CartContentSkeleton />
       ) : cart.length === 0 ? (
         // Empty cart state

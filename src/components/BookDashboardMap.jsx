@@ -3,11 +3,12 @@ import "./BookDashboardMap.css";
 import { useNavigate } from "react-router-dom";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import { useBookDashboard } from "../context/book-dashboard-context";
-import { generateRoadmapFromSyllabus, convertApiRoadmapToInternal } from "../utils/roadmapUtils";
-import { getRoadmap } from "../api/api";
+import { convertApiRoadmapToInternal } from "../utils/roadmapUtils";
+import { getRoadmap, submitRoadmapInput, generateRoadmap } from "../api/api";
 import { useQuery } from "@tanstack/react-query";
 import BookDashboardRoadmapInput from "./BookDashboardRoadmapInput";
 import { Calendar, Clock } from "lucide-react";
+import { toast } from "react-toastify";
 
 // Demo data - commented out, using API and syllabus data instead
 // const DEMO = {
@@ -123,9 +124,10 @@ export default function BookDashboardMap({
   handleSectionChange,
 }) {
   const navigate = useNavigate();
-  const { syllabus, syllabusLoading, syllabusError, selectedUnit, setSelectedUnit, subCode } = useBookDashboard();
+  const { syllabus, syllabusLoading, syllabusError, selectedUnit, setSelectedUnit, subCode, setSelectedQnATopic, setSelectedTopic } = useBookDashboard();
   const profileId = localStorage.getItem("profileId");
   const [showInput, setShowInput] = useState(false);
+  const [isProcessingSkip, setIsProcessingSkip] = useState(false);
 
   // Fetch personalized roadmap from API
   const { 
@@ -141,21 +143,15 @@ export default function BookDashboardMap({
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // Generate roadmap data with priority: API > Syllabus > Empty
+  // Generate roadmap
   const roadmapData = useMemo(() => {
-    // Priority 1: Use API roadmap if available
     if (apiRoadmap && !roadmapError) {
       return convertApiRoadmapToInternal(apiRoadmap);
     }
     
-    // Priority 2: Generate from syllabus
-    if (syllabus && !syllabusLoading && !syllabusError) {
-      return generateRoadmapFromSyllabus(syllabus);
-    }
-    
-    // Priority 3: Use provided data or empty
+    // Use provided data or empty
     return data || { units: [] };
-  }, [apiRoadmap, roadmapError, syllabus, syllabusLoading, syllabusError, data]);
+  }, [apiRoadmap, roadmapError, data]);
 
   // Show input form if no API roadmap exists and user hasn't dismissed it
   useEffect(() => {
@@ -169,30 +165,84 @@ export default function BookDashboardMap({
     refetchRoadmap();
   };
 
+  const handleSkipAndUseDefault = async () => {
+    try {
+      setIsProcessingSkip(true);
+      
+      // Submit default values
+      const defaultData = {
+        profileId,
+        subCode,
+        daysToExam: 30,
+        dailyStudyHours: 2,
+        confidence: [3, 3, 3, 3, 3],
+      };
+
+      await submitRoadmapInput(profileId, subCode, defaultData);
+      await generateRoadmap(profileId, subCode);
+      
+      setShowInput(false);
+      refetchRoadmap();
+      toast.success("Default roadmap created successfully!");
+    } catch (error) {
+      console.error("Failed to create default roadmap:", error);
+      toast.error("Failed to create default roadmap. Please try again or contact support.");
+    } finally {
+      setIsProcessingSkip(false);
+    }
+  };
+
   // default nav handlers if not provided
   const handleOpenQnA = (topic) => {
     if (onOpenQnA) return onOpenQnA(topic);
-    // Navigate to Q&A section with topic filter applied
-    navigate("/book-dashboard?qna=1", { 
-      state: { 
-        topicId: topic.id, 
-        topicName: topic.name,
-        unitId: topic.unitId,
-        filterByTopic: true
-      } 
-    });
+    
+    // Switch to Q&A tab
+    if (handleSectionChange) {
+      if (topic && topic.unitId && setSelectedUnit) {
+        setSelectedUnit(topic.unitId.toString());
+      }
+      
+      if (topic && setSelectedQnATopic) {
+        setSelectedQnATopic(topic.name);
+      }
+      
+      handleSectionChange("Q&A");
+    } else {
+      navigate("/book-dashboard?qna=1", { 
+        state: { 
+          topicId: topic.id, 
+          topicName: topic.name,
+          unitId: topic.unitId,
+          filterByTopic: true
+        } 
+      });
+    }
   };
+  
   const handleOpenNotes = (topic) => {
     if (onOpenNotes) return onOpenNotes(topic);
-    // Navigate to Notes section with topic filter applied
-    navigate("/book-dashboard?notes=1", { 
-      state: { 
-        topicId: topic.id, 
-        topicName: topic.name,
-        unitId: topic.unitId,
-        filterByTopic: true
-      } 
-    });
+    
+    // Switch to Notes tab
+    if (handleSectionChange) {
+      if (topic && topic.unitId && setSelectedUnit) {
+        setSelectedUnit(topic.unitId.toString());
+      }
+      
+      if (topic) {
+        sessionStorage.setItem("filterByTopic", topic.name);
+      }
+      
+      handleSectionChange("Notes");
+    } else {
+      navigate("/book-dashboard?notes=1", { 
+        state: { 
+          topicId: topic.id, 
+          topicName: topic.name,
+          unitId: topic.unitId,
+          filterByTopic: true
+        } 
+      });
+    }
   };
 
   // selected unit (kept in sync with parent if provided)
@@ -275,17 +325,18 @@ export default function BookDashboardMap({
               />
               <div style={{ textAlign: 'center', marginTop: '1rem' }}>
                 <button 
-                  onClick={() => setShowInput(false)}
+                  onClick={handleSkipAndUseDefault}
+                  disabled={isProcessingSkip}
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: '#666',
+                    color: isProcessingSkip ? '#ccc' : '#666',
                     textDecoration: 'underline',
-                    cursor: 'pointer',
+                    cursor: isProcessingSkip ? 'not-allowed' : 'pointer',
                     fontSize: '0.9rem'
                   }}
                 >
-                  Skip and use default roadmap
+                  {isProcessingSkip ? 'Creating default roadmap...' : 'Skip and use default roadmap'}
                 </button>
               </div>
             </div>

@@ -28,6 +28,7 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [isLoadingCart, setIsLoadingCart] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
 
   // Helper function to get all courses from storage
@@ -152,6 +153,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
 
+      setIsAddingToCart(true);
       const planId = plan;
 
       await addToCartAPI(profileId, planId, course.id);
@@ -192,6 +194,8 @@ export const CartProvider = ({ children }) => {
       }
       console.groupEnd();
       toast.error(error.message || "Failed to add item to cart");
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
@@ -349,7 +353,8 @@ export const CartProvider = ({ children }) => {
       const planMap = {
         "FREE": "Free",
         "BASIC": "Basic", 
-        "PRO": "Pro"
+        "PRO": "Pro",
+        "UPGRADED_PRO": "Pro"
       };
       return planMap[apiSubscription.plan] || apiSubscription.plan;
     }
@@ -540,6 +545,7 @@ export const CartProvider = ({ children }) => {
     checkLifetimeLimit,
     getRemainingUsage,
     isLoadingCart,
+    isAddingToCart,
     reloadSubscriptions,
     subscriptions,
   };

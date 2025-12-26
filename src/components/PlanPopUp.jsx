@@ -121,9 +121,10 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
                 addedAt,
             });
         }
-        navigate("/mycart");
+        
         emitPopupClosed("plan_selected", "added_to_cart", false);
         onClose();
+        navigate("/mycart");
     };
 
     return (
@@ -135,7 +136,7 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
         >
             <div className="bg-white rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-xl">
                 <div className="relative px-6 py-4" style={{
-                    background: 'linear-gradient(90deg, #17082c, #381ab2, #9b32ad, #feac2f)'
+                    background: 'linear-gradient(270deg,#feac2f 0%,#9b32ad 33.48%,#381ab2 71.46%,#17082c 140.19%)'
                 }}>
                     <button 
                         onClick={handleClose}
