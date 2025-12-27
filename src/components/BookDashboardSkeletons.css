@@ -1,0 +1,60 @@
+/* Skeleton Loading Animations */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Skeleton specific styles */
+.skeleton-container {
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+}
+
+.skeleton-text {
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+}
+
+.skeleton-circle {
+  background-color: #e5e7eb;
+  border-radius: 50%;
+}
+
+.skeleton-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* Responsive skeleton adjustments */
+@media (max-width: 768px) {
+  .skeleton-card {
+    padding: 0.75rem;
+  }
+}
+
+/* Ensure skeletons maintain proper spacing */
+.skeleton-space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.skeleton-space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+
+.skeleton-space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.skeleton-space-y-6 > * + * {
+  margin-top: 1.5rem;
+}

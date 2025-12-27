@@ -166,6 +166,14 @@ export default function Myorders() {
       <div className="w-[90%] mx-auto">
         {isLoading ? (
           <OrdersSkeleton />
+        ) : activeSubscriptions.length === 0 && expiredSubscriptions.length === 0 && cancelledSubscriptions.length === 0 ? (
+          <NoData 
+            title="No Orders Found"
+            message="You haven't purchased any courses yet. Browse our courses to get started!"
+            className="py-16"
+            buttonText="Browse Courses"
+            onButtonClick={() => navigate('/all-subjects')}
+          />
         ) : (
           <>
             {/* Active Courses */}
@@ -207,17 +215,11 @@ export default function Myorders() {
             )}
 
             {/* Expired Courses */}
-            <h1 className="text-2xl font-semibold py-8">
-              Expired Courses ({expiredSubscriptions.length})
-            </h1>
-            {expiredSubscriptions.length === 0 ? (
-              <NoData 
-                title="No Expired Courses"
-                message="No expired courses"
-                className="py-8"
-              />
-            ) : (
+            {expiredSubscriptions.length > 0 && (
               <>
+                <h1 className="text-2xl font-semibold py-8">
+                  Expired Courses ({expiredSubscriptions.length})
+                </h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {(showAllExpired ? expiredSubscriptions : expiredSubscriptions.slice(0, 3)).map((sub) => (
                     <Expired_Courses_Card

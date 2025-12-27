@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./BookDashboardRightSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { toBePartiallyChecked } from "@testing-library/jest-dom/matchers";
+import { QnAQuestionsSkeleton } from "./BookDashboardSkeletons";
 
 function removeHtmlTags(text) {
   return text.replace(/<\/?[^>]+(>|$)/g, "");
@@ -13,7 +14,7 @@ function truncateText(text, maxLength = 20) {
 }
 
 function BookDashboardRightSec() {
-  const { qnaLoading, selectedQuestion, setSelectedQuestion, filteredQnAQuestions, selectedQnATopic } = useBookDashboard();
+  const { qnaLoading, qnaError, selectedQuestion, setSelectedQuestion, filteredQnAQuestions, selectedQnATopic } = useBookDashboard();
 
   // Use filtered questions from context
   const questions = filteredQnAQuestions || [];
@@ -29,38 +30,28 @@ function BookDashboardRightSec() {
       {/** Desktop View */}
       <div className="topics-not-dropdown">
         <div className="book-dashboard-topics">
-          {!qnaLoading && (
-            <>
-            <div className="all-topics">All Questions</div>
-            <ol>
-              {questions.map((topic, index) => (
-                <li 
-                className={selectedQuestion === index ? "selected-question" : ""}
-                key={index}
-                onClick={() => setSelectedQuestion(index)}
-                >
-                  {removeHtmlTags(topic.question)}
-                </li>
-              ))}
-            </ol>
-            </>
-          )}
-        </div>
-
-        {/* <div className="book-dashboard-topics">
-
           {qnaLoading ? (
-            <></>
-            // <div>Loading...</div>
+            <QnAQuestionsSkeleton />
+          ) : qnaError ? (
+            <div className="sidebar-error">
+              <p>No questions available</p>
+            </div>
+          ) : questions.length === 0 ? (
+            <div className="sidebar-empty">
+              <p>No questions available</p>
+              {selectedQnATopic !== "All Topics" && (
+                <small>Try selecting "All Topics"</small>
+              )}
+            </div>
           ) : (
             <>
               <div className="all-topics">All Questions</div>
               <ol>
-                {qList[unitIndex]?.map((topic, index) => (
-                  <li
-                    className={selectedQuestion === index ? "selected-question" : ""}
-                    key={index}
-                    onClick={() => setSelectedQuestion(index)}
+                {questions.map((topic, index) => (
+                  <li 
+                  className={selectedQuestion === index ? "selected-question" : ""}
+                  key={index}
+                  onClick={() => setSelectedQuestion(index)}
                   >
                     {removeHtmlTags(topic.question)}
                   </li>
@@ -68,7 +59,7 @@ function BookDashboardRightSec() {
               </ol>
             </>
           )}
-        </div> */}
+        </div>
       </div>
 
       {/** Mobile View */}
@@ -81,7 +72,6 @@ function BookDashboardRightSec() {
             {questions.map((topic, index) => (
               <option key={index} value={index}>
                 Question {index + 1}: {removeHtmlTags(topic.question)}
-                {/* Question {index+1} */}
               </option>
             ))}
           </select>

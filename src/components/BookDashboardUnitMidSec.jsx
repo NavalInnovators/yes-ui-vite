@@ -5,6 +5,8 @@ import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
 import parse from "html-react-parser";
 import { findCourseByCode } from "../utils/courseUtils";
+import { NoData, DataAvailableSoon } from "./EmptyStates";
+import { NotesContentSkeleton } from "./BookDashboardSkeletons";
 
 function BookDashboardUnitMidSec({
   currentSection,
@@ -121,22 +123,34 @@ function BookDashboardUnitMidSec({
           </p>
         </div>
       ) : unitNotesLoading ? (
-        <div>Loading unit notes...</div>
+        <NotesContentSkeleton />
       ) : unitNotesError ? (
-        <div>
-          Error loading unit notes. Please contact support team or raise a
-          query!
-        </div>
+        <NoData 
+          title="Error Loading Notes"
+          message="Error loading unit notes. Please contact support team or raise a query!"
+        />
+      ) : !currentUnitTopics.length ? (
+        <DataAvailableSoon 
+          title="Notes Coming Soon"
+          message="Notes for this unit will be available soon. Check back later!"
+        />
+      ) : !selectedTopicContent ? (
+        <NoData 
+          title="Topic Not Found"
+          message="The selected topic doesn't have any content available yet."
+        />
       ) : unitNotesContent ? (
         <div className="book-dashboard-question-summary-container">
           <div className="book-dashboard-question">
             {selectedTopicContent?.name || "Chapter Topic: Summary"}
           </div>
-          {/* </div> */}
           <div className="book-dashboard-answer">{parse(unitNotesContent)}</div>
         </div>
       ) : (
-        <div>Data will be available soon!</div>
+        <DataAvailableSoon 
+          title="Content Coming Soon"
+          message="This topic's content will be available soon!"
+        />
       )}
     </div>
   );

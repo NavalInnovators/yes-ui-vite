@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import "./BookDashboardRightSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
+import { NotesTopicsSkeleton } from "./BookDashboardSkeletons";
 
 function BookDashboardNotesRightSec() {
   const { 
     unitNotesLoading, 
+    unitNotesError,
     notesTopics, 
     selectedUnit, 
     selectedTopic, 
@@ -25,7 +27,17 @@ function BookDashboardNotesRightSec() {
       {/** Desktop View */}
       <div className="topics-not-dropdown">
         <div className="book-dashboard-topics">
-          {!unitNotesLoading && (
+          {unitNotesLoading ? (
+            <NotesTopicsSkeleton />
+          ) : unitNotesError ? (
+            <div className="sidebar-error">
+              <p>No topics available</p>
+            </div>
+          ) : currentUnitTopics.length === 0 ? (
+            <div className="sidebar-empty">
+              <p>No topics available</p>
+            </div>
+          ) : (
             <>
               <div className="all-topics">All Topics</div>
               <ol>
