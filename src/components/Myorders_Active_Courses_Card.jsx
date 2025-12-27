@@ -33,7 +33,7 @@ export default function Active_Courses_Card({
           >
             {getPlanDisplayName(planType)}
           </span>
-          {onCancel && (
+          {/* {onCancel && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -43,7 +43,7 @@ export default function Active_Courses_Card({
             >
               Cancel
             </button>
-          )}
+          )} */}
         </div>
 
         <div className="text-lg font-bold text-gray-900 leading-snug">
