@@ -745,7 +745,7 @@ function BookDashboardMidSec({
                             </select>
                             <UsageCounter feature="Rephraser" />
                         </div>
-                        <div className="topic-filter-container">
+                        {/* <div className="topic-filter-container">
                             <select
                                 className="book-dashboard-dropdown common-css-dropdown"
                                 value={selectedQnATopic}
@@ -760,7 +760,7 @@ function BookDashboardMidSec({
                                     </option>
                                 ))}
                             </select>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Mobile Filter Button */}
