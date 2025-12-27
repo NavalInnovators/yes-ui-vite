@@ -11,6 +11,7 @@ import { useCart } from "../context/CartContext";
 import AllSubjects_CourseCard from "./AllSubjects_CourseCard";
 import OrderSummary from "./Mycart_ordersummary";
 import { isBasic } from "../utils/planUtils";
+import { NoData } from "./EmptyStates";
 
 const AllSubjects = ({ searchQuery, onSearch }) => {
   const queryClient = useQueryClient();
@@ -273,7 +274,11 @@ const AllSubjects = ({ searchQuery, onSearch }) => {
           ) : isError ? (
             <div className="error-message">Error loading courses. Please try again later.</div>
           ) : filteredCourses.length === 0 ? (
-            <div className="no-courses-message">No courses found.</div>
+            <NoData 
+              title="No Courses Found"
+              message="No courses match your search criteria. Try adjusting your filters or search terms."
+              className="col-span-full"
+            />
           ) : (
             filteredCourses.map((course) => (
               <AllSubjects_CourseCard

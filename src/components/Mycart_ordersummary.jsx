@@ -1,4 +1,4 @@
-import { normalizePlanForDisplay, getPlanColorClass } from "../utils/planUtils";
+import { normalizePlan, getPlanColorClass } from "../utils/planUtils";
 
 export default function OrderSummary({
   cart,
@@ -32,7 +32,7 @@ export default function OrderSummary({
       {/* Cart Items Scroll Area */}
       <div className="flex-1 overflow-y-auto pr-1 mb-6 space-y-4 custom-scrollbar">
         {cart.map((item) => {
-          const displayPlan = normalizePlanForDisplay(item.plan);
+          const displayPlan = normalizePlan(item.plan);
           const planColorClass = getPlanColorClass(item.plan);
 
           return (

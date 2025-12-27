@@ -8,6 +8,7 @@ import { getUserPlanForCourse } from "../utils/subscriptionUtils";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 import { isPro, isBasic, isFree } from "../utils/planUtils";
+import { NoData } from "./EmptyStates";
 
 function MySubjects({ searchQuery, onSearch }) {
   const navigate = useNavigate();
@@ -122,7 +123,11 @@ function MySubjects({ searchQuery, onSearch }) {
           ) : isError ? (
             <div className="error-message">Error loading your courses. Please try again!</div>
           ) : filteredSubjects.length === 0 ? (
-            <div className="no-courses-message">No courses found.</div>
+            <NoData 
+              title="No Courses Found"
+              message="You haven't enrolled in any courses yet. Browse our course catalog to get started!"
+              className="col-span-full"
+            />
           ) : (
             filteredSubjects.map((subject, index) => {
               const plan = getUserPlanForCourse(subject.courseCodes[0]);
@@ -189,7 +194,7 @@ function MySubjects({ searchQuery, onSearch }) {
                   {/* Upgrade Buttons */}
                   <div className="flex flex-col gap-2 mt-4">
                     <div className="flex items-center gap-2">
-                      {isFree && (
+                      {isFreePlan && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

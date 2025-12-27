@@ -134,7 +134,7 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
             aria-modal="true" 
             aria-label="Choose plan"
         >
-            <div className="bg-white rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-xl">
+            <div className="bg-white rounded-xl w-full max-w-2xl h-fit overflow-hidden shadow-xl">
                 <div className="relative px-6 py-4" style={{
                     background: 'linear-gradient(270deg,#feac2f 0%,#9b32ad 33.48%,#381ab2 71.46%,#17082c 140.19%)'
                 }}>
@@ -158,7 +158,7 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
                 </div>
 
 
-                <div className="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
+                <div className="p-6 overflow-y-auto h-fit">
                     <div className="grid md:grid-cols-2 gap-4">
                         {/* Basic Plan */}
                         <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">

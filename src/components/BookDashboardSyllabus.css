@@ -3,6 +3,7 @@
     width: 67%;
     padding-left: 3rem;
     padding-right: 3rem;
+    align-self: flex-start;
 }
 
 .book-dashboard-syllabus-container {

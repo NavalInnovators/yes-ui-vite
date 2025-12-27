@@ -114,7 +114,8 @@ export const CartProvider = ({ children }) => {
 
         const response = await getSubscriptions(profileId, "ACTIVE", {
           page: 0,
-          size: 100
+          size: 100,
+          sort: "purchaseDate,desc"
         });
 
         if (response && response.content && Array.isArray(response.content)) {
@@ -506,7 +507,8 @@ export const CartProvider = ({ children }) => {
       // Fetch ALL subscriptions to see the complete picture
       const response = await getSubscriptions(profileId, "ALL", {
         page: 0,
-        size: 200
+        size: 200,
+        sort: "purchaseDate,desc"
       });
       
       console.log("Reloaded subscriptions after payment:", response);

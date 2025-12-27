@@ -87,6 +87,9 @@ import Avatar07 from "./Avatar07.png";
 import Avatar08 from "./Avatar08.png";
 import Avatar09 from "./Avatar09.png";
 import PaidIcon from "./PaidIcon.png";
+import DataAvailableSoon from "./DataAvailableSoon.gif"
+import PageNotFound from "./PageNotFound.gif"
+import NoData from "./NoData.gif"
 
 export {
   logo,
@@ -176,4 +179,7 @@ export {
   Avatar08,
   Avatar09,
   PaidIcon,
+  DataAvailableSoon as DataAvailableSoonGif,
+  PageNotFound as PageNotFoundGif,
+  NoData as NoDataGif
 };

@@ -1,7 +1,7 @@
 .book-dashboard-right-sec {
   margin-top: 1rem;
   width: 18%;
-  height: calc(100vh - 8rem); /* Account for sticky navbar */
+  height: fit-content; /* Account for sticky navbar */
   position: sticky;
   top: 8rem; /* Distance from top to account for sticky navbar */
   overflow-y: auto;

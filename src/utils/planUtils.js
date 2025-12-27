@@ -1,8 +1,7 @@
 // Utility functions for handling plan names and display
 
-
 // Normalize plan name
-export const normalizePlanForDisplay = (plan) => {
+export const normalizePlan = (plan) => {
   if (!plan) return plan;
   
   const planStr = plan.toString().toUpperCase();
@@ -43,7 +42,7 @@ export const isFree = (plan) => {
 
 // Get plan display name with "Plan" suffix
 export const getPlanDisplayName = (plan) => {
-  const normalized = normalizePlanForDisplay(plan);
+  const normalized = normalizePlan(plan);
   return `${normalized} Plan`;
 };
 

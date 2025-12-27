@@ -6,7 +6,7 @@ import { OrdersSkeleton } from "./SkeletonCard";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getPlanDisplayName } from "../utils/planUtils";
+import { NoData } from "./EmptyStates";
 import {
   fetchAllSubscriptions,
   processSubscriptions,
@@ -166,6 +166,14 @@ export default function Myorders() {
       <div className="w-[90%] mx-auto">
         {isLoading ? (
           <OrdersSkeleton />
+        ) : activeSubscriptions.length === 0 && expiredSubscriptions.length === 0 && cancelledSubscriptions.length === 0 ? (
+          <NoData 
+            title="No Orders Found"
+            message="You haven't purchased any courses yet. Browse our courses to get started!"
+            className="py-16"
+            buttonText="Browse Courses"
+            onButtonClick={() => navigate('/all-subjects')}
+          />
         ) : (
           <>
             {/* Active Courses */}
@@ -173,9 +181,11 @@ export default function Myorders() {
               Active Courses ({activeSubscriptions.length})
             </h1>
             {activeSubscriptions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No active courses. Browse courses to get started!
-              </div>
+              <NoData 
+                title="No Active Courses"
+                message="No active courses. Browse courses to get started!"
+                className="py-8"
+              />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {activeSubscriptions.map((sub) => (
@@ -183,7 +193,7 @@ export default function Myorders() {
                     key={sub.id}
                     courseName={sub.course?.name || "Unknown Course"}
                     courseCode={sub.course?.courseCode?.[0] || "N/A"}
-                    planType={getPlanDisplayName(sub.plan)}
+                    planType={sub.plan}
                     purchaseDate={formatDate(sub.purchaseDate)}
                     expiryDate={formatDate(sub.expiryDate)}
                     branchNames={sub.course?.branchNames || []}
@@ -205,22 +215,18 @@ export default function Myorders() {
             )}
 
             {/* Expired Courses */}
-            <h1 className="text-2xl font-semibold py-8">
-              Expired Courses ({expiredSubscriptions.length})
-            </h1>
-            {expiredSubscriptions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No expired courses
-              </div>
-            ) : (
+            {expiredSubscriptions.length > 0 && (
               <>
+                <h1 className="text-2xl font-semibold py-8">
+                  Expired Courses ({expiredSubscriptions.length})
+                </h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {(showAllExpired ? expiredSubscriptions : expiredSubscriptions.slice(0, 3)).map((sub) => (
                     <Expired_Courses_Card
                       key={sub.id}
                       courseName={sub.course.name}
                       courseCode={sub.course.courseCode?.[0] || "N/A"}
-                      planType={getPlanDisplayName(sub.plan)}
+                      planType={sub.plan}
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
                       isCancelled={false}
@@ -257,7 +263,7 @@ export default function Myorders() {
                       key={sub.id}
                       courseName={sub.course.name}
                       courseCode={sub.course.courseCode?.[0] || "N/A"}
-                      planType={getPlanDisplayName(sub.plan)}
+                      planType={sub.plan}
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
                       isCancelled={true}

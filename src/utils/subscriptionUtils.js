@@ -5,6 +5,7 @@ export const fetchAllSubscriptions = async (profileId) => {
   const response = await getSubscriptions(profileId, "ALL", {
     page: 0,
     size: 200,
+    sort: "purchaseDate,desc"
   });
 
   return response?.content || [];
