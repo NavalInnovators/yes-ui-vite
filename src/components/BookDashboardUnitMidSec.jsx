@@ -1,12 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import BookDashboardNavbar from "./BookDashboardNavbar";
 import "./BookDashboardUnitMidSec.css";
 import { useBookDashboard } from "../context/book-dashboard-context";
 import { useCart } from "../context/CartContext";
-import parse from "html-react-parser";
+
 import { findCourseByCode } from "../utils/courseUtils";
 import { NoData, DataAvailableSoon } from "./EmptyStates";
 import { NotesContentSkeleton } from "./BookDashboardSkeletons";
+
+const ShadowHTMLDisplay = ({ content }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const shadowRoot =
+      containerRef.current.shadowRoot ||
+      containerRef.current.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = content;
+  }, [content]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        // display: "block",
+        // backgroundColor: "white", // Ensure white background like a standard HTML file
+        // color: "black", // Ensure black text
+        // fontFamily: "serif", // Ensure serif font like browser default
+        padding: "1rem", // Add some padding for readability
+      }}
+    />
+  );
+};
 
 function BookDashboardUnitMidSec({
   currentSection,
@@ -125,17 +150,17 @@ function BookDashboardUnitMidSec({
       ) : unitNotesLoading ? (
         <NotesContentSkeleton />
       ) : unitNotesError ? (
-        <NoData 
+        <NoData
           title="Error Loading Notes"
           message="Error loading unit notes. Please contact support team or raise a query!"
         />
       ) : !currentUnitTopics.length ? (
-        <DataAvailableSoon 
+        <DataAvailableSoon
           title="Notes Coming Soon"
           message="Notes for this unit will be available soon. Check back later!"
         />
       ) : !selectedTopicContent ? (
-        <NoData 
+        <NoData
           title="Topic Not Found"
           message="The selected topic doesn't have any content available yet."
         />
@@ -144,10 +169,12 @@ function BookDashboardUnitMidSec({
           <div className="book-dashboard-question">
             {selectedTopicContent?.name || "Chapter Topic: Summary"}
           </div>
-          <div className="book-dashboard-answer">{parse(unitNotesContent)}</div>
+          <div className="book-dashboard-answer" style={{ padding: 0, overflow: 'hidden' }}>
+            <ShadowHTMLDisplay content={unitNotesContent} />
+          </div>
         </div>
       ) : (
-        <DataAvailableSoon 
+        <DataAvailableSoon
           title="Content Coming Soon"
           message="This topic's content will be available soon!"
         />

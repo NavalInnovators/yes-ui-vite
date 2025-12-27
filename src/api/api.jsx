@@ -444,7 +444,7 @@ export const rephraseAnswer = async (q_id, style) => {
     const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
     const response = await api.get(`/api/rephrase?q_id=${q_id}&style=${style}${unitParam}`, config);
 
-    const rephrasedText = response?.data?.data?.rephrased_text || response.data;
+    const rephrasedText = response?.data?.content || response.data;
     return rephrasedText;
   } catch (error) {
     throw new Error(
