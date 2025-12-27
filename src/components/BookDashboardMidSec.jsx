@@ -25,7 +25,122 @@ import { getCourseTrackingMeta } from "../utils/courseUtils";
 import { NoData, DataAvailableSoon } from "./EmptyStates";
 import { QnASkeletonLoader } from "./BookDashboardSkeletons";
 
+
+// --- Mermaid Helpers ---
+
+async function checkMermaidSyntax(code) {
+  try {
+    await mermaid.parse(code);
+    return { valid: true, errors: [] };
+  } catch (err) {
+    return {
+      valid: false,
+      errors: [err.message]
+    };
+  }
+}
+
+function autoFixMermaid(code) {
+  let fixed = code;
+
+  // 1. Fix style on same line as node
+  fixed = fixed.replace(
+    /^(\s*\w+\[.*?\])\s+style\s+(\w+.*)$/gm,
+    (_, node, style) => `${node}\nstyle ${style}`
+  );
+
+  // 2. Fix invalid arrows
+  fixed = fixed.replace(/==>/g, '-->');
+  fixed = fixed.replace(/--->/g, '-->');
+
+  // 3. Add default diagram type if missing
+  if (!/^(flowchart|graph|sequenceDiagram)/.test(fixed.trim())) {
+    fixed = `flowchart LR\n${fixed}`;
+  }
+
+  return fixed;
+}
+
+// --- Shadow HTML Component ---
+
+const ShadowHTMLDisplay = ({ content }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const shadowRoot =
+      containerRef.current.shadowRoot ||
+      containerRef.current.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = content;
+  }, [content]);
+
+  return (
+    <div
+      ref={containerRef}
+    // style={{
+    //   display: "block",
+    // }}
+    />
+  );
+};
+
+// --- Mermaid Component ---
+
+const MermaidRenderer = ({ code }) => {
+  const containerRef = useRef(null);
+  const [finalCode, setFinalCode] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const validateAndFix = async () => {
+      // 1. Check syntax
+      const result = await checkMermaidSyntax(code);
+      if (result.valid) {
+        if (active) setFinalCode(code);
+        return;
+      }
+
+      // 2. Try auto-fix
+      const fixed = autoFixMermaid(code);
+      const fixedResult = await checkMermaidSyntax(fixed);
+
+      if (active) {
+        if (fixedResult.valid) {
+          setFinalCode(fixed);
+        } else {
+          console.error("Mermaid invalid after fix:", fixedResult.errors);
+          setFinalCode(null);
+        }
+      }
+    };
+
+    validateAndFix();
+    return () => { active = false; };
+  }, [code]);
+
+  useEffect(() => {
+    if (finalCode && containerRef.current) {
+      containerRef.current.removeAttribute("data-processed");
+      containerRef.current.innerHTML = finalCode;
+      mermaid.run({
+        nodes: [containerRef.current],
+      }).catch(err => console.error("Mermaid run error:", err));
+    }
+  }, [finalCode]);
+
+  if (!finalCode) return null;
+
+  return (
+    <div
+      className="mermaid"
+      ref={containerRef}
+      data-mermaid-content={finalCode}
+    />
+  );
+};
+
 function BookDashboardMidSec({
+
   currentSection,
   handleSectionChange,
   trackQnAEngagement,
@@ -263,8 +378,8 @@ function BookDashboardMidSec({
   // Rephrasing styles and labels
   const getStyleLabel = (styleNum) => {
     switch (styleNum) {
-      case 1:
-        return "Simple language";
+      // case 1:
+      //   return "Simple language";
       case 2:
         return "Include Analogy";
       case 3:
@@ -499,7 +614,10 @@ function BookDashboardMidSec({
     setRephraseLoading(true);
 
     try {
-      const rephrasedToStore = await rephraseAnswer(questionId, style);
+      let rephrasedToStore = await rephraseAnswer(questionId, style);
+      if (typeof rephrasedToStore === "object" && rephrasedToStore !== null) {
+        rephrasedToStore = rephrasedToStore.content || "";
+      }
 
       saveRephrasedForQuestion(
         subCode,
@@ -682,39 +800,8 @@ function BookDashboardMidSec({
         fontSize: "14px", // Adjust font size
       },
     });
+  }, []);
 
-    if (containerRef.current) {
-      console.log("ContainerRef is: ", containerRef);
-      console.log("ContainerRef.current is: ", containerRef.current);
-      const mermaidElements = containerRef.current.querySelectorAll(".mermaid");
-      console.log("containerRef.current.querySelectorAll", mermaidElements);
-
-      // Clear previous Mermaid content
-      mermaidElements.forEach((element) => {
-        const code = element.getAttribute("data-mermaid-content");
-        element.removeAttribute("data-processed"); // Important: remove old Mermaid tracking
-        element.innerHTML = code || "";
-      });
-
-      if (mermaidElements.length > 0) {
-        console.log("Mermaid elements.length is > 0");
-        // Use setTimeout to ensure DOM is fully settled before initializing Mermaid
-        setTimeout(() => {
-          try {
-            // mermaid.init(undefined, mermaidElements);
-            mermaid.run({
-              nodes: mermaidElements,
-            });
-          } catch (error) {
-            console.error("Some Error rendering Mermaid diagrams:");
-          }
-        }, 100); // Delay of 100ms to ensure the DOM is ready
-      } else {
-        console.log("Mermaid elements.length is not > 0");
-        console.warn("No Mermaid elements found in the content.");
-      }
-    }
-  }, [answer]);
 
   useEffect(() => {
     setPageNumber(1);
@@ -735,6 +822,9 @@ function BookDashboardMidSec({
 
   // Function to process content dynamically
   const renderContent = (rawContent) => {
+    if (typeof rawContent !== "string") {
+      rawContent = rawContent.content;
+    }
     const decodeMermaidCode = (text) => {
       return text
         .replace(/&gt;/g, ">")
@@ -752,8 +842,10 @@ function BookDashboardMidSec({
         .replace(/<\/code>/g, ""); // Remove </code> tag
     };
     let parts = [];
-    parts = rawContent.split(/\\`\\`\\`(mermaid|code)([\s\S]*?)\\`\\`\\`/g);
-    console.log("Parts:", parts);
+    // parts = rawContent.split(/```(mermaid|code)([\s\S]*?)```/g);
+    const regex = /(?:```|\/`\/`\/`)(mermaid|code)([\s\S]*?)(?:```|\/`\/`\/`)/g;
+    parts = rawContent.split(regex);
+    // console.log("Parts:", parts);
 
     return (
       <div className="rendered-content">
@@ -762,24 +854,21 @@ function BookDashboardMidSec({
         {parts.map((part, index) => {
           if (index % 3 === 0) {
             // Regular text content
+            if (!part || !part.trim()) return null;
             return (
-              <span key={index} dangerouslySetInnerHTML={{ __html: part }} />
+              <ShadowHTMLDisplay key={index} content={part} />
             );
-          } else if (parts[index - 1] === "mermaid") {
-            // Mermaid block: Decode and render the mermaid code
+          }
+          else if (parts[index - 1] === "mermaid") {
             const mermaidCode = decodeMermaidCode(part.trim());
-            console.log("replaced mermaid code is:", mermaidCode);
             return (
-              <div
+              <MermaidRenderer
                 key={index}
-                className="mermaid"
-                data-mermaid-content={mermaidCode}
-                // style={{ color: "red" }}
-              >
-                {mermaidCode}
-              </div>
+                code={mermaidCode}
+              />
             );
-          } else if (parts[index - 1] === "code") {
+          }
+          else if (parts[index - 1] === "code") {
             // Code block
             const code = decodeMermaidCode(part.trim());
             return (
@@ -853,7 +942,7 @@ function BookDashboardMidSec({
                 value={selectedStyle}
               >
                 <option value="0">Rephraser</option>
-                <option value="1">Simple language</option>
+                {/* <option value="1">Simple language</option> */}
                 <option value="2">Include Analogy</option>
                 <option value="3">Include Examples</option>
               </select>
@@ -928,8 +1017,8 @@ function BookDashboardMidSec({
                       {showOriginal
                         ? "Answer:"
                         : `Rephrased (${getStyleLabel(
-                            rephrasedList[rephraseIndex].style,
-                          )}):`}
+                          rephrasedList[rephraseIndex].style,
+                        )}):`}
                     </span>
                     <div className="rephrased-actions">
                       {!showOriginal && rephrasedList.length > 1 && (
@@ -1078,9 +1167,8 @@ function BookDashboardMidSec({
             </div>
             <div className="mobile-filter-options">
               <button
-                className={`mobile-filter-option ${
-                  selectedQnATopic === "All Topics" ? "active" : ""
-                }`}
+                className={`mobile-filter-option ${selectedQnATopic === "All Topics" ? "active" : ""
+                  }`}
                 onClick={() => {
                   setSelectedQnATopic("All Topics");
                   setShowMobileFilter(false);
@@ -1091,9 +1179,8 @@ function BookDashboardMidSec({
               {currentUnitTopics.map((topic, index) => (
                 <button
                   key={index}
-                  className={`mobile-filter-option ${
-                    selectedQnATopic === topic ? "active" : ""
-                  }`}
+                  className={`mobile-filter-option ${selectedQnATopic === topic ? "active" : ""
+                    }`}
                   onClick={() => {
                     setSelectedQnATopic(topic);
                     setShowMobileFilter(false);
