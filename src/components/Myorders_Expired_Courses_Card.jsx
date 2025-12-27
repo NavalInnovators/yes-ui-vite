@@ -1,4 +1,4 @@
-import { isPro, isBasic } from "../utils/planUtils";
+import { getPlanColorClass, getPlanDisplayName } from "../utils/planUtils";
 
 export default function Expired_Courses_Card({
   courseName,
@@ -11,9 +11,6 @@ export default function Expired_Courses_Card({
   branchNames,
 }) {
 
-  const isProPlan = isPro(planType);
-  const isBasicPlan = isBasic(planType);
-
   return (
     <div
       className="w-full bg-gray-200 rounded-2xl p-5 flex flex-col justify-between border border-gray-300 transition-all duration-300 relative opacity-75"
@@ -22,14 +19,9 @@ export default function Expired_Courses_Card({
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex gap-2">
             <span
-              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isProPlan
-                ? "bg-purple-100 text-purple-700 border border-purple-200"
-                : isBasicPlan
-                  ? "bg-blue-100 text-blue-700 border border-blue-200"
-                  : "bg-gray-100 text-gray-700 border border-gray-200"
-                }`}
+              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${getPlanColorClass(planType)}`}
             >
-              {planType}
+              {getPlanDisplayName(planType)}
             </span>
 
             <span

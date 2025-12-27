@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { isPro, isBasic } from "../utils/planUtils";
+import { getPlanColorClass, getPlanDisplayName } from "../utils/planUtils";
 
 export default function Active_Courses_Card({
   courseName,
@@ -15,9 +15,6 @@ export default function Active_Courses_Card({
 }) {
   const navigate = useNavigate();
 
-  const isProPlan = isPro(planType);
-  const isBasicPlan = isBasic(planType);
-
   const handleCardClick = () => {
     if (courseCode && courseCode !== "N/A") {
       navigate(`/book-dashboard?subcode=${courseCode}`);
@@ -32,14 +29,9 @@ export default function Active_Courses_Card({
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <span
-            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isProPlan
-              ? "bg-purple-100 text-purple-700 border border-purple-200"
-              : isBasicPlan
-                ? "bg-blue-100 text-blue-700 border border-blue-200"
-                : "bg-gray-100 text-gray-700 border border-gray-200"
-              }`}
+            className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${getPlanColorClass(planType)}`}
           >
-            {planType}
+            {getPlanDisplayName(planType)}
           </span>
           {onCancel && (
             <button

@@ -129,7 +129,8 @@ export const getUserContextAsync = async (overrideCourseCode = null) => {
           const { getSubscriptions } = await import('../api/api');
           const response = await getSubscriptions(profileId, "ACTIVE", {
             page: 0,
-            size: 100
+            size: 100,
+            sort: "purchaseDate,desc"
           });
           
           if (response && response.content && Array.isArray(response.content)) {

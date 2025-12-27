@@ -661,7 +661,11 @@ export const getSubscriptions = async (
 
     if (pageable.page !== undefined) params.append("page", pageable.page);
     if (pageable.size !== undefined) params.append("size", pageable.size);
-    if (pageable.sort) params.append("sort", pageable.sort);
+    if (pageable.sort) {
+      params.append("sort", pageable.sort);
+    } else {
+      params.append("sort", "purchaseDate,desc");
+    }
 
     const response = await api.get(
       `/api/subscriptions/${profileId}/get?${params.toString()}`,

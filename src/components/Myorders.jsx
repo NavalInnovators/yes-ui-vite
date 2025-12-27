@@ -6,7 +6,7 @@ import { OrdersSkeleton } from "./SkeletonCard";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getPlanDisplayName } from "../utils/planUtils";
+import { NoData } from "./EmptyStates";
 import {
   fetchAllSubscriptions,
   processSubscriptions,
@@ -173,9 +173,11 @@ export default function Myorders() {
               Active Courses ({activeSubscriptions.length})
             </h1>
             {activeSubscriptions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No active courses. Browse courses to get started!
-              </div>
+              <NoData 
+                title="No Active Courses"
+                message="No active courses. Browse courses to get started!"
+                className="py-8"
+              />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {activeSubscriptions.map((sub) => (
@@ -183,7 +185,7 @@ export default function Myorders() {
                     key={sub.id}
                     courseName={sub.course?.name || "Unknown Course"}
                     courseCode={sub.course?.courseCode?.[0] || "N/A"}
-                    planType={getPlanDisplayName(sub.plan)}
+                    planType={sub.plan}
                     purchaseDate={formatDate(sub.purchaseDate)}
                     expiryDate={formatDate(sub.expiryDate)}
                     branchNames={sub.course?.branchNames || []}
@@ -209,9 +211,11 @@ export default function Myorders() {
               Expired Courses ({expiredSubscriptions.length})
             </h1>
             {expiredSubscriptions.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No expired courses
-              </div>
+              <NoData 
+                title="No Expired Courses"
+                message="No expired courses"
+                className="py-8"
+              />
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -220,7 +224,7 @@ export default function Myorders() {
                       key={sub.id}
                       courseName={sub.course.name}
                       courseCode={sub.course.courseCode?.[0] || "N/A"}
-                      planType={getPlanDisplayName(sub.plan)}
+                      planType={sub.plan}
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
                       isCancelled={false}
@@ -257,7 +261,7 @@ export default function Myorders() {
                       key={sub.id}
                       courseName={sub.course.name}
                       courseCode={sub.course.courseCode?.[0] || "N/A"}
-                      planType={getPlanDisplayName(sub.plan)}
+                      planType={sub.plan}
                       purchaseDate={formatDate(sub.purchaseDate)}
                       expiryDate={formatDate(sub.expiryDate)}
                       isCancelled={true}
