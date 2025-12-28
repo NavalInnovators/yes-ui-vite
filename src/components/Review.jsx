@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import "./Review.css";
 import React, {
   useState,
@@ -12,7 +13,7 @@ import { trackReviewSubmitted } from "../utils/analytics";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const profileId = localStorage.getItem("profileId");
+const profileId = tokenStorage.getProfileId();
 const Review = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);

@@ -13,6 +13,7 @@ import {
   getSubscriptions,
 } from "../api/api";
 import { toast } from "react-toastify";
+import tokenStorage from "../utils/tokenStorage";
 
 const CartContext = createContext();
 
@@ -75,7 +76,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const loadCart = async () => {
       try {
-        const profileId = localStorage.getItem("profileId");
+        const profileId = tokenStorage.getProfileId();
         if (!profileId) {
           setIsLoadingCart(false);
           return;
@@ -107,8 +108,8 @@ export const CartProvider = ({ children }) => {
     // Load subscriptions from API
     const loadSubscriptions = async () => {
       try {
-        const profileId = localStorage.getItem("profileId");
-        const token = localStorage.getItem("token");
+        const profileId = tokenStorage.getProfileId();
+        const token = tokenStorage.getToken();
 
         if (!profileId || !token) return;
 
@@ -146,8 +147,8 @@ export const CartProvider = ({ children }) => {
     const { source = "unknown", metadata = {} } = options;
 
     try {
-      const profileId = localStorage.getItem("profileId");
-      const token = localStorage.getItem("token");
+      const profileId = tokenStorage.getProfileId();
+      const token = tokenStorage.getToken();
 
       if (!profileId) {
         toast.error("Please login to add items to cart");
@@ -240,7 +241,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      const profileId = localStorage.getItem("profileId");
+      const profileId = tokenStorage.getProfileId();
       if (!profileId) {
         return;
       }
@@ -353,7 +354,7 @@ export const CartProvider = ({ children }) => {
       // Normalize plan names to title case to match featureAccess keys
       const planMap = {
         "FREE": "Free",
-        "BASIC": "Basic", 
+        "BASIC": "Basic",
         "PRO": "Pro",
         "UPGRADED_PRO": "Pro"
       };
@@ -467,13 +468,13 @@ export const CartProvider = ({ children }) => {
     const sameYearCourses = allCourses.filter(
       (course) => {
         const isSameYear = cartYears.includes(course.year);
-        
+
         const isInCart = cartItems.some((cartItem) => cartItem.courseId === course.id);
-        
+
         const hasActiveSubscription = subscriptions.some(
           (sub) => sub.course?.id === course.id && sub.status === "ACTIVE"
         );
-        
+
         return isSameYear && !isInCart && !hasActiveSubscription;
       }
     );
@@ -499,8 +500,8 @@ export const CartProvider = ({ children }) => {
   // Function to reload subscriptions (after payment)
   const reloadSubscriptions = async () => {
     try {
-      const profileId = localStorage.getItem("profileId");
-      const token = localStorage.getItem("token");
+      const profileId = tokenStorage.getProfileId();
+      const token = tokenStorage.getToken();
 
       if (!profileId || !token) return;
 
@@ -510,14 +511,14 @@ export const CartProvider = ({ children }) => {
         size: 200,
         sort: "purchaseDate,desc"
       });
-      
+
       console.log("Reloaded subscriptions after payment:", response);
 
       if (response && response.content && Array.isArray(response.content)) {
         // Store all subscriptions for debugging
         const allSubs = response.content;
         const activeSubs = allSubs.filter(sub => sub.status === 'ACTIVE');
-        
+
         setSubscriptions(activeSubs);
         // Store active subscriptions in localStorage for API access
         localStorage.setItem('userSubscriptions', JSON.stringify(activeSubs));

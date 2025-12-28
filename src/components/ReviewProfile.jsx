@@ -2,6 +2,7 @@ import "./ReviewProfile.css";
 import React, { useState } from 'react';
 import { BackArrow, AttachmentIcon } from "../assets";
 import { useNavigate } from 'react-router-dom';
+import { AlertModal } from '../components/AlertModal';
 
 const ReviewProfile = () => {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ const ReviewProfile = () => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
     const [video, setVideo] = useState(null);
+    const [alertConfig, setAlertConfig] = useState(null);
 
     const handleRatingClick = (star) => {
         setRating(star);
@@ -19,7 +21,11 @@ const ReviewProfile = () => {
         if (file && file.size < 10 * 1024 * 1024) { // Check if file size is under 10MB
             setVideo(file);
         } else {
-            alert('File size should be under 10MB');
+            setAlertConfig({
+                title: "Submission Failed",
+                message: "File size should be under 10MB.",
+                variant: "red"
+            });
         }
     };
 
@@ -86,17 +92,26 @@ const ReviewProfile = () => {
                     />
                     <div className="video-upload-texts">
                         <div className="font-subheading-black">
-                        Upload a Video
+                            Upload a Video
                         </div>
                         <div className="font-paragraph-grey">File format should be as MP4 and under 10 MB</div>
                     </div>
                 </div>
 
                 {/* Submit button */}
-                <button  className="submit-button font-public-sans-navbar" onClick={handleSubmit}>
+                <button className="submit-button font-public-sans-navbar" onClick={handleSubmit}>
                     Submit
                 </button>
             </div>
+
+            {alertConfig && (
+                <AlertModal
+                    title={alertConfig.title}
+                    message={alertConfig.message}
+                    variant={alertConfig.variant}
+                    onClose={() => setAlertConfig(null)} // This cleans up the state so it can open again later
+                />
+            )}
 
         </div>
     );

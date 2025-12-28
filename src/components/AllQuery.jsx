@@ -14,7 +14,8 @@ function AllQuery() {
   };
 
   const handleComment = () => {
-    alert("Comment button clicked!");
+    // alert("Comment button clicked!");
+    console.log("Comment button clicked!");
   };
 
   useEffect(() => {

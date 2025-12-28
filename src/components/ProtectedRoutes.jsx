@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import tokenStorage from '../utils/tokenStorage';
 
 // Higher-order component to protect routes
 const ProtectedRoutes = ({ children }) => {
     const [shouldRedirect, setShouldRedirect] = useState(false);
-    const token = localStorage.getItem('token');
+    const token = tokenStorage.getToken();
 
     useEffect(() => {
         if (!token) {
@@ -18,7 +19,7 @@ const ProtectedRoutes = ({ children }) => {
         if (shouldRedirect) {
             return <Navigate to="/login" replace />;
         }
-        return null; 
+        return null;
     }
 
     return children;

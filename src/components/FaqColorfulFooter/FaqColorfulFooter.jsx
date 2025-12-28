@@ -2,7 +2,10 @@ import "./FaqColorfulFooter.css";
 import React, { useState } from "react";
 import emailjs from "emailjs-com";
 import { trackContactFormSubmitted } from "../../utils/analytics";
+import AlertModal from "../AlertModal";
+
 function FaqColorfulFooter() {
+    const [alertConfig, setAlertConfig] = useState(null);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -73,7 +76,11 @@ function FaqColorfulFooter() {
                             location: "faq_page",
                         });
 
-                        alert("Your question has been submitted successfully!");
+                        setAlertConfig({
+                            title: "Success",
+                            message: "Your query has been submitted successfully!",
+                            variant: "success",
+                        });
                         setFormData({
                             firstName: "",
                             lastName: "",
@@ -84,7 +91,12 @@ function FaqColorfulFooter() {
                         });
                     },
                     (error) => {
-                        alert("An error occurred. Please try again.");
+                        // alert("An error occurred. Please try again.");
+                        setAlertConfig({
+                            title: "Error",
+                            message: "Your query was not submitted due to an error. Please try after some time.",
+                            variant: "error",
+                        });
                         console.error(error);
                     },
                 );
@@ -172,6 +184,15 @@ function FaqColorfulFooter() {
                         <button type="submit">Submit</button>
                     </div>
                 </form>
+
+                {alertConfig && (
+                    <AlertModal
+                        title={alertConfig.title}
+                        message={alertConfig.message}
+                        variant={alertConfig.variant}
+                        onClose={() => setAlertConfig(null)} // This cleans up the state so it can open again later
+                    />
+                )}
             </div>
         </div>
     );

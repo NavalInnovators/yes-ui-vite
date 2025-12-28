@@ -7,31 +7,9 @@ import { useCart } from "../context/CartContext";
 import { findCourseByCode } from "../utils/courseUtils";
 import { NoData, DataAvailableSoon } from "./EmptyStates";
 import { NotesContentSkeleton } from "./BookDashboardSkeletons";
+import ShadowHTMLDisplay from "./ShadowHTMLDisplay";
 
-const ShadowHTMLDisplay = ({ content }) => {
-  const containerRef = useRef(null);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const shadowRoot =
-      containerRef.current.shadowRoot ||
-      containerRef.current.attachShadow({ mode: "open" });
-    shadowRoot.innerHTML = content;
-  }, [content]);
-
-  return (
-    <div
-      ref={containerRef}
-      style={{
-        // display: "block",
-        // backgroundColor: "white", // Ensure white background like a standard HTML file
-        // color: "black", // Ensure black text
-        // fontFamily: "serif", // Ensure serif font like browser default
-        padding: "1rem", // Add some padding for readability
-      }}
-    />
-  );
-};
 
 function BookDashboardUnitMidSec({
   currentSection,
@@ -169,7 +147,7 @@ function BookDashboardUnitMidSec({
           <div className="book-dashboard-question">
             {selectedTopicContent?.name || "Chapter Topic: Summary"}
           </div>
-          <div className="book-dashboard-answer" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className="book-dashboard-answer" style={{ padding: '1rem', overflow: 'hidden' }}>
             <ShadowHTMLDisplay content={unitNotesContent} />
           </div>
         </div>

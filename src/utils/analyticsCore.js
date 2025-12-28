@@ -1,3 +1,5 @@
+import tokenStorage from "./tokenStorage";
+
 const SESSION_STORAGE_KEY = "analytics_session_id";
 const POPUP_TIMER_PREFIX = "analytics_popup_timer";
 const POPUP_ABANDONMENT_DELAY_MS = 15 * 60 * 1000; // 15 minutes
@@ -117,8 +119,8 @@ export const getUserId = () => {
   }
 
   try {
-    const token = localStorage.getItem("token");
-    const profileId = localStorage.getItem("profileId");
+    const token = tokenStorage.getToken();
+    const profileId = tokenStorage.getProfileId();
 
     if (token && profileId) {
       return profileId;
@@ -222,8 +224,8 @@ export const initializeUserTracking = () => {
 
   const performIdentification = () => {
     try {
-      const token = localStorage.getItem("token");
-      const profileId = localStorage.getItem("profileId");
+      const token = tokenStorage.getToken();
+      const profileId = tokenStorage.getProfileId();
       const userId = getUserId();
       const sessionId = getSessionId();
       const isLoggedIn = !!(token && profileId);
@@ -277,8 +279,8 @@ export const debugUmamiStatus = () => {
     umamiObject: window.umami,
     userId: getUserId(),
     sessionId: getSessionId(),
-    token: localStorage.getItem("token") ? "exists" : "missing",
-    profileId: localStorage.getItem("profileId"),
+    token: tokenStorage.getToken() ? "exists" : "missing",
+    profileId: tokenStorage.getProfileId(),
   });
 
   if (window.umami?.identify) {
@@ -299,8 +301,8 @@ export const reidentifyUserAfterAuth = () => {
   }
 
   try {
-    const token = localStorage.getItem("token");
-    const profileId = localStorage.getItem("profileId");
+    const token = tokenStorage.getToken();
+    const profileId = tokenStorage.getProfileId();
 
     if (!token || !profileId) {
       return;
@@ -345,7 +347,7 @@ export const schedulePopupAbandonment = ({
   delayMs = POPUP_ABANDONMENT_DELAY_MS,
 }) => {
   if (!isBrowser) {
-    return () => {};
+    return () => { };
   }
 
   const key = buildPopupTimerKey(subjectId);

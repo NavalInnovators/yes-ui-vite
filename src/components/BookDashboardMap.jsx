@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useMemo, useState, useEffect } from "react";
 import "./BookDashboardMap.css";
 import { useNavigate } from "react-router-dom";
@@ -156,7 +157,7 @@ export default function BookDashboardMap({
         setSelectedQnATopic,
         setSelectedTopic,
     } = useBookDashboard();
-    const profileId = localStorage.getItem("profileId");
+    const profileId = tokenStorage.getProfileId();
     const [showInput, setShowInput] = useState(false);
     const [isProcessingSkip, setIsProcessingSkip] = useState(false);
 

@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import React from "react";
 import "./BookDashboard.css";
 import { useState, useEffect, useRef } from "react";
@@ -99,7 +100,7 @@ function BookDashboard() {
     };
 
     // Only reload if user is logged in
-    const profileId = localStorage.getItem("profileId");
+    const profileId = tokenStorage.getProfileId();
     if (profileId) {
       loadSubscriptions();
     }

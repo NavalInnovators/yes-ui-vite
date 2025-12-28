@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getMyCourses } from "../api/api";
 import { ensureSubscriptionsLoaded } from "../utils/subscriptionUtils";
+import tokenStorage from "../utils/tokenStorage";
 
 export const getBookDetails = (allCoursesData) => {
   if (!allCoursesData || allCoursesData.length === 0) return {};
@@ -21,8 +22,8 @@ export const getBookDetails = (allCoursesData) => {
 };
 
 export const useMyCourses = () => {
-  const profileId = localStorage.getItem("profileId");
-  const token = localStorage.getItem("token");
+  const profileId = tokenStorage.getProfileId();
+  const token = tokenStorage.getToken();
   
   return useQuery({
     queryKey: ["myCourses", "subscriptions"],

@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useState, useMemo, useEffect } from "react";
 import GradientDiv from "../roles/components/GradientDiv";
 import Mycart_purchased_course_card from "./Mycart_purchased_course_card";
@@ -54,7 +55,7 @@ export default function Mycart() {
     useEffect(() => {
         const fetchSuggestedCourses = async () => {
             try {
-                const profileId = localStorage.getItem("profileId");
+                const profileId = tokenStorage.getProfileId();
                 if (!profileId || cart.length === 0) {
                     setSuggestedCourses([]);
                     return;
@@ -83,7 +84,7 @@ export default function Mycart() {
     useEffect(() => {
         const fetchCoupons = async () => {
             try {
-                const profileId = localStorage.getItem("profileId");
+                const profileId = tokenStorage.getProfileId();
                 if (!profileId) return;
 
                 setIsLoadingCoupons(true);
@@ -222,7 +223,7 @@ export default function Mycart() {
 
     const handleCheckout = async () => {
         try {
-            const profileId = localStorage.getItem("profileId");
+            const profileId = tokenStorage.getProfileId();
 
             if (!profileId) {
                 toast.error("Please login to checkout");
@@ -456,7 +457,7 @@ export default function Mycart() {
 
     const handleApplyCoupon = async (coupon) => {
         try {
-            const profileId = localStorage.getItem("profileId");
+            const profileId = tokenStorage.getProfileId();
             if (!profileId) {
                 toast.error("Please login to apply coupon");
                 return;

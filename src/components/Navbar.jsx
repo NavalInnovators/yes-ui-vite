@@ -28,6 +28,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { trackUserLogout } from "../utils/analytics";
 import { ShoppingCart } from "lucide-react"; // ← Added cart icon
+import tokenStorage from "../utils/tokenStorage";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -190,7 +191,7 @@ const Navbar = () => {
             <li>
               <Link
                 to={
-                  localStorage.getItem("token")
+                  tokenStorage.getToken()
                     ? "/my-subjects"
                     : "/all-subjects"
                 }
@@ -285,9 +286,8 @@ const Navbar = () => {
                     <div
                       onClick={() => setIsNotificationDropdownOpen(false)}
                       key={notification.id}
-                      className={`notification-item font-notification ${
-                        notification.isRead ? "read" : ""
-                      }`}
+                      className={`notification-item font-notification ${notification.isRead ? "read" : ""
+                        }`}
                     >
                       {notification.message}
                     </div>
