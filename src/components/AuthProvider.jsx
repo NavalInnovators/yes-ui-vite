@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import tokenStorage from "../utils/tokenStorage";
 
 const AuthContext = createContext();
 
@@ -9,27 +10,27 @@ export const useAuth = () => {
 };
 
 const setToken = (token) => {
-  localStorage.setItem("token", token);
+  tokenStorage.setToken(token);
 };
 
 const getToken = () => {
-  return localStorage.getItem("token");
+  return tokenStorage.getToken();
 };
 
 const getProfileId = () => {
-  return localStorage.getItem("profileId");
+  return tokenStorage.getProfileId();
 };
 
 const setProfileId = (profileId) => {
-  localStorage.setItem("profileId", profileId);
+  tokenStorage.setProfileId(profileId);
 };
 
 const getEmail = () => {
-  return localStorage.getItem("email");
+  return tokenStorage.getEmail();
 };
 
 const setEmail = (email) => {
-  localStorage.setItem("email", email);
+  tokenStorage.setEmail(email);
 };
 
 export const AuthProvider = ({ children }) => {
@@ -68,6 +69,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     setIsLoggedIn(false);
+    // Clear auth data from cookies
+    tokenStorage.clearAll();
+    // Still clear localStorage and sessionStorage for other data
     localStorage.clear();
     sessionStorage.clear();
     queryClient.clear();

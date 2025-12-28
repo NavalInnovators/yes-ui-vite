@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,7 +8,7 @@ import { trackQuerySubmitted } from "../utils/analytics";
 // import { hat } from "../assets";
 import "./SubmitQueryProfile.css";
 
-const profileId = localStorage.getItem("profileId");
+const profileId = tokenStorage.getProfileId();
 
 const MakeQuery = () => {
   const [selectedSubjectId, setSelectedSubjectId] = useState("");

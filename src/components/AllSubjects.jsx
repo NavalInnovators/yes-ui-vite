@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useState, useEffect, useMemo } from "react";
 import "./UserDashboard.css";
 import SearchAndFilterBar from "./SearchAndFilterBar";
@@ -43,7 +44,7 @@ const AllSubjects = ({ searchQuery, onSearch }) => {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const profileId = localStorage.getItem("profileId");
+        const profileId = tokenStorage.getProfileId();
         if (!profileId || cart.length === 0) {
           setAvailableCoupons([]);
           return;

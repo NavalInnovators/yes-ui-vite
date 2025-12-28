@@ -6,12 +6,13 @@ import {
   PremiumMember,
   PremiumMemberMHover,
 } from "../assets";
+import tokenStorage from "../utils/tokenStorage";
 // image used in 2 services page articles
 // import servicesMainArticleImg from "../assets/servicesMainArticleImg.png";
 
 export const navLinks = [
   {
-    id: localStorage.getItem('token') ? '/my-subjects' : "/all-subjects",
+    id: tokenStorage.getToken() ? '/my-subjects' : "/all-subjects",
     title: "Dashboard",
   },
   {
@@ -146,12 +147,12 @@ export const membershipPlan = [
     price: "₹0/Subject",
     features: [
       "Free Syllabus access",
-      "Free Details answers of PYQ",
+      "Free Detailed answers of PYQ",
       "Notes Access - 1 Unit",
       "Insights Access - 1 Unit",
       "50 Summarisations & Rephrases",
     ],
-    navigate: "/payment-completion",
+    // navigate: "/payment-completion",
   },
   {
     planIcon: PremiumMember,
@@ -165,7 +166,7 @@ export const membershipPlan = [
       "Notes Access - All Units",
       "Insights Access - All Units",
     ],
-    navigate: "/payment-completion",
+    // navigate: "/payment-completion",
   },
   {
     planIcon: PremiumMember,
@@ -176,9 +177,9 @@ export const membershipPlan = [
       "All Free Plan features+",
       "All Basic Plan features+",
       "Personalised Roadmap",
-      "AI Chatbot Access",
+      // "AI Chatbot Access",
     ],
-    navigate: "/payment-completion",
+    // navigate: "/payment-completion",
   },
 ];
 
@@ -711,55 +712,55 @@ export const jobData = [
 ]
 
 export const jobCategories = [
-  "Frontend", 
-  "Backend", 
-  "Management", 
+  "Frontend",
+  "Backend",
+  "Management",
   "Marketing",
-  "UI/UX", 
-  "Content", 
+  "UI/UX",
+  "Content",
   "AI/ML"
 ];
 
 export const faqs = [
-    {
-      question: "What is Your Exam Saathi and how does it help me in my exam preparation?",
-      answer: "Your Exam Saathi is an AI-powered platform that personalizes exam preparation for undergraduate engineering students. By analyzing exam trends, previous question papers, and learning patterns, we provide targeted study material, predictive questions, and customized learning paths to help you prepare efficiently for your exams.",
-    },
-    {
-      question: "How does the AI-driven analytics help me in my preparation?",
-      answer: "Our AI analyzes your performance in practice tests and assignments to provide personalized insights. It tracks your strengths, weaknesses, and progress over time, offering data-driven recommendations to improve your performance and helping you focus on high-priority areas for exam success.",
-    },
-    {
-      question: "What kind of content will I get through Your Exam Saathi?",
-      answer: "You’ll receive AI-generated summaries of past exam questions, unit-specific notes, mind maps, and tricks that simplify complex topics. The platform also provides personalized question banks and exam tips, focusing on the most frequently tested concepts to ensure maximum exam readiness.",
-    },
-    {
-      question: "How accurate are the AI predictions for upcoming exams?",
-      answer: "Our AI predictions are based on in-depth analysis of past exams and question paper patterns. While predictions aren't 100% guaranteed, they are highly accurate in identifying key topics that are more likely to appear, helping you concentrate on the most important areas.",
-    },
-    {
-      question: "Can I customize my study schedule or preferences on Your Exam Saathi?",
-      answer: "Yes! Your Exam Saathi allows you to customize your study schedule based on your available time and specific preparation goals. The platform automatically adjusts your plan as you progress, ensuring that you cover all necessary topics at the right pace for your exams.",
-    },
-    {
-      question: "How does the AI-powered question bank help with practice?",
-      answer: "The AI-generated question bank tailors practice questions to your skill level and learning pace. It adapts based on your performance, gradually increasing the difficulty to challenge you and reinforce learning. This helps you stay prepared for all types of questions that may appear in exams.",
-    },
-    {
-      question: "How do mind maps and tricks help me in my preparation?",
-      answer: "Mind maps and study tricks simplify complex topics, making them easier to understand and remember. These visual aids help organize information in a structured way, enhancing your retention. The AI generates personalized mind maps that are specifically tailored to the subject and exam you're preparing for.",
-    },
-    {
-      question: "Can Your Exam Saathi help me prepare for multiple engineering subjects?",
-      answer: "Yes, Your Exam Saathi supports multiple engineering disciplines. We provide personalized study content, practice tests, and AI-driven recommendations for each subject, whether it’s Maths, Physics, Computer Science, or other engineering subjects, ensuring a comprehensive preparation plan across all subjects.",
-    },
-    {
-      question: "How can I track my progress on Your Exam Saathi?",
-      answer: "With our AI-powered progress tracking, you can easily monitor your improvement in real-time. The platform tracks your performance in practice tests, assignments, and subject-wise assessments, giving you insights into your strengths and areas that need improvement, allowing you to adjust your study plan accordingly.",
-    },
-    {
-      question: "How can I contact support if I need help with the platform?",
-      answer: "If you need assistance with the platform, you can reach out to our support team through the 'Contact Us' page on our website. Additionally, you can email us at info@navalinnovators.com for any questions or concerns regarding the platform.",
-    },
-  ];
+  {
+    question: "What is Your Exam Saathi and how does it help me in my exam preparation?",
+    answer: "Your Exam Saathi is an AI-powered platform that personalizes exam preparation for undergraduate engineering students. By analyzing exam trends, previous question papers, and learning patterns, we provide targeted study material, predictive questions, and customized learning paths to help you prepare efficiently for your exams.",
+  },
+  {
+    question: "How does the AI-driven analytics help me in my preparation?",
+    answer: "Our AI analyzes your performance in practice tests and assignments to provide personalized insights. It tracks your strengths, weaknesses, and progress over time, offering data-driven recommendations to improve your performance and helping you focus on high-priority areas for exam success.",
+  },
+  {
+    question: "What kind of content will I get through Your Exam Saathi?",
+    answer: "You’ll receive AI-generated summaries of past exam questions, unit-specific notes, mind maps, and tricks that simplify complex topics. The platform also provides personalized question banks and exam tips, focusing on the most frequently tested concepts to ensure maximum exam readiness.",
+  },
+  {
+    question: "How accurate are the AI predictions for upcoming exams?",
+    answer: "Our AI predictions are based on in-depth analysis of past exams and question paper patterns. While predictions aren't 100% guaranteed, they are highly accurate in identifying key topics that are more likely to appear, helping you concentrate on the most important areas.",
+  },
+  {
+    question: "Can I customize my study schedule or preferences on Your Exam Saathi?",
+    answer: "Yes! Your Exam Saathi allows you to customize your study schedule based on your available time and specific preparation goals. The platform automatically adjusts your plan as you progress, ensuring that you cover all necessary topics at the right pace for your exams.",
+  },
+  {
+    question: "How does the AI-powered question bank help with practice?",
+    answer: "The AI-generated question bank tailors practice questions to your skill level and learning pace. It adapts based on your performance, gradually increasing the difficulty to challenge you and reinforce learning. This helps you stay prepared for all types of questions that may appear in exams.",
+  },
+  {
+    question: "How do mind maps and tricks help me in my preparation?",
+    answer: "Mind maps and study tricks simplify complex topics, making them easier to understand and remember. These visual aids help organize information in a structured way, enhancing your retention. The AI generates personalized mind maps that are specifically tailored to the subject and exam you're preparing for.",
+  },
+  {
+    question: "Can Your Exam Saathi help me prepare for multiple engineering subjects?",
+    answer: "Yes, Your Exam Saathi supports multiple engineering disciplines. We provide personalized study content, practice tests, and AI-driven recommendations for each subject, whether it’s Maths, Physics, Computer Science, or other engineering subjects, ensuring a comprehensive preparation plan across all subjects.",
+  },
+  {
+    question: "How can I track my progress on Your Exam Saathi?",
+    answer: "With our AI-powered progress tracking, you can easily monitor your improvement in real-time. The platform tracks your performance in practice tests, assignments, and subject-wise assessments, giving you insights into your strengths and areas that need improvement, allowing you to adjust your study plan accordingly.",
+  },
+  {
+    question: "How can I contact support if I need help with the platform?",
+    answer: "If you need assistance with the platform, you can reach out to our support team through the 'Contact Us' page on our website. Additionally, you can email us at info@navalinnovators.com for any questions or concerns regarding the platform.",
+  },
+];
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { BACKEND_URL, AI_URL, DEV_BACKEND_URL } from "../constants/api";
 import { track } from "@vercel/analytics/react";
 import { generateProtectedHeaders, getUserContext } from "../utils/apiUtils";
+import tokenStorage from "../utils/tokenStorage";
 
 
 const api = axios.create({
@@ -88,7 +89,7 @@ export const submitVerificationDetails = async (
   profileId,
   verificationData
 ) => {
-  const getToken = localStorage.getItem("token");
+  const getToken = tokenStorage.getToken();
   const config = {
     headers: {
       accept: "*/*",
@@ -107,8 +108,8 @@ export const submitVerificationDetails = async (
 
 // POST request for Feedback
 export const postFeedback = async (feedbackData) => {
-  const profileId = localStorage.getItem("profileId");
-  const token = localStorage.getItem("token");
+  const profileId = tokenStorage.getProfileId();
+  const token = tokenStorage.getToken();
   try {
     const response = await api.post(
       `/api/feedback/submit/${profileId}`,
@@ -129,7 +130,7 @@ export const postFeedback = async (feedbackData) => {
 
 // POST request for Query
 export const postQuery = async (queryData) => {
-  const token = localStorage.getItem("token");
+  const token = tokenStorage.getToken();
   try {
     const response = await api.post(`/api/queries/submit`, queryData, {
       headers: {
@@ -145,7 +146,7 @@ export const postQuery = async (queryData) => {
 
 // GET request for Subjects
 export const fetchSubjects = async (profileId) => {
-  const token = localStorage.getItem("token");
+  const token = tokenStorage.getToken();
   try {
     const response = await api.get(`/api/profile/${profileId}/courses`, {
       headers: {
@@ -163,8 +164,8 @@ export const fetchSubjects = async (profileId) => {
 
 // GET from Query
 export const fetchQueries = async () => {
-  const profileId = localStorage.getItem("profileId");
-  const token = localStorage.getItem("token");
+  const profileId = tokenStorage.getProfileId();
+  const token = tokenStorage.getToken();
   try {
     const response = await api.get(`/api/queries/profile/${profileId}`, {
       headers: {
@@ -181,7 +182,7 @@ export const fetchQueries = async () => {
 };
 
 export const getAllCourses = async () => {
-  const getToken = localStorage.getItem("token");
+  const getToken = tokenStorage.getToken();
   const config = {
     headers: {
       accept: "*/*",
@@ -193,8 +194,8 @@ export const getAllCourses = async () => {
   return response.data;
 };
 export const getMyCourses = async () => {
-  const getToken = localStorage.getItem("token");
-  const profileId = localStorage.getItem("profileId");
+  const getToken = tokenStorage.getToken();
+  const profileId = tokenStorage.getProfileId();
   // const profileId = 101
   const config = {
     headers: {
@@ -209,8 +210,8 @@ export const getMyCourses = async () => {
 
 export const getProfile = async () => {
   try {
-    const token = localStorage.getItem("token");
-    const profileId = localStorage.getItem("profileId");
+    const token = tokenStorage.getToken();
+    const profileId = tokenStorage.getProfileId();
 
     const response = await api.get(`/api/profile/${profileId}/get`, {
       headers: {
@@ -232,8 +233,8 @@ export const getProfile = async () => {
 
 export const updateProfile = async (data) => {
   try {
-    const token = localStorage.getItem("token");
-    const profileId = localStorage.getItem("profileId");
+    const token = tokenStorage.getToken();
+    const profileId = tokenStorage.getProfileId();
 
     const response = await api.put(`/api/profile/${profileId}`, data, {
       headers: {
@@ -248,8 +249,8 @@ export const updateProfile = async (data) => {
 
 export const getEduData = async () => {
   try {
-    const token = localStorage.getItem("token");
-    const profileId = localStorage.getItem("profileId");
+    const token = tokenStorage.getToken();
+    const profileId = tokenStorage.getProfileId();
 
     const response = await api.get(`/api/profile/${profileId}/education/get`, {
       headers: {
@@ -265,8 +266,8 @@ export const getEduData = async () => {
 
 export const updateEduData = async (data) => {
   try {
-    const token = localStorage.getItem("token");
-    const profileId = localStorage.getItem("profileId");
+    const token = tokenStorage.getToken();
+    const profileId = tokenStorage.getProfileId();
 
     const response = await api.put(
       `/api/profile/${profileId}/education/update`,
@@ -287,14 +288,14 @@ export const updateEduData = async (data) => {
 export const getSyllabus = async (subCode) => {
   try {
     const { unitNo } = getUserContext(subCode);
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const config = {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     };
-    
+
     // Add unitNo as optional parameter if available
     const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
     const response = await api.get(`/api/getSyllabus?subcode=${subCode}${unitParam}`, config);
@@ -307,17 +308,17 @@ export const getSyllabus = async (subCode) => {
 export const getQnA = async (subCode) => {
   try {
     const { profileId, unitNo } = getUserContext(subCode);
-    
+
     if (!profileId) {
       throw new Error('Missing profileId - user not logged in');
     }
-    
+
     // Get planId specifically for this course
     const { planId } = getUserContext(subCode);
-    
+
     const headers = await generateProtectedHeaders(profileId, subCode, unitNo, planId, 'QNA');
     const config = { headers };
-    
+
     // Add unitNo as optional parameter if available
     const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
     const response = await api.get(`/api/getQA?subcode=${subCode}${unitParam}`, config);
@@ -330,15 +331,15 @@ export const getQnA = async (subCode) => {
 export const getUnitNotes = async (subCode) => {
   try {
     const { profileId, courseCode, unitNo, planId } = getUserContext();
-    
+
     if (!profileId) {
       throw new Error('Missing profileId - user not logged in');
     }
-    
+
     const actualCourseCode = courseCode || subCode;
     const headers = await generateProtectedHeaders(profileId, actualCourseCode, unitNo, planId, 'NOTES');
     const config = { headers };
-    
+
     // Add unitNo as optional parameter if available
     const unitParam = unitNo ? `?unitNo=${unitNo}` : '';
     const response = await api.get(`/api/getUnitNotes/${subCode}${unitParam}`, config);
@@ -351,21 +352,21 @@ export const getUnitNotes = async (subCode) => {
 export const getAnalyticData = async (subCode, unitNo) => {
   try {
     const { profileId, unitNo: contextUnitNo, planId } = getUserContext(subCode);
-    
+
     if (!profileId) {
       throw new Error('Missing profileId - user not logged in');
     }
-    
+
     // Use provided unitNo parameter, fallback to context unitNo
     const finalUnitNo = unitNo || contextUnitNo;
-    
+
     const headers = await generateProtectedHeaders(profileId, subCode, finalUnitNo, planId, 'INSIGHTS');
     const config = { headers };
-    
+
     // Add unitNo as query parameter if available
     const unitParam = finalUnitNo ? `?unitNo=${finalUnitNo}` : '';
     const response = await api.get(`/api/analyticData/${subCode}${unitParam}`, config);
-    
+
     return response.data.data;
   } catch (error) {
     throw error;
@@ -375,9 +376,9 @@ export const getAnalyticData = async (subCode, unitNo) => {
 
 export const enrollCourse = async (course) => {
   try {
-    const profileId = localStorage.getItem("profileId");
+    const profileId = tokenStorage.getProfileId();
     const courseId = course.id;
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
 
     const endpoint = `/api/profile/${profileId}/course/${courseId}/enroll`;
 
@@ -401,18 +402,18 @@ export const enrollCourse = async (course) => {
 export const summarizeAnswer = async (q_id) => {
   try {
     const { profileId, courseCode, unitNo, planId } = getUserContext();
-    
+
     if (!profileId) {
       throw new Error('Missing profileId - user not logged in');
     }
-    
+
     const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'SUMMARIZER');
     const config = { headers };
 
     // Add unitNo as optional parameter if available
     const unitParam = unitNo ? `&unitNo=${unitNo}` : '';
     const response = await api.get(`/api/summarize?q_id=${q_id}${unitParam}`, config);
-    
+
     // Handle the response format
     const rawData = response.data;
     if (typeof rawData === 'string' && rawData.startsWith("FastAPI Response: ")) {
@@ -420,7 +421,7 @@ export const summarizeAnswer = async (q_id) => {
       const parsed = JSON.parse(jsonString);
       return parsed?.data?.summarized_answer;
     }
-    
+
     return response.data?.data?.summarized_answer || response.data;
   } catch (error) {
     throw new Error(
@@ -432,11 +433,11 @@ export const summarizeAnswer = async (q_id) => {
 export const rephraseAnswer = async (q_id, style) => {
   try {
     const { profileId, courseCode, unitNo, planId } = getUserContext();
-    
+
     if (!profileId) {
       throw new Error('Missing profileId - user not logged in');
     }
-    
+
     const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'REPHRASER');
     const config = { headers };
 
@@ -475,7 +476,7 @@ export const resetPasswordLink = async (email) => {
 // CART APIs
 export const getCart = async (profileId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.get(`/api/cart/view/${profileId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -494,7 +495,7 @@ export const getCart = async (profileId) => {
 
 export const addToCart = async (profileId, planId, courseId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
 
     const response = await api.post(
       "/api/cart/add",
@@ -524,7 +525,7 @@ export const addToCart = async (profileId, planId, courseId) => {
 
 export const removeFromCart = async (cartId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/cart/remove/${cartId}`,
       {},
@@ -548,7 +549,7 @@ export const removeFromCart = async (cartId) => {
 
 export const clearCart = async (profileId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/cart/clear/${profileId}`,
       {},
@@ -574,7 +575,7 @@ export const clearCart = async (profileId) => {
 // COUPON APIs
 export const applyCoupon = async (profileId, couponCode) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/coupons/apply`,
       {
@@ -601,7 +602,7 @@ export const applyCoupon = async (profileId, couponCode) => {
 
 export const getCoupons = async (profileId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.get(`/api/coupons/applicable/${profileId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -623,7 +624,7 @@ export const getCoupons = async (profileId) => {
 // SUBSCRIPTION APIs
 export const cancelSubscription = async (reason, profileId, subscriptionId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/subscriptions/cancel`,
       {
@@ -655,7 +656,7 @@ export const getSubscriptions = async (
   pageable = {},
 ) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const params = new URLSearchParams();
     params.append("filter", filter);
 
@@ -690,7 +691,7 @@ export const getSubscriptions = async (
 // TRANSACTION APIs
 export const createTransaction = async (profileId, couponCode = null) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/transactions/create-transaction`,
       {
@@ -721,7 +722,7 @@ export const createTransaction = async (profileId, couponCode = null) => {
 
 export const verifyPayment = async (orderId, paymentId, signature) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/transactions/verify-payment`,
       {
@@ -754,7 +755,7 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
 
 export const removeTransaction = async (orderId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getToken();
     const response = await api.post(
       `/api/transactions/remove/${orderId}`,
       {},
@@ -782,7 +783,7 @@ export const submitRoadmapInput = async (profileId, subCode, inputData) => {
   try {
     const { courseCode, unitNo, planId } = getUserContext();
     const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'ROADMAP');
-    
+
     const response = await api.put(
       `/api/roadmap/input/${profileId}/${subCode}`,
       inputData,
@@ -802,7 +803,7 @@ export const generateRoadmap = async (profileId, subCode) => {
   try {
     const { courseCode, unitNo, planId } = getUserContext();
     const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'ROADMAP');
-    
+
     const response = await api.post(
       `/api/roadmap/generate/${profileId}/${subCode}`,
       {},
@@ -822,7 +823,7 @@ export const getRoadmap = async (profileId, subCode) => {
   try {
     const { courseCode, unitNo, planId } = getUserContext();
     const headers = await generateProtectedHeaders(profileId, courseCode, unitNo, planId, 'ROADMAP');
-    
+
     const response = await api.get(
       `/api/roadmap/${profileId}/${subCode}`,
       { headers }

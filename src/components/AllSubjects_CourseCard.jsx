@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import tokenStorage from "../utils/tokenStorage";
 
 const AllSubjects_CourseCard = ({
     course,
@@ -26,7 +27,7 @@ const AllSubjects_CourseCard = ({
                 return;
             }
 
-            if (!localStorage.getItem("token")) {
+            if (!tokenStorage.getToken()) {
                 navigate("/login");
                 return;
             }

@@ -1,10 +1,11 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useQuery } from "@tanstack/react-query"; // ADDING useQuery HOOK
 import { CommentIcon, LikeIcon } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { fetchQueries, fetchSubjects } from "../api/api"; // IMPORTING fetchQueries AND fetchSubjects
 
-const profileId = localStorage.getItem("profileId");
-// const profileId = localStorage.getItem("profileId");
+const profileId = tokenStorage.getProfileId();
+// const profileId = tokenStorage.getProfileId();
 
 const YourQuery = () => {
   const navigate = useNavigate();

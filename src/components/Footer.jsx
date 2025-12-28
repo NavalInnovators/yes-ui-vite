@@ -3,6 +3,7 @@ import { logo, RightArrow, MobiusStrip, LogoNI } from "../assets";
 import React, { useState } from "react";
 import { footerLinks } from "../constants";
 import { trackSocialLinkClicked } from "../utils/analytics";
+import AlertModal from "./AlertModal";
 // import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
@@ -23,10 +24,16 @@ const Footer = () => {
         setIsChecked(e.target.checked);
     };
 
+    const [alertConfig, setAlertConfig] = useState(null);
     // Handler for form submission
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent default form submission behavior
-        alert(`Form submitted with Email: ${email}`);
+        // alert(`Form submitted with Email: ${email}`);
+        setAlertConfig({
+            title: "Success!",
+            message: "Thanks for your message! We will get back to you soon.",
+            variant: "green"
+        });
     };
 
     return (
@@ -82,6 +89,15 @@ const Footer = () => {
                     </div>
                 </form> */}
 
+                {alertConfig && (
+                    <AlertModal
+                        title={alertConfig.title}
+                        message={alertConfig.message}
+                        variant={alertConfig.variant}
+                        onClose={() => setAlertConfig(null)} // This cleans up the state so it can open again later
+                    />
+                )}
+
                 <div className="all-links-section">
                     {footerLinks.map((header, innerLinks) => (
                         <div className="each-link-segment" key={header.header}>
@@ -95,13 +111,13 @@ const Footer = () => {
                                     className="inner-links"
                                     target={
                                         header.header.toLowerCase() ===
-                                        "connect"
+                                            "connect"
                                             ? "_blank"
                                             : "_self"
                                     }
                                     rel={
                                         header.header.toLowerCase() ===
-                                        "connect"
+                                            "connect"
                                             ? "noopener noreferrer"
                                             : undefined
                                     }

@@ -1,10 +1,11 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { submitRoadmapInput, generateRoadmap } from "../api/api";
 import { toast } from "react-toastify";
 
 const BookDashboardRoadmapInput = ({ subCode, onRoadmapGenerated, existingPreferences }) => {
-  const profileId = localStorage.getItem("profileId");
+  const profileId = tokenStorage.getProfileId();
 
   const [formData, setFormData] = useState({
     daysToExam: existingPreferences?.daysToExam || "",

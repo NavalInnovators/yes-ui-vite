@@ -45,37 +45,37 @@ const pricingPlans = [
     features: [
       "All Basic features +",
       "Personalised Roadmap",
-      "AI Chatbot access",
+      // "AI Chatbot access",
       "Quicker query resolution",
       "Enjoy our Premium features",
-      
+
     ],
   },
 ];
 
 const featuresData = [
-    { feature: 'Syllabus Access', free: true, basic: true, pro: true },
-    { feature: 'PYQ - Detail Answers', free: true, basic: true, pro: true },
-    { feature: 'Notes Access', free: '1 Unit', basic: 'All Units', pro: 'All Units' },
-    { feature: 'Insights Access', free: '1 Unit', basic: 'All Units', pro: 'All Units' },
-    { feature: 'Summariser', free: '50 Total', basic: 'Unlimited', pro: 'Unlimited' },
-    { feature: 'Rephraser', free: '50 Total', basic: 'Unlimited', pro: 'Unlimited' },
-    { feature: 'Personalised Roadmap', free: false, basic: false, pro: true },
-    { feature: 'AI Chatbot Access', free: false, basic: false, pro: true },
+  { feature: 'Syllabus Access', free: true, basic: true, pro: true },
+  { feature: 'PYQ - Detail Answers', free: true, basic: true, pro: true },
+  { feature: 'Notes Access', free: '1 Unit', basic: 'All Units', pro: 'All Units' },
+  { feature: 'Insights Access', free: '1 Unit', basic: 'All Units', pro: 'All Units' },
+  { feature: 'Summariser', free: '50 Total', basic: 'Unlimited', pro: 'Unlimited' },
+  { feature: 'Rephraser', free: '50 Total', basic: 'Unlimited', pro: 'Unlimited' },
+  { feature: 'Personalised Roadmap', free: false, basic: false, pro: true },
+  // { feature: 'AI Chatbot Access', free: false, basic: false, pro: true },
 ];
 
 const faqData = [
-    {
-      id: "faq1",
-      question: "What are the benefits of becoming a Premium Member?",
-      answer: "Premium Membership offers unlimited access to all our features, including unlimited summarizations, rephrasing, mind maps, tricks, and tips. You’ll also gain access to full analytics, predictive question trends, and exclusive filters. Additionally, you’ll get a free trial of the Customized Preparation and AI Features, enhancing your exam prep experience.",
-    },
-    {
-      id: "faq2",
-      question: "What is included in the Free Membership plan?",
-      answer: "The Free Membership plan gives you access to basic features like the syllabus, previous year’s questions with answers, and 50 free summarizations/rephrases. You’ll also get limited access to tricks, maps, and a few other essential resources to help with your exam preparation.",
-    },
-    // Add other FAQs here...
+  {
+    id: "faq1",
+    question: "What are the benefits of becoming a Premium Member?",
+    answer: "Premium Membership offers unlimited access to all our features, including unlimited summarizations, rephrasing, mind maps, tricks, and tips. You’ll also gain access to full analytics, predictive question trends, and exclusive filters. Additionally, you’ll get a free trial of the Customized Preparation and AI Features, enhancing your exam prep experience.",
+  },
+  {
+    id: "faq2",
+    question: "What is included in the Free Membership plan?",
+    answer: "The Free Membership plan gives you access to basic features like the syllabus, previous year’s questions with answers, and 50 free summarizations/rephrases. You’ll also get limited access to tricks, maps, and a few other essential resources to help with your exam preparation.",
+  },
+  // Add other FAQs here...
 ];
 
 
@@ -104,7 +104,7 @@ function MembershipPage() {
                 <p className="card-price">
                   {plan.price}<span className="card-period">{plan.period}</span>
                 </p>
-                <button className="card-button" onClick={isLoggedIn ? ()=>navigate('/all-subjects') : ()=>navigate('/login')} >
+                <button className="card-button" onClick={isLoggedIn ? () => navigate('/all-subjects') : () => navigate('/login')} >
                   {plan.buttonText}
                 </button>
                 <hr className="card-divider" />
@@ -121,7 +121,7 @@ function MembershipPage() {
           </div>
         </div>
       </header>
-      
+
       <main className="container page-content">
         {/* Section 2: Introductory Paragraph */}
         <section className="intro-section">
@@ -167,21 +167,21 @@ function MembershipPage() {
 
         {/* Section 4: "Who is this for?" (NEW) */}
         <section className="who-is-this-for-section">
-            <h2>Who is this for?</h2>
-            <div className="audience-cards-container">
-                <div className="audience-card">
-                    <h4>Free Plan</h4>
-                    <p>Perfect for new users who want to explore our basic features for a single subject and get a feel for the platform.</p>
-                </div>
-                <div className="audience-card">
-                    <h4>Basic Plan</h4>
-                    <p>The ideal choice for students actively preparing for exams who need unlimited access to core study materials and tools.</p>
-                </div>
-                <div className="audience-card">
-                    <h4>Pro Plan</h4>
-                    <p>Designed for the dedicated student seeking a fully personalized, AI-driven learning experience to maximize their score.</p>
-                </div>
+          <h2>Who is this for?</h2>
+          <div className="audience-cards-container">
+            <div className="audience-card">
+              <h4>Free Plan</h4>
+              <p>Perfect for new users who want to explore our basic features for a single subject and get a feel for the platform.</p>
             </div>
+            <div className="audience-card">
+              <h4>Basic Plan</h4>
+              <p>The ideal choice for students actively preparing for exams who need unlimited access to core study materials and tools.</p>
+            </div>
+            <div className="audience-card">
+              <h4>Pro Plan</h4>
+              <p>Designed for the dedicated student seeking a fully personalized, AI-driven learning experience to maximize their score.</p>
+            </div>
+          </div>
         </section>
 
         {/* Section 5: Testimonials (Placeholder for you) */}

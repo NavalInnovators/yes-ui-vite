@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useMemo, useState } from "react";
 import "./BookDashboardMap.css";
 import "./BookDashboardRightSec.css";
@@ -16,7 +17,7 @@ const PRIORITY_META = {
 export default function BookDashboardRoadmapRight({ data }) {
     const { syllabus, syllabusLoading, syllabusError, subCode } = useBookDashboard();
     const [selectedTopicIndex, setSelectedTopicIndex] = useState(0);
-    const profileId = localStorage.getItem("profileId");
+    const profileId = tokenStorage.getProfileId();
 
     // Fetch personalized roadmap from API
     const { 

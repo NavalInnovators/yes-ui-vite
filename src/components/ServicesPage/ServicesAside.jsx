@@ -12,9 +12,9 @@ const ServicesAside = () => {
         { id: 'qna', text: 'Q&A' },
         { id: 'unit', text: 'Unit' },
         { id: 'insights', text: 'Insights' },
-        { id: 'maps', text: 'Maps' },
+        // { id: 'maps', text: 'Maps' },
         { id: 'custom-preparation', text: 'Custom Preparation' },
-        { id: 'ai-featured', text: 'AI Featured' }
+        // { id: 'ai-featured', text: 'AI Featured' }
       ].map(({ id, text }) => (
         <Link
           to={`/services#${id}`}

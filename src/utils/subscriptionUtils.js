@@ -1,4 +1,5 @@
 // Utility functions for managing user subscriptions
+import tokenStorage from "./tokenStorage";
 
 export const fetchAllSubscriptions = async (profileId) => {
   const { getSubscriptions } = await import('../api/api');
@@ -20,9 +21,9 @@ export const ensureSubscriptionsLoaded = async () => {
     }
 
     // If not loaded, fetch them
-    const profileId = localStorage.getItem("profileId");
-    const token = localStorage.getItem("token");
-    
+    const profileId = tokenStorage.getProfileId();
+    const token = tokenStorage.getToken();
+
     if (!profileId || !token) {
       console.warn('Cannot load subscriptions: missing profileId or token');
       return [];
@@ -31,7 +32,7 @@ export const ensureSubscriptionsLoaded = async () => {
     // FIlter active subscriptions
     const allSubscriptions = await fetchAllSubscriptions(profileId);
     const activeSubscriptions = allSubscriptions.filter(sub => sub.status === 'ACTIVE');
-    
+
     // Store active subscriptions in localStorage
     localStorage.setItem('userSubscriptions', JSON.stringify(activeSubscriptions));
     return activeSubscriptions;
@@ -50,7 +51,7 @@ export const clearSubscriptions = () => {
 export const getUserPlanForCourse = (courseCode) => {
   try {
     const subscriptions = JSON.parse(localStorage.getItem('userSubscriptions') || '[]');
-    
+
     if (subscriptions.length === 0) {
       return 'FREE';
     }
@@ -61,17 +62,17 @@ export const getUserPlanForCourse = (courseCode) => {
       ...JSON.parse(localStorage.getItem("allCourses") || "[]"),
       ...JSON.parse(localStorage.getItem("myCourses") || "[]"),
     ];
-    
+
     const normalizedCourseCode = courseCode?.toLowerCase().trim();
-    const course = allCourses.find(course => 
+    const course = allCourses.find(course =>
       Array.isArray(course?.courseCodes) &&
-      course.courseCodes.some(code => 
+      course.courseCodes.some(code =>
         code.toLowerCase().trim() === normalizedCourseCode
       )
     );
-    
+
     if (course) {
-      const currentSubscription = subscriptions.find(sub => 
+      const currentSubscription = subscriptions.find(sub =>
         sub.course?.name === course.name && sub.status === 'ACTIVE'
       );
       if (currentSubscription) {
@@ -119,7 +120,7 @@ export const enhanceSubscription = (sub) => {
 // Helper function to process and categorize subscriptions
 export const processSubscriptions = (subscriptions) => {
   const enhanced = subscriptions.map(enhanceSubscription);
-  
+
   const valid = enhanced.filter((sub) =>
     sub?.course?.name
   );
@@ -127,7 +128,7 @@ export const processSubscriptions = (subscriptions) => {
   return {
     active: valid.filter((sub) => sub.status?.toUpperCase() === "ACTIVE"),
     expired: valid.filter((sub) => sub.status?.toUpperCase() === "EXPIRED"),
-    cancelled: valid.filter((sub) => 
+    cancelled: valid.filter((sub) =>
       sub.status?.toUpperCase() === "CANCELLED"
     ),
   };

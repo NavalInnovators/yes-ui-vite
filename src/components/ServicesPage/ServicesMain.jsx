@@ -11,9 +11,9 @@ const ServicesMain = () => {
       <ServicesMainArticle {...ServicesArticlesContent.qna} />
       <ServicesMainArticle {...ServicesArticlesContent.unit} />
       <ServicesMainArticle {...ServicesArticlesContent.insights} />
-      <ServicesMainArticle {...ServicesArticlesContent.maps} />
+      {/* <ServicesMainArticle {...ServicesArticlesContent.maps} /> */}
       <ServicesMainArticle {...ServicesArticlesContent.customPreparation} />
-      <ServicesMainArticle {...ServicesArticlesContent.aiFeatured} />
+      {/* <ServicesMainArticle {...ServicesArticlesContent.aiFeatured} /> */}
     </main>
   )
 }

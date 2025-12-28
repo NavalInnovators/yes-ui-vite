@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import emailjs from "emailjs-com"; // Import emailjs
 import { trackContactFormSubmitted } from "../utils/analytics";
 import "./ContactPageForm.css";
+import AlertModal from "./AlertModal";
 
 function ContactPageForm() {
+  const [alertConfig, setAlertConfig] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -68,7 +70,13 @@ function ContactPageForm() {
               location: "contacts_page",
             });
 
-            alert("Form submitted successfully!");
+            // alert("Thanks for your message! We will get back to you soon.");
+            setAlertConfig({
+              title: "Success!",
+              message: "Thanks for your message! We will get back to you soon.",
+              variant: "green"
+            });
+
             setFormData({
               firstName: "",
               lastName: "",
@@ -79,7 +87,13 @@ function ContactPageForm() {
             });
           },
           (error) => {
-            alert("Error: " + error.text);
+            console.log("Error: " + error.text);
+            // alert("Form was not submitted due to an error. Please try afer some time.")
+            setAlertConfig({
+              title: "Submission Failed",
+              message: "Form was not submitted due to an error. Please try again later.",
+              variant: "red"
+            });
           },
         );
     }
@@ -149,6 +163,15 @@ function ContactPageForm() {
           Submit
         </button>
       </form>
+
+      {alertConfig && (
+        <AlertModal
+          title={alertConfig.title}
+          message={alertConfig.message}
+          variant={alertConfig.variant}
+          onClose={() => setAlertConfig(null)} // This cleans up the state so it can open again later
+        />
+      )}
     </div>
   );
 }

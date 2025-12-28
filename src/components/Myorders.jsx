@@ -1,3 +1,4 @@
+import tokenStorage from "../utils/tokenStorage";
 import { useState, useEffect } from "react";
 import GradientDiv from "../roles/components/GradientDiv";
 import Active_Courses_Card from "./Myorders_Active_Courses_Card";
@@ -29,7 +30,7 @@ export default function Myorders() {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
-        const profileId = localStorage.getItem("profileId");
+        const profileId = tokenStorage.getProfileId();
         if (!profileId) {
           toast.error("Please login to view orders");
           navigate("/login");
@@ -122,7 +123,7 @@ export default function Myorders() {
     if (!subToCancel) return;
 
     try {
-      const profileId = localStorage.getItem("profileId");
+      const profileId = tokenStorage.getProfileId();
       const { cancelSubscription } = await import("../api/api");
       const reason = "User requested cancellation";
 

@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import mermaid from "mermaid";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"; // Style for code blocks
+import MermaidRenderer from "./MermaidRenderer";
+import ShadowHTMLDisplay from "./ShadowHTMLDisplay";
+import { decodeMermaidCode, processTextWithMath } from "../utils/contentProcessor";
 import "./BookDashboardMidSec.css";
 import { LeftPageArrow, RightPageArrow, Lock } from "../assets";
 import BookDashboardNavbar from "./BookDashboardNavbar";
@@ -24,120 +26,7 @@ import {
 import { getCourseTrackingMeta } from "../utils/courseUtils";
 import { NoData, DataAvailableSoon } from "./EmptyStates";
 import { QnASkeletonLoader } from "./BookDashboardSkeletons";
-
-
-// --- Mermaid Helpers ---
-
-async function checkMermaidSyntax(code) {
-  try {
-    await mermaid.parse(code);
-    return { valid: true, errors: [] };
-  } catch (err) {
-    return {
-      valid: false,
-      errors: [err.message]
-    };
-  }
-}
-
-function autoFixMermaid(code) {
-  let fixed = code;
-
-  // 1. Fix style on same line as node
-  fixed = fixed.replace(
-    /^(\s*\w+\[.*?\])\s+style\s+(\w+.*)$/gm,
-    (_, node, style) => `${node}\nstyle ${style}`
-  );
-
-  // 2. Fix invalid arrows
-  fixed = fixed.replace(/==>/g, '-->');
-  fixed = fixed.replace(/--->/g, '-->');
-
-  // 3. Add default diagram type if missing
-  if (!/^(flowchart|graph|sequenceDiagram)/.test(fixed.trim())) {
-    fixed = `flowchart LR\n${fixed}`;
-  }
-
-  return fixed;
-}
-
-// --- Shadow HTML Component ---
-
-const ShadowHTMLDisplay = ({ content }) => {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const shadowRoot =
-      containerRef.current.shadowRoot ||
-      containerRef.current.attachShadow({ mode: "open" });
-    shadowRoot.innerHTML = content;
-  }, [content]);
-
-  return (
-    <div
-      ref={containerRef}
-    // style={{
-    //   display: "block",
-    // }}
-    />
-  );
-};
-
-// --- Mermaid Component ---
-
-const MermaidRenderer = ({ code }) => {
-  const containerRef = useRef(null);
-  const [finalCode, setFinalCode] = useState(null);
-
-  useEffect(() => {
-    let active = true;
-    const validateAndFix = async () => {
-      // 1. Check syntax
-      const result = await checkMermaidSyntax(code);
-      if (result.valid) {
-        if (active) setFinalCode(code);
-        return;
-      }
-
-      // 2. Try auto-fix
-      const fixed = autoFixMermaid(code);
-      const fixedResult = await checkMermaidSyntax(fixed);
-
-      if (active) {
-        if (fixedResult.valid) {
-          setFinalCode(fixed);
-        } else {
-          console.error("Mermaid invalid after fix:", fixedResult.errors);
-          setFinalCode(null);
-        }
-      }
-    };
-
-    validateAndFix();
-    return () => { active = false; };
-  }, [code]);
-
-  useEffect(() => {
-    if (finalCode && containerRef.current) {
-      containerRef.current.removeAttribute("data-processed");
-      containerRef.current.innerHTML = finalCode;
-      mermaid.run({
-        nodes: [containerRef.current],
-      }).catch(err => console.error("Mermaid run error:", err));
-    }
-  }, [finalCode]);
-
-  if (!finalCode) return null;
-
-  return (
-    <div
-      className="mermaid"
-      ref={containerRef}
-      data-mermaid-content={finalCode}
-    />
-  );
-};
+import ConfirmationModal from "./ConfirmationModal";
 
 function BookDashboardMidSec({
 
@@ -214,6 +103,7 @@ function BookDashboardMidSec({
 
   const [pageNumber, setPageNumber] = useState(1);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [showSummaryConfirmModal, setShowSummaryConfirmModal] = useState(false);
 
   // Get topics for current unit only
   const getCurrentUnitTopics = () => {
@@ -440,16 +330,21 @@ function BookDashboardMidSec({
     }
 
     if (existingSummaries.length > 0) {
-      const confirm = window.confirm(
-        "You've already generated a summary. Do you want to generate another one?",
-      );
-      if (!confirm) return;
+      setShowSummaryConfirmModal(true);
+      return;
     }
 
+    // Continue with summary generation
+    await generateNewSummary();
+  };
+
+  const generateNewSummary = async () => {
     if (!question || !answer || !questionId) {
       toast.error("Question or answer not available for summarization.");
       return;
     }
+
+    const userPlan = courseId ? getUserPlanForCourse(courseId) : "Free";
 
     setSummaryLoading(true);
     toast.info("Summarizing answer...");
@@ -790,6 +685,7 @@ function BookDashboardMidSec({
 
   const containerRef = useRef(null);
 
+  /*
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: false,
@@ -801,6 +697,7 @@ function BookDashboardMidSec({
       },
     });
   }, []);
+  */
 
 
   useEffect(() => {
@@ -825,27 +722,21 @@ function BookDashboardMidSec({
     if (typeof rawContent !== "string") {
       rawContent = rawContent.content;
     }
-    const decodeMermaidCode = (text) => {
-      return text
-        .replace(/&gt;/g, ">")
-        .replace(/&lt;/g, "<")
-        .replace(/&amp;/g, "&")
-        .replace(/&quot;/g, '"')
-        .replace(/&apos;/g, "'")
-        .replace(/<br\s*\/?>/g, "\n")
-        .replace(/<\/?p\s*\/?>/g, "")
-        .replace(/<code class=[\s\S]*?>/g, "")
-        .replace(/<\/code\s*\/?>/g, "")
-        .replace(/<pre[^>]*>/g, "") // Remove <pre> tag
-        .replace(/<\/pre>/g, "") // Remove </pre> tag
-        .replace(/<code[^>]*>/g, "") // Remove <code> tag
-        .replace(/<\/code>/g, ""); // Remove </code> tag
-    };
+
+    // Normalize HTML code blocks to Markdown format
+    if (rawContent) {
+      rawContent = rawContent.replace(
+        /<pre><code class="language-(mermaid|code)">([\s\S]*?)<\/code><\/pre>/g,
+        (_, lang, content) => `\`\`\`${lang}\n${content}\n\`\`\``
+      );
+    }
+
     let parts = [];
     // parts = rawContent.split(/```(mermaid|code)([\s\S]*?)```/g);
     const regex = /(?:```|\/`\/`\/`)(mermaid|code)([\s\S]*?)(?:```|\/`\/`\/`)/g;
     parts = rawContent.split(regex);
     // console.log("Parts:", parts);
+
 
     return (
       <div className="rendered-content">
@@ -855,8 +746,9 @@ function BookDashboardMidSec({
           if (index % 3 === 0) {
             // Regular text content
             if (!part || !part.trim()) return null;
+            const processedContent = processTextWithMath(part);
             return (
-              <ShadowHTMLDisplay key={index} content={part} />
+              <ShadowHTMLDisplay key={index} content={processedContent} />
             );
           }
           else if (parts[index - 1] === "mermaid") {
@@ -1193,6 +1085,19 @@ function BookDashboardMidSec({
           </div>
         </div>
       )}
+
+      {/* Summary Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showSummaryConfirmModal}
+        onClose={() => setShowSummaryConfirmModal(false)}
+        onConfirm={generateNewSummary}
+        title="Generate Another Summary?"
+        message="You've already generated a summary. Do you want to generate another one?"
+        confirmText="Yes, Generate"
+        cancelText="Cancel"
+        variant="blue"
+        icon="info"
+      />
     </div>
   );
 }

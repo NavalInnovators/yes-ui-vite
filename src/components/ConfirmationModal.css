@@ -1,0 +1,245 @@
+/* Confirmation Modal Styles */
+
+.confirmation-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.confirmation-modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    max-width: 320px;
+    width: 100%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: zoomIn 0.2s ease-in-out;
+}
+
+.confirmation-modal-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.confirmation-modal-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.confirmation-modal-icon-wrapper.blue {
+    background-color: #eff6ff;
+}
+
+.confirmation-modal-icon-wrapper.red {
+    background-color: #fef2f2;
+}
+
+.confirmation-modal-icon-wrapper.green {
+    background-color: #f0fdf4;
+}
+
+.confirmation-modal-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.confirmation-modal-icon.blue {
+    color: #3b82f6;
+}
+
+.confirmation-modal-icon.red {
+    color: #ef4444;
+}
+
+.confirmation-modal-icon.green {
+    color: #22c55e;
+}
+
+.confirmation-modal-title {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #111827;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.025em;
+}
+
+.confirmation-modal-message {
+    color: #6b7280;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.confirmation-modal-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.625rem;
+}
+
+/* Gradient Border Button */
+.gradient-border-button {
+    position: relative;
+    padding: 0.625rem 1.25rem;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #111827;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.gradient-border-button::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+    padding: 2px;
+    background: conic-gradient(from 0deg,
+            transparent 0deg,
+            transparent 40deg,
+            #feac2f 80deg,
+            #9b32ad 140deg,
+            #381ab2 200deg,
+            #17082c 260deg,
+            transparent 300deg,
+            transparent 360deg);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+/* Gradient background fill on hover */
+.gradient-border-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg,
+            #feac2f 0%,
+            #ff6b9d 25%,
+            #9b32ad 50%,
+            #381ab2 75%,
+            #17082c 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.gradient-border-button:hover::before {
+    opacity: 0;
+}
+
+.gradient-border-button:hover::after {
+    opacity: 1;
+}
+
+.gradient-border-button:hover {
+    border-color: transparent;
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(254, 172, 47, 0.15);
+    color: white;
+}
+
+.gradient-border-button:active {
+    transform: scale(0.95);
+}
+
+/* Cancel Button */
+.cancel-button {
+    padding: 0.625rem 1.25rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+    background: #f3f4f6;
+}
+
+.cancel-button:active {
+    transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes rotateBorder {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .confirmation-modal-content {
+        padding: 1.25rem;
+        max-width: 300px;
+    }
+
+    .confirmation-modal-title {
+        font-size: 1.125rem;
+    }
+
+    .confirmation-modal-icon-wrapper {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 0.875rem;
+    }
+
+    .confirmation-modal-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
