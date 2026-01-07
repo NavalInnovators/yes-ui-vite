@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, X, Check, Zap, Star, Sparkles } from "lucide-react";
+import { Crown, X, Check, Zap, Sparkles } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { toast } from "react-toastify";
 import {
     trackPopupOpen,
     trackPopupClosed,
@@ -129,128 +128,137 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
 
     return (
         <div 
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[10000] p-4"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[10000] p-2 sm:p-4"
             role="dialog" 
             aria-modal="true" 
             aria-label="Choose plan"
         >
-            <div className="bg-white rounded-xl w-full max-w-2xl h-fit overflow-hidden shadow-xl">
-                <div className="relative px-6 py-4" style={{
+            <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] sm:max-h-[85vh] overflow-hidden shadow-xl flex flex-col">
+                <div className="relative px-4 sm:px-6 py-3 sm:py-4" style={{
                     background: 'linear-gradient(270deg,#feac2f 0%,#9b32ad 33.48%,#381ab2 71.46%,#17082c 140.19%)'
                 }}>
                     <button 
                         onClick={handleClose}
-                        className="absolute top-4 right-4 p-1 hover:bg-white/20 rounded-full transition-colors cursor-pointer"
+                        className="absolute top-3 sm:top-4 right-3 sm:right-4 p-1 hover:bg-white/20 rounded-full transition-colors cursor-pointer"
                         aria-label="Close"
                     >
-                        <X size={20} className="text-white" />
+                        <X size={18} className="text-white sm:w-5 sm:h-5" />
                     </button>
                     
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-white/20 rounded-lg">
-                            <Crown size={20} className="text-yellow-300" />
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg">
+                            <Crown size={18} className="text-yellow-300 sm:w-5 sm:h-5" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-white">Upgrade to Premium</h2>
-                            <p className="text-white/80 text-sm">Choose a plan to unlock all features</p>
+                            <h2 className="text-lg sm:text-xl font-semibold text-white">
+                                {currentPlan === "Basic" ? "Upgrade to Pro" : "Upgrade to Premium"}
+                            </h2>
+                            <p className="text-white/80 text-xs sm:text-sm">
+                                {currentPlan === "Basic" 
+                                    ? "Unlock Pro features to access this content" 
+                                    : "Choose a plan to unlock all features"
+                                }
+                            </p>
                         </div>
                     </div>
                 </div>
 
 
-                <div className="p-6 overflow-y-auto h-fit">
-                    <div className="grid md:grid-cols-2 gap-4">
+                <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+                    <div className={`grid gap-3 sm:gap-4 ${currentPlan === "Basic" ? "grid-cols-1 max-w-xs mx-auto" : "md:grid-cols-2"}`}>
                         {/* Basic Plan */}
-                        <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="p-1.5 bg-blue-50 rounded">
-                                    <Check size={16} className="text-blue-600" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Basic Plan</h3>
-                                    <div className="flex items-baseline gap-1">
-                                        <span className="text-lg font-bold text-gray-900">₹110</span>
-                                        <span className="text-sm text-gray-500">/year</span>
+                        {currentPlan !== "Basic" && (
+                            <div className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:border-gray-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">
+                                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                                    <div className="p-1 sm:p-1.5 bg-blue-50 rounded">
+                                        <Check size={14} className="text-blue-600 sm:w-4 sm:h-4" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Basic Plan</h3>
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="text-base sm:text-lg font-bold text-gray-900">₹110</span>
+                                            <span className="text-xs sm:text-sm text-gray-500">/year</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div className="space-y-2 mb-4">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">Everything in Free Plan</span>
+                                
+                                <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                        <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                        <span className="text-gray-700">Everything in Free Plan</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                        <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                        <span className="text-gray-700">Unlimited Summarizer</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                        <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                        <span className="text-gray-700">Unlimited Rephraser</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                        <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                        <span className="text-gray-700">All 5 Unit Notes</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                        <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                        <span className="text-gray-700">All 5 Unit Insights</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">Unlimited Summarizer</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">Unlimited Rephraser</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">All 5 Unit Notes</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">All 5 Unit Insights</span>
-                                </div>
-                            </div>
 
-                            <button 
-                                onClick={() => handlePlanSelect("BASIC")}
-                                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 text-sm shadow-md hover:shadow-lg cursor-pointer"
-                            >
-                                Choose Basic
-                            </button>
-                        </div>
+                                <button 
+                                    onClick={() => handlePlanSelect("BASIC")}
+                                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm shadow-md hover:shadow-lg cursor-pointer"
+                                >
+                                    Choose Basic
+                                </button>
+                            </div>
+                        )}
 
                         {/* Pro Plan */}
-                        <div className="relative border border-purple-200 rounded-lg p-4 hover:border-purple-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">
+                        <div className="relative border border-purple-200 rounded-lg p-3 sm:p-4 hover:border-purple-300 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md">
 
                             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                                <div className="bg-purple-600 text-white px-3 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                                    <Sparkles size={10} />
+                                <div className="bg-purple-600 text-white px-2 sm:px-3 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <Sparkles size={8} className="sm:w-2.5 sm:h-2.5" />
                                     Popular
                                 </div>
                             </div>
                             
-                            <div className="flex items-center gap-3 mb-3 mt-1">
-                                <div className="p-1.5 bg-purple-50 rounded">
-                                    <Zap size={16} className="text-purple-600" />
+                            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 mt-1">
+                                <div className="p-1 sm:p-1.5 bg-purple-50 rounded">
+                                    <Zap size={14} className="text-purple-600 sm:w-4 sm:h-4" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900">Pro Plan</h3>
+                                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Pro Plan</h3>
                                     <div className="flex items-baseline gap-1">
-                                        <span className="text-lg font-bold text-gray-900">₹150</span>
-                                        <span className="text-sm text-gray-500">/year</span>
+                                        <span className="text-base sm:text-lg font-bold text-gray-900">₹150</span>
+                                        <span className="text-xs sm:text-sm text-gray-500">/year</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div className="space-y-2 mb-4">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                            <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
+                                <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                    <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
                                     <span className="text-gray-700">Everything in Basic Plan</span>
                                 </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">AI-powered Chatbot</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
+                                <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                    <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
                                     <span className="text-gray-700">Personalized Roadmap</span>
                                 </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Check size={14} className="text-green-500 flex-shrink-0" />
-                                    <span className="text-gray-700">Priority Support</span>
+                                <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                    <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                    <span className="text-gray-700">Quicker query resolution</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs sm:text-sm">
+                                    <Check size={12} className="text-amber-500 shrink-0 sm:w-3.5 sm:h-3.5" />
+                                    <span className="text-gray-700">Enjoy our Premium features</span>
                                 </div>
                             </div>
 
                             <button 
                                 onClick={() => handlePlanSelect("PRO")}
-                                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 text-sm shadow-md hover:shadow-lg cursor-pointer"
+                                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg transition-all duration-300 text-sm shadow-md hover:shadow-lg cursor-pointer"
                             >
                                 Choose Pro
                             </button>
@@ -259,13 +267,16 @@ function PlanPopUp({ onClose, course, requiredPlan, currentPlan, targetUnit }) {
                 </div>
 
                 {/* Footer */}
-                <div className="border-t border-gray-200 px-6 py-3 bg-gray-50">
+                <div className="border-t border-gray-200 px-4 sm:px-6 py-3 bg-gray-50">
                     <div className="flex justify-center">
                         <button 
                             onClick={handleSkip}
-                            className="text-gray-500 hover:text-gray-700 text-sm underline transition-colors cursor-pointer"
+                            className="text-gray-500 hover:text-gray-700 text-xs sm:text-sm transition-colors cursor-pointer"
                         >
-                            Continue with Free Plan
+                            {currentPlan === "Basic" 
+                                ? "Continue with Basic Plan" 
+                                : "Continue with Free Plan"
+                            }
                         </button>
                     </div>
                 </div>
